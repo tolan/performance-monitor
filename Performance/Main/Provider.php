@@ -410,10 +410,10 @@ final class Performance_Main_Provider {
      * @return void
      */
     private function _autoloader($class) {
-        $root      = $_SERVER['DOCUMENT_ROOT'];
-        $classPath = str_replace('_', '/', $class);
+        $root      = dirname(__DIR__);
+        $classPath = strstr(str_replace('_', '/', $class), '/');
 
-        $path = $root.'/'.$classPath.'.php';
+        $path = $root.$classPath.'.php';
 
         if (file_exists($path)) {
             include $path;
@@ -437,10 +437,10 @@ final class Performance_Main_Provider {
         $class = $class === null ? get_class() : $class;
         if (class_exists($class) === false && ($this->_useAutoloader === false || is_callable('spl_autoload_register') === false)) {
             if (preg_match('/^Performance.*/', $class)) {
-                $tmp = substr($class, strpos($class, '_') + 1);
+                $tmp    = substr($class, strpos($class, '_') + 1);
                 $module = substr($tmp, 0, strpos($tmp, '_'));
-                $path = $_SERVER['DOCUMENT_ROOT'].'/Performance/'.$module.'/';
-                $files = $this->_getFiles($path);
+                $path   = dirname(__DIR__).'/'.$module.'/';
+                $files  = $this->_getFiles($path);
                 foreach ($files as $file) {
                     include_once $file;
                 }

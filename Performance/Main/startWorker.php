@@ -1,7 +1,6 @@
 <?php
 
-$_SERVER['DOCUMENT_ROOT'] = dirname(dirname(__DIR__));
-include $_SERVER['DOCUMENT_ROOT'].'/Performance/boot.php';
+include __DIR__.'/../boot.php';
 
 Performance_Main_Provider::getInstance()->loadEnum('Performance_Main_Gearman_ServerFunction');
 

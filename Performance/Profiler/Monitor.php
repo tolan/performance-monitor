@@ -1,5 +1,5 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'].'/Performance/boot.php';
+include __DIR__.'/../boot.php';
 
 /**
  * This script defines class of the performance profiler.
