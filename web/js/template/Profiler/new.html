@@ -1,0 +1,52 @@
+<div>
+    <form>
+        <table>
+            <tbody>
+                <tr>
+                    <td>Název</td>
+                    <td><input type="text" ng-model="name" placeholder="Název"></td>
+                </tr>
+                <tr>
+                    <td>Popis</td>
+                    <td><textarea ng-model="description" placeholder="Popis"></textarea></td>
+                </tr>
+                <tr>
+                    <td>Adresa</td>
+                    <td><input type="text" ng-model="link" placeholder="Adresa"></td>
+                </tr>
+                <tr>
+                    <td>Parametry</td>
+                    <td>
+                        <table>
+                            <tr>
+                                <th>Klíč</th>
+                                <th>Hodnota</th>
+                                <th></th>
+                            </tr>
+                            <tr ng-repeat="param in parameters">
+                                <td>
+                                    <input type="text" ng-model="param.key" placeholder="Klíč">
+                                </td>
+                                <td>
+                                    <input type="text" ng-model="param.value" placeholder="Klíč">
+                                </td>
+                                <td>
+                                    <a ng-click="deleteParam($index)" class="btn"><i class="icon-trash"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a ng-click="addParam()" class="btn"><i class="icon-plus-sign"></i></a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div>
+            <button type="button" class="button btn" ng-click="send()">Uložit</button>
+            <button type="button" class="button btn" ng-click="back()">Zpět</button>
+        </div>
+    </form>
+</div>

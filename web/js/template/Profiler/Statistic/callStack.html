@@ -1,0 +1,38 @@
+<div ng-controller="ProfilerCallStackCtrl">
+    <accordion close-others="false">
+        <accordion-group ng-repeat="call in calls" ng-click="showCall(call)" heading="[[call.time]] ms - [[call.content]]">
+            <div ng-include="'call.html'"></div>
+        </accordion-group>
+    </accordion>
+</div>
+
+<script type="text/ng-template"  id="callStack.html">
+    <div>
+        <span>Podstrom volání:</span>
+        <div>
+            <accordion close-others="false">
+                <accordion-group ng-repeat="call in call.calls" ng-click="showCall(call)" heading="[[call.time]] ms - [[call.content]]">
+                    <div ng-include="'call.html'"></div>
+                </accordion-group>
+            </accordion>
+        </div>
+</script>
+
+<script type="text/ng-template"  id="call.html">
+    <table>
+        <tr>
+            <td>Soubor:</td>
+            <td>[[call.file]]</td>
+        </tr>
+        <tr>
+            <td>Řádek:</td>
+            <td>[[call.line]]</td>
+        </tr>
+        <tr>
+            <td>Doba zpracování:</td>
+            <td>[[call.time]]</td>
+        </tr>
+    </table>
+    <div ng-if="call.calls" ng-include="'callStack.html'"></div>
+</script>
+

@@ -1,0 +1,67 @@
+a:hover {
+    cursor: pointer;
+}
+
+.center, table .center, .header {
+    text-align: center;
+}
+
+.navigation {
+    margin-left: auto;
+    margin-bottom: 0;
+    display: inline-block;
+}
+
+.navigation > li {
+    display: inline-block;
+}
+
+.navigation .btn-group {
+    margin: 0;
+}
+
+.navigation .btn-group > .btn {
+    border-radius: 0;
+}
+
+.content {
+
+}
+
+.list {
+    margin-left: 5%;
+    width: 90%;
+}
+
+.list .search-query {
+    display: inline-block;
+    margin-left: 1%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.list table .actions {
+    width: 130px;
+}
+
+.profiler-attempt-call-list .file {
+    width: 30%;
+}
+.profiler-attempt-call-list .pageSize {
+    width: 70px;
+    float: right;
+    margin: 1%;
+}
+
+.profiler-attempt-call-list .index ,
+.profiler-attempt-call-list .line {
+    width: 60px;
+}
+
+.profiler-attempt-call-list .time {
+    width: 150px;
+}
+
+.profiler-attempt-call-list .count-calls {
+    width: 110px;
+}

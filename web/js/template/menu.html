@@ -1,0 +1,6 @@
+<ul class="navigation">
+    <li ng-repeat="item in menu" class="btn-group">
+        <a ng-href="[[item.href]]" ng-if="!item.submenu" type="button" class="btn">[[item.text]]</a>
+        <button ng-if="item.submenu" type="button" class="btn" bs-dropdown="item.submenu">[[item.text]]</button>
+    </li>
+</ul>
