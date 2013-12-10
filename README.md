@@ -17,7 +17,7 @@ The purpose of the framework is the analysis, optimization, control and evaluate
 
 ## Run example
 - for measure you must start worker server. Run file startWorker.php in Performance/Main without parameters.
-- include this code to your project:
+- include this code to your project (see example.php):
 <pre>
   include 'Performance/Profiler/Monitor.php';
   Performance_Profiler_Monitor::getInstance()->enable();
