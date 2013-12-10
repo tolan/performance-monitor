@@ -16,6 +16,6 @@ $config = array(
         'user'     => 'root',
         'password' => 'net',
         'database' => 'performance',
-        'install'  => false
+        'install'  => true
     )
 );
