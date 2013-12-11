@@ -4,7 +4,7 @@ $config = array(
     'provider' => array(
         'useAutoloader' => TRUE,
         'initServices'  => array(
-            'Performance_Main_Database',
+            'database',
             'log'
         ),
         'serviceMap'    =>  array(
@@ -26,7 +26,6 @@ $config = array(
     ),
     'access' => array(
         'allowFrom' => array(
-            '127.0.0.1'
         ),
         'deniedFrom' => array(
         )

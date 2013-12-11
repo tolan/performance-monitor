@@ -65,7 +65,8 @@ class Performance_Main_Web_App {
         try {
             $this->_provider->get('access')->checkAccess();
         } catch (Performance_Main_Access_Exception $exc) {
-            $this->_showAccessDenied($exc);
+            $this->_provider->get('log')->warning('Unauthorized exception: '.$exc->getMessage());
+            return $this->_showAccessDenied($exc);
         }
 
         $this->_response = $this->_router
@@ -106,7 +107,13 @@ class Performance_Main_Web_App {
         return $this;
     }
 
+    /**
+     * Forward to access denied page.
+     *
+     * @param Performance_Main_Access_Exception $exc Exception
+     */
     private function _showAccessDenied(Performance_Main_Access_Exception $exc) {
-        
+        // TODO
+        return $this;
     }
 }
