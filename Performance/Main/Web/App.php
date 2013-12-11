@@ -62,6 +62,12 @@ class Performance_Main_Web_App {
      * @return Performance_Main_Web_App
      */
     protected function init() {
+        try {
+            $this->_provider->get('access')->checkAccess();
+        } catch (Performance_Main_Access_Exception $exc) {
+            $this->_showAccessDenied($exc);
+        }
+
         $this->_response = $this->_router
             ->route()
             ->getController()
@@ -98,5 +104,9 @@ class Performance_Main_Web_App {
      */
     protected function afterRender() {
         return $this;
+    }
+
+    private function _showAccessDenied(Performance_Main_Access_Exception $exc) {
+        
     }
 }

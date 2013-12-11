@@ -129,6 +129,12 @@ class Performance_Main_Database_Query {
         $this->setSQL($sql);
         $this->query = mysql_query($sql, $this->_connection);
 
+        $error = mysql_error($this->_connection);
+
+        if ($error !== '') {
+            throw new Performance_Main_Database_Exception('Database error. Check sql statement: '.$error);
+        }
+
         if ($this->query === false) {
             throw new Performance_Main_Database_Exception('Database error. Check sql statement: '.$sql);
         }

@@ -50,7 +50,9 @@ class Performance_Main_Web_Component_Router {
      * @return Performance_Main_Web_Component_Router
      */
     public function route() {
-        $this->_controller = $this->_resolveController();
+        if ($this->_controller === null) {
+            $this->_controller = $this->_resolveController();
+        }
 
         return $this;
     }
