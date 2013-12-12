@@ -174,6 +174,10 @@ final class Performance_Main_Provider {
      * @return ${name} Instance of $name
      */
     public function get($name) {
+        if (isset($this->_serviceMap[$name])) {
+            $name = $this->_serviceMap[$name];
+        }
+
         $instance = $this->_getInstance($name);
 
         self::$_preventCycleDependencies = array();
@@ -267,7 +271,7 @@ final class Performance_Main_Provider {
         }
 
         $instance = $this->_createInstance($name);
-        $this->set($instance);
+        $this->set($instance, $name);
 
         return $instance;
     }
@@ -282,10 +286,6 @@ final class Performance_Main_Provider {
      * @throws Performance_Main_Exception Throws when dependecies are cycling or instance was not created.
      */
     private function _createInstance($name) {
-        if (isset($this->_serviceMap[$name])) {
-            $name = $this->_serviceMap[$name];
-        }
-
         $this->_loadClass($name);
         if (in_array($name, self::$_preventCycleDependencies)) {
             throw new Performance_Main_Exception('Object has cycling dependencies!');
