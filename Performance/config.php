@@ -8,13 +8,14 @@ $config = array(
             'log'
         ),
         'serviceMap'    =>  array(
-            'database' => 'Performance_Main_Database',
-            'config'   => 'Performance_Main_Config',
-            'web'      => 'Performance_Main_Web_App',
-            'request'  => 'Performance_Main_Web_Component_Request',
-            'log'      => 'Performance_Main_Log',
-            'access'   => 'Performance_Main_Access',
-            'router'   => 'Performance_Main_Web_Component_Router'
+            'database'  => 'Performance_Main_Database',
+            'config'    => 'Performance_Main_Config',
+            'web'       => 'Performance_Main_Web_App',
+            'request'   => 'Performance_Main_Web_Component_Request',
+            'response'  => 'Performance_Main_Web_Component_Response',
+            'log'       => 'Performance_Main_Log',
+            'access'    => 'Performance_Main_Access',
+            'router'    => 'Performance_Main_Web_Component_Router'
         )
     ),
     'database' => array(
