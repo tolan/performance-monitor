@@ -39,7 +39,7 @@ class Performance_Main_Web_App {
      */
     public function __construct(Performance_Main_Provider $provider) {
         $this->_provider = $provider;
-        $this->_router   = $provider->get('Performance_Main_Web_Component_Router');
+        $this->_router   = $provider->get('router');
     }
 
     /**

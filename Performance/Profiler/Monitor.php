@@ -88,7 +88,7 @@ class Performance_Profiler_Monitor {
         }
 
         $startKey = Performance_Profiler_Enum_HttpKeys::PROFILER_START;
-        $get = $this->_provider->get('Performance_Main_Web_Component_Request')->getGet();
+        $get = $this->_provider->get('request')->getGet();
 
         if ($get->has($startKey) && strtolower($get->get($startKey)) == 'true') {
             $this->_checkEnable();

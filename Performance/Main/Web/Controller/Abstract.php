@@ -146,7 +146,7 @@ abstract class Performance_Main_Web_Controller_Abstract {
      * @return Performance_Main_Web_Component_Request
      */
     final protected function getRequest() {
-        return $this->_provider->get('Performance_Main_Web_Component_Request');
+        return $this->_provider->get('request');
     }
 
     /**

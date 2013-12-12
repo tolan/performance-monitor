@@ -15,7 +15,7 @@ class Performance_Main_Web_Controller_Abstract_Html extends Performance_Main_Web
      * @return Performance_Main_Web_Component_Response
      */
     final public function getResponse() {
-        return $this->getProvider()->get('Performance_Main_Web_Component_Response');
+        return $this->getProvider()->get('response');
     }
 
     /**

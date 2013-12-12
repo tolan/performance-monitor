@@ -31,7 +31,7 @@ abstract class Performance_Profiler_Component_AbstractFactory {
     public function __construct(Performance_Main_Provider $provider) {
         $this->_provider = $provider;
 
-        $get          = $provider->get('Performance_Main_Web_Component_Request')->getGet();
+        $get          = $provider->get('request')->getGet();
         $measureIdKey = Performance_Profiler_Enum_HttpKeys::ATTEMPT_ID;
 
         if ($get->has($measureIdKey)) {
