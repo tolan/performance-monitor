@@ -74,7 +74,10 @@ class Performance_Profiler_Component_Repository_MeasureAttempt extends Performan
      * @return int Inseted id
      */
     public function create($data) {
-        $data['started'] = Performance_Main_Database::convertTimeToMySQLDateTime($data['started']);
+        if (isset($data['started'])) {
+            $data['started'] = Performance_Main_Database::convertTimeToMySQLDateTime($data['started']);
+        }
+
         return parent::create($data);
     }
 
@@ -87,6 +90,10 @@ class Performance_Profiler_Component_Repository_MeasureAttempt extends Performan
      * @return int Count of affected rows
      */
     public function update($id, $data) {
+        if (isset($data['started'])) {
+            $data['started'] = Performance_Main_Database::convertTimeToMySQLDateTime($data['started']);
+        }
+
         return parent::update($id, $data);
     }
 

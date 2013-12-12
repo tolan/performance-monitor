@@ -39,22 +39,15 @@ class Performance_Profiler_Gearman_Worker extends Performance_Main_Abstract_Gear
         $repositoryAttempt  = $this->getProvider()->get('Performance_Profiler_Component_Repository_MeasureAttempt');
 
         $messageData = $this->getMessageData();
-        $measureId   = $messageData['id'];
+        $measureId   = $messageData[Performance_Profiler_Enum_HttpKeys::MEASURE_ID];
+        $attemptId   = $messageData[Performance_Profiler_Enum_HttpKeys::ATTEMPT_ID];
         $measure     = $repositoryMeasure->getMeasure($measureId);
 
-        $attemptId = $repositoryAttempt->create(
-            array(
-                'profiler_measure_id' => $measureId,
-                'state'               => Performance_Profiler_Enum_AttemptState::STATE_MEASURE_ACTIVE,
-                'started'             => time()
-            )
-        );
-        $this->getMessage()->setData(array(Performance_Profiler_Enum_HttpKeys::ATTEMPT_ID => $attemptId));
-        $this->getProvider()->get('Performance_Main_Web_Component_Request')->getGet()->set(Performance_Profiler_Enum_HttpKeys::ATTEMPT_ID, $attemptId);
+        $this->getProvider()->get('request')->getGet()->set(Performance_Profiler_Enum_HttpKeys::ATTEMPT_ID, $attemptId);
         $address = $this->_formatAddress($measure, $attemptId);
 
         try {
-            $repositoryAttempt->update($attemptId, array('state' => Performance_Profiler_Enum_AttemptState::STATE_MEASURE_ACTIVE));
+            $repositoryAttempt->update($attemptId, array('state' => Performance_Profiler_Enum_AttemptState::STATE_MEASURE_ACTIVE, 'started' => time()));
             file_get_contents($address);
             $repositoryAttempt->update($attemptId, array('state' => Performance_Profiler_Enum_AttemptState::STATE_MEASURED));
         } catch (Exception $e) {

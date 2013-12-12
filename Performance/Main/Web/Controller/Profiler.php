@@ -191,9 +191,22 @@ class Performance_Main_Web_Controller_Profiler extends Performance_Main_Web_Cont
      * @return void
      */
     public function actionStartMeasure($params) {
+        $attemptId = $this->_attemptRepository->create(
+            array(
+                'profiler_measure_id' => $params['id'],
+                'state'               => Performance_Profiler_Enum_AttemptState::STATE_MEASURE_ACTIVE,
+                'started'             => time()
+            )
+        );
+
         $this->getProvider()
             ->get('Performance_Profiler_Gearman_Client')
-            ->setData(array('id' => $params['id']))
+            ->setData(
+                array(
+                    Performance_Profiler_Enum_HttpKeys::ATTEMPT_ID => $attemptId,
+                    Performance_Profiler_Enum_HttpKeys::MEASURE_ID => $params['id']
+                )
+            )
             ->doAsynchronize();
 
         $this->setData(true);
