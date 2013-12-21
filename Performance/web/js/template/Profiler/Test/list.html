@@ -1,0 +1,47 @@
+<div class="measure-test-list list-90">
+    <table class="table table-striped table-bordered table-hover table-responsive">
+        <thead>
+            <tr>
+                <th ng-click="predicate='id'; reverse=!reverse">#</th>
+                <th ng-click="predicate='url'; reverse=!reverse">
+                    <i ng-class="selectSortClass('url', predicate, reverse)"></i>[[_.('profiler.measure.test.url')]]
+                </th>
+                <th ng-click="predicate='state'; reverse=!reverse">
+                    <i ng-class="selectSortClass('state', predicate, reverse)"></i>[[_.('profiler.measure.test.state')]]
+                </th>
+                <th ng-click="predicate='parameters'; reverse=!reverse">
+                    <i ng-class="selectSortClass('parameters', predicate, reverse)"></i>[[_.('profiler.measure.test.parameters')]]
+                </th>
+                <th ng-click="predicate='body'; reverse=!reverse">
+                    <i ng-class="selectSortClass('body', predicate, reverse)"></i>[[_.('profiler.measure.test.body')]]
+                </th>
+                <th ng-click="predicate='started'; reverse=!reverse">
+                    <i ng-class="selectSortClass('started', predicate, reverse)"></i>[[_.('profiler.measure.test.started')]]
+                </th>
+                <th ng-click="predicate='time'; reverse=!reverse">
+                    <i ng-class="selectSortClass('time', predicate, reverse)"></i>[[_.('profiler.measure.test.time')]]
+                </th>
+                <th ng-click="predicate='calls'; reverse=!reverse">
+                    <i ng-class="selectSortClass('calls', predicate, reverse)"></i>[[_.('profiler.measure.test.calls')]]
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="attempt in attempts | filter:search | orderBy:predicate:reverse">
+                <td>[[indexOf(attempts, attempt) + 1]]</td>
+                <td>[[attempt.url]]</td>
+                <td ng-switch on="attempt.state">
+                    <a href="#/profiler/test/[[testId]]/attempt/[[attempt.id]]" ng-switch-when="statistic_generated">
+                        [[_.('profiler.measure.test.showStatistic')]]
+                    </a>
+                    <span ng-switch-default>[[_.('profiler.measure.test.state.' + attempt.state)]]</span>
+                </td>
+                <td>[[attempt.parameters]]</td>
+                <td>[[attempt.body]]</td>
+                <td>[[attempt.started | date:'d.M.yyyy H:mm:ss']]</td>
+                <td>[[attempt.time]]</td>
+                <td>[[attempt.calls]]</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

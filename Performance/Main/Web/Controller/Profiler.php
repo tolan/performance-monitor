@@ -18,26 +18,40 @@ class Performance_Main_Web_Controller_Profiler extends Performance_Main_Web_Cont
      */
     private $_measureRepository = null;
 
-    /*
-     * Measure attempt repository
-     *
-     * @var Performance_Profiler_Component_Repository_MeasureAttempt
-     */
-    private $_attemptRepository = null;
-
-    /**
-     * Measure statistic repository
-     *
-     * @var Performance_Profiler_Component_Repository_MeasureStatistic
-     */
-    private $_statisticRepository = null;
-
     /**
      * Measure statistic data repository
      *
-     * @var Performance_Profiler_Component_Repository_MeasureStatisticData
+     * @var Performance_Profiler_Component_Repository_AttemptStatisticData
      */
     private $_statisticDataRepository = null;
+
+    /**
+     * Measure request data repository
+     *
+     * @var Performance_Profiler_Component_Repository_MeasureRequest
+     */
+    private $_requestRepository = null;
+
+    /**
+     * Measure request parameter data repository
+     *
+     * @var Performance_Profiler_Component_Repository_RequestParameter
+     */
+    private $_parameterRepository = null;
+
+    /**
+     * Measure test data repository
+     *
+     * @var Performance_Profiler_Component_Repository_MeasureTest
+     */
+    private $_testRepository = null;
+
+    /**
+     * Measure test data repository
+     *
+     * @var Performance_Profiler_Component_Repository_TestAttempt
+     */
+    private $_attemptRepository = null;
 
     /**
      * Init method sets repositories.
@@ -46,9 +60,13 @@ class Performance_Main_Web_Controller_Profiler extends Performance_Main_Web_Cont
      */
     public function init() {
         $this->_measureRepository       = $this->getProvider()->get('Performance_Profiler_Component_Repository_Measure');
-        $this->_attemptRepository       = $this->getProvider()->get('Performance_Profiler_Component_Repository_MeasureAttempt');
-        $this->_statisticRepository     = $this->getProvider()->get('Performance_Profiler_Component_Repository_MeasureStatistic');
-        $this->_statisticDataRepository = $this->getProvider()->get('Performance_Profiler_Component_Repository_MeasureStatisticData');
+        $this->_requestRepository       = $this->getProvider()->get('Performance_Profiler_Component_Repository_MeasureRequest');
+        $this->_parameterRepository     = $this->getProvider()->get('Performance_Profiler_Component_Repository_RequestParameter');
+
+        $this->_testRepository    = $this->getProvider()->get('Performance_Profiler_Component_Repository_MeasureTest');
+        $this->_attemptRepository = $this->getProvider()->get('Performance_Profiler_Component_Repository_TestAttempt');
+
+        $this->_statisticDataRepository = $this->getProvider()->get('Performance_Profiler_Component_Repository_AttemptStatisticData');
     }
 
     /**
@@ -76,9 +94,9 @@ class Performance_Main_Web_Controller_Profiler extends Performance_Main_Web_Cont
      * @return void
      */
     public function actionMeasure($params) {
-        $data = $this->_measureRepository->getMeasures(array($params['id']));
+        $data = $this->_measureRepository->getMeasure($params['id']);
 
-        $this->setData($data[$params['id']]);
+        $this->setData($data);
     }
 
     /**
@@ -105,15 +123,60 @@ class Performance_Main_Web_Controller_Profiler extends Performance_Main_Web_Cont
      * @return void
      */
     public function actionCreate() {
-        $input           = $this->getRequest()->getInput();
-        $params          = $input['parameters'];
-        $input['edited'] = Performance_Main_Database::convertTimeToMySQLDateTime(time());
-        unset($input['parameters']);
+        $input = $this->getRequest()->getInput();
 
-        $id = $this->_measureRepository->create($input);
-        $this->_measureRepository->setParameters($id, $params);
+        $measureId = $this->_measureRepository->create(array(
+            'name'        => $input['name'],
+            'description' => $input['description']
+        ));
 
-        $this->setData($id);
+        foreach ($input['requests'] as $request) {
+            $this->_createRequest($measureId, $request);
+        }
+
+        $this->setData($measureId);
+    }
+
+    /**
+     * Creates new request for measure with given request data.
+     *
+     * @param int   $measureId ID of measure
+     * @param array $request   Request data (url, method, toMeasure, parameters)
+     *
+     * @return Performance_Main_Web_Controller_Profiler
+     */
+    private function _createRequest($measureId, $request) {
+        $requestId = $this->_requestRepository->create(array(
+            'measureId' => $measureId,
+            'url'       => $request['url'],
+            'method'    => $request['method'],
+            'toMeasure' => $request['toMeasure']
+        ));
+
+        if (isset($request['parameters'])) {
+            foreach ($request['parameters'] as $parameter) {
+                $this->_createParameter($requestId, $parameter);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Create parameter for request with given parameter data.
+     *
+     * @param int   $requestId ID of request for measure
+     * @param array $parameter Parameter data (method, name, value)
+     *
+     * @return int
+     */
+    private function _createParameter($requestId, $parameter) {
+        return $this->_parameterRepository->create(array(
+            'requestId' => $requestId,
+            'method'    => $parameter['method'],
+            'name'      => $parameter['name'],
+            'value'     => $parameter['value']
+        ));
     }
 
     /**
@@ -126,85 +189,64 @@ class Performance_Main_Web_Controller_Profiler extends Performance_Main_Web_Cont
      * @return void
      */
     public function actionUpdate($params) {
-        $id             = (int)$params['id'];
-        $data           = $this->getRequest()->getInput();
-        $params         = $data['parameters'];
-        $data['edited'] = Performance_Main_Database::convertTimeToMySQLDateTime(time());
-        unset($data['parameters']);
+        $id    = (int)$params['id'];
+        $input = $this->getRequest()->getInput();
 
-        $this->_measureRepository->update($id, $data);
-        $this->_measureRepository->deleteParameters($id);
-        $this->_measureRepository->setParameters($id, $params);
+        $this->_measureRepository->update($id, array(
+            'name'        => $input['name'],
+            'description' => $input['description']
+        ));
+
+        $measure = $this->_measureRepository->getMeasure($id);
+
+        foreach ($measure['requests'] as $request) {
+            $this->_requestRepository->delete($request['id']);
+        }
+
+        foreach ($input['requests'] as $request) {
+            $this->_createRequest($id, $request);
+        }
+
+        $this->setData(true);
     }
 
     /**
-     * Find all attempts for measure by measure id.
+     * Find all tests for measure by measure id.
      *
-     * @link /measure/{id}/attempts
+     * @link /measure/{measureId}/tests
      *
      * @method GET
      *
      * @return void
      */
-    public function actionAttempts($params) {
-        $data = $this->_attemptRepository->getAttempts($params['id']);
-
-        $this->setData(array_values($data));
-    }
-
-    /**
-     * Get attempt by attempt id.
-     *
-     * @link /measure/attempt/{id}
-     *
-     * @method GET
-     *
-     * @return void
-     */
-    public function actionGetAttempt($params) {
-        $data = $this->_attemptRepository->getAttempt($params['id']);
+    public function actionTests($params) {
+        $data = $this->_testRepository->getTests($params['measureId']);
 
         $this->setData($data);
     }
 
     /**
-     * Method for delete attempt by id.
+     * It launch test for measure by given measure id.
      *
-     * @link /measure/attempt/{id}
-     *
-     * @method DELETE
-     *
-     * @return void
-     */
-    public function actionDeleteAttempt($params) {
-        $this->_attemptRepository->delete($params['id']);
-        $this->setData(true);
-    }
-
-    /**
-     * Start measure for attempt by attempt id.
-     *
-     * @link /measure/attempt/{id}/start
+     * @link /measure/{measureId}/test/start
      *
      * @method POST
      *
+     * @param array $params Input parameters
+     *
      * @return void
      */
-    public function actionStartMeasure($params) {
-        $attemptId = $this->_attemptRepository->create(
-            array(
-                'profiler_measure_id' => $params['id'],
-                'state'               => Performance_Profiler_Enum_AttemptState::STATE_MEASURE_ACTIVE,
-                'started'             => time()
-            )
+    public function actionStartTest($params) {
+        $testId = $this->_testRepository->create(
+            array('measureId' => $params['measureId'])
         );
 
         $this->getProvider()
             ->get('Performance_Profiler_Gearman_Client')
             ->setData(
                 array(
-                    Performance_Profiler_Enum_HttpKeys::ATTEMPT_ID => $attemptId,
-                    Performance_Profiler_Enum_HttpKeys::MEASURE_ID => $params['id']
+                    Performance_Profiler_Enum_HttpKeys::MEASURE_ID => $params['measureId'],
+                    Performance_Profiler_Enum_HttpKeys::TEST_ID    => $testId
                 )
             )
             ->doAsynchronize();
@@ -213,16 +255,78 @@ class Performance_Main_Web_Controller_Profiler extends Performance_Main_Web_Cont
     }
 
     /**
+     * Get test by given id.
+     *
+     * @link /measure/test/{id}
+     *
+     * @method GET
+     *
+     * @return void
+     */
+    public function actionTest($params) {
+        $data = $this->_testRepository->getTest($params['id']);
+
+        $this->setData(current($data));
+    }
+
+    /**
+     * Delete test by given id.
+     *
+     * @link /measure/test/{id}
+     *
+     * @method DELETE
+     *
+     * @param array $params Input parameters
+     *
+     * @return void
+     */
+    public function actionDeleteTest($params) {
+        $this->_testRepository->delete($params['id']);
+
+        $this->setData(true);
+    }
+
+    /**
+     * Find all attempts for test by test id.
+     *
+     * @link /measure/test/{testId}/attempts
+     *
+     * @method GET
+     *
+     * @param type $params
+     */
+    public function actionGetAttempts($params) {
+        $data = $this->_attemptRepository->getAttempts($params['testId']);
+
+        $this->setData($data);
+    }
+
+    /**
      * Gets statistics for attempt by attempt id.
      *
-     * @link /measure/attempt/{id}/statistic
+     * @link /test/attempt/{id}/statistic
      *
      * @method GET
      *
      * @return void
      */
     public function actionGetAttemptStatistic($params) {
-        $data = $this->_statisticRepository->getAttemptStatistic($params['id']);
+        $data = $this->_testRepository->getAttemptStatistic($params['id']);
+
+        $this->setData($data);
+    }
+
+    /**
+     * Gets calls stack for attempt by attempt id and parent call id (zero means all root calls)
+     *
+     * @link /test/attempt/{id}/callStack/parent/{parentId}
+     *
+     * @method GET
+     *
+     * @return void
+     */
+    public function actionGetAttemptCallStack($params) {
+        $data = $this->_statisticDataRepository->getAttemptCallStack($params['id'], $params['parentId']);
 
         $this->setData($data);
     }
@@ -230,7 +334,7 @@ class Performance_Main_Web_Controller_Profiler extends Performance_Main_Web_Cont
     /**
      * Gets function statistics for attempt by attempt id.
      *
-     * @link /measure/attempt/{id}/statistic/function
+     * @link /test/attempt/{id}/statistic/function
      *
      * @method GET
      *
@@ -243,17 +347,35 @@ class Performance_Main_Web_Controller_Profiler extends Performance_Main_Web_Cont
     }
 
     /**
-     * Gets calls stack for attempt by attempt id and parent call id (zero is all root calls)
+     * Gets information about request and their parameters methods.
      *
-     * @link /measure/attempt/{id}/callStack/parent/{parentId}
+     * @link /request/methods
      *
      * @method GET
      *
      * @return void
      */
-    public function actionGetAttemptCallStack($params) {
-        $data = $this->_statisticDataRepository->getAttemptCallStack($params['id'], $params['parentId']);
+    public function actionGetMethods() {
+        $methods = Performance_Main_Http_Enum_Method::getConstants();
 
-        $this->setData($data);
+        $result = array();
+        foreach ($methods as $method) {
+            $result['requests'][] = array(
+                'value' => $method,
+                'name' => 'profiler.measure.request.method.'.strtolower($method)
+            );
+        }
+
+        $paramMethods = Performance_Main_Http_Enum_ParameterType::getAllowedParams();
+        foreach ($paramMethods as $method => $allowed) {
+            foreach ($allowed as $allow) {
+                $result['params'][$method][] = array(
+                    'value' => $allow,
+                    'name' => 'profiler.measure.request.method.'.strtolower($allow)
+                );
+            }
+        }
+
+        $this->setData($result);
     }
 }

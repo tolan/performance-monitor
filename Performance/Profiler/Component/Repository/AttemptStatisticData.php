@@ -7,7 +7,7 @@
  * @category   Performance
  * @package    Profiler
  */
-class Performance_Profiler_Component_Repository_MeasureStatisticData extends Performance_Main_Abstract_Repository {
+class Performance_Profiler_Component_Repository_AttemptStatisticData extends Performance_Main_Abstract_Repository {
 
     /**
      * Init method for set managed table.
@@ -15,7 +15,7 @@ class Performance_Profiler_Component_Repository_MeasureStatisticData extends Per
      * @return void
      */
     protected function init() {
-        parent::init('profiler_measure_statistic_data');
+        parent::init('attempt_statistic_data');
     }
 
     /**
@@ -27,14 +27,13 @@ class Performance_Profiler_Component_Repository_MeasureStatisticData extends Per
      * @return array Array with calls
      */
     public function getAttemptCallStack($attemptId, $parentId = 0) {
-        return $this
-            ->getDatabase()
+        $select = $this->getDatabase()
             ->select()
-            ->from(array('pms' => 'profiler_measure_statistic'), array())
-            ->joinInner(array('pmsd' => 'profiler_measure_statistic_data'), 'pmsd.profiler_measure_statistic_id = pms.id')
-            ->where('pms.profiler_measure_attempt_id = ?', $attemptId)
-            ->where('pmsd.parent_id = ?', $parentId)
-            ->fetchAll();
+            ->from(array('asd' => 'attempt_statistic_data'))
+            ->where('asd.attemptId = ?', $attemptId)
+            ->where('asd.parentId = ?', $parentId);
+
+        return $select->fetchAll();
     }
 
     /**
@@ -50,22 +49,20 @@ class Performance_Profiler_Component_Repository_MeasureStatisticData extends Per
             ->select()
             ->columns(
                 array(
-                    'id'       => 'pmsd.id',
-                    'file'     => 'pmsd.file',
-                    'line'     => 'pmsd.line',
-                    'content'  => 'pmsd.content',
-                    'time'     => 'SUM(pmsd.time)',
-                    'avgTime'  => 'AVG(pmsd.time)',
-                    'count'    => 'COUNT(CONCAT(pmsd.file, pmsd.line))',
-                    'min'      => 'MIN(pmsd.time)',
-                    'max'      => 'MAX(pmsd.time)',
-                    'times'    => 'CONCAT(\'[\', GROUP_CONCAT(pmsd.time), \']\')'
+                    'id'       => 'asd.id',
+                    'file'     => 'asd.file',
+                    'line'     => 'asd.line',
+                    'content'  => 'asd.content',
+                    'time'     => 'SUM(asd.time)',
+                    'avgTime'  => 'AVG(asd.time)',
+                    'count'    => 'COUNT(CONCAT(asd.file, asd.line))',
+                    'min'      => 'MIN(asd.time)',
+                    'max'      => 'MAX(asd.time)'
                 )
             )
-            ->from(array('pms' => 'profiler_measure_statistic'), array())
-            ->joinInner(array('pmsd' => 'profiler_measure_statistic_data'), 'pmsd.profiler_measure_statistic_id = pms.id', array())
-            ->where('pms.profiler_measure_attempt_id = ?', $attemptId)
-            ->group(array('pmsd.file', 'pmsd.line'));
+            ->from(array('asd' => 'attempt_statistic_data'), array())
+            ->where('asd.attemptId = ?', $attemptId)
+            ->group(array('asd.file', 'asd.line'));
 
         $data = $select->fetchAll();
 
@@ -77,7 +74,6 @@ class Performance_Profiler_Component_Repository_MeasureStatisticData extends Per
             $call['count']   = (int)$call['count'];
             $call['min']     = (float)$call['min'];
             $call['max']     = (float)$call['max'];
-            $call['times']   = json_decode($call['times']);
         }
 
         return $data;

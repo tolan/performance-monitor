@@ -30,13 +30,6 @@ abstract class Performance_Profiler_Component_AbstractFactory {
      */
     public function __construct(Performance_Main_Provider $provider) {
         $this->_provider = $provider;
-
-        $get          = $provider->get('request')->getGet();
-        $measureIdKey = Performance_Profiler_Enum_HttpKeys::ATTEMPT_ID;
-
-        if ($get->has($measureIdKey)) {
-            $this->_attemptId = $get->get($measureIdKey);
-        }
     }
 
     /**
@@ -45,6 +38,15 @@ abstract class Performance_Profiler_Component_AbstractFactory {
      * @return int
      */
     protected function getAttemptId() {
+        $this->_attemptId = null;
+
+        $get          = $this->_provider->get('request')->getGet();
+        $measureIdKey = Performance_Profiler_Enum_HttpKeys::ATTEMPT_ID;
+
+        if ($get->has($measureIdKey)) {
+            $this->_attemptId = $get->get($measureIdKey);
+        }
+
         return $this->_attemptId;
     }
 

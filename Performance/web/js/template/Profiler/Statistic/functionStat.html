@@ -1,5 +1,5 @@
 <div class="list profiler-attempt-call-list" ng-controller="ProfilerFunctionStatCtrl">
-    <input type="text" ng-model="search" class="search-query" placeholder="Vyhledat">
+    <input type="text" ng-model="search" class="search-query" placeholder="[[_.('profiler.list.search')]]">
     <select ng-model="pageSize" ng-options="size for size in pageSizes" class="pageSize"></select>
     <table class="table table-striped table-bordered table-hover table-responsive">
         <thead>
@@ -8,28 +8,28 @@
                     #
                 </th>
                 <th ng-click="predicate='file'; reverse=!reverse" class="file">
-                    <i ng-class="selectSortClass('file', predicate, reverse)"></i>Soubor
+                    <i ng-class="selectSortClass('file', predicate, reverse)"></i>[[_.('profiler.measure.test.file')]]
                 </th>
                 <th ng-click="predicate='line'; reverse=!reverse" class="center line">
-                    <i ng-class="selectSortClass('line', predicate, reverse)"></i>Řádek
+                    <i ng-class="selectSortClass('line', predicate, reverse)"></i>[[_.('profiler.measure.test.line')]]
                 </th>
                 <th ng-click="predicate='content'; reverse=!reverse">
-                    <i ng-class="selectSortClass('content', predicate, reverse)"></i>Obsah
+                    <i ng-class="selectSortClass('content', predicate, reverse)"></i>[[_.('profiler.measure.test.content')]]
                 </th>
                 <th ng-click="predicate='time'; reverse=!reverse" class="center time">
-                    <i ng-class="selectSortClass('time', predicate, reverse)"></i>Celkový čas [ms]
+                    <i ng-class="selectSortClass('time', predicate, reverse)"></i>[[_.('profiler.measure.test.time')]]
                 </th>
                 <th ng-click="predicate='avgTime'; reverse=!reverse" class="center time">
-                    <i ng-class="selectSortClass('avgTime', predicate, reverse)"></i>Průměrný čas [ms]
+                    <i ng-class="selectSortClass('avgTime', predicate, reverse)"></i>[[_.('profiler.measure.test.avgTime')]]
                 </th>
                 <th ng-click="predicate='count'; reverse=!reverse" class="center count-calls">
-                    <i ng-class="selectSortClass('count', predicate, reverse)"></i>Počet volání
+                    <i ng-class="selectSortClass('count', predicate, reverse)"></i>[[_.('profiler.measure.test.calls')]]
                 </th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="call in calls | filter:search | customFilter:refresh | orderBy:predicate:reverse | startFrom:(currentPage-1)*pageSize | limitTo:pageSize">
-                <td class="center">[[call.id]]</td>
+                <td class="center">[[indexOf(calls, call) + 1]]</td>
                 <td>[[call.file]]</td>
                 <td class="center">[[call.line]]</td>
                 <td>[[call.content]]</td>

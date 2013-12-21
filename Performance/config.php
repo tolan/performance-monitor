@@ -2,10 +2,9 @@
 
 $config = array(
     'provider' => array(
-        'useAutoloader' => TRUE,
+        'useAutoloader' => true,
         'initServices'  => array(
-            'database',
-            'log'
+            'database'
         ),
         'serviceMap'    =>  array(
             'database'  => 'Performance_Main_Database',
@@ -15,7 +14,8 @@ $config = array(
             'response'  => 'Performance_Main_Web_Component_Response',
             'log'       => 'Performance_Main_Log',
             'access'    => 'Performance_Main_Access',
-            'router'    => 'Performance_Main_Web_Component_Router'
+            'router'    => 'Performance_Main_Web_Component_Router',
+            'cache'     => 'Performance_Main_Cache'
         )
     ),
     'database' => array(
@@ -23,7 +23,7 @@ $config = array(
         'user'     => 'root',
         'password' => 'net',
         'database' => 'performance',
-        'install'  => true
+        'install'  => false
     ),
     'access' => array(
         'allowFrom' => array(
@@ -35,5 +35,8 @@ $config = array(
         'level' => 5,
         'file'  => __DIR__.'/performance.log',
         'cache' => true
+    ),
+    'translate' => array(
+        'lang' => 'CS'
     )
 );

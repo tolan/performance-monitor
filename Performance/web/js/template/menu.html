@@ -1,6 +1,18 @@
-<ul class="navigation">
-    <li ng-repeat="item in menu" class="btn-group">
-        <a ng-href="[[item.href]]" ng-if="!item.submenu" type="button" class="btn">[[item.text]]</a>
-        <button ng-if="item.submenu" type="button" class="btn" bs-dropdown="item.submenu">[[item.text]]</button>
-    </li>
-</ul>
+<nav class="navbar navbar-default navigation" role="navigation">
+    <ul class="nav navbar-nav">
+        <li ng-repeat='item in menu' ng-include="'menu-item.html'" ng-if="!item.submenu"></li>
+        <li ng-repeat='item in menu' ng-include="'menu-item-submenu.html'" ng-if="item.submenu" class="dropdown"></li>
+    </ul>
+</nav>
+
+<script type="text/ng-template" id="menu-item.html">
+    <a ng-href="[[item.href]]">[[_.(item.text)]]</a>
+</script>
+
+<script type="text/ng-template" id="menu-item-submenu.html">
+    <a ng-href="[[item.href]]" class="dropdown-toggle" data-toggle="dropdown">[[_.(item.text)]]<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+        <li ng-repeat='item in item.submenu' ng-include="'menu-item.html'" ng-if="!item.submenu"></li>
+        <li ng-repeat='item in item.submenu' ng-include="'menu-item-submenu.html'" ng-if="item.submenu" class="dropdown"></li>
+    </ul>
+</script>

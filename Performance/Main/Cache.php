@@ -31,9 +31,10 @@ class Performance_Main_Cache {
      * @param string $namespace Namespace
      */
     public function __construct($namespace = self::DEFAULT_NAMESPACE) {
+        session_start();
         $this->_namespace = $namespace;
 
-        if (isset($_SESSION[$namespace])) {
+        if (isset($_SESSION[self::SESSION_NAME][$namespace])) {
             $this->_cache = unserialize($_SESSION[self::SESSION_NAME][$namespace]);
         }
     }

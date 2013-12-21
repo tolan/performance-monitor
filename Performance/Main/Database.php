@@ -169,74 +169,98 @@ class Performance_Main_Database {
      */
     private function _install() {
         mysql_query("CREATE DATABASE IF NOT EXISTS `".$this->_database."` CHARACTER SET utf8 COLLATE=utf8_general_ci", $this->_connection);
+        mysql_query("USE ".$this->_database, $this->_connection);
 
-        mysql_query("CREATE TABLE IF NOT EXISTS `profiler_measure` (
-            `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-            `name` VARCHAR(64) NULL,
-            `description` text NULL,
-            `link` VARCHAR(255) NULL,
-            `edited` DATETIME NULL,
-            PRIMARY KEY (`id`)
+        mysql_query("CREATE TABLE IF NOT EXISTS `measure` (
+                `id`          INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `name`        VARCHAR(64) NULL,
+                `description` TEXT NULL,
+                `edited`      DATETIME NULL
             ) ENGINE='InnoDB'",
             $this->_connection
         );
 
-        mysql_query("CREATE TABLE IF NOT EXISTS `profiler_measure_parameter` (
-            `id` int unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            `profiler_measure_id` int(10) unsigned NOT NULL,
-            `key` varchar(64) NOT NULL,
-            `value` varchar(255) NOT NULL,
-            FOREIGN KEY (`profiler_measure_id`) REFERENCES `profiler_measure` (`id`) ON DELETE CASCADE
+        mysql_query("CREATE TABLE IF NOT EXISTS `measure_request` (
+                `id`        INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `measureId` INT UNSIGNED NOT NULL,
+                `url`       VARCHAR(255) NULL,
+                `method`    VARCHAR(16) NULL,
+                `toMeasure` TINYINT(1) NULL,
+                FOREIGN KEY (`measureId`) REFERENCES `measure` (`id`) ON DELETE CASCADE
             ) ENGINE='InnoDB'",
             $this->_connection
         );
 
-        mysql_query("CREATE TABLE IF NOT EXISTS `profiler_measure_attempt` (
-            `id` int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            `profiler_measure_id` int(10) unsigned NOT NULL,
-            `state` VARCHAR(32) NULL,
-            `started` DATETIME NULL,
-            `compensationTime` FLOAT NOT NULL DEFAULT 0,
-            FOREIGN KEY (`profiler_measure_id`) REFERENCES `profiler_measure` (`id`) ON DELETE CASCADE
+        mysql_query("CREATE TABLE IF NOT EXISTS `request_parameter` (
+                `id`        INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `requestId` INT UNSIGNED NOT NULL,
+                `method`    VARCHAR(16) NOT NULL,
+                `name`      VARCHAR(64) NOT NULL,
+                `value`     VARCHAR(255) NOT NULL,
+                FOREIGN KEY (`requestId`) REFERENCES `measure_request` (`id`) ON DELETE CASCADE
             ) ENGINE='InnoDB'",
             $this->_connection
         );
 
-        mysql_query("CREATE TABLE IF NOT EXISTS `profiler_measure_data` (
-            `id` bigint unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            `profiler_measure_attempt_id` int(10) unsigned NOT NULL,
-            `file` varchar(512) NOT NULL,
-            `line` int NOT NULL,
-            `immersion` int NOT NULL,
-            `start` float NOT NULL,
-            `end` float NOT NULL,
-            FOREIGN KEY (`profiler_measure_attempt_id`) REFERENCES `profiler_measure_attempt` (`id`) ON DELETE CASCADE
+        mysql_query("CREATE TABLE IF NOT EXISTS `measure_test` (
+                `id`        INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `measureId` INT UNSIGNED NOT NULL,
+                `state`     VARCHAR(32) NULL,
+                `started`   DATETIME NULL,
+                FOREIGN KEY (`measureId`) REFERENCES `measure` (`id`) ON DELETE CASCADE
             ) ENGINE='InnoDB'",
             $this->_connection
         );
 
-        mysql_query("CREATE TABLE IF NOT EXISTS `profiler_measure_statistic` (
-            `id` int unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            `profiler_measure_attempt_id` int(10) unsigned NOT NULL,
-            `time` float NOT NULL,
-            `calls` int NOT NULL,
-            FOREIGN KEY (`profiler_measure_attempt_id`) REFERENCES `profiler_measure_attempt` (`id`) ON DELETE CASCADE
+        mysql_query("CREATE TABLE IF NOT EXISTS `test_attempt` (
+                `id`               INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `testId`           INT UNSIGNED NOT NULL,
+                `url`              VARCHAR(255) NULL,
+                `parameters`       TEXT NULL,
+                `body`             TEXT NULL,
+                `state`            VARCHAR(32) NULL,
+                `started`          DATETIME NULL,
+                `compensationTime` FLOAT NOT NULL DEFAULT 0,
+                `time`             FLOAT NOT NULL,
+                `calls`            INT NOT NULL,
+                FOREIGN KEY (`testId`) REFERENCES `measure_test` (`id`) ON DELETE CASCADE
             ) ENGINE='InnoDB'",
             $this->_connection
         );
 
-        mysql_query("CREATE TABLE IF NOT EXISTS `profiler_measure_statistic_data` (
-            `id` bigint unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            `profiler_measure_statistic_id` int(10) unsigned NOT NULL,
-            `parent_id` bigint unsigned NOT NULL,
-            `file` varchar(512) NOT NULL,
-            `line` int NOT NULL,
-            `content` text NOT NULL,
-            `time` float unsigned NOT NULL,
-            FOREIGN KEY (`profiler_measure_statistic_id`) REFERENCES `profiler_measure_statistic` (`id`) ON DELETE CASCADE
+        mysql_query("CREATE TABLE IF NOT EXISTS `attempt_data` (
+                `id`        BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `attemptId` INT UNSIGNED NOT NULL,
+                `file`      VARCHAR(512) NOT NULL,
+                `line`      INT NOT NULL,
+                `immersion` INT NOT NULL,
+                `start`     FLOAT NOT NULL,
+                `end`       FLOAT NOT NULL,
+                FOREIGN KEY (`attemptId`) REFERENCES `test_attempt` (`id`) ON DELETE CASCADE
             ) ENGINE='InnoDB'",
             $this->_connection
         );
+
+        mysql_query("CREATE TABLE IF NOT EXISTS `attempt_statistic_data` (
+                `id`        BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `attemptId` INT UNSIGNED NOT NULL,
+                `parentId`  BIGINT UNSIGNED NOT NULL,
+                `file`      VARCHAR(512) NOT NULL,
+                `line`      INT NOT NULL,
+                `content`   TEXT NOT NULL,
+                `time`      FLOAT UNSIGNED NOT NULL,
+                FOREIGN KEY (`attemptId`) REFERENCES `test_attempt` (`id`) ON DELETE CASCADE
+            ) ENGINE='InnoDB'",
+            $this->_connection
+        );
+
+        $translateFile = dirname(__DIR__).'/translate.sql';
+        $sql           = explode(";\n", file_get_contents($translateFile));
+        foreach ($sql as $query) {
+            if (!empty($query)) {
+                mysql_query($query, $this->_connection);
+            }
+        }
 
         return $this;
     }
@@ -271,7 +295,11 @@ class Performance_Main_Database {
      *
      * @return string
      */
-    public static function convertTimeToMySQLDateTime($time) {
+    public static function convertTimeToMySQLDateTime($time = null) {
+        if (!$time) {
+            $time = time();
+        }
+
         return date(self::MYSQL_DATETIME, $time);
     }
 }

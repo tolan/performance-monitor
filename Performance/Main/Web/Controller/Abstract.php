@@ -96,15 +96,19 @@ abstract class Performance_Main_Web_Controller_Abstract {
      */
     final public function run() {
         if ($this->_params === null) {
-            $this->{'action'.ucfirst($this->_action)}();
+            $answer = $this->{'action'.ucfirst($this->_action)}();
         } else {
-            $this->{'action'.ucfirst($this->_action)}($this->_params);
+            $answer = $this->{'action'.ucfirst($this->_action)}($this->_params);
+        }
+
+        // If data was not set with $this->setData() then set data from returned action
+        if ($answer && $this->getData() === null) {
+            $this->setData($answer);
         }
 
         $view = $this->getView();
         $view->setData($this->getData());
-        $response = $this->getResponse();
-        $response->setView($view);
+        $this->getResponse()->setView($view);
 
         return $this;
     }

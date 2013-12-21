@@ -7,7 +7,7 @@
  * @category   Performance
  * @package    Profiler
  */
-class Performance_Profiler_Component_Repository_MeasureData extends Performance_Main_Abstract_Repository {
+class Performance_Profiler_Component_Repository_AttemptData extends Performance_Main_Abstract_Repository {
 
     /**
      * Init method for set managed table.
@@ -15,7 +15,7 @@ class Performance_Profiler_Component_Repository_MeasureData extends Performance_
      * @return void
      */
     protected function init() {
-        parent::init('profiler_measure_data');
+        parent::init('attempt_data');
     }
 
     /**
@@ -29,7 +29,7 @@ class Performance_Profiler_Component_Repository_MeasureData extends Performance_
         return $this->getDatabase()
             ->select()
             ->from($this->getTableName(), array('id', 'file', 'line', 'immersion', 'start', 'end'))
-            ->where('profiler_measure_attempt_id = ?', $id)
+            ->where('attemptId = ?', $id)
             ->fetchAll();
     }
 

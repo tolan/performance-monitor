@@ -1,0 +1,105 @@
+<div class="list profiler-measure-attempt-list">
+    <div class="measure-detail well well-sm">
+        <div class="measure-detail-basic">
+            <div class="measure-detail-basic-name">
+                <span class="label label-default">[[_.('profiler.measure.name')]]</span>
+                <span>[[measure.name]]</span>
+            </div>
+            <div class="measure-detail-basic-name">
+                <span class="label label-default">[[_.('profiler.measure.description')]]</span>
+                <span>[[measure.description]]</span>
+            </div>
+            <div class="measure-detail-basic-name">
+                <span class="label label-default">[[_.('profiler.measure.edited')]]</span>
+                <span>[[measure.edited | date:'d.M.yyyy H:mm:ss']]</span>
+            </div>
+        </div>
+        <div class="measure-detail-requests well well-sm">
+            <div ng-show="measure.requests.length" class="caption">[[_.('profiler.measure.request.list')]]</div>
+            <div ng-repeat="request in measure.requests" class="request">
+                <div class="measure-detail-request-url">
+                    <span class="label label-default">[[_.('profiler.request.url')]]</span>
+                    <span>[[request.url]]</span>
+                </div>
+                <div class="measure-detail-request-method">
+                    <span class="label label-default">[[_.('profiler.request.method')]]</span>
+                    <span>[[_.('profiler.measure.request.method.' + request.method.toLowerCase())]]</span>
+                </div>
+                <div class="measure-detail-request-toMeasure">
+                    <span class="label label-default">[[_.('profiler.request.toMeasure')]]</span>
+                    <a ng-class="request.toMeasure ? 'icon-check' : 'icon-unchecked'"></a>
+                </div>
+                <div class="measure-detail-request-parameters">
+                    <div ng-show="request.parameters.length">[[_.('profiler.request.parameters.list')]]</div>
+                    <div ng-repeat="parameter in request.parameters" class="request-parameter">
+                        <div class="measure-detail-parameter-name">
+                            <span class="label label-default">[[_.('profiler.request.parameter.name')]]</span>
+                            <span>[[parameter.name]]</span>
+                        </div>
+                        <div class="measure-detail-parameter-value">
+                            <span class="label label-default">[[_.('profiler.request.parameter.value')]]</span>
+                            <span>[[parameter.value]]</span>
+                        </div>
+                        <div class="measure-detail-parameter-method">
+                            <span class="label label-default">[[_.('profiler.request.method')]]</span>
+                            <span>[[_.('profiler.measure.request.method.' + parameter.method.toLowerCase())]]</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="text" ng-model="search" class="search-query" placeholder="[[_.('profiler.list.search')]]">
+    <select ng-model="pageSize" ng-options="size for size in pageSizes" class="pageSize"></select>
+    <table class="table table-striped table-bordered table-hover table-responsive">
+        <thead>
+            <tr>
+                <th ng-click="predicate='id'; reverse=!reverse">#</th>
+                <th ng-click="predicate='state'; reverse=!reverse">
+                    <i ng-class="selectSortClass('state', predicate, reverse)">
+                    </i>
+                    [[_.('profiler.measure.test.state')]]
+                </th>
+                <th ng-click="predicate='started'; reverse=!reverse">
+                    <i ng-class="selectSortClass('started', predicate, reverse)">
+                    </i>
+                    [[_.('profiler.measure.test.started')]]
+                </th>
+                <th class="center actions">
+                    <a ng-click="startTest()">
+                        <i class="icon-plus-sign">
+                        </i>
+                        [[_.('profiler.measure.test.start')]]
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="test in tests | filter:search | customFilter:refresh | orderBy:predicate:reverse | startFrom:(currentPage-1)*pageSize | limitTo:pageSize">
+                <td>[[indexOf(tests, test) + 1]]</td>
+                <td ng-switch on="test.state">
+                    <a href="#/profiler/measure/detail/[[measureId]]/test/[[test.id]]" ng-switch-when="statistic_generated">[[_.('profiler.measure.test.showStatistic')]]</a>
+                    <span ng-switch-default>[[_.('profiler.measure.test.state.' + test.state)]]</span>
+                </td>
+                <td>[[test.started | date:'d.M.yyyy H:mm:ss']]</td>
+                <td class="center btn-group actions">
+                    <a ng-click="deleteTest(test.id)" class="btn"><i class="icon-trash"></i></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="center">
+        <pagination
+            boundary-links="true"
+            total-items="totalItems"
+            page="currentPage"
+            items-per-page="pageSize"
+            max-size="10"
+            previous-text="&lsaquo;"
+            next-text="&rsaquo;"
+            first-text="&laquo;"
+            last-text="&raquo;">
+        </pagination>
+    </div>
+</div>

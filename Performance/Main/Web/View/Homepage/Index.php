@@ -18,7 +18,9 @@ class Performance_Main_Web_View_Homepage_Index extends Performance_Main_Web_View
         parent::getPayload();
         $template = $this->getTemplate();
         $template->addScript('/Performance/web/js/app.js');
-        $template->addScript('/Performance/web/js/menu.js');
+        $template->addScript('/Performance/web/js/router.js');
+        $template->addScript('/Performance/web/js/controller/Menu.js');
+        $template->addScript('/Performance/web/js/controller/Lang.js');
         $template->addScript('/Performance/web/js/controller/Profiler.js');
         $template->setBody($this->_generateHtml());
 
@@ -32,7 +34,10 @@ class Performance_Main_Web_View_Homepage_Index extends Performance_Main_Web_View
      */
     private function _generateHtml() {
         $html = '<div ng-app="Perf">'
-                    . '<div ng-controller="MenuCtrl" class="header"><div ng-include="template"></div></div>'
+                    .'<div class="header">'
+                        . '<div ng-controller="MenuCtrl" class="menu"><div ng-include="template"></div></div>'
+                        . '<div ng-controller="LangCtrl" class="lang"><div ng-include="template"></div></div>'
+                    .'</div>'
                     . '<div ng-view class="content">Application error.</div>'
                 . '</div>';
 

@@ -17,30 +17,30 @@ class Performance_Main_Web_Controller_Menu extends Performance_Main_Web_Controll
     public function actionIndex() {
         $menu = array(
             array(
-                'text' => 'Přehled',
+                'text' => 'main.menu.summary',
                 'href' => '#profiler/list'
             ),
             array(
-                'text' => 'Vyhledávání',
+                'text' => 'main.menu.search',
                 'href' => '#measure/search'
             ),
             array(
-                'text' => 'Statistiky',
+                'text' => 'main.menu.statistics',
                 'href' => '#measure/statistics'
             ),
             array(
-                'text' => 'Optimalizace',
+                'text' => 'main.menu.optimalization',
                 'href' => '#measure/optimalization'
             ),
             array(
-                'text' => 'Nastavení',
+                'text' => 'main.menu.setup',
                 'submenu' => array(
                     array(
-                        'text' => 'Plánovač',
+                        'text' => 'main.menu.cron',
                         'href' => '#/settings/cron'
                     ),
                     array(
-                        'text' => 'O aplikaci',
+                        'text' => 'main.menu.about',
                         'href' => '#/settings/about'
                     ),
                 )

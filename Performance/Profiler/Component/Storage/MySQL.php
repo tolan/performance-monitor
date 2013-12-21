@@ -39,6 +39,7 @@ class Performance_Profiler_Component_Storage_MySQL extends Performance_Profiler_
      */
     public function setAttemptId($id) {
         $this->_attemptId = $id;
+
         return $this;
     }
 
@@ -49,25 +50,34 @@ class Performance_Profiler_Component_Storage_MySQL extends Performance_Profiler_
      */
     public function save() {
         $id         = $this->_attemptId;
-        $repository = $this->getProvider()->get('Performance_Profiler_Component_Repository_MeasureData');
-        $startTime  = $this->getStorageCalls()[0]['startTime'];
+        $repository = $this->getProvider()
+            ->get('Performance_Profiler_Component_Repository_AttemptData'); /* @var $repository Performance_Profiler_Component_Repository_AttemptData */
+        $calls      = &$this->getStorageCalls();
+        $startTime  = $calls[0]['startTime'];
 
-        foreach ($this->getStorageCalls() as $call) {
+        foreach ($calls as $call) {
             $repository->create(
                 array(
-                    'profiler_measure_attempt_id' => $id,
-                    'file'                        => $call['stack']['file'],
-                    'line'                        => $call['stack']['line'],
-                    'immersion'                   => $call['stack']['immersion'],
-                    'start'                       => ($call['startTime'] - $startTime)*1000,
-                    'end'                         => ($call['endTime'] - $startTime)*1000
+                    'attemptId' => $id,
+                    'file'      => $call['stack']['file'],
+                    'line'      => $call['stack']['line'],
+                    'immersion' => $call['stack']['immersion'],
+                    'start'     => ($call['startTime'] - $startTime) * 1000,
+                    'end'       => ($call['endTime'] - $startTime) * 1000
                 )
             );
         }
 
         $compTime          = $this->_compensationTime();
-        $repositoryAttempt = $this->getProvider()->get('Performance_Profiler_Component_Repository_MeasureAttempt');
-        $repositoryAttempt->update($id, array('compensationTime' => $compTime*1000));
+        $repositoryAttempt = $this->getProvider()
+            ->get('Performance_Profiler_Component_Repository_TestAttempt'); /* @var $repositoryAttempt Performance_Profiler_Component_Repository_TestAttempt */
+        $repositoryAttempt->update(
+            $id,
+            array(
+                'compensationTime' => $compTime * 1000,
+                'started'          => $startTime
+            )
+        );
     }
 
     /**
@@ -84,7 +94,7 @@ class Performance_Profiler_Component_Storage_MySQL extends Performance_Profiler_
         $start = microtime(true);
         for($i = 0; $i < $count; $i++) {
         }
-        $end = (microtime(true) - $start)/($this->_compRuns+2);
+        $end = (microtime(true) - $start) / ($this->_compRuns+2);
         unregister_tick_function(array(&$this, '_compensationEmptyFunction'));
 
         return $end;

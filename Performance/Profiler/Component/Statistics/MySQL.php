@@ -35,16 +35,16 @@ class Performance_Profiler_Component_Statistics_MySQL extends Performance_Profil
     /**
      * Repository for measure statistic.
      *
-     * @var Performance_Profiler_Component_Repository_MeasureStatistic
+     * @var Performance_Profiler_Component_Repository_TestAttempt
      */
-    private $_repositoryStatistics     = null;
+    private $_attemptRepository     = null;
 
     /**
      * Repository for measure statistic data.
      *
-     * @var Performance_Profiler_Component_Repository_MeasureStatisticData
+     * @var Performance_Profiler_Component_Repository_AttemptStatisticData
      */
-    private $_repositoryStatisticsData = null;
+    private $_statDataRepository = null;
 
     /**
      * Analyzed call stack tree.
@@ -104,7 +104,7 @@ class Performance_Profiler_Component_Statistics_MySQL extends Performance_Profil
     public function setAttemptId($id) {
         $this->_attemptId = $id;
 
-        $attempt = $this->getProvider()->get('Performance_Profiler_Component_Repository_MeasureAttempt')->getAttempt($id);
+        $attempt = $this->_attemptRepository->getAttempt($id);
         $this->_compTime = $attempt['compensationTime'];
 
         return $this;
@@ -131,16 +131,12 @@ class Performance_Profiler_Component_Statistics_MySQL extends Performance_Profil
      */
     public function save() {
         $this->generate();
-        $statistic = array(
-            'profiler_measure_attempt_id' => $this->_attemptId
-        );
-        $id = $this->_repositoryStatistics->create($statistic);
-        $this->_save($this->_statistics, $id);
+        $this->_save($this->_statistics, $this->_attemptId);
         $updateData = array(
             'time' => $this->_times[0],
             'calls' => $this->_countCalls
         );
-        $this->_repositoryStatistics->update($id, $updateData);
+        $this->_attemptRepository->update($this->_attemptId, $updateData);
 
         return $this;
     }
@@ -316,29 +312,30 @@ class Performance_Profiler_Component_Statistics_MySQL extends Performance_Profil
     /**
      * It saves statistics data to MYSQL.
      *
-     * @param array $statistics   Analyzed trre with statistics
-     * @param int   $statisticsId ID of statistic
-     * @param int   $parent       ID of statistic data parent id (0 is root)
+     * @param array $statistics Analyzed trre with statistics
+     * @param int   $attemptId  ID of attempt
+     * @param int   $parent     ID of statistic data parent id (0 is root)
      *
      * @return Performance_Profiler_Component_Statistics_MySQL
      */
-    private function _save(&$statistics, &$statisticsId = null, $parent = 0) {
+    private function _save(&$statistics, $attemptId = null, $parent = 0) {
         $this->_times[$parent] = 0;
-        $respository = $this->_repositoryStatisticsData;
+        $respository = $this->_statDataRepository;
+
         foreach ($statistics as &$call) {
             $this->_times[$parent] += $call['time'];
             $this->_countCalls++;
             $data = array(
-                'profiler_measure_statistic_id' => $statisticsId,
-                'parent_id'                     => $parent,
-                'file'                          => $call['file'],
-                'line'                          => $call['line'],
-                'content'                       => $call['content'],
-                'time'                          => $call['time']
+                'attemptId' => $attemptId,
+                'parentId'  => $parent,
+                'file'      => $call['file'],
+                'line'      => $call['line'],
+                'content'   => $call['content'],
+                'time'      => $call['time']
             );
             $id = $respository->create($data);
             if (isset($call['subStack'])) {
-                $this->_save($call['subStack'], $statisticsId, $id);
+                $this->_save($call['subStack'], $attemptId, $id);
             }
         }
 
@@ -351,8 +348,9 @@ class Performance_Profiler_Component_Statistics_MySQL extends Performance_Profil
      * @return void
      */
     protected function init() {
-        $this->_callStack                = $this->getProvider()->get('Performance_Profiler_Component_CallStack_Factory')->getCallStack();
-        $this->_repositoryStatistics     = $this->getProvider()->get('Performance_Profiler_Component_Repository_MeasureStatistic');
-        $this->_repositoryStatisticsData = $this->getProvider()->get('Performance_Profiler_Component_Repository_MeasureStatisticData');
+        $this->_callStack          = $this->getProvider()
+                ->get('Performance_Profiler_Component_CallStack_Factory')->getCallStack(); /* @var $callStack Performance_Profiler_Component_CallStack_MySQL */
+        $this->_attemptRepository  = $this->getProvider()->get('Performance_Profiler_Component_Repository_TestAttempt');
+        $this->_statDataRepository = $this->getProvider()->get('Performance_Profiler_Component_Repository_AttemptStatisticData');
     }
 }

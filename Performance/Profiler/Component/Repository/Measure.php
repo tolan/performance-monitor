@@ -10,6 +10,15 @@
 class Performance_Profiler_Component_Repository_Measure extends Performance_Main_Abstract_Repository {
 
     /**
+     * Init method for set managed table.
+     *
+     * @return void
+     */
+    protected function init() {
+        parent::init('measure');
+    }
+
+    /**
      * Gets measures by id/s. For empty input it returns all measures.
      *
      * @param array|int $ids ID/s of measure
@@ -19,8 +28,7 @@ class Performance_Profiler_Component_Repository_Measure extends Performance_Main
     public function getMeasures($ids = null) {
         $select = $this->getDatabase()
                 ->select()
-                ->from(array('pm' => 'profiler_measure'))
-                ->joinLeft(array('pmp' => 'profiler_measure_parameter'), 'pm.id = pmp.profiler_measure_id', array('key', 'value'));
+                ->from(array('pm' => $this->getTableName()));
 
         if ($ids) {
             $select->where('pm.id IN (?)', $ids);
@@ -30,22 +38,11 @@ class Performance_Profiler_Component_Repository_Measure extends Performance_Main
 
         $result = array();
         foreach ($data as $item) {
-            $parameters = isset($result[$item['id']]) ? $result[$item['id']]['parameters'] : array();
-
-            if (!empty($item['key']) && !empty($item['value'])) {
-                $parameters[] = array(
-                    'key'   => $item['key'],
-                    'value' => $item['value']
-                );
-            }
-
             $result[$item['id']] = array(
                 'id'          => $item['id'],
                 'name'        => $item['name'],
                 'description' => $item['description'],
-                'link'        => $item['link'],
-                'edited'      => strtotime($item['edited'])*1000,
-                'parameters'  => $parameters
+                'edited'      => strtotime($item['edited'])*1000
             );
         }
 
@@ -60,8 +57,48 @@ class Performance_Profiler_Component_Repository_Measure extends Performance_Main
      * @return array
      */
     public function getMeasure($id) {
-        $data = $this->getMeasures(array($id));
-        return $data[$id];
+        $select = $this->getDatabase()
+            ->select()
+            ->from(array('m' => $this->getTableName()), array('id' => 'id', 'name', 'description', 'edited'))
+            ->joinLeft(array('mr' => 'measure_request'), 'mr.measureId = m.id', array('requestId' => 'id', 'measureId', 'url', 'method', 'toMeasure'))
+            ->joinLeft(
+                array('rp' => 'request_parameter'), 'rp.requestId = mr.id', array('methodParam' => 'method', 'nameParam' => 'name', 'value')
+            )
+            ->where('m.id = ?', $id);
+
+        $data     = $select->fetchAll();
+        $requests = array();
+        $params   = array();
+
+        foreach ($data as $item) {
+            if ($item['nameParam']) {
+                $params[$item['requestId']][] = array(
+                    'method' => $item['methodParam'],
+                    'name'   => $item['nameParam'],
+                    'value'  => $item['value']
+                );
+            }
+            $requests[$item['requestId']] = array(
+                'id'        => $item['requestId'],
+                'method'    => $item['method'],
+                'url'       => $item['url'],
+                'toMeasure' => (boolean)$item['toMeasure']
+            );
+        }
+
+        $result = array(
+            'id'          => $data[0]['id'],
+            'name'        => $data[0]['name'],
+            'description' => $data[0]['description'],
+            'edited'      => $data[0]['edited']
+        );
+
+        foreach ($requests as $request) {
+            $request['parameters'] = isset($params[$request['id']]) ? $params[$request['id']] : array();
+            $result['requests'][] = $request;
+        }
+
+        return $result;
     }
 
     /**
@@ -72,11 +109,7 @@ class Performance_Profiler_Component_Repository_Measure extends Performance_Main
      * @return int Count of affected rows
      */
     public function delete($id) {
-        return $this->getDatabase()
-            ->delete()
-            ->setTable('profiler_measure')
-            ->where('id = ?', $id)
-            ->run();
+        return parent::delete($id);
     }
 
     /**
@@ -87,11 +120,8 @@ class Performance_Profiler_Component_Repository_Measure extends Performance_Main
      * @return int Inserted ID
      */
     public function create($data) {
-        return $this->getDatabase()
-            ->insert()
-            ->setTable('profiler_measure')
-            ->setInsertData($data)
-            ->run();
+        $data['edited'] = Performance_Main_Database::convertTimeToMySQLDateTime(time());
+        return parent::create($data);
     }
 
     /**
@@ -103,54 +133,7 @@ class Performance_Profiler_Component_Repository_Measure extends Performance_Main
      * @return int Count affected rows
      */
     public function update($id, $data) {
-        return $this->getDatabase()
-            ->update()
-            ->setTable('profiler_measure')
-            ->setUpdateData($data)
-            ->where('id = ?', $id)
-            ->run();
-    }
-
-    /**
-     * Delete all measure parameters by given measure id.
-     *
-     * @param int $id ID of measure
-     *
-     * @return int Count of affected rows
-     */
-    public function deleteParameters($id) {
-        return $this->getDatabase()
-            ->delete()
-            ->setTable('profiler_measure_parameter')
-            ->where('profiler_measure_id = ?', $id)
-            ->run();
-    }
-
-    /**
-     * Set new parameters for measure by given measure id.
-     *
-     * @param int   $id     ID of measure
-     * @param array $params Array with arrays of paramaters
-     *
-     * @return array Array with inserted IDs
-     */
-    public function setParameters($id, $params) {
-        $ids = array();
-        foreach ($params as $param) {
-            if (!empty($param['key']) && !empty($param['value'])) {
-                $insert = array(
-                    'profiler_measure_id' => $id,
-                    'key'                 => $param['key'],
-                    'value'               => $param['value']
-                );
-                $ids[] = $this->getDatabase()
-                    ->insert()
-                    ->setTable('profiler_measure_parameter')
-                    ->setInsertData($insert)
-                    ->run();
-            }
-        }
-
-        return $ids;
+        $data['edited'] = Performance_Main_Database::convertTimeToMySQLDateTime(time());
+        return parent::update($id, $data);
     }
 }

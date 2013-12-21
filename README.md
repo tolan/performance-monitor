@@ -3,10 +3,11 @@ Welcome to the project, which aims to create PHP Performance framework.
 The purpose of the framework is the analysis, optimization, control and evaluate the performance of code in PHP project.
 
 ## Requirements
-* Apache:  2.2
-* PHP:     5.3+
-* MySQL:   5.5
-* Gearman: 1.1.2
+* Apache:        2.2
+* PHP:           5.3+
+* MySQL:         5.5
+* Gearman:       1.1.2
+* HTTP_Request2: 2.1.1 (see: http://pear.php.net/package/HTTP_Request2)
 
 ## Configuration
 - configuration is in file: Performance/config.php
@@ -24,7 +25,7 @@ The purpose of the framework is the analysis, optimization, control and evaluate
   declare(ticks=1);
 
   /** Your code **/
-  
+
   Performance_Profiler_Monitor::getInstance()->disable();
 </pre>
 - next go to page http://__your-domain__/Performance/web/

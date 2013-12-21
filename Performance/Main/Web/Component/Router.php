@@ -76,7 +76,19 @@ class Performance_Main_Web_Component_Router {
 
         $path = substr($server->getREQUEST_URI(), strlen($server->getBASE()));
 
+        $getParams = array();
+        if (strpos($path, '?')) {
+            $getParams = $this->_parseGetParams($path);
+            $path      = $getParams['path'];
+        }
+
         $route = $this->_resolveNewRoute($path);
+
+        if (isset($getParams['params'])) {
+            foreach ($getParams['params'] as $key => $value) {
+                $route[self::PARAMS][$key] = $value;
+            }
+        }
 
         $controller = $this->_provider->get('Performance_Main_Web_Controller_'.$route[self::CONTROLLER]);
         $controller->setAction($route[self::METHOD]);
@@ -267,5 +279,25 @@ class Performance_Main_Web_Component_Router {
         }
 
         return $pathParams;
+    }
+
+    /**
+     * It provides parsing of get params and returns array with values.
+     *
+     * @param string $path Input request path
+     *
+     * @return array
+     */
+    private function _parseGetParams($path) {
+        $params = explode('&', ltrim(strstr($path, '?'), '?'));
+        $result = array();
+        foreach ($params as $param) {
+            list($key, $value)      = explode('=', $param);
+            $result['params'][$key] = $value;
+        }
+
+        $result['path'] = strstr($path, '?', true);
+
+        return $result;
     }
 }

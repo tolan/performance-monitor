@@ -102,18 +102,51 @@ perfModule.service(
 
 perfModule.service(
     'translate',
-    function($http) {
+    function($rootScope, $http) {
         var self = this;
+        this._lang = null;
         this._placeholders = {};
         this._table = {};
-        $http.get('translate').success(function(translate) {
-            self._table = translate;
-        });
+        this._loadedModules = [];
+
+        this.switchLang = function(lang) {
+            var i, modules = this._loadedModules;
+
+            if (lang === this._lang) {
+                return this;
+            }
+
+            this._lang = lang;
+            this._loadedModules = [];
+            //this._table = {};
+
+            for(i in modules) {
+                if (modules.hasOwnProperty(i)) {
+                    this.loadModule(modules[i]);
+                }
+            }
+
+            $rootScope.$broadcast('translate:switchLang');
+            return this;
+        }
+
+        this.loadModule = function (module) {
+            if (_.indexOf(this._loadedModules, module) === -1 && module.length) {
+                this._loadedModules.push(module);
+                $http.get('translate/module/' + module + (this._lang ? '/' + this._lang : '')).success(function(translate) {
+                    self._lang = translate.lang;
+                    self._table = _.extend(self._table, translate.translate);
+                });
+            }
+        };
 
         this._ = function (key, placeholders) {
             var string = key;
             if (this._table.hasOwnProperty(key)) {
                 string = this._table[key];
+            } else {
+                var module = key.substring(0, _.indexOf(key, '.'));
+                this.loadModule(module);
             }
 
             string = this._replace(string, placeholders);
@@ -143,6 +176,8 @@ perfModule.service(
 
             return string;
         };
+
+        this.loadModule('main');
     }
 );
 
@@ -154,26 +189,21 @@ perfModule.run(
             return translate._(key, placeholders);
         };
 
+        rootScope.selectSortClass = function(column, predicate, reverse) {
+            var style = 'icon-minus';
+            if (column === predicate) {
+                style = 'icon-chevron-' + ((reverse === undefined || reverse === true) ? 'up' : 'down');
+            }
+
+            return style;
+        };
+
+        rootScope.indexOf = function(items, item) {
+            return _.indexOf(items, item);
+        };
+
         rootScope.validator = validator;
 }]);
-
-perfModule.config([
-    '$routeProvider', '$locationProvider',
-    function($routeProvider, $locationProvider) {
-        $routeProvider.
-            when('/profiler/list',       {templateUrl: '/Performance/web/js/template/Profiler/list.html',   controller: ProfilerListCtrl}).
-            when('/profiler/new',        {templateUrl: '/Performance/web/js/template/Profiler/new.html',    controller: ProfilerCreateCtrl}).
-            when('/profiler/edit/:id',   {templateUrl: '/Performance/web/js/template/Profiler/new.html',    controller: ProfilerCreateCtrl}).
-            when('/profiler/detail/:id', {templateUrl: '/Performance/web/js/template/Profiler/detail.html', controller: ProfilerDetailCtrl}).
-            when(
-                '/profiler/detail/:measureId/attempt/:id',
-                {templateUrl: '/Performance/web/js/template/Profiler/attemptDetail.html', controller: ProfilerAttemptDetailCtrl}
-            ).
-            otherwise({redirectTo: '/profiler/list'});
-
-        $locationProvider.html5Mode(false);
-    }
-]);
 
 perfModule.filter('startFrom', function() {
     return function(input, start) {

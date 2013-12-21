@@ -19,7 +19,7 @@ class Performance_Profiler_Component_CallStack_MySQL extends Performance_Profile
     /**
      * Repository for loading calls.
      *
-     * @var Performance_Profiler_Component_Repository_MeasureData
+     * @var Performance_Profiler_Component_Repository_AttemptData
      */
     private $_repositoryData = null;
 
@@ -102,7 +102,7 @@ class Performance_Profiler_Component_CallStack_MySQL extends Performance_Profile
      * @return void
      */
     protected function init() {
-        $this->_repositoryData = $this->getProvider()->get('Performance_Profiler_Component_Repository_MeasureData');
+        $this->_repositoryData = $this->getProvider()->get('Performance_Profiler_Component_Repository_AttemptData');
     }
 
     /**
