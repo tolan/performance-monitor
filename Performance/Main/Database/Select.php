@@ -6,6 +6,10 @@
  * @author     Martin Kovar
  * @category   Performance
  * @package    Main
+ *
+ * @method Performance_Main_Database_Select where(string $condition, array $bind=null) It adds condition with AND operator.
+ * @method Performance_Main_Database_Select orWhere(string $condition, array $bind=null) It adds condition with OR operator.
+ * @method Performance_Main_Database_Select setSQL(string $sql) It adds condition with OR operator.
  */
 class Performance_Main_Database_Select extends Performance_Main_Database_Where {
 
@@ -56,7 +60,7 @@ class Performance_Main_Database_Select extends Performance_Main_Database_Where {
         $alias = is_array($table) ? key($table) : $table;
         $table = is_array($table) ? current($table) : $table;
 
-        $this->_table   = array(
+        $this->_table = array(
             'table' => $table,
             'alias' => $alias
         );
@@ -178,7 +182,7 @@ class Performance_Main_Database_Select extends Performance_Main_Database_Where {
         $sql .= $this->_group  === null ? '' : ' GROUP BY '.$this->_group;
         $sql .= $this->_having === null ? '' : ' HAVING '.$this->_having;
 
-        $this->sql = $sql;
+        $this->setStatement($sql);
 
         return $this;
     }

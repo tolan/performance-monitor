@@ -24,6 +24,13 @@ class Performance_Main_Database_Insert extends Performance_Main_Database_Query {
     private $_data = array();
 
     /**
+     * Data for mass insert.
+     *
+     * @var array
+     */
+    private $_massData = array();
+
+    /**
      * Last insert id
      *
      * @var int
@@ -57,6 +64,19 @@ class Performance_Main_Database_Insert extends Performance_Main_Database_Query {
     }
 
     /**
+     * This method provides insert multiple rows in one insert statement.
+     *
+     * @param array $data Data for mass insert (multiple rows)
+     *
+     * @return Performance_Main_Database_Insert
+     */
+    public function massInsert(array $data) {
+        $this->_massData = $data;
+
+        return $this;
+    }
+
+    /**
      * This runs SQL insert stament and returns last inserted id.
      *
      * @return int Last insert ID.
@@ -64,11 +84,9 @@ class Performance_Main_Database_Insert extends Performance_Main_Database_Query {
     public function run() {
         $this->preFetch();
 
-        $this->fetch($this->sql);
+        $this->execute($this->getStatement(), $this->getBind());
 
-        $this->_insertId = mysql_insert_id($this->_connection);
-
-        return $this->_insertId;
+        return $this->getConnection()->lastInsertId();
     }
 
     /**
@@ -98,18 +116,31 @@ class Performance_Main_Database_Insert extends Performance_Main_Database_Query {
             throw new Performance_Main_Database_Exception('Table is not set.');
         }
 
-        if (empty($this->_data)) {
+        if (empty($this->_data) && empty($this->_massData)) {
             throw new Performance_Main_Database_Exception('Data are not set.');
         }
 
+        $data  = array_filter(array_merge($this->_massData, array($this->_data)));
+        $first = $data[current(array_keys($data))];
+
         $sql = 'INSERT INTO '.$this->_table;
 
-        $columns = '(`'.join('`, `', array_keys($this->_data)).'`)';
-        $data = '('.join(', ', $this->cleanData($this->_data)).')';
+        $columns = '(`'.join('`, `', array_keys($first)).'`)';
 
-        $sql .= ' '.$columns.' VALUES '.$data;
+        $placeholders = array();
+        $bind = array();
+        foreach ($data as $row) {
+            $placeholders[] = '('.rtrim(str_repeat('?, ', count($row)), ', ').')';
+            foreach ($row as $field) {
+                $bind[] = $field;
+            }
+        }
 
-        $this->sql = $sql;
+        $values = join(', ', $placeholders);
+        $sql .= ' '.$columns.' VALUES '.$values;
+
+        $this->setStatement($sql);
+        $this->setBind($bind);
 
         return $this;
     }

@@ -6,8 +6,15 @@
  * @author     Martin Kovar
  * @category   Performance
  * @package    Main
+ *
+ * @method Performance_Main_Log trace(mixed $message) It provides logging into file with trace level.
+ * @method Performance_Main_Log debug(mixed $message) It provides logging into file with debug level.
+ * @method Performance_Main_Log info(mixed $message) It provides logging into file with info level.
+ * @method Performance_Main_Log warning(mixed $message) It provides logging into file with warning level.
+ * @method Performance_Main_Log error(mixed $message) It provides logging into file with error level.
+ * @method Performance_Main_Log fatal(mixed $message) It provides logging into file with fatal level.
  */
-class Performance_Main_Log {
+class Performance_Main_Log implements Performance_Main_Event_Interface_Reciever {
     /**
      * Singleton instance of Performance_Main_Log.
      *
@@ -46,9 +53,14 @@ class Performance_Main_Log {
     /**
      * Construct method.
      *
-     * @param Performance_Main_Config $config Config instance
+     * @param Performance_Main_Config         $config   Config instance
+     * @param Performance_Main_Event_Mediator $mediator Mediator instance
      */
-    private function __construct(Performance_Main_Config $config = null) {
+    private function __construct(Performance_Main_Config $config = null, Performance_Main_Event_Mediator $mediator = null) {
+        if ($mediator) {
+            $mediator->register($this);
+        }
+
         if ($config !== null) {
             $settings = $config->get('log');
             $this->_caching = isset($settings['cache']) ? $settings['cache'] : $this->_caching;
@@ -58,15 +70,41 @@ class Performance_Main_Log {
     }
 
     /**
-     * Returns singleton instance.
+     * It recieve message from mediator.
      *
-     * @param Performance_Main_Config $config Config instance
+     * @param Performance_Main_Event_Interface_Message $message Message instance
+     * @param Performance_Main_Event_Interface_Sender  $sender  Sender instance
      *
      * @return Performance_Main_Log
      */
-    public static function getInstance(Performance_Main_Config $config = null) {
+    public function recieve(Performance_Main_Event_Interface_Message $message, Performance_Main_Event_Interface_Sender $sender) {
+        if ($this->_level <= Performance_Main_Log_Enum_Level::DEBUG) {
+            $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+
+            $messsage = new Performance_Main_Log_Message(
+                'MESSAGE',
+                array(get_class($sender), $message->getData()),
+                $trace[1]['file'],
+                $trace[1]['line']
+            );
+
+            $this->_addMessage($messsage);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns singleton instance.
+     *
+     * @param Performance_Main_Config         $config   Config instance
+     * @param Performance_Main_Event_Mediator $mediator Mediator instance
+     *
+     * @return Performance_Main_Log
+     */
+    public static function getInstance(Performance_Main_Config $config = null, Performance_Main_Event_Mediator $mediator = null) {
         if (self::$_instance === false) {
-            self::$_instance = new self($config);
+            self::$_instance = new self($config, $mediator);
         }
 
         return self::$_instance;
@@ -88,7 +126,8 @@ class Performance_Main_Log {
 
         if (array_key_exists($level, $constants)) {
             if ($constants[$level] <= $this->_level && $this->_level !== Performance_Main_Log_Enum_Level::OFF) {
-                $messsage = new Performance_Main_Log_Message($level, $arguments);
+                $trace    = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+                $messsage = new Performance_Main_Log_Message($level, $arguments, $trace[0]['file'], $trace[0]['line']);
                 $this->_addMessage($messsage);
             }
         } else {
@@ -121,7 +160,7 @@ class Performance_Main_Log {
      * @param Performance_Main_Log_Message $message Message instnace
      *
      * @return Performance_Main_Log
-     * 
+     *
      * @throws Performance_Main_Log_Exception Throws when is not set filename for log.
      */
     private function _writeMessage(Performance_Main_Log_Message $message) {

@@ -24,7 +24,7 @@ class Performance_Profiler_Component_Repository_TestAttempt extends Performance_
             ->from($this->getTableName());
 
         if ($testId) {
-            $select->where('testId IN (?)', $testId);
+            $select->where('testId IN (:id)', array(':id' => $testId));
         }
 
         return $select->fetchAll();
@@ -41,7 +41,7 @@ class Performance_Profiler_Component_Repository_TestAttempt extends Performance_
         $select = $this->getDatabase()
             ->select()
             ->from($this->getTableName())
-            ->where('id = ?', $id);
+            ->where('id = :id', array(':id' => $id));
 
         return $select->fetchOne();
     }

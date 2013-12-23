@@ -22,10 +22,10 @@ class Performance_Main_Translate_Repository extends Performance_Main_Abstract_Re
                 ->select()
                 ->columns(array('`key`' => 'CONCAT(t.module, ".", t.key)'))
                 ->from(array('t' => 'translate'), array('text'))
-                ->where('t.lang = ?', $lang);
+                ->where('t.lang = :lang', array(':lang' => $lang));
 
         if ($module) {
-            $select->where('t.module IN (?)', $module);
+            $select->where('t.module IN (:module)', array(':module' => $module));
         }
 
         $data = $select->fetchAll();

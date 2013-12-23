@@ -30,8 +30,8 @@ class Performance_Profiler_Component_Repository_AttemptStatisticData extends Per
         $select = $this->getDatabase()
             ->select()
             ->from(array('asd' => 'attempt_statistic_data'))
-            ->where('asd.attemptId = ?', $attemptId)
-            ->where('asd.parentId = ?', $parentId);
+            ->where('asd.attemptId = :attemptId', array(':attemptId' => $attemptId))
+            ->where('asd.parentId = :parentId', array(':parentId' => $parentId));
 
         return $select->fetchAll();
     }
@@ -61,7 +61,7 @@ class Performance_Profiler_Component_Repository_AttemptStatisticData extends Per
                 )
             )
             ->from(array('asd' => 'attempt_statistic_data'), array())
-            ->where('asd.attemptId = ?', $attemptId)
+            ->where('asd.attemptId = :id', array(':id' => $attemptId))
             ->group(array('asd.file', 'asd.line'));
 
         $data = $select->fetchAll();

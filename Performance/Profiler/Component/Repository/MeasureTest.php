@@ -24,7 +24,7 @@ class Performance_Profiler_Component_Repository_MeasureTest extends Performance_
                 ->from($this->getTableName());
 
         if ($measureId) {
-            $select->where('measureId IN (?)', $measureId);
+            $select->where('measureId IN (:ids)', array(':ids' => $measureId));
         }
 
         return $select->fetchAll();
@@ -63,7 +63,7 @@ class Performance_Profiler_Component_Repository_MeasureTest extends Performance_
                     array(
                         'maxImmersion' => 'MAX(ad.immersion)',
                         'started'      => 'UNIX_TIMESTAMP(ta.started)*1000'))
-                ->where('ta.id = ?', $id);
+                ->where('ta.id = :id', array('id' => $id));
 
         return $select->fetchOne();
     }

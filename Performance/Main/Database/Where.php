@@ -47,38 +47,26 @@ class Performance_Main_Database_Where extends Performance_Main_Database_Query {
      */
     protected function compile() {
         $result = '';
+        $compiledBinds = array();
 
         if (count($this->_where) > 0) {
             foreach ($this->_where as $condition) {
-                $bind         = $this->cleanData($condition['bind']);
-                $compiledBind = $this->_compileBindData($bind);
-                $operator     = $condition['operator'];
-                $condition    = $condition['condition'];
+                $bind          = $this->cleanData($condition['bind']);
+                $compiledBinds = array_merge($compiledBinds, (array)$bind);
+                $operator      = $condition['operator'];
+                $condition     = $condition['condition'];
 
                 if ($result === '') {
-                    $result = ' ('.str_replace('?', $compiledBind, $condition).')';
+                    $result = ' ('.$condition.')';
                 } else {
-                    $result .= ' '.$operator.' ('.str_replace('?', $compiledBind, $condition).')';
+                    $result .= ' '.$operator.' ('.$condition.')';
                 }
             }
         }
 
+        $this->setBind($compiledBinds);
+
         return $result;
-    }
-
-    /**
-     * Compile data to string.
-     *
-     * @param mixed $data
-     *
-     * @return string
-     */
-    private function _compileBindData($data) {
-        if (is_array($data)) {
-            return join(', ', $data);
-        }
-
-        return $data;
     }
 
     /**
@@ -92,9 +80,9 @@ class Performance_Main_Database_Where extends Performance_Main_Database_Query {
      */
     private function _whereCondition($condition, $bind=null, $type = 'AND') {
         $this->_where[] = array(
-            'operator' => $type,
+            'operator'  => $type,
             'condition' => $condition,
-            'bind' => $bind
+            'bind'      => $bind
         );
 
         return $this;

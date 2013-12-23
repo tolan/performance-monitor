@@ -29,7 +29,7 @@ class Performance_Profiler_Component_Repository_AttemptData extends Performance_
         return $this->getDatabase()
             ->select()
             ->from($this->getTableName(), array('id', 'file', 'line', 'immersion', 'start', 'end'))
-            ->where('attemptId = ?', $id)
+            ->where('attemptId = :id', array(':id' => $id))
             ->fetchAll();
     }
 

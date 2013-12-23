@@ -154,29 +154,14 @@ class Performance_Main_Web_Controller_Profiler extends Performance_Main_Web_Cont
         ));
 
         if (isset($request['parameters'])) {
-            foreach ($request['parameters'] as $parameter) {
-                $this->_createParameter($requestId, $parameter);
+            foreach ($request['parameters'] as &$parameter) {
+                $parameter['requestId'] = $requestId;
             }
+
+            $this->_parameterRepository->massCreate($request['parameters']);
         }
 
         return $this;
-    }
-
-    /**
-     * Create parameter for request with given parameter data.
-     *
-     * @param int   $requestId ID of request for measure
-     * @param array $parameter Parameter data (method, name, value)
-     *
-     * @return int
-     */
-    private function _createParameter($requestId, $parameter) {
-        return $this->_parameterRepository->create(array(
-            'requestId' => $requestId,
-            'method'    => $parameter['method'],
-            'name'      => $parameter['name'],
-            'value'     => $parameter['value']
-        ));
     }
 
     /**

@@ -70,7 +70,7 @@ abstract class Performance_Main_Abstract_Repository {
         return $this->getDatabase()
             ->delete()
             ->setTable($this->getTableName())
-            ->where('id = ?', $id)
+            ->where('id = :id', array(':id' => $id))
             ->run();
     }
 
@@ -106,7 +106,7 @@ abstract class Performance_Main_Abstract_Repository {
             ->update()
             ->setTable($this->getTableName())
             ->setUpdateData($data)
-            ->where('id = ?', $id)
+            ->where('id = :id', array(':id' => $id))
             ->run();
     }
 

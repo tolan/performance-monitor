@@ -31,7 +31,7 @@ class Performance_Profiler_Component_Repository_Measure extends Performance_Main
                 ->from(array('pm' => $this->getTableName()));
 
         if ($ids) {
-            $select->where('pm.id IN (?)', $ids);
+            $select->where('pm.id IN (:ids)', array(':ids' => $ids));
         }
 
         $data = $select->fetchAll();
@@ -64,7 +64,7 @@ class Performance_Profiler_Component_Repository_Measure extends Performance_Main
             ->joinLeft(
                 array('rp' => 'request_parameter'), 'rp.requestId = mr.id', array('methodParam' => 'method', 'nameParam' => 'name', 'value')
             )
-            ->where('m.id = ?', $id);
+            ->where('m.id = :id', array(':id' => $id));
 
         $data     = $select->fetchAll();
         $requests = array();

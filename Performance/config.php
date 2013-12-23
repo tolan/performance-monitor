@@ -4,18 +4,19 @@ $config = array(
     'provider' => array(
         'useAutoloader' => true,
         'initServices'  => array(
-            'database'
+            'database',
+            'log'
         ),
-        'serviceMap'    =>  array(
-            'database'  => 'Performance_Main_Database',
-            'config'    => 'Performance_Main_Config',
-            'web'       => 'Performance_Main_Web_App',
-            'request'   => 'Performance_Main_Web_Component_Request',
-            'response'  => 'Performance_Main_Web_Component_Response',
-            'log'       => 'Performance_Main_Log',
-            'access'    => 'Performance_Main_Access',
-            'router'    => 'Performance_Main_Web_Component_Router',
-            'cache'     => 'Performance_Main_Cache'
+        'serviceMap'   =>  array(
+            'database' => 'Performance_Main_Database',
+            'config'   => 'Performance_Main_Config',
+            'web'      => 'Performance_Main_Web_App',
+            'request'  => 'Performance_Main_Web_Component_Request',
+            'response' => 'Performance_Main_Web_Component_Response',
+            'log'      => 'Performance_Main_Log',
+            'access'   => 'Performance_Main_Access',
+            'router'   => 'Performance_Main_Web_Component_Router',
+            'cache'    => 'Performance_Main_Cache'
         )
     ),
     'database' => array(

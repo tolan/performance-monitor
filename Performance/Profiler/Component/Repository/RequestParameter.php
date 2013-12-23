@@ -28,4 +28,19 @@ class Performance_Profiler_Component_Repository_RequestParameter extends Perform
     public function create($data) {
         return parent::create($data);
     }
+
+    /**
+     * It provides create method for multiple parameters.
+     *
+     * @param array $parameters List of parameters
+     *
+     * @return int last insert id
+     */
+    public function massCreate($parameters) {
+        return $this->getDatabase()
+            ->insert()
+            ->setTable($this->getTableName())
+            ->massInsert($parameters)
+            ->run();
+    }
 }

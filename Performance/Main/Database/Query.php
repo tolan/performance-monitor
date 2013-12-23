@@ -14,28 +14,35 @@ class Performance_Main_Database_Query {
      *
      * @var string
      */
-    protected $sql = null;
+    private $_statement = null;
 
     /**
-     * Query resource from mysql_query
+     * Binding data.
+     *
+     * @var array
+     */
+    private $_bind = array();
+
+    /**
+     * Query resource response from MySQL
      *
      * @var mixed
      */
-    protected $query = null;
+    private $_response = null;
 
     /**
      * Connection resource to database
      *
-     * @var resource
+     * @var Performance_Main_Database_Connection
      */
     protected $_connection;
 
     /**
      * Construct method
      *
-     * @param resource $connection Connection resource to database
+     * @param Performance_Main_Database_Connection $connection Connection to database
      */
-    final public function __construct($connection) {
+    final public function __construct(Performance_Main_Database_Connection $connection) {
         $this->_connection = $connection;
     }
 
@@ -47,14 +54,9 @@ class Performance_Main_Database_Query {
     public function fetchAll() {
         $this->preFetch();
 
-        $query = $this->fetch($this->sql);
+        $this->_response = $this->execute($this->_statement, $this->_bind);
 
-        $result = array();
-        while($row = mysql_fetch_array($query, MYSQLI_ASSOC)) {
-            $result[] = $row;
-        }
-
-        return $result;
+        return $this->_response->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -65,9 +67,29 @@ class Performance_Main_Database_Query {
     public function fetchOne() {
         $this->preFetch();
 
-        $query = $this->fetch($this->sql);
+        $this->_response = $this->execute($this->_statement, $this->_bind);
 
-        return mysql_fetch_array($query, MYSQLI_ASSOC);
+        return $this->_response->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * This method execute SQL statement with binding data. This method corresponds with PDO->prepare($statement)->execute($bind).
+     *
+     * @param string $statement SQL statement
+     * @param array  $bind      Data to bind
+     *
+     * @return PDOStatement
+     *
+     * @throws Performance_Main_Database_Exception
+     */
+    public function execute($statement, $bind) {
+        $answer = $this->_connection->prepare($statement);
+
+        if ($answer->execute($bind) === false) {
+            throw new Performance_Main_Database_Exception('Database error. Check sql statement: '.$this->_connection->errorInfo());
+        }
+
+        return $answer;
     }
 
     /**
@@ -84,7 +106,7 @@ class Performance_Main_Database_Query {
             throw new Performance_Main_Database_Exception('Input is not SQL statement.');
         }
 
-        $this->sql = $sql;
+        $this->_statement = $sql;
 
         return $this;
     }
@@ -97,7 +119,7 @@ class Performance_Main_Database_Query {
     public function __toString() {
         $this->compile();
 
-        return $this->sql;
+        return strtr($this->_statement, $this->_bind);
     }
 
     /**
@@ -110,36 +132,65 @@ class Performance_Main_Database_Query {
     }
 
     /**
+     * Sets SQL statement for prepare method.
+     *
+     * @param string $statement SQL statement
+     *
+     * @return Performance_Main_Database_Query
+     */
+    protected function setStatement($statement) {
+        $this->_statement = $statement;
+
+        return $this;
+    }
+
+    /**
+     * Sets bind data for execute method.
+     *
+     * @param array $bind Bind data
+     *
+     * @return Performance_Main_Database_Query
+     */
+    protected function setBind($bind) {
+        $this->_bind = array_merge($this->_bind, $bind);
+
+        return $this;
+    }
+
+    /**
+     * Gets SQL statement.
+     *
+     * @return string
+     */
+    protected function getStatement() {
+        return $this->_statement;
+    }
+
+    /**
+     * Gets bind data.
+     *
+     * @return array
+     */
+    protected function getBind() {
+        return $this->_bind;
+    }
+
+    /**
+     * Gets connection to database.
+     *
+     * @return Performance_Main_Database_Connection
+     */
+    protected function getConnection() {
+        return $this->_connection;
+    }
+
+    /**
      * Compile method of SQL statement. There is nothig because this query is compiled in input.
      *
      * @return Performance_Main_Database_Query
      */
     protected function compile() {
         return $this;
-    }
-
-    /**
-     * This method sends mysql statement to database and returns resource.
-     *
-     * @param string $sql SQL statement
-     *
-     * @return mixed Resource to MySQL
-     */
-    protected function fetch($sql) {
-        $this->setSQL($sql);
-        $this->query = mysql_query($sql, $this->_connection);
-
-        $error = mysql_error($this->_connection);
-
-        if ($error !== '') {
-            throw new Performance_Main_Database_Exception('Database error. Check sql statement: '.$error);
-        }
-
-        if ($this->query === false) {
-            throw new Performance_Main_Database_Exception('Database error. Check sql statement: '.$sql);
-        }
-
-        return $this->query;
     }
 
     /**
@@ -152,7 +203,7 @@ class Performance_Main_Database_Query {
     protected function preFetch() {
         $this->compile();
 
-        if ($this->sql === null) {
+        if ($this->_statement === null) {
             throw new Performance_Main_Database_Exception('SQL query is not set!');
         }
 
@@ -169,13 +220,13 @@ class Performance_Main_Database_Query {
     protected function cleanData($data) {
         if (is_array($data)) {
             $items = array();
-            foreach ($data as $item) {
-                $items[] = $this->cleanData($item);
+            foreach ($data as $key => $item) {
+                $items[$key] = $this->cleanData($item);
             }
 
             $data = $items;
         } elseif (is_string($data)) {
-            $data = "'".mysql_real_escape_string($data)."'";
+            $data = mysql_real_escape_string($data);
         } elseif (is_object($data)) {
             $data = (string)$data;
         } elseif (is_bool($data)) {

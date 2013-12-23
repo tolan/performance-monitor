@@ -48,13 +48,15 @@ class Performance_Main_Log_Message {
      *
      * @param enum  $level     One of Performance_Main_Log_Enum_Level
      * @param array $arguments Arguments of message
+     * @param file  $file      File where is log called
+     * @param int   $line      Line where is log called
+     *
+     * @return void
      */
-    public function __construct($level, $arguments) {
-        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-
+    public function __construct($level, $arguments, $file, $line) {
         $this->_level     = $level;
-        $this->_file      = $trace[1]['file'];
-        $this->_line      = $trace[1]['line'];
+        $this->_file      = $file;
+        $this->_line      = $line;
         $this->_arguments = $arguments;
     }
 

@@ -7,7 +7,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Cache {
+class Performance_Main_Cache implements Performance_Main_Event_Interface_Sender {
     const SESSION_NAME      = 'Cache';
     const DEFAULT_NAMESPACE = 'Performance';
 
@@ -26,17 +26,46 @@ class Performance_Main_Cache {
     private $_cache = array();
 
     /**
+     * Mediator instance
+     *
+     * @var Performance_Main_Event_Mediator
+     */
+    private $_mediator = null;
+
+    /**
      * Construct method.
      *
-     * @param string $namespace Namespace
+     * @param string                          $namespace Namespace
+     * @param Performance_Main_Event_Mediator $mediator  Mediator instance
+     *
+     * @return void
      */
-    public function __construct($namespace = self::DEFAULT_NAMESPACE) {
+    public function __construct($namespace = self::DEFAULT_NAMESPACE, Performance_Main_Event_Mediator $mediator = null) {
         session_start();
         $this->_namespace = $namespace;
+        $this->_mediator  = $mediator;
 
         if (isset($_SESSION[self::SESSION_NAME][$namespace])) {
             $this->_cache = unserialize($_SESSION[self::SESSION_NAME][$namespace]);
         }
+
+        $message = new Performance_Main_Event_Message();
+        $this->send($message->setData('Cache is loaded.'));
+    }
+
+    /**
+     * It sends message to mediator.
+     *
+     * @param Performance_Main_Event_Interface_Message $message Message instance
+     *
+     * @return Performance_Main_Cache
+     */
+    public function send(Performance_Main_Event_Interface_Message $message) {
+        if ($this->_mediator) {
+            $this->_mediator->send($message, $this);
+        }
+
+        return $this;
     }
 
     /**

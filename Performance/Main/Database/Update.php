@@ -6,6 +6,10 @@
  * @author     Martin Kovar
  * @category   Performance
  * @package    Main
+ *
+ * @method Performance_Main_Database_Select where(string $condition, array $bind=null) It adds condition with AND operator.
+ * @method Performance_Main_Database_Select orWhere(string $condition, array $bind=null) It adds condition with OR operator.
+ * @method Performance_Main_Database_Select setSQL(string $sql) It adds condition with OR operator.
  */
 class Performance_Main_Database_Update extends Performance_Main_Database_Where {
 
@@ -57,9 +61,7 @@ class Performance_Main_Database_Update extends Performance_Main_Database_Where {
     public function run() {
         $this->preFetch();
 
-        $this->fetch($this->sql);
-
-        return mysql_affected_rows($this->_connection);
+        return $this->execute($this->getStatement(), $this->getBind());
     }
 
     /**
@@ -78,19 +80,22 @@ class Performance_Main_Database_Update extends Performance_Main_Database_Where {
             throw new Performance_Main_Database_Exception('Data are not set.');
         }
 
-        $sql = 'UPDATE '.$this->_table. ' SET ';
-        $updates = array();
+        $sql          = 'UPDATE '.$this->_table. ' SET ';
+        $placeholders = array();
+        $bind         = array();
 
         foreach ($this->_data as $column => $data) {
-            $updates[] = $column.' = '.$this->cleanData($data);
+            $placeholders[] = $column.' = :'.$column;
+            $bind[':'.$column] = $data;
         }
 
-        $sql .= join(', ', $updates);
+        $sql .= join(', ', $placeholders);
 
         $where = parent::compile();
-        $sql .= $where == '' ? '' : ' WHERE '.$where;
+        $sql  .= $where == '' ? '' : ' WHERE '.$where;
 
-        $this->sql = $sql;
+        $this->setStatement($sql);
+        $this->setBind($bind);
 
         return $this;
     }
