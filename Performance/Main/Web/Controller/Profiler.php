@@ -153,7 +153,7 @@ class Performance_Main_Web_Controller_Profiler extends Performance_Main_Web_Cont
             'toMeasure' => $request['toMeasure']
         ));
 
-        if (isset($request['parameters'])) {
+        if (isset($request['parameters']) && !empty($request['parameters'])) {
             foreach ($request['parameters'] as &$parameter) {
                 $parameter['requestId'] = $requestId;
             }
