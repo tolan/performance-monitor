@@ -22,6 +22,12 @@
                 <th ng-click="predicate='avgTime'; reverse=!reverse" class="center time">
                     <i ng-class="selectSortClass('avgTime', predicate, reverse)"></i>[[_.('profiler.measure.test.avgTime')]]
                 </th>
+                <th ng-click="predicate='timeSubStack'; reverse=!reverse" class="center time">
+                    <i ng-class="selectSortClass('timeSubStack', predicate, reverse)"></i>[[_.('profiler.measure.test.timeSubStack')]]
+                </th>
+                <th ng-click="predicate='avgTimeSubStack'; reverse=!reverse" class="center time">
+                    <i ng-class="selectSortClass('avgTimeSubStack', predicate, reverse)"></i>[[_.('profiler.measure.test.avgTimeSubStack')]]
+                </th>
                 <th ng-click="predicate='count'; reverse=!reverse" class="center count-calls">
                     <i ng-class="selectSortClass('count', predicate, reverse)"></i>[[_.('profiler.measure.test.calls')]]
                 </th>
@@ -32,9 +38,11 @@
                 <td class="center">[[indexOf(calls, call) + 1]]</td>
                 <td>[[call.file]]</td>
                 <td class="center">[[call.line]]</td>
-                <td>[[call.content]]</td>
+                <td>[[call.content | limitTo : 200]]</td>
                 <td>[[call.time | round:5]]</td>
                 <td>[[call.avgTime | round:5]]</td>
+                <td>[[call.timeSubStack | round:5]]</td>
+                <td>[[call.avgTimeSubStack | round:5]]</td>
                 <td class="center">[[call.count]]</td>
             </tr>
         </tbody>

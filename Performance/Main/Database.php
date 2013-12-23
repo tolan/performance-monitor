@@ -242,13 +242,14 @@ class Performance_Main_Database {
         );
 
         $connection->exec("CREATE TABLE IF NOT EXISTS `attempt_statistic_data` (
-                `id`        BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `attemptId` INT UNSIGNED NOT NULL,
-                `parentId`  BIGINT UNSIGNED NOT NULL,
-                `file`      VARCHAR(512) NOT NULL,
-                `line`      INT NOT NULL,
-                `content`   TEXT NOT NULL,
-                `time`      FLOAT UNSIGNED NOT NULL,
+                `id`           BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `attemptId`    INT UNSIGNED NOT NULL,
+                `parentId`     BIGINT UNSIGNED NOT NULL,
+                `file`         VARCHAR(512) NOT NULL,
+                `line`         INT NOT NULL,
+                `content`      TEXT NOT NULL,
+                `time`         FLOAT UNSIGNED NOT NULL,
+                `timeSubStack` FLOAT UNSIGNED NOT NULL,
                 FOREIGN KEY (`attemptId`) REFERENCES `test_attempt` (`id`) ON DELETE CASCADE
             ) ENGINE='InnoDB'"
         );

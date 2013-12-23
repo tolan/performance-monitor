@@ -1,6 +1,6 @@
 <div ng-controller="ProfilerCallStackCtrl">
     <accordion close-others="false">
-        <accordion-group ng-repeat="call in calls" ng-click="showCall(call)" heading="[[call.time]] ms - [[call.content]]">
+        <accordion-group ng-repeat="call in calls" ng-click="showCall(call)" heading="[[call.timeSubStack]] ms - [[call.content | limitTo : 200]]">
             <div ng-include="'call.html'"></div>
         </accordion-group>
     </accordion>
@@ -11,7 +11,7 @@
         <span>[[_.('profiler.measure.test.subStack')]]</span>
         <div>
             <accordion close-others="false">
-                <accordion-group ng-repeat="call in call.calls" ng-click="showCall(call)" heading="[[call.time]] ms - [[call.content]]">
+                <accordion-group ng-repeat="call in call.calls" ng-click="showCall(call)" heading="[[call.timeSubStack]] ms - [[call.content | limitTo : 200]]">
                     <div ng-include="'call.html'"></div>
                 </accordion-group>
             </accordion>
@@ -30,7 +30,7 @@
         </tr>
         <tr>
             <td>[[_.('profiler.measure.test.time')]]</td>
-            <td>[[call.time]]</td>
+            <td>[[call.timeSubStack]]</td>
         </tr>
     </table>
     <div ng-if="call.calls" ng-include="'callStack.html'"></div>

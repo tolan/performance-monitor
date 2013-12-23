@@ -3,8 +3,13 @@ html {
 }
 
 body {
-    margin-left: 10%;
-    width: 80%;
+    margin-left: 5%;
+    width: 90%;
+}
+
+.table thead th,
+table thead th {
+    vertical-align: middle;
 }
 
 a:hover {
@@ -46,6 +51,7 @@ a:hover {
 
 .list {
     width: 100%;
+    font-size: 90%;
 }
 
 .list-90 {

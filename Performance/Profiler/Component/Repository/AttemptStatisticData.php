@@ -49,15 +49,17 @@ class Performance_Profiler_Component_Repository_AttemptStatisticData extends Per
             ->select()
             ->columns(
                 array(
-                    'id'       => 'asd.id',
-                    'file'     => 'asd.file',
-                    'line'     => 'asd.line',
-                    'content'  => 'asd.content',
-                    'time'     => 'SUM(asd.time)',
-                    'avgTime'  => 'AVG(asd.time)',
-                    'count'    => 'COUNT(CONCAT(asd.file, asd.line))',
-                    'min'      => 'MIN(asd.time)',
-                    'max'      => 'MAX(asd.time)'
+                    'id'               => 'asd.id',
+                    'file'             => 'asd.file',
+                    'line'             => 'asd.line',
+                    'content'          => 'asd.content',
+                    'time'             => 'SUM(asd.time)',
+                    'avgTime'          => 'AVG(asd.time)',
+                    'timeSubStack'     => 'SUM(asd.timeSubStack)',
+                    'avgTimeSubStack'  => 'AVG(asd.timeSubStack)',
+                    'count'            => 'COUNT(CONCAT(asd.file, asd.line))',
+                    'min'              => 'MIN(asd.time)',
+                    'max'              => 'MAX(asd.time)'
                 )
             )
             ->from(array('asd' => 'attempt_statistic_data'), array())
@@ -67,13 +69,15 @@ class Performance_Profiler_Component_Repository_AttemptStatisticData extends Per
         $data = $select->fetchAll();
 
         foreach ($data as &$call) {
-            $call['id']      = (int)$call['id'];
-            $call['line']    = (int)$call['line'];
-            $call['time']    = (float)$call['time'];
-            $call['avgTime'] = (float)$call['avgTime'];
-            $call['count']   = (int)$call['count'];
-            $call['min']     = (float)$call['min'];
-            $call['max']     = (float)$call['max'];
+            $call['id']              = (int)$call['id'];
+            $call['line']            = (int)$call['line'];
+            $call['time']            = (float)$call['time'];
+            $call['avgTime']         = (float)$call['avgTime'];
+            $call['timeSubStack']    = (float)$call['timeSubStack'];
+            $call['avgTimeSubStack'] = (float)$call['avgTimeSubStack'];
+            $call['count']           = (int)$call['count'];
+            $call['min']             = (float)$call['min'];
+            $call['max']             = (float)$call['max'];
         }
 
         return $data;

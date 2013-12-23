@@ -104,7 +104,7 @@ class Performance_Profiler_Component_Statistics_MySQL extends Performance_Profil
     public function setAttemptId($id) {
         $this->_attemptId = $id;
 
-        $attempt = $this->_attemptRepository->getAttempt($id);
+        $attempt         = $this->_attemptRepository->getAttempt($id);
         $this->_compTime = $attempt['compensationTime'];
 
         return $this;
@@ -117,7 +117,7 @@ class Performance_Profiler_Component_Statistics_MySQL extends Performance_Profil
      */
     public function generate() {
         if (empty($this->_statistics)) {
-            $this->_times[0] = 0;
+            $this->_times = array(0 => 0);
             $this->_statistics = $this->_generate($this->_callStack->getAnalyzedTree());
         }
 
@@ -133,7 +133,7 @@ class Performance_Profiler_Component_Statistics_MySQL extends Performance_Profil
         $this->generate();
         $this->_save($this->_statistics, $this->_attemptId);
         $updateData = array(
-            'time' => $this->_times[0],
+            'time'  => $this->_times[0],
             'calls' => $this->_countCalls
         );
         $this->_attemptRepository->update($this->_attemptId, $updateData);
@@ -160,10 +160,11 @@ class Performance_Profiler_Component_Statistics_MySQL extends Performance_Profil
             }
 
             $answer = $this->_getContent($call['file'], $call['line']);
-            $call['time']    = $this->_getTime($call) + $time;
-            $call['content'] = $answer['content'];
-            $call['lines']   = $answer['lines'];
-            $this->_times[$parent] += $call['time'];
+            $call['time']           = $this->_getTime($call);
+            $call['timeSubStack']   = $call['time'] + $time;
+            $call['content']        = $answer['content'];
+            $call['lines']          = $answer['lines'];
+            $this->_times[$parent] += $call['timeSubStack'];
         }
 
         $this->_checkCycle($tree);
@@ -186,7 +187,7 @@ class Performance_Profiler_Component_Statistics_MySQL extends Performance_Profil
                     continue;
                 } elseif($call['lines'] > 1) {
                     $this->_handleCycleSubStack($tree, $call, $key);
-                    $call['time'] += isset($call['subStack']) ? $this->_getTimeSubStack($call['subStack']) : 0;
+                    $call['timeSubStack'] += isset($call['subStack']) ? $this->_getTimeSubStack($call['subStack']) : 0;
                 }
             }
         }
@@ -235,7 +236,7 @@ class Performance_Profiler_Component_Statistics_MySQL extends Performance_Profil
     private function _getTimeSubStack(&$subStack) {
         $time = 0;
         foreach($subStack as &$subCall) {
-            $time += $subCall['time'];
+            $time += $subCall['time'] + $subCall['timeSubStack'];
         }
 
         return $time;
@@ -323,15 +324,16 @@ class Performance_Profiler_Component_Statistics_MySQL extends Performance_Profil
         $respository = $this->_statDataRepository;
 
         foreach ($statistics as &$call) {
-            $this->_times[$parent] += $call['time'];
+            $this->_times[$parent] += $call['timeSubStack'];
             $this->_countCalls++;
             $data = array(
-                'attemptId' => $attemptId,
-                'parentId'  => $parent,
-                'file'      => $call['file'],
-                'line'      => $call['line'],
-                'content'   => $call['content'],
-                'time'      => $call['time']
+                'attemptId'    => $attemptId,
+                'parentId'     => $parent,
+                'file'         => $call['file'],
+                'line'         => $call['line'],
+                'content'      => $call['content'],
+                'time'         => $call['time'],
+                'timeSubStack' => $call['timeSubStack']
             );
             $id = $respository->create($data);
             if (isset($call['subStack'])) {
