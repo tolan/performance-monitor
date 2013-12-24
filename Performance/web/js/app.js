@@ -2,6 +2,7 @@
 
 
 /* App Module */
+var countLoad = 0;
 var perfModule = angular.module(
     'Perf',
     ['ui.bootstrap', '$strap.directives', 'ngRoute']
@@ -9,7 +10,38 @@ var perfModule = angular.module(
     function($interpolateProvider) {
         $interpolateProvider.startSymbol('[[').endSymbol(']]');
     }
-);
+).config(function ($httpProvider) {
+    $httpProvider.responseInterceptors.push('myHttpInterceptor');
+    var spinnerFunction = function (data, headersGetter) {
+        if (countLoad === 0) {
+            $('#loader').show();
+        }
+
+        countLoad++;
+        return data;
+    };
+
+    $httpProvider.defaults.transformRequest.push(spinnerFunction);
+}).factory('myHttpInterceptor', function ($q, $window) {
+    return function (promise) {
+        return promise.then(function (response) {
+            countLoad--;
+            if (countLoad === 0) {
+                $('#loader').hide();
+            }
+
+            return response;
+        }, function (response) {
+            countLoad--;
+            if (countLoad === 0) {
+                $('#loader').hide();
+            }
+
+            return $q.reject(response);
+        });
+    };
+});
+
 
 perfModule.service(
     'validator',

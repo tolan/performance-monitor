@@ -38,6 +38,7 @@ class Performance_Main_Web_View_Homepage_Index extends Performance_Main_Web_View
                         . '<div ng-controller="MenuCtrl" class="menu"><div ng-include="template"></div></div>'
                         . '<div ng-controller="LangCtrl" class="lang"><div ng-include="template"></div></div>'
                     .'</div>'
+                    . '<div id="loader"></div>'
                     . '<div ng-view class="content">Application error.</div>'
                 . '</div>';
 
