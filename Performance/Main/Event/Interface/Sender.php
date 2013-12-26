@@ -12,7 +12,7 @@ interface Performance_Main_Event_Interface_Sender {
     /**
      * Sends message to mediator and then to all recievers.
      *
-     * @param Performance_Main_Event_Interface_Message $message Message instance
+     * @param mixed $message Message instance
      */
-    public function send(Performance_Main_Event_Interface_Message $message);
+    public function send($message);
 }

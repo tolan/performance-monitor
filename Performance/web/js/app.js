@@ -1,6 +1,5 @@
 'use strict';
 
-
 /* App Module */
 var countLoad = 0;
 var perfModule = angular.module(

@@ -84,6 +84,9 @@ class Performance_Main_Web_App {
      * @return Performance_Main_Web_App
      */
     protected function beforeRender() {
+        $eveMan = $this->_provider->get('Performance_Main_Event_Manager'); /* @var $eveMan Performance_Main_Event_Manager */
+        $eveMan->flush();
+
         return $this;
     }
 
@@ -104,6 +107,9 @@ class Performance_Main_Web_App {
      * @return Performance_Main_Web_App
      */
     protected function afterRender() {
+        $eveMan = $this->_provider->get('Performance_Main_Event_Manager'); /* @var $eveMan Performance_Main_Event_Manager */
+        $eveMan->flush();
+
         return $this;
     }
 

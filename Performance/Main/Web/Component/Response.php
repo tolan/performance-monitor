@@ -74,14 +74,20 @@ class Performance_Main_Web_Component_Response {
     }
 
     /**
-     * Echo function for payload.
+     * Echo function for payload. It flush whole output and close connection with browser.
      *
      * @return Performance_Main_Web_Component_Response
      */
     public function flush() {
-        $html = $this->getPayload();
+        ob_end_clean();
+        ob_start();
 
-        echo $html;
+        echo $this->getPayload();
+
+        header('Connection: close');
+        header('Content-Length: '.ob_get_length());
+        ob_end_flush();
+        flush();
 
         return $this;
     }

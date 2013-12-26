@@ -65,7 +65,7 @@ class Performance_Main_Log implements Performance_Main_Event_Interface_Reciever 
             $settings = $config->get('log');
             $this->_caching = isset($settings['cache']) ? $settings['cache'] : $this->_caching;
             $this->_level   = isset($settings['level']) ? $settings['level'] : $this->_level;
-            $this->_file    = isset($settings['file'])  ? $settings['file']  : $this->_file;
+            $this->_file    = $this->_resolveFile($settings['file'], $config->get('root'));
         }
     }
 
@@ -135,6 +135,27 @@ class Performance_Main_Log implements Performance_Main_Event_Interface_Reciever 
         }
 
         return $this;
+    }
+
+    /**
+     * It resolves right target path of log file.
+     *
+     * @param string $path Traget path
+     * @param string $root Root path of application
+     *
+     * @return string
+     *
+     * @throws Performance_Main_Log_Exception Throws when path is undefined
+     */
+    private function _resolveFile($path = null, $root = null) {
+        if ($path === null) {
+            throw new Performance_Main_Log_Exception('Log path must be defined.');
+        }
+        if (strpos($path, '/') === 0) {
+            return $path;
+        }
+
+        return $root.'/'.$path;
     }
 
     /**

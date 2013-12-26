@@ -7,7 +7,7 @@
  * @category   Performance
  * @package    Profiler
  */
-class Performance_Profiler_Gearman_Worker extends Performance_Main_Abstract_Gearman_Worker {
+class Performance_Profiler_Gearman_Worker extends Performance_Main_Abstract_Gearman_Worker implements Performance_Main_Event_Interface_Sender {
 
     /**
      * Measure test data repository
@@ -82,6 +82,7 @@ class Performance_Profiler_Gearman_Worker extends Performance_Main_Abstract_Gear
             $this->_sendMeasure($measure);
             $this->_testRepository->update($this->_testId, array('state' => Performance_Profiler_Enum_AttemptState::STATE_MEASURED));
         } catch (Exception $e) {
+            $this->send($e);
             $this->_testRepository->update($this->_testId, array('state' => Performance_Profiler_Enum_AttemptState::STATE_ERROR));
         }
     }
@@ -120,6 +121,7 @@ class Performance_Profiler_Gearman_Worker extends Performance_Main_Abstract_Gear
 
             $this->_testRepository->update($this->_testId, array('state' => Performance_Profiler_Enum_AttemptState::STATE_STATISTIC_GENERATED));
         } catch (Exception $e) {
+            $this->send($e);
             $this->_testRepository->update($this->_testId, array('state' => Performance_Profiler_Enum_AttemptState::STATE_ERROR));
         }
     }
@@ -132,7 +134,8 @@ class Performance_Profiler_Gearman_Worker extends Performance_Main_Abstract_Gear
      * @return void
      */
     private function _sendMeasure($measure) {
-        $client = $this->getProvider()->prototype('Performance_Main_Http_Client', true); /* @var $client Performance_Main_Http_Client */
+        $client        = $this->getProvider()->prototype('Performance_Main_Http_Client', true); /* @var $client Performance_Main_Http_Client */
+        $parameterEnum = 'Performance_Main_Http_Enum_ParameterType';
 
         foreach ($measure['requests'] as $request) {
             $request['parameters'] = isset($request['parameters']) ? $request['parameters'] : array();
@@ -146,24 +149,16 @@ class Performance_Profiler_Gearman_Worker extends Performance_Main_Abstract_Gear
                     )
                 );
                 $request['parameters'][] = array(
-                    'method' => Performance_Main_Http_Enum_ParameterType::GET,
-                    'name'   => Performance_Profiler_Enum_HttpKeys::PROFILER_START,
-                    'value'  => true
+                    'method' => $parameterEnum::GET, 'name' => Performance_Profiler_Enum_HttpKeys::PROFILER_START, 'value' => true
                 );
                 $request['parameters'][] = array(
-                    'method' => Performance_Main_Http_Enum_ParameterType::GET,
-                    'name'   => Performance_Profiler_Enum_HttpKeys::MEASURE_ID,
-                    'value'  => $this->_measureId
+                    'method' => $parameterEnum::GET, 'name' => Performance_Profiler_Enum_HttpKeys::MEASURE_ID, 'value' => $measure['id']
                 );
                 $request['parameters'][] = array(
-                    'method' => Performance_Main_Http_Enum_ParameterType::GET,
-                    'name'   => Performance_Profiler_Enum_HttpKeys::TEST_ID,
-                    'value'  => $this->_testId
+                    'method' => $parameterEnum::GET, 'name' => Performance_Profiler_Enum_HttpKeys::TEST_ID, 'value' => $this->_testId
                 );
                 $request['parameters'][] = array(
-                    'method' => Performance_Main_Http_Enum_ParameterType::GET,
-                    'name'   => Performance_Profiler_Enum_HttpKeys::ATTEMPT_ID,
-                    'value'  => $attemptId
+                    'method' => $parameterEnum::GET, 'name' => Performance_Profiler_Enum_HttpKeys::ATTEMPT_ID, 'value' => $attemptId
                 );
             }
 
@@ -212,5 +207,20 @@ class Performance_Profiler_Gearman_Worker extends Performance_Main_Abstract_Gear
         }
 
         return join(', ', $result);
+    }
+
+    /**
+     * It sends message to mediator.
+     *
+     * @param mixed $messageData Message data
+     *
+     * @return Performance_Profiler_Gearman_Worker
+     */
+    public function send($messageData) {
+        $message = new Performance_Profiler_Gearman_EventMessage();
+        $message->setData($messageData);
+        $this->getProvider('Performance_Profiler_Event_Mediator')->send($message, $this);
+
+        return $this;
     }
 }

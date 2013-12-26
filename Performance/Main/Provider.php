@@ -72,6 +72,8 @@ final class Performance_Main_Provider {
         } else {
             $this->_loadClass();
         }
+        
+        $this->set($this);
 
         foreach ($services as $name => $service) {
             $instance = $this->get($service);

@@ -17,6 +17,35 @@ class Performance_Main_Config {
     private $_data = array();
 
     /**
+     * Construct method for init default values.
+     */
+    public function __construct() {
+        $this->set('root', dirname(__DIR__));
+    }
+
+    /**
+     * It loads configuration from JSON file.
+     *
+     * @param string $configFile Path to config file.
+     *
+     * @return Performance_Main_Config
+     *
+     * @throws Performance_Main_Exception Throws when config file doesn't exist.
+     */
+    public function loadJson($configFile) {
+        if (file_exists($configFile)) {
+            $content = file_get_contents($configFile);
+
+            $config = json_decode($content, JSON_OBJECT_AS_ARRAY);
+            $this->fromArray($config);
+        } else {
+            throw new Performance_Main_Exception('Config file doesn\'t exist.');
+        }
+
+        return $this;
+    }
+
+    /**
      * Magic method for basic function (set, get).
      *
      * @param string $name      Method name

@@ -7,7 +7,15 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Event_Mediator implements Performance_Main_Event_Interface_Mediator {
+class Performance_Main_Event_Mediator
+implements Performance_Main_Event_Interface_Mediator, Performance_Main_Event_Interface_Reciever {
+
+    /**
+     * List of recievers which are registred when is mediator created.
+     *
+     * @var array
+     */
+    protected $_initRecievers = array();
 
     /**
      * Stack of recievers in structure array('messageClass' => array(recievers)).
@@ -15,6 +23,17 @@ class Performance_Main_Event_Mediator implements Performance_Main_Event_Interfac
      * @var array
      */
     private $_recievers = array();
+
+    /**
+     * Construct method. Register default recivevers.
+     *
+     * @param Performance_Main_Provider $provider
+     */
+    public function __construct(Performance_Main_Provider $provider) {
+        foreach ($this->_initRecievers as $recieverClass) {
+            $this->register($provider->get($recieverClass));
+        }
+    }
 
     /**
      * Register reciever for send message. Message is sent to the recipient by message type that receives its parameter (include children in object model).
@@ -80,6 +99,20 @@ class Performance_Main_Event_Mediator implements Performance_Main_Event_Interfac
                 }
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * This is proxy method for send method.
+     *
+     * @param Performance_Main_Event_Interface_Message $message Message instance
+     * @param Performance_Main_Event_Interface_Sender  $sender  Sender instance
+     *
+     * @return Performance_Main_Event_Mediator
+     */
+    public function recieve(Performance_Main_Event_Interface_Message $message, Performance_Main_Event_Interface_Sender $sender) {
+        $this->send($message, $sender);
 
         return $this;
     }

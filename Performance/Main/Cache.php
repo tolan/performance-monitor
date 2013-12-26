@@ -49,18 +49,20 @@ class Performance_Main_Cache implements Performance_Main_Event_Interface_Sender 
             $this->_cache = unserialize($_SESSION[self::SESSION_NAME][$namespace]);
         }
 
-        $message = new Performance_Main_Event_Message();
-        $this->send($message->setData('Cache is loaded.'));
+        $this->send('Cache is loaded.');
     }
 
     /**
      * It sends message to mediator.
      *
-     * @param Performance_Main_Event_Interface_Message $message Message instance
+     * @param mixed $content Message content
      *
      * @return Performance_Main_Cache
      */
-    public function send(Performance_Main_Event_Interface_Message $message) {
+    public function send($content) {
+        $message = new Performance_Main_Event_Message();
+        $message->setData($content);
+
         if ($this->_mediator) {
             $this->_mediator->send($message, $this);
         }

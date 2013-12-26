@@ -1,0 +1,38 @@
+{
+    "modules" : ["Profiler"],
+    "provider" : {
+        "useAutoloader" : true,
+        "initServices"  : ["database", "log", "loader"],
+        "serviceMap"    : {
+            "database" : "Performance_Main_Database",
+            "config"   : "Performance_Main_Config",
+            "web"      : "Performance_Main_Web_App",
+            "request"  : "Performance_Main_Web_Component_Request",
+            "response" : "Performance_Main_Web_Component_Response",
+            "log"      : "Performance_Main_Log",
+            "access"   : "Performance_Main_Access",
+            "router"   : "Performance_Main_Web_Component_Router",
+            "cache"    : "Performance_Main_Cache",
+            "loader"   : "Performance_Main_ModuleLoader"
+        }
+    },
+    "database" : {
+        "address"  : "localhost",
+        "user"     : "root",
+        "password" : "net",
+        "database" : "performance",
+        "install"  : false
+    },
+    "access" : {
+        "allowFrom" : [],
+        "deniedFrom" : []
+    },
+    "log" : {
+        "level" : 5,
+        "file"  : "performance.log",
+        "cache" : true
+    },
+    "translate" : {
+        "lang" : "CS"
+    }
+}
