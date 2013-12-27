@@ -13,7 +13,7 @@ var perfModule = angular.module(
     $httpProvider.responseInterceptors.push('myHttpInterceptor');
     var spinnerFunction = function (data, headersGetter) {
         if (countLoad === 0) {
-            $('#loader').show();
+            $('#loader').fadeIn();
         }
 
         countLoad++;
@@ -23,19 +23,22 @@ var perfModule = angular.module(
     $httpProvider.defaults.transformRequest.push(spinnerFunction);
 }).factory('myHttpInterceptor', function ($q, $window) {
     return function (promise) {
-        return promise.then(function (response) {
+        var hideFunction = function () {
             countLoad--;
             if (countLoad === 0) {
-                $('#loader').hide();
+                setTimeout(function() {
+                    if (countLoad === 0) {
+                        $('#loader').fadeOut();
+                    }
+                }, 100);
             }
+        };
 
+        return promise.then(function (response) {
+            hideFunction();
             return response;
         }, function (response) {
-            countLoad--;
-            if (countLoad === 0) {
-                $('#loader').hide();
-            }
-
+            hideFunction();
             return $q.reject(response);
         });
     };
