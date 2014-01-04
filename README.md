@@ -10,10 +10,10 @@ The purpose of the framework is the analysis, optimization, control and evaluate
 * HTTP_Request2: 2.1.1 (see: http://pear.php.net/package/HTTP_Request2)
 
 ## Configuration
-- configuration is in file: Performance/config.php
-- there is simple array with name $config
+- configuration is in file: Performance/config.json
+- there is simple array with config
 - look to part database for settings of MySQL
-- when you run application first time then set 'database' => 'install' to TRUE. It is for create all tables.
+- when you run application first time then set 'database' => 'install' to TRUE. It is for create all tables and translation.
 
 
 ## Run example
