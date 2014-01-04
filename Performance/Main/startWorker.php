@@ -18,7 +18,7 @@ function start_gearman_server(GearmanJob $job) {
     $server->setMessage($message);
     $server->run();
 
-    $eveMan = $this->_provider->get('Performance_Main_Event_Manager'); /* @var $eveMan Performance_Main_Event_Manager */
+    $eveMan = $provider->get('Performance_Main_Event_Manager'); /* @var $eveMan Performance_Main_Event_Manager */
     $eveMan->flush();
     $eveMan->clean();
 

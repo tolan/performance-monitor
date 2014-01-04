@@ -27,7 +27,7 @@ class Query extends AbstractCondition {
     public function addFilter(Select $select, $table, $column) {
         $values = $this->_extractStrings($this->getValue());
 
-        if ($this->_where === null) {
+        if ($this->_where === null && !empty($values)) {
             $this->_where = $select->createWhere();
         }
 
@@ -73,7 +73,9 @@ class Query extends AbstractCondition {
      * @return \PF\Search\Filter\Condition\Query
      */
     public function fulltext(Select $select) {
-        $select->where($this->_where->getStatement(), $this->_where->getBind());
+        if ($this->_where !== null) {
+            $select->where($this->_where->getStatement(), $this->_where->getBind());
+        }
 
         return $this;
     }
