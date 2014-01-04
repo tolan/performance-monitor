@@ -14,7 +14,8 @@ body {
     width: 100%;
     height: 100%;
     display: none;
-    background: rgba(80, 80, 80, 0.1) url(../img/ajax-loader.gif) no-repeat center center fixed
+    background: rgba(120, 120, 120, 0.2) url(../img/ajax-loader.gif) no-repeat center center fixed;
+    box-shadow: 3px 0px 10px 10px #D0D0D0 inset;
 }
 
 .table thead th,
@@ -216,3 +217,90 @@ a:hover {
 .measure-test-list {
     margin-top: 1%;
 }
+
+.search {
+    margin-top: 1%;
+    margin-bottom: 2%;
+    padding: 1%;
+    padding-left: 3%;
+    padding-right: 3%;
+    border: 1px #D0D0D0 solid;
+    border-radius: 3px;
+}
+
+.search .label {
+    font-size: inherit;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.search-filters-main .dropdown {
+    text-align: left;
+}
+
+.search-filters-main .search-filters-menu {
+    margin: 1%;
+}
+
+.search-filters-main .btn {
+    margin: 0;
+}
+
+.search-filter {
+    margin: 3px;
+    vertical-align: top;
+}
+
+.search-filter .search-filter-item {
+    padding: 0px;
+}
+
+.search-filter .search-filter-remove {
+    vertical-align: top;
+    position: relative;
+    top: -5px;
+    left: 5px;
+}
+
+.search-filter-item .search-filter-item-name,
+.search-filter-item .search-filter-item-operator,
+.search-filter-item .search-filter-item-input {
+    min-width: 340px;
+    display: block;
+    padding-top: 2px;
+    padding-bottom: 4px;
+    margin-top: 2px;
+    margin-bottom: 5px;
+}
+
+.search-filter-item .search-filter-item-name {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.search-filters-list div {
+    display: inline-block;
+}
+
+.search-result-list {
+    padding-top: 1px;
+}
+
+.search-result-item .search-result-item-name {
+    width: 10%;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.search-result-item .search-result-item-attributes div {
+    margin: 5px;
+    margin-right: 30px;
+}
+
+.search-result-item .search-result-item-attributes-name {
+    width: 100px;
+    display: inline-block;
+}
+
+
+

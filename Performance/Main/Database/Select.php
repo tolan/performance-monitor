@@ -14,6 +14,13 @@
 class Performance_Main_Database_Select extends Performance_Main_Database_Where {
 
     /**
+     * Parameter for DISTINCT function.
+     *
+     * @var type
+     */
+    private $_distinct = '';
+
+    /**
      * List of columns which will be returned.
      *
      * @var array
@@ -49,6 +56,43 @@ class Performance_Main_Database_Select extends Performance_Main_Database_Where {
     private $_having = null;
 
     /**
+     * It adds DISTINCT to SQL statement.
+     *
+     * @return Performance_Main_Database_Select
+     */
+    public function distinct() {
+        $this->_distinct = ' DISTINCT';
+
+        return $this;
+    }
+
+    /**
+     * Returns new instance of where condition.
+     *
+     * @return \Performance_Main_Database_Where
+     */
+    public function createWhere() {
+        return new parent($this->getConnection());
+    }
+
+    /**
+     * Sets columns which will be selected. It is good for special formating and functions.
+     *
+     * @param array $columns Array with selected columns
+     *
+     * @return Performance_Main_Database_Select
+     */
+    public function columns($columns) {
+        if (isset($this->_columns[''])) {
+            $columns = array_merge($this->_columns[''], (array)$columns);
+        }
+
+        $this->_columns[''] = (array)$columns;
+
+        return $this;
+    }
+
+    /**
      * It sets part FROM.
      *
      * @param string|array $table   Name of table or alias => table array
@@ -66,19 +110,6 @@ class Performance_Main_Database_Select extends Performance_Main_Database_Where {
         );
 
         $this->_columns[$alias] = (array)$columns;
-
-        return $this;
-    }
-
-    /**
-     * Sets columns which will be selected. It is good for special formating and functions.
-     *
-     * @param array $columns Array with selected columns
-     *
-     * @return Performance_Main_Database_Select
-     */
-    public function columns($columns) {
-        $this->_columns[''] = (array)$columns;
 
         return $this;
     }
@@ -147,7 +178,7 @@ class Performance_Main_Database_Select extends Performance_Main_Database_Where {
             throw new Performance_Main_Database_Exception('From table is not set.');
         }
 
-        $sql = 'SELECT';
+        $sql = 'SELECT'.$this->_distinct;
 
         if (empty($this->_columns)) {
             $sql .= ' *';

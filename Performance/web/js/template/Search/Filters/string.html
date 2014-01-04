@@ -1,0 +1,7 @@
+<div class="search-filter-string">
+    <h3><span class="search-filter-item-name label label-default">[[_.(filter.name)]]</span></h3>
+    <select class="search-filter-item-operator" ng-model="filter.operator" ng-change="send(filter)">
+        <option ng-repeat="operator in filter.operators" value="[[operator.value]]">[[_.(operator.text)]]</option>
+    </select>
+    <input class="search-filter-item-input" type="text" ng-model="filter.value" placeholder="[[_.('search.filter.' + filter.type + '.input.placeholder')]]" ng-change="send(filter)">
+</div>

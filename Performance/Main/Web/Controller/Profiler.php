@@ -59,9 +59,9 @@ class Performance_Main_Web_Controller_Profiler extends Performance_Main_Web_Cont
      * @return void
      */
     public function init() {
-        $this->_measureRepository       = $this->getProvider()->get('Performance_Profiler_Component_Repository_Measure');
-        $this->_requestRepository       = $this->getProvider()->get('Performance_Profiler_Component_Repository_MeasureRequest');
-        $this->_parameterRepository     = $this->getProvider()->get('Performance_Profiler_Component_Repository_RequestParameter');
+        $this->_measureRepository   = $this->getProvider()->get('Performance_Profiler_Component_Repository_Measure');
+        $this->_requestRepository   = $this->getProvider()->get('Performance_Profiler_Component_Repository_MeasureRequest');
+        $this->_parameterRepository = $this->getProvider()->get('Performance_Profiler_Component_Repository_RequestParameter');
 
         $this->_testRepository    = $this->getProvider()->get('Performance_Profiler_Component_Repository_MeasureTest');
         $this->_attemptRepository = $this->getProvider()->get('Performance_Profiler_Component_Repository_TestAttempt');

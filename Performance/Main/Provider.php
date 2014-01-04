@@ -72,7 +72,7 @@ final class Performance_Main_Provider {
         } else {
             $this->_loadClass();
         }
-        
+
         $this->set($this);
 
         foreach ($services as $name => $service) {
@@ -412,8 +412,9 @@ final class Performance_Main_Provider {
      * @return void
      */
     private function _autoloader($class) {
-        $root      = dirname(__DIR__);
-        $classPath = strstr(str_replace('_', '/', $class), '/');
+        $root            = dirname(__DIR__);
+        $translatedClass = strtr($class, array('_' => '/', '\\' => '/'));
+        $classPath       = strstr($translatedClass, '/');
 
         $path = $root.$classPath.'.php';
 

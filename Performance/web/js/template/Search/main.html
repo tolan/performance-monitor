@@ -1,0 +1,5 @@
+<div class="search list-80" ng-controller="SearchMainCtrl">
+    <div class="alert alert-danger" ng-show="errorMessage">[[errorMessage && _.(errorMessage)]]</div>
+    <div class="search-filters" ng-controller="SearchFiltersCtrl" ng-include="template"></div>
+    <div class="search-result" ng-controller="SearchResultCtrl" ng-include="template"></div>
+</div>

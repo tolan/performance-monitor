@@ -22,7 +22,7 @@ class Performance_Main_Web_Controller_Menu extends Performance_Main_Web_Controll
             ),
             array(
                 'text' => 'main.menu.search',
-                'href' => '#measure/search'
+                'href' => '#search'
             ),
             array(
                 'text' => 'main.menu.statistics',

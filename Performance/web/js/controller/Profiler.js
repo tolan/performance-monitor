@@ -176,7 +176,7 @@ function ProfilerMeasureCreateCtrl($scope, $http, $routeParams, $window, $locati
     };
 }
 
-function ProfilerMeasureDetailCtrl($scope, $http, $routeParams, $window, $location, $timeout) {
+function ProfilerMeasureDetailCtrl($scope, $http, $routeParams, $location, $timeout) {
     $scope.predicate = 'id';
     $scope.reverse   = false;
     $scope.measureId = $routeParams.id;

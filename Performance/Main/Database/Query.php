@@ -117,9 +117,18 @@ class Performance_Main_Database_Query {
      * @return string
      */
     public function __toString() {
-        $this->compile();
+        $this->preFetch();
 
-        return strtr($this->_statement, $this->_bind);
+        $statement = $this->_statement;
+        foreach ($this->_bind as $key => $value) {
+            if (is_numeric($key)) {
+                $statement = preg_replace('/\?/', '\''.$value.'\'', $statement, 1);
+            } else {
+                $statement = str_replace($key, '\''.$value.'\'', $statement);
+            }
+        }
+
+        return $statement;
     }
 
     /**
@@ -162,7 +171,11 @@ class Performance_Main_Database_Query {
      *
      * @return string
      */
-    protected function getStatement() {
+    public function getStatement() {
+        if ($this->_statement === null) {
+            $this->compile();
+        }
+
         return $this->_statement;
     }
 
@@ -171,7 +184,11 @@ class Performance_Main_Database_Query {
      *
      * @return array
      */
-    protected function getBind() {
+    public function getBind() {
+        if ($this->_statement === null) {
+            $this->compile();
+        }
+
         return $this->_bind;
     }
 
@@ -201,6 +218,9 @@ class Performance_Main_Database_Query {
      * @throws Performance_Main_Database_Exception Throws when SQL query is not created.
      */
     protected function preFetch() {
+        $this->_statement = null;
+        $this->_bind      = array();
+
         $this->compile();
 
         if ($this->_statement === null) {
@@ -231,8 +251,6 @@ class Performance_Main_Database_Query {
             $data = (string)$data;
         } elseif (is_bool($data)) {
             $data = $data === true ? 1 : 0;
-        } elseif (is_null($data)) {
-            $data = 'NULL';
         }
 
         return $data;

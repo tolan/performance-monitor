@@ -64,6 +64,7 @@ class Performance_Main_Database_Where extends Performance_Main_Database_Query {
             }
         }
 
+        $this->setStatement($result);
         $this->setBind($compiledBinds);
 
         return $result;

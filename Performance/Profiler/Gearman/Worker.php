@@ -144,6 +144,7 @@ class Performance_Profiler_Gearman_Worker extends Performance_Main_Abstract_Gear
                     array(
                         'testId'     => $this->_testId,
                         'url'        => $request['url'],
+                        'method'     => $request['method'],
                         'parameters' => $this->_getParameters($request),
                         'body'       => $this->_getBody($request)
                     )

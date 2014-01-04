@@ -108,6 +108,17 @@ class Performance_Main_Database {
     }
 
     /**
+     * Returns PDO connection to database. It is for create custom statements.
+     *
+     * @return Performance_Main_Database_Connection
+     */
+    public function getConnection() {
+        $this->connect();
+
+        return $this->_connection;
+    }
+
+    /**
      * Gets instance for SQL select statement.
      *
      * @return Performance_Main_Database_Select
@@ -218,6 +229,7 @@ class Performance_Main_Database {
                 `id`               INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `testId`           INT UNSIGNED NOT NULL,
                 `url`              VARCHAR(255) NULL,
+                `method`           VARCHAR(16) NOT NULL,
                 `parameters`       TEXT NULL,
                 `body`             TEXT NULL,
                 `state`            VARCHAR(32) NULL,
