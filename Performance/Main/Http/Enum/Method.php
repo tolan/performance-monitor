@@ -1,5 +1,9 @@
 <?php
 
+namespace PF\Main\Http\Enum;
+
+use PF\Main\Abstracts\Enum;
+
 /**
  * This class defines methods of http request.
  *
@@ -7,7 +11,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Http_Enum_Method extends Performance_Main_Abstract_Enum {
+class Method extends Enum {
     const GET    = 'GET';
     const POST   = 'POST';
     const PUT    = 'PUT';

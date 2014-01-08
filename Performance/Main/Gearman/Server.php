@@ -1,5 +1,10 @@
 <?php
 
+namespace PF\Main\Gearman;
+
+use PF\Main\Provider;
+use PF\Main\Abstracts\Gearman\Message;
+
 /**
  * This script defines class for gearman which manage all gearman workers.
  *
@@ -7,19 +12,19 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Gearman_Server {
+class Server {
 
     /**
      * Message with data
      *
-     * @var Performance_Main_Abstract_Gearman_Message
+     * @var \PF\Main\Abstracts\Gearman\Message
      */
     private $_message = null;
 
     /**
      * Provider instance
      *
-     * @var Performance_Main_Provider
+     * @var \PF\Main\Provider
      */
     private $_provider = null;
 
@@ -33,20 +38,20 @@ class Performance_Main_Gearman_Server {
     /**
      * Construct method
      *
-     * @param Performance_Main_Provider $provider
+     * @param \PF\Main\Provider $provider
      */
-    public function __construct(Performance_Main_Provider $provider) {
+    public function __construct(Provider $provider) {
         $this->_provider = $provider;
     }
 
     /**
      * Sets message for worker.
      *
-     * @param Performance_Main_Abstract_Gearman_Message $message Message instance
+     * @param \PF\Main\Abstracts\Gearman\Message $message Message instance
      *
-     * @return Performance_Main_Gearman_Server
+     * @return \PF\Main\Gearman\Server
      */
-    public function setMessage(Performance_Main_Abstract_Gearman_Message $message) {
+    public function setMessage(Message $message) {
         $this->_message = $message;
 
         return $this;
@@ -55,7 +60,7 @@ class Performance_Main_Gearman_Server {
     /**
      * This manage whole process. It takes target worker from message, then creates worker and sets message and then runs process on worker and sets result.
      *
-     * @return Performance_Main_Gearman_Server
+     * @return \PF\Main\Gearman\Server
      */
     public function run() {
         $target = $this->_message->getTarget();

@@ -2,6 +2,8 @@
 
 namespace PF\Search\Enum;
 
+use PF\Main\Abstracts\Enum;
+
 /**
  * This script defines enum with all posible filter for all entities.
  *
@@ -9,7 +11,7 @@ namespace PF\Search\Enum;
  * @category   Performance
  * @package    Search
  */
-class Filter extends \Performance_Main_Abstract_Enum {
+class Filter extends Enum {
     const FULLTEXT      = 'fulltext';
     const NAME          = 'name';
     const EDITED        = 'edited';

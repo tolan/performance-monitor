@@ -1,5 +1,9 @@
 <?php
 
+namespace PF\Profiler\Component\Repository;
+
+use PF\Main\Abstracts\Repository;
+
 /**
  * This script defines repository for measures request parameters.
  *
@@ -7,7 +11,7 @@
  * @category   Performance
  * @package    Profiler
  */
-class Performance_Profiler_Component_Repository_RequestParameter extends Performance_Main_Abstract_Repository {
+class RequestParameter extends Repository {
 
     /**
      * Init method for set managed table.

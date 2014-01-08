@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Profiler\Event;
+
 /**
  * This script defines class of mediator for profiler module.
  *
@@ -7,7 +9,7 @@
  * @category   Performance
  * @package    Profiler
  */
-class Performance_Profiler_Event_Mediator extends Performance_Main_Event_Mediator {
+class Mediator extends \PF\Main\Event\Mediator {
 
     /**
      * List of recievers which are registered when mediator is created.
@@ -15,6 +17,6 @@ class Performance_Profiler_Event_Mediator extends Performance_Main_Event_Mediato
      * @var array
      */
     protected $_initRecievers = array(
-        'Performance_Main_Event_Mediator'
+        'PF\Main\Event\Mediator'
     );
 }

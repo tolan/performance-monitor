@@ -22,7 +22,7 @@ class Container {
     /**
      * Select instance.
      *
-     * @var \Performance_Main_Database_Select
+     * @var \PF\Search\Filter\Select
      */
     private $_select;
 

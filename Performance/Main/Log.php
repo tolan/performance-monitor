@@ -1,5 +1,14 @@
 <?php
 
+namespace PF\Main;
+
+use PF\Main\Event\Interfaces\Reciever as EventReciever;
+use PF\Main\Event\Interfaces\Message as EventMessage;
+use PF\Main\Event\Interfaces\Sender as EventSender;
+use PF\Main\Log\Enum\Level;
+use PF\Main\Config;
+use PF\Main\Event\Mediator;
+
 /**
  * This script defines class for logging messages to file.
  *
@@ -7,18 +16,19 @@
  * @category   Performance
  * @package    Main
  *
- * @method Performance_Main_Log trace(mixed $message) It provides logging into file with trace level.
- * @method Performance_Main_Log debug(mixed $message) It provides logging into file with debug level.
- * @method Performance_Main_Log info(mixed $message) It provides logging into file with info level.
- * @method Performance_Main_Log warning(mixed $message) It provides logging into file with warning level.
- * @method Performance_Main_Log error(mixed $message) It provides logging into file with error level.
- * @method Performance_Main_Log fatal(mixed $message) It provides logging into file with fatal level.
+ * @method \PF\Main\Log trace(mixed $message)   It provides logging into file with trace level.
+ * @method \PF\Main\Log debug(mixed $message)   It provides logging into file with debug level.
+ * @method \PF\Main\Log info(mixed $message)    It provides logging into file with info level.
+ * @method \PF\Main\Log warning(mixed $message) It provides logging into file with warning level.
+ * @method \PF\Main\Log error(mixed $message)   It provides logging into file with error level.
+ * @method \PF\Main\Log fatal(mixed $message)   It provides logging into file with fatal level.
  */
-class Performance_Main_Log implements Performance_Main_Event_Interface_Reciever {
+class Log implements EventReciever {
+
     /**
-     * Singleton instance of Performance_Main_Log.
+     * Singleton instance of \PF\Main\Log.
      *
-     * @var Performance_Main_Log
+     * @var \PF\Main\Log
      */
     private static $_instance = false;
 
@@ -32,9 +42,9 @@ class Performance_Main_Log implements Performance_Main_Event_Interface_Reciever 
     /**
      * Log level.
      *
-     * @var enum Performance_Main_Log_Enum_Level
+     * @var enum \PF\Main\Log\Enum\Level
      */
-    private $_level   = Performance_Main_Log_Enum_Level::OFF;
+    private $_level = Level::OFF;
 
     /**
      * Log filename
@@ -53,10 +63,10 @@ class Performance_Main_Log implements Performance_Main_Event_Interface_Reciever 
     /**
      * Construct method.
      *
-     * @param Performance_Main_Config         $config   Config instance
-     * @param Performance_Main_Event_Mediator $mediator Mediator instance
+     * @param \PF\Main\Config         $config   Config instance
+     * @param \PF\Main\Event\Mediator $mediator Mediator instance
      */
-    private function __construct(Performance_Main_Config $config = null, Performance_Main_Event_Mediator $mediator = null) {
+    private function __construct(Config $config = null, Mediator $mediator = null) {
         if ($mediator) {
             $mediator->register($this);
         }
@@ -72,16 +82,16 @@ class Performance_Main_Log implements Performance_Main_Event_Interface_Reciever 
     /**
      * It recieve message from mediator.
      *
-     * @param Performance_Main_Event_Interface_Message $message Message instance
-     * @param Performance_Main_Event_Interface_Sender  $sender  Sender instance
+     * @param \PF\Main\Event\Interface\Message $message Message instance
+     * @param \PF\Main\Event\Interface\Sender  $sender  Sender instance
      *
-     * @return Performance_Main_Log
+     * @return \PF\Main\Log
      */
-    public function recieve(Performance_Main_Event_Interface_Message $message, Performance_Main_Event_Interface_Sender $sender) {
-        if ($this->_level <= Performance_Main_Log_Enum_Level::DEBUG) {
+    public function recieve(EventMessage $message, EventSender $sender) {
+        if ($this->_level <= Level::DEBUG) {
             $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
-            $messsage = new Performance_Main_Log_Message(
+            $messsage = new Log\Message(
                 'MESSAGE',
                 array(get_class($sender), $message->getData()),
                 $trace[1]['file'],
@@ -97,12 +107,12 @@ class Performance_Main_Log implements Performance_Main_Event_Interface_Reciever 
     /**
      * Returns singleton instance.
      *
-     * @param Performance_Main_Config         $config   Config instance
-     * @param Performance_Main_Event_Mediator $mediator Mediator instance
+     * @param \PF\Main\Config         $config   Config instance
+     * @param \PF\Main\Event\Mediator $mediator Mediator instance
      *
-     * @return Performance_Main_Log
+     * @return \PF\Main\Log
      */
-    public static function getInstance(Performance_Main_Config $config = null, Performance_Main_Event_Mediator $mediator = null) {
+    public static function getInstance(Config $config = null, Mediator $mediator = null) {
         if (self::$_instance === false) {
             self::$_instance = new self($config, $mediator);
         }
@@ -116,22 +126,22 @@ class Performance_Main_Log implements Performance_Main_Event_Interface_Reciever 
      * @param string $name      Logging level
      * @param array  $arguments Arguments of log
      *
-     * @return Performance_Main_Log
+     * @return \PF\Main\Log
      *
-     * @throws Performance_Main_Log_Exception Throws when called method is not defined in level enum
+     * @throws \PF\Main\Log\Exception Throws when called method is not defined in level enum
      */
     public function __call($name, $arguments) {
         $level     = strtoupper($name);
-        $constants = Performance_Main_Log_Enum_Level::getConstants();
+        $constants = Level::getConstants();
 
         if (array_key_exists($level, $constants)) {
-            if ($constants[$level] <= $this->_level && $this->_level !== Performance_Main_Log_Enum_Level::OFF) {
+            if ($constants[$level] <= $this->_level && $this->_level !== Level::OFF) {
                 $trace    = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-                $messsage = new Performance_Main_Log_Message($level, $arguments, $trace[0]['file'], $trace[0]['line']);
+                $messsage = new Log\Message($level, $arguments, $trace[0]['file'], $trace[0]['line']);
                 $this->_addMessage($messsage);
             }
         } else {
-            throw new Performance_Main_Log_Exception('Undefined log level: '.$level);
+            throw new Log\Exception('Undefined log level: '.$level);
         }
 
         return $this;
@@ -145,11 +155,11 @@ class Performance_Main_Log implements Performance_Main_Event_Interface_Reciever 
      *
      * @return string
      *
-     * @throws Performance_Main_Log_Exception Throws when path is undefined
+     * @throws \PF\Main\Log\Exception Throws when path is undefined
      */
     private function _resolveFile($path = null, $root = null) {
         if ($path === null) {
-            throw new Performance_Main_Log_Exception('Log path must be defined.');
+            throw new Log\Exception('Log path must be defined.');
         }
         if (strpos($path, '/') === 0) {
             return $path;
@@ -161,11 +171,11 @@ class Performance_Main_Log implements Performance_Main_Event_Interface_Reciever 
     /**
      * This method handle message for caching or writing.
      *
-     * @param Performance_Main_Log_Message $message Message instance
+     * @param \PF\Main\Log\Message $message Message instance
      *
-     * @return Performance_Main_Log
+     * @return \PF\Main\Log
      */
-    private function _addMessage(Performance_Main_Log_Message $message) {
+    private function _addMessage(Log\Message $message) {
         if ($this->_caching === true) {
             $this->_cacheLogs[] = $message;
         } else {
@@ -178,15 +188,15 @@ class Performance_Main_Log implements Performance_Main_Event_Interface_Reciever 
     /**
      * Write message. This ensure right setting for message.
      *
-     * @param Performance_Main_Log_Message $message Message instnace
+     * @param \PF\Main\Log\Message $message Message instnace
      *
-     * @return Performance_Main_Log
+     * @return \PF\Main\Log
      *
-     * @throws Performance_Main_Log_Exception Throws when is not set filename for log.
+     * @throws \PF\Main\Log\Exception Throws when is not set filename for log.
      */
-    private function _writeMessage(Performance_Main_Log_Message $message) {
+    private function _writeMessage(Log\Message $message) {
         if ($this->_file === null) {
-            throw new Performance_Main_Log_Exception('Filename for logging is not defined.');
+            throw new Log\Exception('Filename for logging is not defined.');
         }
 
         $message->write($this->_file);

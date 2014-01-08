@@ -1,5 +1,9 @@
 <?php
 
+namespace PF\Profiler\Component\Storage;
+
+use PF\Profiler\Component\AbstractFactory;
+
 /**
  * This script defnes factory class for creating profler storage instance.
  *
@@ -7,19 +11,19 @@
  * @category   Performance
  * @package    Profiler
  */
-class Performance_Profiler_Component_Storage_Factory extends Performance_Profiler_Component_AbstractFactory {
+class Factory extends AbstractFactory {
 
     /**
      * Returns profiler storage instance.
      *
-     * @return Performance_Profiler_Component_Storage_Abstract
+     * @return \PF\Profiler\Component\Storage\AbstractStorage
      */
     public function getStorage() {
         if ($this->getAttemptId()) {
-            $storage = $this->getProvider()->get('Performance_Profiler_Component_Storage_MySQL');
+            $storage = $this->getProvider()->get('PF\Profiler\Component\Storage\MySQL');
             $storage->setAttemptId($this->getAttemptId());
         } else {
-            $storage = $this->getProvider()->get('Performance_Profiler_Component_Storage_Default');
+            $storage = $this->getProvider()->get('PF\Profiler\Component\Storage\Browser');
         }
 
         return $storage;

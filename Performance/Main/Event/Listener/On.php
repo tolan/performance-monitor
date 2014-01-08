@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Event\Listener;
+
 /**
  * This script defines class for event listener (type: on).
  *
@@ -7,6 +9,5 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Event_Listener_On extends Performance_Main_Event_Listener_Abstract {
-
+class On extends AbstractListener {
 }

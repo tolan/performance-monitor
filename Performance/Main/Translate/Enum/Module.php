@@ -1,5 +1,9 @@
 <?php
 
+namespace PF\Main\Translate\Enum;
+
+use PF\Main\Abstracts\Enum;
+
 /**
  * This class defines modules in translate.
  *
@@ -7,7 +11,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Translate_Enum_Module extends Performance_Main_Abstract_Enum {
+class Module extends Enum {
     const MAIN     = 'main';
     const PROFILER = 'profiler';
 }

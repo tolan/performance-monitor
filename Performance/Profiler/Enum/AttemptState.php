@@ -1,5 +1,9 @@
 <?php
 
+namespace PF\Profiler\Enum;
+
+use PF\Main\Abstracts\Enum;
+
 /**
  * This script defines enum with states of attempt.
  *
@@ -7,7 +11,8 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Profiler_Enum_AttemptState extends Performance_Main_Abstract_Enum {
+class AttemptState extends Enum {
+
     const STATE_IDLE                 = 'idle';
     const STATE_MEASURE_ACTIVE       = 'measure_active';
     const STATE_MEASURED             = 'measured';

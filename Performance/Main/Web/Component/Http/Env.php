@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Web\Component\Http;
+
 /**
  * This script defines class for access to env instead of $_ENV.
  *
@@ -7,5 +9,5 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Web_Component_Http_Env extends Performance_Main_Web_Component_Http_Abstract {
+class Env extends AbstractHttp {
 }

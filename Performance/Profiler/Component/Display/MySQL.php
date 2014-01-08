@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Profiler\Component\Display;
+
 /**
  * This script defines profiler display for MYSQL usage.
  *
@@ -7,5 +9,5 @@
  * @category   Performance
  * @package    Profiler
  */
-class Performance_Profiler_Component_Display_MySQL extends Performance_Profiler_Component_Display_Abstract {
+class MySQL extends AbstractDisplay {
 }

@@ -2,6 +2,8 @@
 
 namespace PF\Search;
 
+use PF\Main\Provider;
+
 /**
  * This script defines class for search engine. It provides method for find entities by given filters.
  *
@@ -14,16 +16,16 @@ class Engine {
     /**
      * Provider instance
      *
-     * @var Performance_Main_Provider
+     * @var \PF\Main\Provider
      */
     private $_provider;
 
     /**
      * Construct method.
      *
-     * @param \Performance_Main_Provider $provider Provider instance
+     * @param \PF\Main\Provider $provider Provider instance
      */
-    public function __construct(\Performance_Main_Provider $provider) {
+    public function __construct(Provider $provider) {
         $this->_provider = $provider;
     }
 

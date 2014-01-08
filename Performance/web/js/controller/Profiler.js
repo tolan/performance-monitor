@@ -9,7 +9,7 @@
  * @returns {void}
  */
 function ProfilerMeasureListCtrl($scope, $http, $modal) {
-    $scope.predicate = 'id';
+    $scope.predicate = 'name';
     $scope.reverse   = false;
     $scope.measures  = [];
     $scope.deleteMeasureId;
@@ -177,7 +177,7 @@ function ProfilerMeasureCreateCtrl($scope, $http, $routeParams, $window, $locati
 }
 
 function ProfilerMeasureDetailCtrl($scope, $http, $routeParams, $location, $timeout) {
-    $scope.predicate = 'id';
+    $scope.predicate = 'started';
     $scope.reverse   = false;
     $scope.measureId = $routeParams.id;
     $scope.measure;
@@ -266,7 +266,7 @@ function ProfilerMeasureDetailCtrl($scope, $http, $routeParams, $location, $time
 
 function ProfilerTestListCtrl($scope, $http, $routeParams) {
     $scope.testId = $routeParams.id;
-    $scope.predicate = 'id';
+    $scope.predicate = 'started';
     $scope.reverse   = false;
     $scope.attempts  = [];
 

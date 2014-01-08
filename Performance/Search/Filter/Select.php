@@ -2,6 +2,8 @@
 
 namespace PF\Search\Filter;
 
+use PF\Main\Database;
+
 /**
  * This script defines class for statement which extends standard database select.
  *
@@ -9,7 +11,7 @@ namespace PF\Search\Filter;
  * @category   Performance
  * @package    Search
  */
-class Select extends \Performance_Main_Database_Select {
+class Select extends Database\Select {
 
     /**
      * Helper variable for create unique name.

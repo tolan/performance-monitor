@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Profiler\Component\Statistics;
+
 /**
  * This script defines profiler statistic class for access to MYSQL.
  *
@@ -7,7 +9,7 @@
  * @category   Performance
  * @package    Profiler
  */
-class Performance_Profiler_Component_Statistics_MySQL extends Performance_Profiler_Component_Statistics_Abstract {
+class MySQL extends AbstractStatistics {
 
     /**
      * ID of attempt.
@@ -35,14 +37,14 @@ class Performance_Profiler_Component_Statistics_MySQL extends Performance_Profil
     /**
      * Repository for measure statistic.
      *
-     * @var Performance_Profiler_Component_Repository_TestAttempt
+     * @var \PF\Profiler\Component\Repository\TestAttempt
      */
     private $_attemptRepository     = null;
 
     /**
      * Repository for measure statistic data.
      *
-     * @var Performance_Profiler_Component_Repository_AttemptStatisticData
+     * @var \PF\Profiler\Component\Repository\AttemptStatisticData
      */
     private $_statDataRepository = null;
 
@@ -99,13 +101,12 @@ class Performance_Profiler_Component_Statistics_MySQL extends Performance_Profil
      *
      * @param int $id ID of attempt
      *
-     * @return Performance_Profiler_Component_Statistics_MySQL
+     * @return \PF\Profiler\Component\Statistics\MySQL
      */
     public function setAttemptId($id) {
         $this->_attemptId = $id;
-
-        $attempt         = $this->_attemptRepository->getAttempt($id);
-        $this->_compTime = $attempt['compensationTime'];
+        $attempt          = $this->_attemptRepository->getAttempt($id);
+        $this->_compTime  = $attempt['compensationTime'];
 
         return $this;
     }
@@ -113,11 +114,11 @@ class Performance_Profiler_Component_Statistics_MySQL extends Performance_Profil
     /**
      * Generate statistics from analyzed tree.
      *
-     * @return Performance_Profiler_Component_Statistics_MySQL
+     * @return \PF\Profiler\Component\Statistics\MySQL
      */
     public function generate() {
         if (empty($this->_statistics)) {
-            $this->_times = array(0 => 0);
+            $this->_times      = array(0 => 0);
             $this->_statistics = $this->_generate($this->_callStack->getAnalyzedTree());
         }
 
@@ -127,7 +128,7 @@ class Performance_Profiler_Component_Statistics_MySQL extends Performance_Profil
     /**
      * Save statistics to MYSQL.
      *
-     * @return Performance_Profiler_Component_Statistics_MySQL
+     * @return \PF\Profiler\Component\Statistics\MySQL
      */
     public function save() {
         $this->generate();
@@ -200,7 +201,7 @@ class Performance_Profiler_Component_Statistics_MySQL extends Performance_Profil
      * @param array $cycleCall Call with cycle
      * @param int   $key       Key of call in tree
      *
-     * @return Performance_Profiler_Component_Statistics_MySQL
+     * @return \PF\Profiler\Component\Statistics\MySQL
      */
     private function _handleCycleSubStack(&$tree, &$cycleCall, $key) {
         $startLine = $cycleCall['line'] - ($cycleCall['lines'] - 1);
@@ -268,7 +269,7 @@ class Performance_Profiler_Component_Statistics_MySQL extends Performance_Profil
 
         $file = self::$_filesCache[$filename];
 
-        $result = trim($file[$line - 1]);
+        $result       = trim($file[$line - 1]);
         $countOfLines = 1;
 
         while(!$this->_checkCompleteContent($result) && $line > 1) {
@@ -317,7 +318,7 @@ class Performance_Profiler_Component_Statistics_MySQL extends Performance_Profil
      * @param int   $attemptId  ID of attempt
      * @param int   $parent     ID of statistic data parent id (0 is root)
      *
-     * @return Performance_Profiler_Component_Statistics_MySQL
+     * @return \PF\Profiler\Component\Statistics\MySQL
      */
     private function _save(&$statistics, $attemptId = null, $parent = 0) {
         $this->_times[$parent] = 0;
@@ -350,9 +351,8 @@ class Performance_Profiler_Component_Statistics_MySQL extends Performance_Profil
      * @return void
      */
     protected function init() {
-        $this->_callStack          = $this->getProvider()
-                ->get('Performance_Profiler_Component_CallStack_Factory')->getCallStack(); /* @var $callStack Performance_Profiler_Component_CallStack_MySQL */
-        $this->_attemptRepository  = $this->getProvider()->get('Performance_Profiler_Component_Repository_TestAttempt');
-        $this->_statDataRepository = $this->getProvider()->get('Performance_Profiler_Component_Repository_AttemptStatisticData');
+        $this->_callStack          = $this->getProvider()->get('PF\Profiler\Component\CallStack\Factory')->getCallStack();
+        $this->_attemptRepository  = $this->getProvider()->get('PF\Profiler\Component\Repository\TestAttempt');
+        $this->_statDataRepository = $this->getProvider()->get('PF\Profiler\Component\Repository\AttemptStatisticData');
     }
 }

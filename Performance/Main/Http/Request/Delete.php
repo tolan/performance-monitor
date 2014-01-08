@@ -1,5 +1,9 @@
 <?php
 
+namespace PF\Main\Http\Request;
+
+use PF\Main\Http\Enum\Method;
+
 /**
  * This script defines class for DELETE http request.
  *
@@ -7,12 +11,12 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Http_Request_Delete extends Performance_Main_Http_Request_Abstract {
+class Delete extends AbstractRequest {
 
     /**
      * Method type.
-     * 
+     *
      * @var string
      */
-    protected $_method = Performance_Main_Http_Enum_Method::DELETE;
+    protected $_method = Method::DELETE;
 }

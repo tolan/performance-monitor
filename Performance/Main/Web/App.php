@@ -1,5 +1,10 @@
 <?php
 
+namespace PF\Main\Web;
+
+use PF\Main\Provider;
+use PF\Main\Access\Exception as AccessException;
+
 /**
  * This script defines main class for run application.
  *
@@ -7,37 +12,37 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Web_App {
+class App {
 
     /**
      * Provider instance
      *
-     * @var Performance_Main_Provider
+     * @var \PF\Main\Provider
      */
     private $_provider = null;
 
     /**
      * Response Template
      *
-     * @var Performance_Main_Web_Component_Response
+     * @var \PF\Main\Web\Component\Response
      */
     private $_response = null;
 
     /**
      * Router instance
      *
-     * @var Performance_Main_Web_Component_Router
+     * @var \PF\Main\Web\Component\Router
      */
     private $_router = null;
 
     /**
      * Construct method.
      *
-     * @param Performance_Main_Provider $provider Provider instance
+     * @param \PF\Main\Provider $provider Provider instance
      *
      * @return void
      */
-    public function __construct(Performance_Main_Provider $provider) {
+    public function __construct(Provider $provider) {
         $this->_provider = $provider;
         $this->_router   = $provider->get('router');
     }
@@ -45,7 +50,7 @@ class Performance_Main_Web_App {
     /**
      * This method run application stack.
      *
-     * @return Performance_Main_Web_App
+     * @return \PF\Main\Web\App
      */
     final public function run() {
         $this->init();
@@ -59,13 +64,14 @@ class Performance_Main_Web_App {
     /**
      * Init function for resolve routing.
      *
-     * @return Performance_Main_Web_App
+     * @return \PF\Main\Web\App
      */
     protected function init() {
         try {
             $this->_provider->get('access')->checkAccess();
-        } catch (Performance_Main_Access_Exception $exc) {
+        } catch (AccessException $exc) {
             $this->_provider->get('log')->warning('Unauthorized exception: '.$exc->getMessage());
+
             return $this->_showAccessDenied($exc);
         }
 
@@ -81,10 +87,10 @@ class Performance_Main_Web_App {
     /**
      * Method which is called before render function.
      *
-     * @return Performance_Main_Web_App
+     * @return \PF\Main\Web\App
      */
     protected function beforeRender() {
-        $eveMan = $this->_provider->get('Performance_Main_Event_Manager'); /* @var $eveMan Performance_Main_Event_Manager */
+        $eveMan = $this->_provider->get('PF\Main\Event\Manager'); /* @var $eveMan \PF\Main\Event\Manager */
         $eveMan->flush();
 
         return $this;
@@ -93,7 +99,7 @@ class Performance_Main_Web_App {
     /**
      * Render function which call flush on response instance.
      *
-     * @return Performance_Main_Web_App
+     * @return \PF\Main\Web\App
      */
     protected function render() {
         $this->_response->flush();
@@ -104,10 +110,10 @@ class Performance_Main_Web_App {
     /**
      * Method which is called after render function.
      *
-     * @return Performance_Main_Web_App
+     * @return \PF\Main\Web\App
      */
     protected function afterRender() {
-        $eveMan = $this->_provider->get('Performance_Main_Event_Manager'); /* @var $eveMan Performance_Main_Event_Manager */
+        $eveMan = $this->_provider->get('PF\Main\Event\Manager'); /* @var $eveMan \PF\Main\Event\Manager */
         $eveMan->flush();
 
         return $this;
@@ -116,9 +122,9 @@ class Performance_Main_Web_App {
     /**
      * Forward to access denied page.
      *
-     * @param Performance_Main_Access_Exception $exc Exception
+     * @param \PF\Main\Access\Exception $exc Exception
      */
-    private function _showAccessDenied(Performance_Main_Access_Exception $exc) {
+    private function _showAccessDenied(AccessException $exc) {
         // TODO
         return $this;
     }

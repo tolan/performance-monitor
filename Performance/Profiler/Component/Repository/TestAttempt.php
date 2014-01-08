@@ -1,6 +1,17 @@
 <?php
 
-class Performance_Profiler_Component_Repository_TestAttempt extends Performance_Main_Abstract_Repository {
+namespace PF\Profiler\Component\Repository;
+
+use PF\Main\Abstracts\Repository;
+
+/**
+ * This script defines repository for test attempts.
+ *
+ * @author     Martin Kovar
+ * @category   Performance
+ * @package    Profiler
+ */
+class TestAttempt extends Repository {
 
     /**
      * Init method for set managed table.
@@ -67,7 +78,7 @@ class Performance_Profiler_Component_Repository_TestAttempt extends Performance_
      */
     public function update($id, $data) {
         if (isset($data['started'])) {
-            $data['started'] = Performance_Main_Database::convertTimeToMySQLDateTime($data['started']);
+            $data['started'] = $this->getUtils()->convertTimeToMySQLDateTime($data['started']);
         }
 
         return parent::update($id, $data);

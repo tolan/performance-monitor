@@ -9,5 +9,5 @@ namespace PF\Search;
  * @category   Performance
  * @package    Search
  */
-class Exception extends \Performance_Main_Exception {
+class Exception extends \PF\Main\Exception {
 }

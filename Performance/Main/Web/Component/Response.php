@@ -1,5 +1,9 @@
 <?php
 
+namespace PF\Main\Web\Component;
+
+use PF\Main\Web\View\AbstractView;
+
 /**
  * This script defines class for response.
  *
@@ -7,32 +11,23 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Web_Component_Response {
+class Response {
 
     /**
      * Instance of template
      *
-     * @var Performance_Main_Web_Component_Template_Abstract
+     * @var \PF\Main\Web\Component\Template\AbstractTemplate
      */
     private $_template = null;
 
     /**
-     * Construct method
-     *
-     * @param Performance_Main_Web_Component_Template_Html $template Template instance
-     */
-    public function __construct(Performance_Main_Web_Component_Template_Html $template = null) {
-        $this->_template = $template;
-    }
-
-    /**
      * Sets templates instance.
      *
-     * @param Performance_Main_Web_Component_Template_Abstract $template Template instance
+     * @param \PF\Main\Web\Component\Template\AbstractTemplate $template Template instance
      *
-     * @return Performance_Main_Web_Component_Response
+     * @return \PF\Main\Web\Component\Response
      */
-    public function setTemplate(Performance_Main_Web_Component_Template_Abstract $template) {
+    public function setTemplate(Template\AbstractTemplate $template) {
         $this->_template = $template;
 
         return $this;
@@ -41,11 +36,11 @@ class Performance_Main_Web_Component_Response {
     /**
      * Sets view instance.
      *
-     * @param Performance_Main_Web_View_Abstract $view View instance
+     * @param \PF\Main\Web\View\AbstractView $view View instance
      *
-     * @return Performance_Main_Web_Component_Response
+     * @return \PF\Main\Web\Component\Response
      */
-    public function setView(Performance_Main_Web_View_Abstract $view) {
+    public function setView(AbstractView $view) {
         $this->_template->setView($view);
 
         return $this;
@@ -56,7 +51,7 @@ class Performance_Main_Web_Component_Response {
      *
      * @param mixed $data Data for display
      *
-     * @return Performance_Main_Web_Component_Response
+     * @return \PF\Main\Web\Component\Response
      */
     public function setData($data) {
         $this->_template->setData($data);
@@ -76,7 +71,7 @@ class Performance_Main_Web_Component_Response {
     /**
      * Echo function for payload. It flush whole output and close connection with browser.
      *
-     * @return Performance_Main_Web_Component_Response
+     * @return \PF\Main\Web\Component\Response
      */
     public function flush() {
         ob_end_clean();

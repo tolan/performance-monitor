@@ -1,5 +1,10 @@
 <?php
 
+namespace PF\Main\Web\Controller;
+
+use PF\Profiler\Enum;
+use PF\Main\Http;
+
 /**
  * This scripts defines class for profiler controller.
  *
@@ -9,47 +14,47 @@
  *
  * @link /profiler
  */
-class Performance_Main_Web_Controller_Profiler extends Performance_Main_Web_Controller_Abstract_Json {
+class Profiler extends Abstracts\Json {
 
     /*
      * Measure repository
      *
-     * @var Performance_Profiler_Component_Repository_Measure
+     * @var \PF\Profiler\Component\Repository\Measure
      */
     private $_measureRepository = null;
 
     /**
      * Measure statistic data repository
      *
-     * @var Performance_Profiler_Component_Repository_AttemptStatisticData
+     * @var \PF\Profiler\Component\Repository\AttemptStatisticData
      */
     private $_statisticDataRepository = null;
 
     /**
      * Measure request data repository
      *
-     * @var Performance_Profiler_Component_Repository_MeasureRequest
+     * @var \PF\Profiler\Component\Repository\MeasureRequest
      */
     private $_requestRepository = null;
 
     /**
      * Measure request parameter data repository
      *
-     * @var Performance_Profiler_Component_Repository_RequestParameter
+     * @var \PF\Profiler\Component\Repository\RequestParameter
      */
     private $_parameterRepository = null;
 
     /**
      * Measure test data repository
      *
-     * @var Performance_Profiler_Component_Repository_MeasureTest
+     * @var \PF\Profiler\Component\Repository\MeasureTest
      */
     private $_testRepository = null;
 
     /**
      * Measure test data repository
      *
-     * @var Performance_Profiler_Component_Repository_TestAttempt
+     * @var \PF\Profiler\Component\Repository\TestAttempt
      */
     private $_attemptRepository = null;
 
@@ -59,14 +64,14 @@ class Performance_Main_Web_Controller_Profiler extends Performance_Main_Web_Cont
      * @return void
      */
     public function init() {
-        $this->_measureRepository   = $this->getProvider()->get('Performance_Profiler_Component_Repository_Measure');
-        $this->_requestRepository   = $this->getProvider()->get('Performance_Profiler_Component_Repository_MeasureRequest');
-        $this->_parameterRepository = $this->getProvider()->get('Performance_Profiler_Component_Repository_RequestParameter');
+        $this->_measureRepository   = $this->getProvider()->get('PF\Profiler\Component\Repository\Measure');
+        $this->_requestRepository   = $this->getProvider()->get('PF\Profiler\Component\Repository\MeasureRequest');
+        $this->_parameterRepository = $this->getProvider()->get('PF\Profiler\Component\Repository\RequestParameter');
 
-        $this->_testRepository    = $this->getProvider()->get('Performance_Profiler_Component_Repository_MeasureTest');
-        $this->_attemptRepository = $this->getProvider()->get('Performance_Profiler_Component_Repository_TestAttempt');
+        $this->_testRepository    = $this->getProvider()->get('PF\Profiler\Component\Repository\MeasureTest');
+        $this->_attemptRepository = $this->getProvider()->get('PF\Profiler\Component\Repository\TestAttempt');
 
-        $this->_statisticDataRepository = $this->getProvider()->get('Performance_Profiler_Component_Repository_AttemptStatisticData');
+        $this->_statisticDataRepository = $this->getProvider()->get('PF\Profiler\Component\Repository\AttemptStatisticData');
     }
 
     /**
@@ -143,7 +148,7 @@ class Performance_Main_Web_Controller_Profiler extends Performance_Main_Web_Cont
      * @param int   $measureId ID of measure
      * @param array $request   Request data (url, method, toMeasure, parameters)
      *
-     * @return Performance_Main_Web_Controller_Profiler
+     * @return \PF\Main\Web\Controller\Profiler
      */
     private function _createRequest($measureId, $request) {
         $requestId = $this->_requestRepository->create(array(
@@ -227,11 +232,11 @@ class Performance_Main_Web_Controller_Profiler extends Performance_Main_Web_Cont
         );
 
         $this->getProvider()
-            ->get('Performance_Profiler_Gearman_Client')
+            ->get('PF\Profiler\Gearman\Client')
             ->setData(
                 array(
-                    Performance_Profiler_Enum_HttpKeys::MEASURE_ID => $params['measureId'],
-                    Performance_Profiler_Enum_HttpKeys::TEST_ID    => $testId
+                    Enum\HttpKeys::MEASURE_ID => $params['measureId'],
+                    Enum\HttpKeys::TEST_ID    => $testId
                 )
             )
             ->doAsynchronize();
@@ -341,22 +346,22 @@ class Performance_Main_Web_Controller_Profiler extends Performance_Main_Web_Cont
      * @return void
      */
     public function actionGetMethods() {
-        $methods = Performance_Main_Http_Enum_Method::getConstants();
+        $methods = Http\Enum\Method::getConstants();
 
         $result = array();
         foreach ($methods as $method) {
             $result['requests'][] = array(
                 'value' => $method,
-                'name' => 'profiler.measure.request.method.'.strtolower($method)
+                'name'  => 'profiler.measure.request.method.'.strtolower($method)
             );
         }
 
-        $paramMethods = Performance_Main_Http_Enum_ParameterType::getAllowedParams();
+        $paramMethods = Http\Enum\ParameterType::getAllowedParams();
         foreach ($paramMethods as $method => $allowed) {
             foreach ($allowed as $allow) {
                 $result['params'][$method][] = array(
                     'value' => $allow,
-                    'name' => 'profiler.measure.request.method.'.strtolower($allow)
+                    'name'  => 'profiler.measure.request.method.'.strtolower($allow)
                 );
             }
         }

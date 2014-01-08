@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Profiler\Event;
+
 /**
  * This script defines class of mediator message.
  *
@@ -7,6 +9,6 @@
  * @category   Performance
  * @package    Profiler
  */
-class Performance_Profiler_Event_Message extends Performance_Main_Event_Message {
+class Message extends \PF\Main\Event\Message {
 
 }

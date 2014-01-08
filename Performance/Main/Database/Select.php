@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Database;
+
 /**
  * This script defines class for select statement of MySQL.
  *
@@ -7,11 +9,11 @@
  * @category   Performance
  * @package    Main
  *
- * @method Performance_Main_Database_Select where(string $condition, array $bind=null) It adds condition with AND operator.
- * @method Performance_Main_Database_Select orWhere(string $condition, array $bind=null) It adds condition with OR operator.
- * @method Performance_Main_Database_Select setSQL(string $sql) It adds condition with OR operator.
+ * @method \PF\Main\Database\Select where(string $condition, array $bind=null)   It adds condition with AND operator.
+ * @method \PF\Main\Database\Select orWhere(string $condition, array $bind=null) It adds condition with OR operator.
+ * @method \PF\Main\Database\Select setSQL(string $sql)                          It sets SQL query.
  */
-class Performance_Main_Database_Select extends Performance_Main_Database_Where {
+class Select extends Where {
 
     /**
      * Parameter for DISTINCT function.
@@ -58,7 +60,7 @@ class Performance_Main_Database_Select extends Performance_Main_Database_Where {
     /**
      * It adds DISTINCT to SQL statement.
      *
-     * @return Performance_Main_Database_Select
+     * @return \PF\Main\Database\Select
      */
     public function distinct() {
         $this->_distinct = ' DISTINCT';
@@ -69,7 +71,7 @@ class Performance_Main_Database_Select extends Performance_Main_Database_Where {
     /**
      * Returns new instance of where condition.
      *
-     * @return \Performance_Main_Database_Where
+     * @return \PF\Main\Database\Where
      */
     public function createWhere() {
         return new parent($this->getConnection());
@@ -80,7 +82,7 @@ class Performance_Main_Database_Select extends Performance_Main_Database_Where {
      *
      * @param array $columns Array with selected columns
      *
-     * @return Performance_Main_Database_Select
+     * @return \PF\Main\Database\Select
      */
     public function columns($columns) {
         if (isset($this->_columns[''])) {
@@ -98,7 +100,7 @@ class Performance_Main_Database_Select extends Performance_Main_Database_Where {
      * @param string|array $table   Name of table or alias => table array
      * @param array        $columns List of columns wich will be returned
      *
-     * @return Performance_Main_Database_Select
+     * @return \PF\Main\Database\Select
      */
     public function from($table, $columns=array('*')) {
         $alias = is_array($table) ? key($table) : $table;
@@ -121,7 +123,7 @@ class Performance_Main_Database_Select extends Performance_Main_Database_Where {
      * @param string       $on      ON condition to connection of tables
      * @param array        $columns List of columns wich will be returned
      *
-     * @return Performance_Main_Database_Select
+     * @return \PF\Main\Database\Select
      */
     public function joinInner($table, $on, $columns=array('*')) {
         return $this->_join($table, $on, $columns, 'INNER JOIN');
@@ -134,7 +136,7 @@ class Performance_Main_Database_Select extends Performance_Main_Database_Where {
      * @param string       $on      ON condition to connection of tables
      * @param array        $columns List of columns wich will be returned
      *
-     * @return Performance_Main_Database_Select
+     * @return \PF\Main\Database\Select
      */
     public function joinLeft($table, $on, $columns=array('*')) {
         return $this->_join($table, $on, $columns, 'LEFT JOIN');
@@ -145,7 +147,7 @@ class Performance_Main_Database_Select extends Performance_Main_Database_Where {
      *
      * @param array $columns List of columns for group function
      *
-     * @return Performance_Main_Database_Select
+     * @return \PF\Main\Database\Select
      */
     public function group($columns = null) {
         $this->_group = join((', '), (array)$columns);
@@ -156,9 +158,9 @@ class Performance_Main_Database_Select extends Performance_Main_Database_Where {
     /**
      * It adds HAVING function to SQL statement.
      *
-     * @param string|Performance_Main_Database_Where $condition HAVING condition
+     * @param string|\PF\Main\Database\Where $condition HAVING condition
      *
-     * @return Performance_Main_Database_Select
+     * @return \PF\Main\Database\Select
      */
     public function having($condition = null) {
         $this->_having = (string)$condition;
@@ -169,13 +171,13 @@ class Performance_Main_Database_Select extends Performance_Main_Database_Where {
     /**
      * It creates SQL select statement.
      *
-     * @return Performance_Main_Database_Select
+     * @return \PF\Main\Database\Select
      *
-     * @throws Performance_Main_Database_Exception Throws when FROM table is not set.
+     * @throws \PF\Main\Database\Exception Throws when FROM table is not set.
      */
     protected function compile() {
         if ($this->_table === null) {
-            throw new Performance_Main_Database_Exception('From table is not set.');
+            throw new Exception('From table is not set.');
         }
 
         $sql = 'SELECT'.$this->_distinct;
@@ -226,15 +228,15 @@ class Performance_Main_Database_Select extends Performance_Main_Database_Where {
      * @param array        $columns  List of columns wich will be returned
      * @param string       $joinType Define JOIN type (INNER or LEFT)
      *
-     * @return Performance_Main_Database_Select
+     * @return \PF\Main\Database\Select
      */
     private function _join($table, $on, $columns=array('*'), $joinType = 'INNER JOIN') {
         $alias = is_array($table) ? key($table) : $table;
         $table = is_array($table) ? current($table) : $table;
 
         $this->_joins[$alias] = array(
-            'type' => $joinType,
-            'on' => $on,
+            'type'  => $joinType,
+            'on'    => $on,
             'table' => $table
         );
 

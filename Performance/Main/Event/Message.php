@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Event;
+
 /**
  * This script defines class for message mediator.
  *
@@ -7,7 +9,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Event_Message implements Performance_Main_Event_Interface_Message {
+class Message implements Interfaces\Message {
 
     /**
      * Data of message.
@@ -22,7 +24,7 @@ class Performance_Main_Event_Message implements Performance_Main_Event_Interface
      * @return mixed
      */
     public function getData() {
-        return $this->_data;;
+        return $this->_data;
     }
 
     /**
@@ -30,7 +32,7 @@ class Performance_Main_Event_Message implements Performance_Main_Event_Interface
      *
      * @param mixed $data Data of message
      *
-     * @return Performance_Main_Event_Message
+     * @return \PF\Main\Event\Message
      */
     public function setData($data) {
         $this->_data = $data;

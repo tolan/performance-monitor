@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Database;
+
 /**
  * This script defines class for connection to MySQL over PDO.
  *
@@ -7,7 +9,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Database_Connection extends PDO {
+class Connection extends \PDO {
 
     /**
      * Construct method.
@@ -17,8 +19,6 @@ class Performance_Main_Database_Connection extends PDO {
      * @param string $passwd   Password for connect to MySQL server
      * @param string $database Name of connected database
      * @param array  $options  Options for PDO
-     *
-     * @return void
      */
     public function __construct($host, $username, $passwd, $database=null, $options=array()) {
         $dsn = 'mysql:host='.$host.($database ? ';dbname='.$database : '');

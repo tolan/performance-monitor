@@ -2,6 +2,8 @@
 
 namespace PF\Search\Enum;
 
+use PF\Main\Abstracts\Enum;
+
 /**
  * This script defines enum with all posible operators.
  *
@@ -9,7 +11,7 @@ namespace PF\Search\Enum;
  * @category   Performance
  * @package    Search
  */
-class Operator extends \Performance_Main_Abstract_Enum {
+class Operator extends Enum {
     const IS_EMPTY = 'empty';
     const IS_SET   = 'set';
 

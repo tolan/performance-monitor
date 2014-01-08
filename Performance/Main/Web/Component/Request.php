@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Web\Component;
+
 /**
  * This script defines class for input request.
  *
@@ -7,7 +9,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Web_Component_Request {
+class Request {
 
     /**
      * Stack for instances
@@ -28,7 +30,7 @@ class Performance_Main_Web_Component_Request {
     /**
      * Return entity instance with COOKIE.
      *
-     * @return Performance_Main_Web_Component_Http_Cookie
+     * @return \PF\Main\Web\Component\Http\Cookie
      */
     public function getCookie() {
         return $this->_getInstance('Cookie');
@@ -37,7 +39,7 @@ class Performance_Main_Web_Component_Request {
     /**
      * Return entity instance with ENV.
      *
-     * @return Performance_Main_Web_Component_Http_Env
+     * @return \PF\Main\Web\Component\Http\Env
      */
     public function getEnv() {
         return $this->_getInstance('Env');
@@ -46,7 +48,7 @@ class Performance_Main_Web_Component_Request {
     /**
      * Return entity instance with FILES.
      *
-     * @return Performance_Main_Web_Component_Http_Files
+     * @return \PF\Main\Web\Component\Http\Files
      */
     public function getFiles() {
         return $this->_getInstance('Files');
@@ -55,7 +57,7 @@ class Performance_Main_Web_Component_Request {
     /**
      * Return entity instance with GET.
      *
-     * @return Performance_Main_Web_Component_Http_Get
+     * @return \PF\Main\Web\Component\Http\Get
      */
     public function getGet() {
         return $this->_getInstance('Get');
@@ -64,7 +66,7 @@ class Performance_Main_Web_Component_Request {
     /**
      * Return entity instance with POST.
      *
-     * @return Performance_Main_Web_Component_Http_Post
+     * @return \PF\Main\Web\Component\Http\Post
      */
     public function getPost() {
         return $this->_getInstance('Post');
@@ -73,7 +75,7 @@ class Performance_Main_Web_Component_Request {
     /**
      * Return entity instance with REQUEST.
      *
-     * @return Performance_Main_Web_Component_Http_Request
+     * @return \PF\Main\Web\Component\Http\Request
      */
     public function getRequest() {
         return $this->_getInstance('Request');
@@ -82,7 +84,7 @@ class Performance_Main_Web_Component_Request {
     /**
      * Return entity instance with SERVER.
      *
-     * @return Performance_Main_Web_Component_Http_Server
+     * @return \PF\Main\Web\Component\Http\Server
      */
     public function getServer() {
         return $this->_getInstance('Server');
@@ -91,7 +93,7 @@ class Performance_Main_Web_Component_Request {
     /**
      * Return entity instance with SESSION.
      *
-     * @return Performance_Main_Web_Component_Http_Session
+     * @return \PF\Main\Web\Component\Http\Session
      */
     public function getSession() {
         return $this->_getInstance('Session');
@@ -103,7 +105,7 @@ class Performance_Main_Web_Component_Request {
      * @return array
      */
     public function getAll() {
-        $refl = new ReflectionClass(get_class());
+        $refl = new \ReflectionClass(get_class());
         $reflMethods = $refl->getMethods();
         $result = array();
 
@@ -122,11 +124,11 @@ class Performance_Main_Web_Component_Request {
      *
      * @param string $name Class name of http component
      *
-     * @return Performance_Main_Web_Component_Http_Abstract
+     * @return \PF\Main\Web\Component\Http\AbstractHttp
      */
     private function _getInstance($name) {
         if (!isset($this->_instances[$name])) {
-            $class = 'Performance_Main_Web_Component_Http_'.$name;
+            $class = '\\'.__NAMESPACE__.'\\Http\\'.$name;
             $this->_instances[$name] = new $class();
         }
 

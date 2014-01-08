@@ -1,13 +1,15 @@
 <?php
 
+namespace PF\Main\Http;
+
 /**
  * This script defines class for http request client.
  * It provides managing of http requests for sending multiple requests with one cookies (it stores php session id).
  *
  * Example usage:
  *
- * $cookie = new Performance_Main_Http_Cookies();
- * $client = new Performance_Main_Http_Client($cookie)
+ * $cookie = new \PF\Main\Http\Cookies();
+ * $client = new \PF\Main\Http\Client($cookie);
  *
  * $params = array(
  *     '0' => array(
@@ -16,7 +18,7 @@
  *         'method' => 'GET'
  *     )
  * );
- * $request = $client->createRequest(Performance_Main_Http_Enum_Method::GET, 'http://perf.lc/test.php', $params);
+ * $request = $client->createRequest(\PF\Main\Http\Enum\Method::GET, 'http://perf.lc/test.php', $params);
  * $client->addRequest($request);
  * $client->addRequest($request);
  * $client->addRequest($request);
@@ -26,12 +28,12 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Http_Client {
+class Client {
 
     /**
      * Cookies instance for sharing one cookies over all requests.
      *
-     * @var Performance_Main_Http_Cookies
+     * @var \PF\Main\Http\Cookies
      */
     private $_cookies = null;
 
@@ -45,20 +47,20 @@ class Performance_Main_Http_Client {
     /**
      * Construct method.
      *
-     * @param Performance_Main_Http_Cookies $cookies Cookies instance
+     * @param \PF\Main\Http\Cookies $cookies Cookies instance
      */
-    public function __construct(Performance_Main_Http_Cookies $cookies) {
+    public function __construct(Cookies $cookies) {
         $this->_cookies = $cookies;
     }
 
     /**
      * It adds one request to stack and sets cookies.
      *
-     * @param Performance_Main_Http_Request_Abstract $request Request instance
+     * @param \PF\Main\Http\Request\AbstractRequest $request Request instance
      *
-     * @return Performance_Main_Http_Client
+     * @return \PF\Main\Http\Client
      */
-    public function addRequest(Performance_Main_Http_Request_Abstract $request) {
+    public function addRequest(Request\AbstractRequest $request) {
         $request->setCookieJar($this->_cookies);
         $this->_requests[] = $request;
 
@@ -68,11 +70,11 @@ class Performance_Main_Http_Client {
     /**
      * It removes request from stack.
      *
-     * @param Performance_Main_Http_Request_Abstract $request Request instance
+     * @param \PF\Main\Http\Request\AbstractRequest $request Request instance
      *
-     * @return Performance_Main_Http_Client
+     * @return \PF\Main\Http\Client
      */
-    public function removeRequest(Performance_Main_Http_Request_Abstract $request) {
+    public function removeRequest(Request\AbstractRequest $request) {
         foreach ($this->_requests as $key => $req) {
             if ($req === $request) {
                 unset($this->_requests[$key]);
@@ -85,14 +87,14 @@ class Performance_Main_Http_Client {
     /**
      * It creates and returns request intance by given method, url and parameters.
      *
-     * @param enum   $method     One of Performance_Main_Http_Enum_Method
+     * @param enum   $method     One of \PF\Main\Http\Enum\Method
      * @param string $url        Url of target address
      * @param array  $parameters Array with parameters as POST, GET, etc.
      *
-     * @return Performance_Main_Http_Request_Abstract
+     * @return \PF\Main\Http\Request\AbstractRequest
      */
     public function createRequest($method, $url, $parameters = array()) {
-        $request = Performance_Main_Http_Request_Factory::getInstance($method);
+        $request = Request\Factory::getInstance($method);
         $url     = preg_match('#^https*://#', $url) ? $url : 'http://' . $url;
         $request->setUrl($url);
         $this->_addParameters($request, $parameters);
@@ -103,21 +105,21 @@ class Performance_Main_Http_Client {
     /**
      * It adds parameters to given request.
      *
-     * @param Performance_Main_Http_Request_Abstract $request    Request instance
-     * @param array                                  $parameters Array with parameters as POST, GET, etc.
+     * @param \PF\Main\Http\Request\AbstractRequest $request    Request instance
+     * @param array                                 $parameters Array with parameters as POST, GET, etc.
      *
-     * @return Performance_Main_Http_Request_Abstract
+     * @return \PF\Main\Http\Request\AbstractRequest
      *
-     * @throws Performance_Main_Http_Exception Throws when parameters is not allowed on request type.
+     * @throws \PF\Main\Http\Exception Throws when parameters is not allowed on request type.
      */
-    private function _addParameters(Performance_Main_Http_Request_Abstract $request, $parameters = array()) {
-        $allowedParams = Performance_Main_Http_Enum_ParameterType::getAllowedParams($request->getMethod());
+    private function _addParameters(Request\AbstractRequest $request, $parameters = array()) {
+        $allowedParams = Enum\ParameterType::getAllowedParams($request->getMethod());
 
         foreach ($parameters as $data) {
             if (in_array($data['method'], $allowedParams)) {
                 $this->_addMethodParameters($request, $data['method'], $data);
             } else {
-                throw new Performance_Main_Http_Exception('Method parameter '.$data['method'].' is not allowed on request '.$request->getMethod().'.');
+                throw new Exception('Method parameter '.$data['method'].' is not allowed on request '.$request->getMethod().'.');
             }
         }
 
@@ -127,19 +129,19 @@ class Performance_Main_Http_Client {
     /**
      * It adds concrete parameter to request.
      *
-     * @param Performance_Main_Http_Request_Abstract $request Request instance
-     * @param enum                                   $method  One of Performance_Main_Http_Enum_ParameterType
-     * @param array                                  $data    Array with parameters as method, name and value
+     * @param \PF\Main\Http\Request\AbstractRequest $request Request instance
+     * @param enum                                  $method  One of \PF\Main\Http\Enum\ParameterType
+     * @param array                                 $data    Array with parameters as method, name and value
      *
-     * @return Performance_Main_Http_Request_Abstract
+     * @return \PF\Main\Http\Request\AbstractRequest
      */
-    private function _addMethodParameters(Performance_Main_Http_Request_Abstract $request, $method, $data) {
+    private function _addMethodParameters(Request\AbstractRequest $request, $method, $data) {
         switch ($method) {
-            case Performance_Main_Http_Enum_ParameterType::GET:
+            case Enum\ParameterType::GET:
                 $url = $request->getUrl(); /* @var $url Net_URL2 */
                 $url->setQueryVariable($data['name'], $data['value']);
                 break;
-            case Performance_Main_Http_Enum_ParameterType::POST:
+            case Enum\ParameterType::POST:
                 $request->addPostParameter($data['name'], $data['value']);
         }
 
@@ -149,10 +151,10 @@ class Performance_Main_Http_Client {
     /**
      * Method for send all request in stack.
      *
-     * @return Performance_Main_Http_Client
+     * @return \PF\Main\Http\Client
      */
     public function send() {
-        foreach ($this->_requests as $request) { /* @var $request Performance_Main_Http_Request_Abstract */
+        foreach ($this->_requests as $request) { /* @var $request \PF\Main\Http\Request\AbstractRequest */
             $request->send();
         }
 

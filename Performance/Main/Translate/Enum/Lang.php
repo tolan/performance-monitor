@@ -1,5 +1,9 @@
 <?php
 
+namespace PF\Main\Translate\Enum;
+
+use PF\Main\Abstracts\Enum;
+
 /**
  * This class defines supported languages.
  *
@@ -7,7 +11,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Translate_Enum_Lang extends Performance_Main_Abstract_Enum {
+class Lang extends Enum {
     const CZECH   = 'CS';
     const ENGLISH = 'EN';
 }

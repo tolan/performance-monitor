@@ -1,5 +1,9 @@
 <?php
 
+namespace PF\Main\Web\View\Homepage;
+
+use PF\Main\Web\View\Html;
+
 /**
  * This script defines class for homepage index view.
  *
@@ -7,12 +11,12 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Web_View_Homepage_Index extends Performance_Main_Web_View_Html {
+class Index extends Html {
 
     /**
      * Generates payload. Sets headers and body in template.
      *
-     * @return Performance_Main_Web_View_Homepage_Index
+     * @return \PF\Main\Web\View\Homepage\Index
      */
     public function getPayload() {
         parent::getPayload();

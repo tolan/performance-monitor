@@ -2,6 +2,7 @@
 
 namespace PF\Search\Filter\Condition;
 
+use PF\Main\Utils;
 use PF\Search\Filter\Select;
 use PF\Search\Filter\Exception;
 
@@ -17,7 +18,7 @@ abstract class AbstractCondition {
     /**
      * Utils instance.
      *
-     * @var \Performance_Main_Utils
+     * @var \PF\Main\Utils
      */
     private $_utils;
 
@@ -38,16 +39,16 @@ abstract class AbstractCondition {
     /**
      * Construct method.
      *
-     * @param \Performance_Main_Utils $utils Utils instance
+     * @param \PF\Main\Utils $utils Utils instance
      */
-    public function __construct(\Performance_Main_Utils $utils) {
+    public function __construct(Utils $utils) {
         $this->_utils = $utils;
     }
 
     /**
      * Returns utils instance.
      *
-     * @return \Performance_Main_Utils
+     * @return \PF\Main\Utils
      */
     protected function getUtils() {
         return $this->_utils;
@@ -94,6 +95,13 @@ abstract class AbstractCondition {
         return $this;
     }
 
+    /**
+     * Prohibited method.
+     *
+     * @param \PF\Search\Filter\Select $select Select instance
+     *
+     * @throws Exception Throws always
+     */
     public function fulltext(Select $select) {
         throw new Exception('You can not call fulltext method on non-query condition');
     }

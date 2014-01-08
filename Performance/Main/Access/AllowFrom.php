@@ -1,5 +1,9 @@
 <?php
 
+namespace PF\Main\Access;
+
+use PF\Main\Access\Exception;
+
 /**
  * This script defines class for access control by allowed ip address.
  *
@@ -7,7 +11,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Access_AllowFrom extends Performance_Main_Access_Abstract {
+class AllowFrom extends AbstractAccess {
     const CONFIG_KEY = 'allowFrom';
 
     /**
@@ -15,7 +19,7 @@ class Performance_Main_Access_AllowFrom extends Performance_Main_Access_Abstract
      *
      * @return int
      *
-     * @throws Performance_Main_Access_Exception Throws when are set allow address and remote ip address is not in allowed.
+     * @throws \PF\Main\Access\Exception Throws when are set allow address and remote ip address is not in allowed.
      */
     public function checkAccess() {
         $config      = $this->getConfig();
@@ -33,7 +37,7 @@ class Performance_Main_Access_AllowFrom extends Performance_Main_Access_Abstract
         }
 
         if ($priority === 0) {
-            throw new Performance_Main_Access_Exception('Access denied by allow address.');
+            throw new Exception('Access denied by allow address.');
         }
 
         return $priority;

@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main;
+
 /**
  * This script defines class for application configuration.
  *
@@ -7,7 +9,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Config {
+class Config {
 
     /**
      * Configuration data
@@ -19,7 +21,7 @@ class Performance_Main_Config {
     /**
      * Construct method for init default values.
      */
-    public function __construct() {
+    final public function __construct() {
         $this->set('root', dirname(__DIR__));
     }
 
@@ -28,9 +30,9 @@ class Performance_Main_Config {
      *
      * @param string $configFile Path to config file.
      *
-     * @return Performance_Main_Config
+     * @return \PF\Main\Config
      *
-     * @throws Performance_Main_Exception Throws when config file doesn't exist.
+     * @throws \PF\Main\Exception Throws when config file doesn't exist.
      */
     public function loadJson($configFile) {
         if (file_exists($configFile)) {
@@ -39,7 +41,7 @@ class Performance_Main_Config {
             $config = json_decode($content, JSON_OBJECT_AS_ARRAY);
             $this->fromArray($config);
         } else {
-            throw new Performance_Main_Exception('Config file doesn\'t exist.');
+            throw new Exception('Config file doesn\'t exist.');
         }
 
         return $this;
@@ -51,7 +53,7 @@ class Performance_Main_Config {
      * @param string $name      Method name
      * @param array  $arguments Input data
      *
-     * @throws Performance_Main_Exception
+     * @throws \PF\Main\Exception Throws when called function doesn't exists.
      *
      * @return mixed
      */
@@ -65,7 +67,7 @@ class Performance_Main_Config {
             case 'get':
                 return $this->get($property);
             default:
-                throw new Performance_Main_Exception('Undefined function');
+                throw new Exception('Undefined function');
         }
     }
 
@@ -74,7 +76,7 @@ class Performance_Main_Config {
      *
      * @param array $array Configuration data
      *
-     * @return Performance_Main_Config
+     * @return \PF\Main\Config
      */
     public function fromArray(array $array = null) {
         foreach ($array as $key => $item) {
@@ -99,7 +101,7 @@ class Performance_Main_Config {
      * @param string $name Name of option
      * @param mixed  $data Configuration data
      *
-     * @return Performance_Main_Config
+     * @return \PF\Main\Config
      */
     public function set($name, $data) {
         $this->_data[lcfirst($name)] = $data;
@@ -114,11 +116,11 @@ class Performance_Main_Config {
      *
      * @return mixed Configuration data
      *
-     * @throws Performance_Main_Exception Throws when option is not defined.
+     * @throws \PF\Main\Exception Throws when option is not defined.
      */
     public function get($name) {
         if ($this->hasOwnProperty($name) === false) {
-            throw new Performance_Main_Exception('Property "'.lcfirst($name).'" is not defined.');
+            throw new Exception('Property "'.lcfirst($name).'" is not defined.');
         }
 
         return $this->_data[lcfirst($name)];
@@ -129,9 +131,9 @@ class Performance_Main_Config {
      *
      * @param string $name Name of configuration option
      *
-     * @return Performance_Main_Config
+     * @return \PF\Main\Config
      *
-     * @throws Performance_Main_Exception Throws when option is not defined.
+     * @throws \PF\Main\Exception Throws when option is not defined.
      */
     public function reset($name=null) {
         if($name === null) {
@@ -139,7 +141,7 @@ class Performance_Main_Config {
         } elseif($this->hasOwnProperty($name)) {
             unset($this->_data[lcfirst($name)]);
         } else {
-            throw new Performance_Main_Exception('Property "'.lcfirst($name).'" is not defined.');
+            throw new Exception('Property "'.lcfirst($name).'" is not defined.');
         }
 
         return $this;

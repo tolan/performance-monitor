@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Database;
+
 /**
  * This script defines class for WHERE part of MySQL statement.
  *
@@ -7,7 +9,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Database_Where extends Performance_Main_Database_Query {
+class Where extends Query {
 
     /**
      * List of where conditions
@@ -22,7 +24,7 @@ class Performance_Main_Database_Where extends Performance_Main_Database_Query {
      * @param string $condition Codition with binding
      * @param mixed  $bind      Bind data
      *
-     * @return Performance_Main_Database_Where
+     * @return \PF\Main\Database\Where
      */
     public function where($condition, $bind=null) {
         return $this->_whereCondition($condition, $bind, 'AND');
@@ -34,7 +36,7 @@ class Performance_Main_Database_Where extends Performance_Main_Database_Query {
      * @param string $condition Codition with binding
      * @param mixed  $bind      Bind data
      *
-     * @return Performance_Main_Database_Where
+     * @return \PF\Main\Database\Where
      */
     public function orWhere($condition, $bind=null) {
         return $this->_whereCondition($condition, $bind, 'OR');
@@ -77,7 +79,7 @@ class Performance_Main_Database_Where extends Performance_Main_Database_Query {
      * @param mixed  $bind      Bind data
      * @param string $type      Type of operator (AND or OR)
      *
-     * @return Performance_Main_Database_Where
+     * @return \PF\Main\Database\Where
      */
     private function _whereCondition($condition, $bind=null, $type = 'AND') {
         $this->_where[] = array(

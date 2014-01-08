@@ -1,5 +1,10 @@
 <?php
 
+namespace PF\Main\Http\Enum;
+
+use PF\Main\Abstracts\Enum;
+use PF\Main\Http\Exception;
+
 /**
  * This class defines methods of parameters on http requests.
  *
@@ -7,11 +12,11 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Http_Enum_ParameterType extends Performance_Main_Abstract_Enum {
-    const DELETE = Performance_Main_Http_Enum_Method::DELETE;
-    const GET    = Performance_Main_Http_Enum_Method::GET;
-    const POST   = Performance_Main_Http_Enum_Method::POST;
-    const PUT    = Performance_Main_Http_Enum_Method::PUT;
+class ParameterType extends Enum {
+    const DELETE = Method::DELETE;
+    const GET    = Method::GET;
+    const POST   = Method::POST;
+    const PUT    = Method::PUT;
 
     /**
      * Map for allowed parameters on each request type.
@@ -19,17 +24,17 @@ class Performance_Main_Http_Enum_ParameterType extends Performance_Main_Abstract
      * @var array
      */
     private static $_allowedParams = array(
-        Performance_Main_Http_Enum_Method::DELETE => array(
+        Method::DELETE => array(
             self::GET
         ),
-        Performance_Main_Http_Enum_Method::GET => array(
+        Method::GET => array(
             self::GET
         ),
-        Performance_Main_Http_Enum_Method::POST => array(
+        Method::POST => array(
             self::GET,
             self::POST
         ),
-        Performance_Main_Http_Enum_Method::PUT => array(
+        Method::PUT => array(
             self::GET,
             self::POST
         )
@@ -38,9 +43,11 @@ class Performance_Main_Http_Enum_ParameterType extends Performance_Main_Abstract
     /**
      * Returns allowed parameter types by given method type of request.
      *
-     * @param type $method
-     * @return type
-     * @throws Performance_Main_Http_Exception
+     * @param enum $method One of \PF\Main\Http\Enum\Method
+     *
+     * @return array
+     *
+     * @throws \PF\Main\Http\Exception
      */
     public static function getAllowedParams($method = null) {
         if ($method === null) {
@@ -48,7 +55,7 @@ class Performance_Main_Http_Enum_ParameterType extends Performance_Main_Abstract
         }
 
         if (!isset(self::$_allowedParams[$method])) {
-            throw new Performance_Main_Http_Exception('Undefined method parameters.');
+            throw new Exception('Undefined method parameters.');
         }
 
         return self::$_allowedParams[$method];

@@ -1,5 +1,10 @@
 <?php
 
+namespace PF\Profiler\Component;
+
+use PF\Main\Provider;
+use PF\Profiler\Enum\HttpKeys;
+
 /**
  * Abstract class for all abstract factory component of profiler.
  *
@@ -7,12 +12,12 @@
  * @category   Performance
  * @package    Profiler
  */
-abstract class Performance_Profiler_Component_AbstractFactory {
+abstract class AbstractFactory {
 
     /**
      * Provider instnace.
      *
-     * @var Performance_Main_Provider
+     * @var \PF\Main\Provider
      */
     private $_provider;
 
@@ -26,9 +31,9 @@ abstract class Performance_Profiler_Component_AbstractFactory {
     /**
      * Construct method.
      *
-     * @param Performance_Main_Provider $provider
+     * @param \PF\Main\Provider $provider
      */
-    public function __construct(Performance_Main_Provider $provider) {
+    public function __construct(Provider $provider) {
         $this->_provider = $provider;
     }
 
@@ -41,7 +46,7 @@ abstract class Performance_Profiler_Component_AbstractFactory {
         $this->_attemptId = null;
 
         $get          = $this->_provider->get('request')->getGet();
-        $measureIdKey = Performance_Profiler_Enum_HttpKeys::ATTEMPT_ID;
+        $measureIdKey = HttpKeys::ATTEMPT_ID;
 
         if ($get->has($measureIdKey)) {
             $this->_attemptId = $get->get($measureIdKey);
@@ -53,7 +58,7 @@ abstract class Performance_Profiler_Component_AbstractFactory {
     /**
      * Returns provider instance.
      *
-     * @return Performance_Main_Provider
+     * @return \PF\Main\Provider
      */
     protected function getProvider() {
         return $this->_provider;

@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Database;
+
 /**
  * This script defines class for insert statement of MySQL.
  *
@@ -7,7 +9,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Database_Insert extends Performance_Main_Database_Query {
+class Insert extends Query {
 
     /**
      * Name of table
@@ -42,7 +44,7 @@ class Performance_Main_Database_Insert extends Performance_Main_Database_Query {
      *
      * @param string $table Name of table
      *
-     * @return Performance_Main_Database_Insert
+     * @return \PF\Main\Database\Insert
      */
     public function setTable($table) {
         $this->_table = is_array($table) ? current($table) : $table;
@@ -55,7 +57,7 @@ class Performance_Main_Database_Insert extends Performance_Main_Database_Query {
      *
      * @param array $data Data to insert
      *
-     * @return Performance_Main_Database_Insert
+     * @return \PF\Main\Database\Insert
      */
     public function setInsertData(array $data) {
         $this->_data = $data;
@@ -68,7 +70,7 @@ class Performance_Main_Database_Insert extends Performance_Main_Database_Query {
      *
      * @param array $data Data for mass insert (multiple rows)
      *
-     * @return Performance_Main_Database_Insert
+     * @return \PF\Main\Database\Insert
      */
     public function massInsert(array $data) {
         $this->_massData = $data;
@@ -86,7 +88,11 @@ class Performance_Main_Database_Insert extends Performance_Main_Database_Query {
 
         $this->execute($this->getStatement(), $this->getBind());
 
-        return $this->getConnection()->lastInsertId();
+        $id = $this->getConnection()->lastInsertId();
+
+        $this->_insertId = $id;
+
+        return $id;
     }
 
     /**
@@ -94,11 +100,11 @@ class Performance_Main_Database_Insert extends Performance_Main_Database_Query {
      *
      * @return int Last insert ID
      *
-     * @throws Performance_Main_Database_Exception Throws when insert ID is not available.
+     * @throws \PF\Main\Database\Exception Throws when insert ID is not available.
      */
     public function getId() {
         if ($this->_insertId === null) {
-            throw new Performance_Main_Database_Exception('Insert ID is not available.');
+            throw new Exception('Insert ID is not available.');
         }
 
         return $this->_insertId;
@@ -107,17 +113,17 @@ class Performance_Main_Database_Insert extends Performance_Main_Database_Query {
     /**
      * This create SQL statement from input data.
      *
-     * @return Performance_Main_Database_Insert
+     * @return \PF\Main\Database\Insert
      *
-     * @throws Performance_Main_Database_Exception Throws when table or data are not set.
+     * @throws \PF\Main\Database\Exception Throws when table or data are not set.
      */
     protected function compile() {
         if ($this->_table === null) {
-            throw new Performance_Main_Database_Exception('Table is not set.');
+            throw new Exception('Table is not set.');
         }
 
         if (empty($this->_data) && empty($this->_massData)) {
-            throw new Performance_Main_Database_Exception('Data are not set.');
+            throw new Exception('Data are not set.');
         }
 
         $data  = array_filter(array_merge($this->_massData, array($this->_data)));

@@ -2,6 +2,8 @@
 
 namespace PF\Search\Enum;
 
+use PF\Main\Abstracts\Enum;
+
 /**
  * This script defines enum with all posible filter types.
  *
@@ -9,7 +11,7 @@ namespace PF\Search\Enum;
  * @category   Performance
  * @package    Search
  */
-class Type extends \Performance_Main_Abstract_Enum {
+class Type extends Enum {
     const QUERY  = 'query';
     const STRING = 'string';
     const DATE   = 'date';

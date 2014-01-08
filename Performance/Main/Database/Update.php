@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Database;
+
 /**
  * This script defines class for update statement of MySQL.
  *
@@ -7,11 +9,11 @@
  * @category   Performance
  * @package    Main
  *
- * @method Performance_Main_Database_Select where(string $condition, array $bind=null) It adds condition with AND operator.
- * @method Performance_Main_Database_Select orWhere(string $condition, array $bind=null) It adds condition with OR operator.
- * @method Performance_Main_Database_Select setSQL(string $sql) It adds condition with OR operator.
+ * @method \PF\Main\Database\Update where(string $condition, array $bind=null)   It adds condition with AND operator.
+ * @method \PF\Main\Database\Update orWhere(string $condition, array $bind=null) It adds condition with OR operator.
+ * @method \PF\Main\Database\Update setSQL(string $sql)                          It sets SQL qeury.
  */
-class Performance_Main_Database_Update extends Performance_Main_Database_Where {
+class Update extends Where {
 
     /**
      * Name of table
@@ -32,7 +34,7 @@ class Performance_Main_Database_Update extends Performance_Main_Database_Where {
      *
      * @param string $table Name of table
      *
-     * @return Performance_Main_Database_Update
+     * @return \PF\Main\Database\Update
      */
     public function setTable($table) {
         $this->_table = is_array($table) ? current($table) : $table;
@@ -45,7 +47,7 @@ class Performance_Main_Database_Update extends Performance_Main_Database_Where {
      *
      * @param array $data Data to update
      *
-     * @return Performance_Main_Database_Update
+     * @return \PF\Main\Database\Update
      */
     public function setUpdateData($data) {
         $this->_data = $data;
@@ -67,17 +69,17 @@ class Performance_Main_Database_Update extends Performance_Main_Database_Where {
     /**
      * This create SQL statement from input data.
      *
-     * @return Performance_Main_Database_Update
+     * @return \PF\Main\Database\Update
      *
-     * @throws Performance_Main_Database_Exception Throws when table or data are not set.
+     * @throws \PF\Main\Database\Exception Throws when table or data are not set.
      */
     protected function compile() {
         if ($this->_table === null) {
-            throw new Performance_Main_Database_Exception('Table is not set.');
+            throw new Exception('Table is not set.');
         }
 
         if (empty($this->_data)) {
-            throw new Performance_Main_Database_Exception('Data are not set.');
+            throw new Exception('Data are not set.');
         }
 
         $sql          = 'UPDATE '.$this->_table. ' SET ';

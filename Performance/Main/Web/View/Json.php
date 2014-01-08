@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Web\View;
+
 /**
  * Abstract class for each JSON view.
  *
@@ -7,7 +9,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Web_View_Json extends Performance_Main_Web_View_Abstract {
+class Json extends AbstractView {
 
     /**
      * Generates payload.
@@ -21,7 +23,7 @@ class Performance_Main_Web_View_Json extends Performance_Main_Web_View_Abstract 
     /**
      * Returns JSON template.
      *
-     * @return Performance_Main_Web_Component_Template_Json
+     * @return \PF\Main\Web\Component\Template\Json
      */
     final protected function getTemplate() {
         return parent::getTemplate();

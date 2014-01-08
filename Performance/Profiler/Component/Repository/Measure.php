@@ -1,5 +1,9 @@
 <?php
 
+namespace PF\Profiler\Component\Repository;
+
+use PF\Main\Abstracts\Repository;
+
 /**
  * This script defines repository for measures.
  *
@@ -7,7 +11,7 @@
  * @category   Performance
  * @package    Profiler
  */
-class Performance_Profiler_Component_Repository_Measure extends Performance_Main_Abstract_Repository {
+class Measure extends Repository {
 
     /**
      * Init method for set managed table.
@@ -61,9 +65,7 @@ class Performance_Profiler_Component_Repository_Measure extends Performance_Main
             ->select()
             ->from(array('m' => $this->getTableName()), array('id' => 'id', 'name', 'description', 'edited'))
             ->joinLeft(array('mr' => 'measure_request'), 'mr.measureId = m.id', array('requestId' => 'id', 'measureId', 'url', 'method', 'toMeasure'))
-            ->joinLeft(
-                array('rp' => 'request_parameter'), 'rp.requestId = mr.id', array('methodParam' => 'method', 'nameParam' => 'name', 'value')
-            )
+            ->joinLeft(array('rp' => 'request_parameter'), 'rp.requestId = mr.id', array('methodParam' => 'method', 'nameParam' => 'name', 'value'))
             ->where('m.id = :id', array(':id' => $id));
 
         $data     = $select->fetchAll();
@@ -120,7 +122,7 @@ class Performance_Profiler_Component_Repository_Measure extends Performance_Main
      * @return int Inserted ID
      */
     public function create($data) {
-        $data['edited'] = Performance_Main_Database::convertTimeToMySQLDateTime(time());
+        $data['edited'] = $this->getUtils()->convertTimeToMySQLDateTime(time());
         return parent::create($data);
     }
 
@@ -133,7 +135,7 @@ class Performance_Profiler_Component_Repository_Measure extends Performance_Main
      * @return int Count affected rows
      */
     public function update($id, $data) {
-        $data['edited'] = Performance_Main_Database::convertTimeToMySQLDateTime(time());
+        $data['edited'] = $this->getUtils()->convertTimeToMySQLDateTime(time());
         return parent::update($id, $data);
     }
 }

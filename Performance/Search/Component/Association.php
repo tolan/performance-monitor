@@ -67,14 +67,14 @@ class Association {
      */
     private $_enums = array(
         Enum\Target::MEASURE => array(
-            Enum\Filter::METHOD => 'Performance_Main_Http_Enum_Method'
+            Enum\Filter::METHOD => '\PF\Main\Http\Enum\Method'
         ),
         Enum\Target::TEST => array(
-            Enum\Filter::STATE => 'Performance_Profiler_Enum_AttemptState'
+            Enum\Filter::STATE => '\PF\Profiler\Enum\AttemptState'
         ),
         Enum\Target::ATTEMPT =>array(
-            Enum\Filter::STATE  => 'Performance_Profiler_Enum_AttemptState',
-            Enum\Filter::METHOD => 'Performance_Main_Http_Enum_Method'
+            Enum\Filter::STATE  => '\PF\Profiler\Enum\AttemptState',
+            Enum\Filter::METHOD => '\PF\Main\Http\Enum\Method'
         )
     );
 

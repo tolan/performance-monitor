@@ -1,5 +1,10 @@
 <?php
 
+namespace PF\Main\Web\Component;
+
+use PF\Main\Provider;
+use PF\Main\Web\Exception;
+
 /**
  * This script defines class for application router.
  *
@@ -7,7 +12,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Web_Component_Router {
+class Router {
     const CONTROLLER = 'controller';
     const METHOD     = 'action';
     const PARAMS     = 'params';
@@ -15,31 +20,31 @@ class Performance_Main_Web_Component_Router {
     /**
      * Http request
      *
-     * @var Performance_Main_Web_Component_Request
+     * @var \PF\Main\Web\Component\Request
      */
     private $_request;
 
     /**
      * Provider instance
      *
-     * @var Performance_Main_Provider
+     * @var \PF\Main\Provider
      */
     private $_provider;
 
     /**
      * Controller instance
      *
-     * @var Performance_Main_Web_Controller_Abstract
+     * @var \PF\Main\Web\Controller\Abstracts\Controller
      */
     private $_controller = null;
 
     /**
      * Construct method
      *
-     * @param Performance_Main_Provider              $provider Provider instnace
-     * @param Performance_Main_Web_Component_Request $request  Request instance
+     * @param \PF\Main\Provider              $provider Provider instnace
+     * @param \PF\Main\Web\Component\Request $request  Request instance
      */
-    public function __construct(Performance_Main_Provider $provider, Performance_Main_Web_Component_Request $request) {
+    public function __construct(Provider $provider, Request $request) {
         $this->_provider = $provider;
         $this->_request  = $request;
     }
@@ -47,7 +52,7 @@ class Performance_Main_Web_Component_Router {
     /**
      * Resolve route and create controller instance.
      *
-     * @return Performance_Main_Web_Component_Router
+     * @return \PF\Main\Web\Component\Router
      */
     public function route() {
         if ($this->_controller === null) {
@@ -60,16 +65,20 @@ class Performance_Main_Web_Component_Router {
     /**
      * Returns instance of controller.
      *
-     * @return Performance_Main_Web_Controller_Abstract
+     * @return \PF\Main\Web\Controller\Abstracts\Controller
      */
     public function getController() {
+        if ($this->_controller === null) {
+            $this->_controller = $this->_resolveController();
+        }
+
         return $this->_controller;
     }
 
     /**
      * This method resolve route and return controller instance.
      *
-     * @return Performance_Main_Web_Controller_Abstract
+     * @return \PF\Main\Web\Controller\Abstracts\Controller
      */
     private function _resolveController() {
         $server = $this->_request->getServer();
@@ -90,7 +99,7 @@ class Performance_Main_Web_Component_Router {
             }
         }
 
-        $controller = $this->_provider->get('Performance_Main_Web_Controller_'.$route[self::CONTROLLER]);
+        $controller = $this->_provider->get('PF\Main\Web\Controller\\'.$route[self::CONTROLLER]);
         $controller->setAction($route[self::METHOD]);
         $controller->setParams($route[self::PARAMS]);
 
@@ -104,19 +113,19 @@ class Performance_Main_Web_Component_Router {
      *
      * @return array
      *
-     * @throws Performance_Main_Web_Exception Throws when controller has wrong base path.
+     * @throws \PF\Main\Web\Exception Throws when controller has wrong base path.
      */
     private function _resolveNewRoute($path) {
         list($controller, $action) =  explode('/', trim($path, '/').'/', 2);
 
         $controller = $controller === '' ? 'Homepage' : $controller;
 
-        $class = 'Performance_Main_Web_Controller_'.ucfirst($controller);
+        $class = '\PF\Main\Web\Controller\\'.ucfirst($controller);
 
         $classAnnot = $this->_getClassAnnotations($class);
 
         if (isset($classAnnot['link']) && strpos($path, $classAnnot['link']) === false) {
-            throw new Performance_Main_Web_Exception('Route doesn\'t match.');
+            throw new Exception('Route doesn\'t match.');
         }
 
         $classMethodsAnnot = $this->_getClassMethodsAnnotations($class);
@@ -182,14 +191,14 @@ class Performance_Main_Web_Component_Router {
     }
 
     /**
-     * Returns annotation from all acion methods in controller class.
+     * Returns annotation from all action methods in controller class.
      *
      * @param string $class Class name
      *
      * @return array Array with annotations
      */
     private function _getClassMethodsAnnotations($class) {
-        $refl = new ReflectionClass($class);
+        $refl = new \ReflectionClass($class);
         $methods = $refl->getMethods();
 
         $annotations = array();
@@ -218,7 +227,7 @@ class Performance_Main_Web_Component_Router {
     private function _getClassAnnotations($class) {
         $annotations = array();
 
-        $refl = new ReflectionClass($class);
+        $refl = new \ReflectionClass($class);
         $doc  = $refl->getDocComment();
 
         preg_match_all('#@(.*?)\n#s', $doc, $annotations);

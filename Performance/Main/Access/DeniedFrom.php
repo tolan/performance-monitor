@@ -1,5 +1,9 @@
 <?php
 
+namespace PF\Main\Access;
+
+use PF\Main\Access\Exception;
+
 /**
  * This script defines class for access control by denied ip address.
  *
@@ -7,7 +11,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Access_DeniedFrom extends Performance_Main_Access_Abstract {
+class DeniedFrom extends AbstractAccess {
     const CONFIG_KEY = 'deniedFrom';
 
     /**
@@ -15,7 +19,7 @@ class Performance_Main_Access_DeniedFrom extends Performance_Main_Access_Abstrac
      *
      * @return int
      *
-     * @throws Performance_Main_Access_Exception Throws when are set denied address and remote ip address is not in denied.
+     * @throws \PF\Main\Access\Exception Throws when are set denied address and remote ip address is not in denied.
      */
     public function checkAccess() {
         $config      = $this->getConfig();
@@ -33,7 +37,7 @@ class Performance_Main_Access_DeniedFrom extends Performance_Main_Access_Abstrac
         }
 
         if ($priority === 32) {
-            throw new Performance_Main_Access_Exception('Access denied by denied address.');
+            throw new Exception('Access denied by denied address.');
         }
 
         return $priority;

@@ -1,0 +1,30 @@
+{
+    "modules" : [],
+    "provider" : {
+        "useAutoloader" : true,
+        "initServices"  : ["database"],
+        "serviceMap"    : {
+            "database" : "PF\\Main\\Database",
+            "config"   : "PF\\Main\\Config"
+        }
+    },
+    "database" : {
+        "address"  : "localhost",
+        "user"     : "root",
+        "password" : "net",
+        "database" : "performance_unit_tests",
+        "install"  : true
+    },
+    "access" : {
+        "allowFrom" : [],
+        "deniedFrom" : []
+    },
+    "log" : {
+        "level" : 6,
+        "file"  : "performance.log",
+        "cache" : true
+    },
+    "translate" : {
+        "lang" : "CS"
+    }
+}

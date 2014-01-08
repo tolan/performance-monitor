@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main;
+
 /**
  * This script defines class for caching.
  *
@@ -7,7 +9,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Cache implements Performance_Main_Event_Interface_Sender {
+class Cache implements Event\Interfaces\Sender {
     const SESSION_NAME      = 'Cache';
     const DEFAULT_NAMESPACE = 'Performance';
 
@@ -28,19 +30,19 @@ class Performance_Main_Cache implements Performance_Main_Event_Interface_Sender 
     /**
      * Mediator instance
      *
-     * @var Performance_Main_Event_Mediator
+     * @var \PF\Main\Event\Mediator
      */
     private $_mediator = null;
 
     /**
      * Construct method.
      *
-     * @param string                          $namespace Namespace
-     * @param Performance_Main_Event_Mediator $mediator  Mediator instance
+     * @param string                  $namespace Namespace
+     * @param \PF\Main\Event\Mediator $mediator  Mediator instance
      *
      * @return void
      */
-    public function __construct($namespace = self::DEFAULT_NAMESPACE, Performance_Main_Event_Mediator $mediator = null) {
+    public function __construct($namespace = self::DEFAULT_NAMESPACE, Event\Mediator $mediator = null) {
         session_start();
         $this->_namespace = $namespace;
         $this->_mediator  = $mediator;
@@ -57,10 +59,10 @@ class Performance_Main_Cache implements Performance_Main_Event_Interface_Sender 
      *
      * @param mixed $content Message content
      *
-     * @return Performance_Main_Cache
+     * @return \PF\Main\Cache
      */
     public function send($content) {
-        $message = new Performance_Main_Event_Message();
+        $message = new Event\Message();
         $message->setData($content);
 
         if ($this->_mediator) {
@@ -77,11 +79,11 @@ class Performance_Main_Cache implements Performance_Main_Event_Interface_Sender 
      *
      * @return mixed
      *
-     * @throws Performance_Main_Exception Throws when variable is not defined
+     * @throws \PF\Main\Exception Throws when variable is not defined
      */
     public function load($name) {
         if (!$this->has($name)) {
-            throw new Performance_Main_Exception('Undefined cache variable.');
+            throw new Exception('Undefined cache variable.');
         }
 
         return $this->_cache[$name];
@@ -93,7 +95,7 @@ class Performance_Main_Cache implements Performance_Main_Event_Interface_Sender 
      * @param string $name  Name of variable
      * @param mixed  $value Values
      *
-     * @return Performance_Main_Cache
+     * @return \PF\Main\Cache
      */
     public function save($name, $value) {
         $this->_cache[$name] = $value;
@@ -117,13 +119,13 @@ class Performance_Main_Cache implements Performance_Main_Event_Interface_Sender 
      *
      * @param string $name Name of variable
      *
-     * @return Performance_Main_Cache
+     * @return \PF\Main\Cache
      *
-     * @throws Performance_Main_Exception Throws when variable is not set.
+     * @throws \PF\Main\Exception Throws when variable is not set.
      */
     public function clean($name) {
         if (!$this->has($name)) {
-            throw new Performance_Main_Exception('Undefined cache variable.');
+            throw new Exception('Undefined cache variable.');
         }
 
         unset($this->_cache[$name]);

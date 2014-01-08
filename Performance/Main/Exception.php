@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main;
+
 /**
  * This script defines basic exception class.
  *
@@ -7,5 +9,5 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Exception extends Exception {
+class Exception extends \Exception {
 }

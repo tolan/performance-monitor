@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main;
+
 /**
  * This script defines class for connect to MySQL database and provide basic function.
  *
@@ -7,8 +9,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Database {
-    const MYSQL_DATETIME = 'Y-m-d H:i:s';
+class Database {
 
     /**
      * MySQL Server address
@@ -61,22 +62,22 @@ class Performance_Main_Database {
     /**
      * Connection to database.
      *
-     * @var Performance_Main_Database_Connection
+     * @var \PF\Main\Database\Connection
      */
     private $_connection;
 
     /**
      * Construct method which sets parameters to database connection.
      *
-     * @param Performance_Main_Config $config Configuration
+     * @param \PF\Main\Config $config Configuration
      *
-     * @throws Performance_Main_Database_Exception Throws when missing some configuration option
+     * @throws \PF\Main\Database\Exception Throws when missing some configuration option
      */
-    public function __construct(Performance_Main_Config $config) {
+    public function __construct(Config $config) {
         $configuration = $config->get('database');
 
         if (count(array_diff($this->_configParams, array_keys($configuration))) > 0) {
-            throw new Performance_Main_Database_Exception('Wrong configuration. Requested options: '.join(', ', $this->_configParams));
+            throw new Database\Exception('Wrong configuration. Requested options: '.join(', ', $this->_configParams));
         }
 
         $this->_address  = $configuration['address'];
@@ -92,15 +93,15 @@ class Performance_Main_Database {
     /**
      * This method provides connection to database.
      *
-     * @return Performance_Main_Database
+     * @return \PF\Main\Database
      */
     public function connect() {
         if ($this->_isConnected === false) {
             $options = array(
-                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-                PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARACTER SET UTF8; SET NAMES UTF8"
+                Database\Connection::ATTR_ERRMODE            => Database\Connection::ERRMODE_EXCEPTION,
+                Database\Connection::MYSQL_ATTR_INIT_COMMAND => "SET CHARACTER SET UTF8; SET NAMES UTF8"
             );
-            $this->_connection  = new Performance_Main_Database_Connection($this->_address, $this->_user, $this->_password, $this->_database, $options);
+            $this->_connection  = new Database\Connection($this->_address, $this->_user, $this->_password, $this->_database, $options);
             $this->_isConnected = true;
         }
 
@@ -110,7 +111,7 @@ class Performance_Main_Database {
     /**
      * Returns PDO connection to database. It is for create custom statements.
      *
-     * @return Performance_Main_Database_Connection
+     * @return \PF\Main\Database\Connection
      */
     public function getConnection() {
         $this->connect();
@@ -121,69 +122,69 @@ class Performance_Main_Database {
     /**
      * Gets instance for SQL select statement.
      *
-     * @return Performance_Main_Database_Select
+     * @return \PF\Main\Database\Select
      */
     public function select() {
         $this->connect();
 
-        return new Performance_Main_Database_Select($this->_connection);
+        return new Database\Select($this->_connection);
     }
 
     /**
      * Gets instance for SQL insert statement.
      *
-     * @return Performance_Main_Database_Insert
+     * @return \PF\Main\Database\Insert
      */
     public function insert() {
         $this->connect();
 
-        return new Performance_Main_Database_Insert($this->_connection);
+        return new Database\Insert($this->_connection);
     }
 
     /**
      * Gets instance for SQL update statement.
      *
-     * @return Performance_Main_Database_Update
+     * @return \PF\Main\Database\Update
      */
     public function update() {
         $this->connect();
 
-        return new Performance_Main_Database_Update($this->_connection);
+        return new Database\Update($this->_connection);
     }
 
     /**
      * Gets instance for SQL delete statement.
      *
-     * @return Performance_Main_Database_Update
+     * @return \PF\Main\Database\Delte
      */
     public function delete() {
         $this->connect();
 
-        return new Performance_Main_Database_Delete($this->_connection);
+        return new Database\Delete($this->_connection);
     }
 
     /**
      * Gets instance for SQL query statement. Please exact function such as select, insert, update, delete.
      *
-     * @return Performance_Main_Database_Query
+     * @return \PF\Main\Database\Query
      */
     public function query() {
         $this->connect();
 
-        return new Performance_Main_Database_Query($this->_connection);
+        return new Database\Query($this->_connection);
     }
 
     /**
      * Method for installing database with all tables.
      *
-     * @return Performance_Main_Database
+     * @return \PF\Main\Database
      */
     private function _install() {
         $options = array(
-                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-                PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARACTER SET UTF8; SET NAMES UTF8"
+                Database\Connection::ATTR_ERRMODE            => Database\Connection::ERRMODE_EXCEPTION,
+                Database\Connection::MYSQL_ATTR_INIT_COMMAND => "SET CHARACTER SET UTF8; SET NAMES UTF8"
             );
-        $connection = new Performance_Main_Database_Connection($this->_address, $this->_user, $this->_password, null, $options);
+        $connection = new Database\Connection($this->_address, $this->_user, $this->_password, null, $options);
 
         $connection->exec("CREATE DATABASE IF NOT EXISTS `".$this->_database."` CHARACTER SET utf8 COLLATE=utf8_general_ci");
         $connection->exec("USE ".$this->_database);
@@ -280,20 +281,5 @@ class Performance_Main_Database {
 
 
         return $this;
-    }
-
-    /**
-     * Helper method for convert time to MYSQL datetime format.
-     *
-     * @param int $time Time in seconds
-     *
-     * @return string
-     */
-    public static function convertTimeToMySQLDateTime($time = null) {
-        if (!$time) {
-            $time = time();
-        }
-
-        return date(self::MYSQL_DATETIME, $time);
     }
 }

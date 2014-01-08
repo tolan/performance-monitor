@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Web\Controller;
+
 /**
  * This scripts defines class for menu controller.
  *
@@ -7,7 +9,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Web_Controller_Menu extends Performance_Main_Web_Controller_Abstract_Json {
+class Menu extends Abstracts\Json {
 
     /**
      * Index action for get menu structure.

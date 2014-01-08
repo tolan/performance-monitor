@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Database;
+
 /**
  * This script defines class for universal query statement of MySQL.
  *
@@ -7,7 +9,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Database_Query {
+class Query {
 
     /**
      * Created MySQL statement
@@ -33,16 +35,16 @@ class Performance_Main_Database_Query {
     /**
      * Connection resource to database
      *
-     * @var Performance_Main_Database_Connection
+     * @var \PF\Main\Database\Connection
      */
     protected $_connection;
 
     /**
      * Construct method
      *
-     * @param Performance_Main_Database_Connection $connection Connection to database
+     * @param \PF\Main\Database\Connection $connection Connection to database
      */
-    final public function __construct(Performance_Main_Database_Connection $connection) {
+    final public function __construct(Connection $connection) {
         $this->_connection = $connection;
     }
 
@@ -56,7 +58,7 @@ class Performance_Main_Database_Query {
 
         $this->_response = $this->execute($this->_statement, $this->_bind);
 
-        return $this->_response->fetchAll(PDO::FETCH_ASSOC);
+        return $this->_response->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -69,24 +71,24 @@ class Performance_Main_Database_Query {
 
         $this->_response = $this->execute($this->_statement, $this->_bind);
 
-        return $this->_response->fetch(PDO::FETCH_ASSOC);
+        return $this->_response->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**
-     * This method execute SQL statement with binding data. This method corresponds with PDO->prepare($statement)->execute($bind).
+     * This method execute SQL statement with binding data. This method corresponds to PDO->prepare($statement)->execute($bind).
      *
      * @param string $statement SQL statement
      * @param array  $bind      Data to bind
      *
-     * @return PDOStatement
+     * @return \PDOStatement
      *
-     * @throws Performance_Main_Database_Exception
+     * @throws \PF\Main\Database\Exception
      */
     public function execute($statement, $bind) {
         $answer = $this->_connection->prepare($statement);
 
         if ($answer->execute($bind) === false) {
-            throw new Performance_Main_Database_Exception('Database error. Check sql statement: '.$this->_connection->errorInfo());
+            throw new Exception('Database error. Check sql statement: '.$this->_connection->errorInfo());
         }
 
         return $answer;
@@ -97,13 +99,13 @@ class Performance_Main_Database_Query {
      *
      * @param string $sql SQL statement
      *
-     * @return Performance_Main_Database_Query
+     * @return \PF\Main\Database\Query
      *
-     * @throws Performance_Main_Database_Exception Throws when input SQL is not statement.
+     * @throws \PF\Main\Database\Exception Throws when input SQL is not statement.
      */
     public function setSQL($sql) {
         if (!is_string($sql)) {
-            throw new Performance_Main_Database_Exception('Input is not SQL statement.');
+            throw new Exception('Input is not SQL statement.');
         }
 
         $this->_statement = $sql;
@@ -145,7 +147,7 @@ class Performance_Main_Database_Query {
      *
      * @param string $statement SQL statement
      *
-     * @return Performance_Main_Database_Query
+     * @return \PF\Main\Database\Query
      */
     protected function setStatement($statement) {
         $this->_statement = $statement;
@@ -158,7 +160,7 @@ class Performance_Main_Database_Query {
      *
      * @param array $bind Bind data
      *
-     * @return Performance_Main_Database_Query
+     * @return \PF\Main\Database\Query
      */
     protected function setBind($bind) {
         $this->_bind = array_merge($this->_bind, $bind);
@@ -195,7 +197,7 @@ class Performance_Main_Database_Query {
     /**
      * Gets connection to database.
      *
-     * @return Performance_Main_Database_Connection
+     * @return \PF\Main\Database\Connection
      */
     protected function getConnection() {
         return $this->_connection;
@@ -204,7 +206,7 @@ class Performance_Main_Database_Query {
     /**
      * Compile method of SQL statement. There is nothig because this query is compiled in input.
      *
-     * @return Performance_Main_Database_Query
+     * @return \PF\Main\Database\Query
      */
     protected function compile() {
         return $this;
@@ -213,9 +215,9 @@ class Performance_Main_Database_Query {
     /**
      * Method which could be called before fetch method and it call compile method for create SQL statement.
      *
-     * @return Performance_Main_Database_Query
+     * @return \PF\Main\Database\Query
      *
-     * @throws Performance_Main_Database_Exception Throws when SQL query is not created.
+     * @throws \PF\Main\Database\Exception Throws when SQL query is not created.
      */
     protected function preFetch() {
         $this->_statement = null;
@@ -224,7 +226,7 @@ class Performance_Main_Database_Query {
         $this->compile();
 
         if ($this->_statement === null) {
-            throw new Performance_Main_Database_Exception('SQL query is not set!');
+            throw new Exception('SQL query is not set!');
         }
 
         return $this;

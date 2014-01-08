@@ -1,5 +1,10 @@
 <?php
 
+namespace PF\Main\Http\Request;
+
+use PF\Main\Http\Enum\Method;
+use PF\Main\Http\Exception;
+
 /**
  * Factory class for create request instance by given method type.
  *
@@ -7,33 +12,33 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Http_Request_Factory {
+class Factory {
 
     /**
      * Returns reqeust by method.
      *
-     * @param enum $method One of Performance_Main_Http_Enum_Method
+     * @param enum $method One of \PF\Main\Http\Enum\Method
      *
-     * @return Performance_Main_Http_Request_Abstract
+     * @return \PF\Main\Http\Request\AbstractRequest
      *
-     * @throws Performance_Main_Http_Exception Throws when request class doesn't exist.
+     * @throws \PF\Main\Http\Exception Throws when request class doesn't exist.
      */
     public static function getInstance($method) {
         switch ($method) {
-            case Performance_Main_Http_Enum_Method::DELETE:
-                $instance = new Performance_Main_Http_Request_Delete(null, $method);
+            case Method::DELETE:
+                $instance = new Delete(null, $method);
                 break;
-            case Performance_Main_Http_Enum_Method::GET:
-                $instance = new Performance_Main_Http_Request_Get(null, $method);
+            case Method::GET:
+                $instance = new Get(null, $method);
                 break;
-            case Performance_Main_Http_Enum_Method::POST:
-                $instance = new Performance_Main_Http_Request_Post(null, $method);
+            case Method::POST:
+                $instance = new Post(null, $method);
                 break;
-            case Performance_Main_Http_Enum_Method::DELETE:
-                $instance = new Performance_Main_Http_Request_Delete(null, $method);
+            case Method::PUT:
+                $instance = new Put(null, $method);
                 break;
             default:
-                throw new Performance_Main_Http_Exception('Unsupported method.');
+                throw new Exception('Unsupported method.');
         }
 
         return $instance;

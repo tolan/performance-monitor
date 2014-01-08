@@ -1,5 +1,9 @@
 <?php
 
+namespace PF\Main\Log\Enum;
+
+use PF\Main\Abstracts\Enum;
+
 /**
  * This script defines enum class for log level.
  *
@@ -7,7 +11,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Log_Enum_Level extends Performance_Main_Abstract_Enum {
+class Level extends Enum {
     const TRACE   = 0;
     const DEBUG   = 1;
     const INFO    = 2;

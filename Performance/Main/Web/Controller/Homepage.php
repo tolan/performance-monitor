@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Web\Controller;
+
 /**
  * This scripts defines class for homepage controller.
  *
@@ -7,7 +9,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Web_Controller_Homepage extends Performance_Main_Web_Controller_Abstract_Html {
+class Homepage extends Abstracts\Html {
 
     /**
      * Index action. Look to view.

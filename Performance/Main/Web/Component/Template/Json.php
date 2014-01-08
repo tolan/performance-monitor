@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Web\Component\Template;
+
 /**
  * This script defines template for JSON view.
  *
@@ -7,7 +9,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Web_Component_Template_Json extends Performance_Main_Web_Component_Template_Abstract {
+class Json extends AbstractTemplate {
 
     /**
      * Sets header and returns JSON encoded paylod.

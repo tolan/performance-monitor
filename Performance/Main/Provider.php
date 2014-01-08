@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main;
+
 /**
  * Class definition for performance provider. This class is responsible for creating classes and store their instances to the store.
  * Creating classes resolves dependencies between classes and provides a protection from loops.
@@ -8,14 +10,14 @@
  * @category   Performance
  * @package    Main
  */
-final class Performance_Main_Provider {
+class Provider {
 
     /**
      * Storage for singleton instances.
      *
      * @var array
      */
-    private $_instances    = array();
+    private $_instances = array();
 
     /**
      * Information about dependencies between classes.
@@ -34,7 +36,7 @@ final class Performance_Main_Provider {
     /**
      * Self singleton instance
      *
-     * @var Performance_Main_Provider
+     * @var \PF\Main\Provider
      */
     private static $_selfInstance = null;
 
@@ -54,10 +56,8 @@ final class Performance_Main_Provider {
 
     /**
      * Construct method which initialize instance and prepare autoloder.
-     *
-     * @return void
      */
-    public function __construct(Performance_Main_config $config = null) {
+    public function __construct(Config $config = null) {
         $services = array();
         if ($config !== null) {
             $this->set($config);
@@ -84,9 +84,9 @@ final class Performance_Main_Provider {
     /**
      * Return singleton instance.
      *
-     * @return Performance_Main_Provider
+     * @return \PF\Main\Provider
      */
-    public static function getInstance(Performance_Main_config $config = null) {
+    public static function getInstance(Config $config = null) {
         if (self::$_selfInstance === null) {
             self::$_selfInstance = new self($config);
         }
@@ -100,13 +100,13 @@ final class Performance_Main_Provider {
      * @param object $instance Some instance
      * @param string $name     Optional name for instance
      *
-     * @return Performance_Main_Provider
+     * @return \PF\Main\Provider
      *
-     * @throws Performance_Main_Exception Throws when instance is not object
+     * @throws \PF\Main\Exception Throws when instance is not object
      */
     public function set($instance, $name=null) {
         if (is_object($instance) === false) {
-            throw new Performance_Main_Exception('First parameter must be instance.');
+            throw new Exception('First parameter must be instance.');
         }
 
         if ($name === null || is_string($name) === false) {
@@ -117,9 +117,9 @@ final class Performance_Main_Provider {
         $this->reset(get_class($instance));
 
         $this->_instances[] = array(
-            'name' => $name,
-            'classname' => get_class($instance),
-            'instance' => $instance
+            'name'      => ltrim($name, '\\'),
+            'classname' => ltrim(get_class($instance), '\\'),
+            'instance'  => $instance
         );
 
         return $this;
@@ -130,7 +130,7 @@ final class Performance_Main_Provider {
      *
      * @param string $name Name of class
      *
-     * @return Performance_Main_Provider
+     * @return \PF\Main\Provider
      */
     public function reset($name=null) {
         if ($name === null) {
@@ -173,9 +173,10 @@ final class Performance_Main_Provider {
      *
      * @param string $name Name of class
      *
-     * @return ${name} Instance of $name
+     * @return object ${name} Instance of $name
      */
     public function get($name) {
+        $name = ltrim($name, '\\');
         if (isset($this->_serviceMap[$name])) {
             $name = $this->_serviceMap[$name];
         }
@@ -244,10 +245,10 @@ final class Performance_Main_Provider {
      *
      * @param strin $name Class name of constants
      *
-     * @return Performance_Main_Provider
+     * @return \PF\Main\Provider
      */
     public function loadEnum($name) {
-        $this->_loadClass($name);
+        $this->_autoloader($name);
 
         return $this;
     }
@@ -285,12 +286,12 @@ final class Performance_Main_Provider {
      *
      * @return object {$name}
      *
-     * @throws Performance_Main_Exception Throws when dependecies are cycling or instance was not created.
+     * @throws \PF\Main\Exception Throws when dependecies are cycling or instance was not created.
      */
     private function _createInstance($name) {
         $this->_loadClass($name);
         if (in_array($name, self::$_preventCycleDependencies)) {
-            throw new Performance_Main_Exception('Object has cycling dependencies!');
+            throw new Exception('Object has cycling dependencies!');
         }
 
         self::$_preventCycleDependencies[] = $name;
@@ -323,13 +324,13 @@ final class Performance_Main_Provider {
             if ($dependencies['method'] === 'getInstance') {
                 $instance = forward_static_call_array(array($name, 'getInstance'), $arguments);
             } else {
-                $class    = new ReflectionClass($name);
+                $class    = new \ReflectionClass($name);
                 $instance = $class->newInstanceArgs($arguments);
             }
         }
 
         if (is_object($instance) === false) {
-            throw new Performance_Main_Exception('Instance '.$name.' was not created!');
+            throw new Exception('Instance '.$name.' was not created!');
         }
 
         return $instance;
@@ -343,14 +344,14 @@ final class Performance_Main_Provider {
      *
      * @return array Array with all dependencies.
      *
-     * @throws Performance_Main_Exception Throws when class doesn't exists.
+     * @throws \PF\Main\Exception Throws when class doesn't exists.
      */
     private function _getDependencies($name) {
         if (!isset($this->_dependencies[$name])) {
             if (class_exists($name)) {
-                $reflClass = new ReflectionClass($name);
+                $reflClass = new \ReflectionClass($name);
             } else {
-                throw new Performance_Main_Exception('Object doesn\'t exists: '.$name);
+                throw new Exception('Object doesn\'t exists: '.$name);
             }
 
             $methods      = $reflClass->getMethods();
@@ -383,20 +384,20 @@ final class Performance_Main_Provider {
                 if ($param->getClass() !== null) {
                     $dependencies[$param->getPosition()] = array(
                         'className' => $param->getClass()->getName(),
-                        'position' => $param->getPosition(),
-                        'name' => $param->getName()
+                        'position'  => $param->getPosition(),
+                        'name'      => $param->getName()
                     );
                 } else {
                     $dependencies[$param->getPosition()] = array(
                         'defaultValue' => $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null,
-                        'position' => $param->getPosition(),
-                        'name' => $param->getName()
+                        'position'     => $param->getPosition(),
+                        'name'         => $param->getName()
                     );
                 }
             }
 
             $this->_dependencies[$name] = array(
-                'method' => $method->getName(),
+                'method'       => $method->getName(),
                 'dependencies' => $dependencies
             );
         }
@@ -432,23 +433,23 @@ final class Performance_Main_Provider {
      *
      * @param string $class Name of class
      *
-     * @return Performance_Main_Provider
+     * @return \PF\Main\Provider
      *
-     * @throws Performance_Main_Exception Throws when you try load class from non Performance pool
+     * @throws \PF\Main\Exception Throws when you try load class from non Performance pool
      */
     private function _loadClass($class = null) {
         $class = $class === null ? get_class() : $class;
         if (class_exists($class) === false && ($this->_useAutoloader === false || is_callable('spl_autoload_register') === false)) {
-            if (preg_match('/^Performance.*/', $class)) {
-                $tmp    = substr($class, strpos($class, '_') + 1);
-                $module = substr($tmp, 0, strpos($tmp, '_'));
+            if (preg_match('/^Performance.*|^PF.*/', $class)) {
+                $tmp    = substr($class, strpos($class, '\\') + 1);
+                $module = substr($tmp, 0, strpos($tmp, '\\'));
                 $path   = dirname(__DIR__).'/'.$module.'/';
                 $files  = $this->_getFiles($path);
                 foreach ($files as $file) {
                     include_once $file;
                 }
             } else {
-                throw new Performance_Main_Exception('Provider loading only classes from Performance.');
+                throw new Exception('Provider loading only classes from Performance (PF namespace).');
             }
         }
 

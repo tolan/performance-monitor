@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Profiler\Component\Storage;
+
 /**
  * This script defines profiler storage class for access to MYSQL.
  *
@@ -7,7 +9,7 @@
  * @category   Performance
  * @package    Profiler
  */
-class Performance_Profiler_Component_Storage_MySQL extends Performance_Profiler_Component_Storage_Abstract {
+class MySQL extends AbstractStorage {
 
     /**
      * ID of attempt.
@@ -35,7 +37,7 @@ class Performance_Profiler_Component_Storage_MySQL extends Performance_Profiler_
      *
      * @param int $id ID of attempt
      *
-     * @return Performance_Profiler_Component_Storage_MySQL
+     * @return \PF\Profiler\Component\Storage\MySQL
      */
     public function setAttemptId($id) {
         $this->_attemptId = $id;
@@ -51,7 +53,7 @@ class Performance_Profiler_Component_Storage_MySQL extends Performance_Profiler_
     public function save() {
         $id         = $this->_attemptId;
         $repository = $this->getProvider()
-            ->get('Performance_Profiler_Component_Repository_AttemptData'); /* @var $repository Performance_Profiler_Component_Repository_AttemptData */
+            ->get('PF\Profiler\Component\Repository\AttemptData'); /* @var $repository \PF\Profiler\Component\Repository\AttemptData */
         $calls      = &$this->getStorageCalls();
         $startTime  = $calls[0]['startTime'];
 
@@ -70,7 +72,7 @@ class Performance_Profiler_Component_Storage_MySQL extends Performance_Profiler_
 
         $compTime          = $this->_compensationTime();
         $repositoryAttempt = $this->getProvider()
-            ->get('Performance_Profiler_Component_Repository_TestAttempt'); /* @var $repositoryAttempt Performance_Profiler_Component_Repository_TestAttempt */
+            ->get('PF\Profiler\Component\Repository\TestAttempt'); /* @var $repositoryAttempt \PF\Profiler\Component\Repository\TestAttempt */
         $repositoryAttempt->update(
             $id,
             array(

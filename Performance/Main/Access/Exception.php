@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Access;
+
 /**
  * This script defines exception class for access control.
  *
@@ -7,5 +9,5 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Access_Exception extends Performance_Main_Exception {
+class Exception extends \PF\Main\Exception {
 }

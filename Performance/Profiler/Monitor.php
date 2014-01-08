@@ -1,5 +1,10 @@
 <?php
+
+namespace PF\Profiler;
+
 include __DIR__.'/../boot.php';
+
+use PF\Main\Provider;
 
 /**
  * This script defines class of the performance profiler.
@@ -8,12 +13,12 @@ include __DIR__.'/../boot.php';
  * @category   Performance
  * @package    Profiler
  */
-class Performance_Profiler_Monitor {
+class Monitor {
 
     /**
      * Singleton instance
      *
-     * @var Performance_Profiler_Monitor
+     * @var \PF\Profiler\Monitor
      */
     private static $_instance = false;
 
@@ -27,25 +32,25 @@ class Performance_Profiler_Monitor {
     /**
      * Provider instance.
      *
-     * @var Performance_Provider
+     * @var \PF\Main\Provider
      */
     private $_provider = null;
 
     /**
      * Storage for calls
      *
-     * @var Performance_Profiler_Component_Storage
+     * @var \PF\Profiler\Component\Storage\AbstractStorage
      */
     private $_storage = null;
 
     /**
      * Contruct method.
      *
-     * @param Performance_Profiler_Config $provider
+     * @param \PF\Main\Provider $provider
      */
-    private function __construct(Performance_Main_Provider $provider = null) {
+    private function __construct(Provider $provider = null) {
         if ($provider === null) {
-            $provider = Performance_Main_Provider::getInstance();
+            $provider = Provider::getInstance();
         }
 
         $this->reset();
@@ -55,9 +60,9 @@ class Performance_Profiler_Monitor {
     /**
      * Method for get singleton instance
      *
-     * @return Performance_Profiler_Monitor
+     * @return \PF\Profiler\Monitor
      */
-    public static function getInstance(Performance_Main_Provider $provider = null) {
+    public static function getInstance(Provider $provider = null) {
         if (self::$_instance === false) {
             self::$_instance = new self($provider);
         }
@@ -68,7 +73,7 @@ class Performance_Profiler_Monitor {
     /**
      * Reset method.
      *
-     * @return Performance_Profiler_Monitor
+     * @return \PF\Profiler\Monitor
      */
     public function reset() {
         $this->_storage   = null;
@@ -80,14 +85,14 @@ class Performance_Profiler_Monitor {
     /**
      * Method for enable profiling.
      *
-     * @return Performance_Profiler_Monitor
+     * @return \PF\Profiler\Monitor
      */
     public function enable() {
         if ($this->_storage === null) {
-            $this->_storage = $this->_provider->get('Performance_Profiler_Component_Storage_Factory')->getStorage();
+            $this->_storage = $this->_provider->get('PF\Profiler\Component\Storage\Factory')->getStorage();
         }
 
-        $startKey = Performance_Profiler_Enum_HttpKeys::PROFILER_START;
+        $startKey = Enum\HttpKeys::PROFILER_START;
         $get = $this->_provider->get('request')->getGet();
 
         if ($get->has($startKey) && strtolower($get->get($startKey)) == '1') {
@@ -102,7 +107,7 @@ class Performance_Profiler_Monitor {
     /**
      * Method to disable profiling.
      *
-     * @return Performance_Profiler_Monitor
+     * @return \PF\Profiler\Monitor
      */
     public function disable() {
         if ($this->_isEnabled == false) {
@@ -204,7 +209,7 @@ class Performance_Profiler_Monitor {
      */
     private function _checkEnable() {
         if ($this->_isEnabled === true) {
-            throw new Performance_Profiler_Exception('Profiler is still enabled.');
+            throw new Exception('Profiler is still enabled.');
         }
     }
 }

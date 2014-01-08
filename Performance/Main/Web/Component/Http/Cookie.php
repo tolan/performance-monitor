@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Web\Component\Http;
+
 /**
  * This script defines class for access to cookies instead of $_COOKIE.
  *
@@ -7,5 +9,5 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Web_Component_Http_Cookie extends Performance_Main_Web_Component_Http_Abstract {
+class Cookie extends AbstractHttp {
 }

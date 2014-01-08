@@ -1,6 +1,6 @@
 <?php
 include 'Performance/Profiler/Monitor.php';
-Performance_Profiler_Monitor::getInstance()->enable();
+\PF\Profiler\Monitor::getInstance()->enable();
 declare(ticks=1);
 
 echo "hello";
@@ -9,7 +9,7 @@ a();
 
 sleep(1);
 
-Performance_Profiler_Monitor::getInstance()->disable();
+\PF\Profiler\Monitor::getInstance()->disable();
 
 
 function a() {

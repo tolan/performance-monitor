@@ -1,12 +1,13 @@
 <?php
 
-// @codingStandardsIgnoreStart
-include $_SERVER['DOCUMENT_ROOT'].'/Performance/boot.php';
-// @codingStandardsIgnoreEnd
+include __DIR__.'/../boot.php';
+
+$provider = \PF\Main\Provider::getInstance();
+
 try {
-    Performance_Main_Provider::getInstance()->get('web')->run();
-} catch (Performance_Main_Exception $e) {
-    Performance_Main_Provider::getInstance()->get('log')->error($e->getMessage());
-    Performance_Main_Provider::getInstance()->get('log')->error($e->getTraceAsString());
+    $provider->get('web')->run();
+} catch (\PF\Main\Exception $e) {
+    $provider->get('log')->error($e->getMessage());
+    $provider->get('log')->error($e->getTraceAsString());
 }
 

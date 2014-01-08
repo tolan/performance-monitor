@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Profiler\Component\CallStack;
+
 /**
  * This script defines profiler call stack class with saving tree to MYSQL.
  *
@@ -7,7 +9,7 @@
  * @category   Performance
  * @package    Profiler
  */
-class Performance_Profiler_Component_CallStack_MySQL extends Performance_Profiler_Component_CallStack_Abstract {
+class MySQL extends AbstractCallStack {
 
     /**
      * ID of measure attempt
@@ -19,7 +21,7 @@ class Performance_Profiler_Component_CallStack_MySQL extends Performance_Profile
     /**
      * Repository for loading calls.
      *
-     * @var Performance_Profiler_Component_Repository_AttemptData
+     * @var \PF\Profiler\Component\Repository\AttemptData
      */
     private $_repositoryData = null;
 
@@ -47,7 +49,7 @@ class Performance_Profiler_Component_CallStack_MySQL extends Performance_Profile
     /**
      * This reset call stack to default values (erase analyzed tree, calls data and attempt information).
      *
-     * @return Performance_Profiler_Component_CallStack_MySQL
+     * @return \PF\Profiler\Component\CallStack\MySQL
      */
     public function reset() {
         $this->_attemptId    = null;
@@ -63,7 +65,7 @@ class Performance_Profiler_Component_CallStack_MySQL extends Performance_Profile
      *
      * @param int $id ID of attempt
      *
-     * @return Performance_Profiler_Component_CallStack_MySQL
+     * @return \PF\Profiler\Component\CallStack\MySQL
      */
     public function setAttemptId($id) {
         $this->_attemptId = $id;
@@ -74,7 +76,7 @@ class Performance_Profiler_Component_CallStack_MySQL extends Performance_Profile
     /**
      * This create analyzed tree from calls.
      *
-     * @return Performance_Profiler_Component_CallStack_MySQL
+     * @return \PF\Profiler\Component\CallStack\MySQL
      */
     public function analyze() {
         if (empty($this->_analyzedTree)) {
@@ -102,7 +104,7 @@ class Performance_Profiler_Component_CallStack_MySQL extends Performance_Profile
      * @return void
      */
     protected function init() {
-        $this->_repositoryData = $this->getProvider()->get('Performance_Profiler_Component_Repository_AttemptData');
+        $this->_repositoryData = $this->getProvider()->get('PF\Profiler\Component\Repository\AttemptData');
     }
 
     /**
@@ -123,8 +125,7 @@ class Performance_Profiler_Component_CallStack_MySQL extends Performance_Profile
             } elseif ($call['immersion'] > $this->_actualLevel) {
                 $this->_actualLevel++;
                 array_unshift($stack, $call);
-                $tmp = $this->_analyzeTree($stack);
-                $result[] = $tmp;
+                $result[] = $this->_analyzeTree($stack);
             } else {
                 $this->_actualLevel--;
                 $call['subStack'] = $result;
@@ -142,7 +143,7 @@ class Performance_Profiler_Component_CallStack_MySQL extends Performance_Profile
      */
     private function _getData() {
         if ($this->_measuredData === null) {
-            $this->_measuredData =$this->_repositoryData->getDataByAttemptId($this->_attemptId);
+            $this->_measuredData = $this->_repositoryData->getDataByAttemptId($this->_attemptId);
         }
 
         return $this->_measuredData;

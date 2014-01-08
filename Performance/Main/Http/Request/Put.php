@@ -1,5 +1,9 @@
 <?php
 
+namespace PF\Main\Http\Request;
+
+use PF\Main\Http\Enum\Method;
+
 /**
  * This script defines class for PUT http request.
  *
@@ -7,12 +11,12 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Http_Request_Put extends Performance_Main_Http_Request_Abstract {
+class Put extends AbstractRequest {
 
     /**
      * Method type.
      *
      * @var string
      */
-    protected $_method = Performance_Main_Http_Enum_Method::PUT;
+    protected $_method = Method::PUT;
 }

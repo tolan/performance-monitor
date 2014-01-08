@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Web\Component\Http;
+
 /**
  * This script defines class for access to request instead of $_REQUEST.
  *
@@ -7,5 +9,5 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Web_Component_Http_Request extends Performance_Main_Web_Component_Http_Abstract {
+class Request extends AbstractHttp {
 }

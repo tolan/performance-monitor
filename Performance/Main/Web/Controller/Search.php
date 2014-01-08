@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Web\Controller;
+
 /**
  * This scripts defines class for search controller.
  *
@@ -9,7 +11,7 @@
  *
  * @link /search
  */
-class Performance_Main_Web_Controller_Search extends Performance_Main_Web_Controller_Abstract_Json {
+class Search extends Abstracts\Json {
 
     /**
      * Returns filter menu for search entities.

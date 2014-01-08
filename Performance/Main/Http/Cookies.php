@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Http;
+
 require_once 'HTTP/Request2/CookieJar.php';
 
 /**
@@ -8,7 +10,7 @@ require_once 'HTTP/Request2/CookieJar.php';
  * @author     Martin Kovar
  * @category   Performance
  * @package    Main
- * 
+ *
  */
-class Performance_Main_Http_Cookies extends HTTP_Request2_CookieJar {
+class Cookies extends \HTTP_Request2_CookieJar {
 }

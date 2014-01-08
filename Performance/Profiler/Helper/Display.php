@@ -1,8 +1,11 @@
 <?php
+
+namespace PF\Profiler\Helper;
+
 /**
  * TODO
  */
-class Performance_Profiler_Helper_Display
+class Display
 {
     /**
      * Core render method, which manipulate jquery and call render other data.

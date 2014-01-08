@@ -1,5 +1,9 @@
 <?php
 
+namespace PF\Main\Event;
+
+use PF\Main\Provider;
+
 /**
  * This script defines class for main mediator.
  *
@@ -7,8 +11,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Event_Mediator
-implements Performance_Main_Event_Interface_Mediator, Performance_Main_Event_Interface_Reciever {
+class Mediator implements Interfaces\Mediator, Interfaces\Reciever {
 
     /**
      * List of recievers which are registred when is mediator created.
@@ -27,9 +30,9 @@ implements Performance_Main_Event_Interface_Mediator, Performance_Main_Event_Int
     /**
      * Construct method. Register default recivevers.
      *
-     * @param Performance_Main_Provider $provider
+     * @param \PF\Main\Provider $provider
      */
-    public function __construct(Performance_Main_Provider $provider) {
+    public function __construct(Provider $provider) {
         foreach ($this->_initRecievers as $recieverClass) {
             $this->register($provider->get($recieverClass));
         }
@@ -38,11 +41,11 @@ implements Performance_Main_Event_Interface_Mediator, Performance_Main_Event_Int
     /**
      * Register reciever for send message. Message is sent to the recipient by message type that receives its parameter (include children in object model).
      *
-     * @param Performance_Main_Event_Interface_Reciever $reciever Reciever instance
+     * @param \PF\Main\Event\Interfaces\Reciever $reciever Reciever instance
      *
-     * @return Performance_Main_Event_Mediator
+     * @return \PF\Main\Event\Mediator
      */
-    public function register(Performance_Main_Event_Interface_Reciever $reciever) {
+    public function register(Interfaces\Reciever $reciever) {
         $messageClass = $this->_getMessageClass($reciever);
 
         if (isset($this->_recievers[$messageClass])) {
@@ -61,11 +64,11 @@ implements Performance_Main_Event_Interface_Mediator, Performance_Main_Event_Int
     /**
      * This method provides the deregistration of the mediator.
      *
-     * @param Performance_Main_Event_Interface_Reciever $reciever Reciever instance
+     * @param \PF\Main\Event\Interfaces\Reciever $reciever Reciever instance
      *
-     * @return Performance_Main_Event_Mediator
+     * @return \PF\Main\Event\Mediator
      */
-    public function unregister(Performance_Main_Event_Interface_Reciever $reciever) {
+    public function unregister(Interfaces\Reciever $reciever) {
         $messageClass = $this->_getMessageClass($reciever);
 
         if (isset($this->_recievers[$messageClass])) {
@@ -84,12 +87,12 @@ implements Performance_Main_Event_Interface_Mediator, Performance_Main_Event_Int
     /**
      * This method sends message to all recievers which has concrete message class in its parameter.
      *
-     * @param Performance_Main_Event_Interface_Message $message Message instance
-     * @param Performance_Main_Event_Interface_Sender  $sender  Sender instance
+     * @param \PF\Main\Event\Interface\Message $message Message instance
+     * @param \PF\Main\Event\Interface\Sender  $sender  Sender instance
      *
-     * @return Performance_Main_Event_Mediator
+     * @return \PF\Main\Event\Mediator
      */
-    public function send(Performance_Main_Event_Interface_Message $message, Performance_Main_Event_Interface_Sender $sender) {
+    public function send(Interfaces\Message $message, Interfaces\Sender $sender) {
         foreach ($this->_recievers as $messageClass => $recievers) {
             if (is_a($message, $messageClass, false)) {
                 foreach ($recievers as $reciever) {
@@ -106,12 +109,12 @@ implements Performance_Main_Event_Interface_Mediator, Performance_Main_Event_Int
     /**
      * This is proxy method for send method.
      *
-     * @param Performance_Main_Event_Interface_Message $message Message instance
-     * @param Performance_Main_Event_Interface_Sender  $sender  Sender instance
+     * @param \PF\Main\Event\Interface\Message $message Message instance
+     * @param \PF\Main\Event\Interface\Sender  $sender  Sender instance
      *
-     * @return Performance_Main_Event_Mediator
+     * @return \PF\Main\Event\Mediator
      */
-    public function recieve(Performance_Main_Event_Interface_Message $message, Performance_Main_Event_Interface_Sender $sender) {
+    public function recieve(Interfaces\Message $message, Interfaces\Sender $sender) {
         $this->send($message, $sender);
 
         return $this;
@@ -120,12 +123,12 @@ implements Performance_Main_Event_Interface_Mediator, Performance_Main_Event_Int
     /**
      * Returns exact class name of message which reciever has as parameter in recieve method.
      *
-     * @param Performance_Main_Event_Interface_Reciever $reciever Reciever instance
+     * @param \PF\Main\Event\Interface\Reciever $reciever Reciever instance
      *
      * @return string Message class name in parameter method recieve
      */
-    private function _getMessageClass(Performance_Main_Event_Interface_Reciever $reciever) {
-        $method       = new ReflectionMethod($reciever, 'recieve');
+    private function _getMessageClass(Interfaces\Reciever $reciever) {
+        $method       = new \ReflectionMethod($reciever, 'recieve');
         $params       = $method->getParameters();
         $messageClass = $params[0]->getClass()->getName();
 

@@ -1,5 +1,9 @@
 <?php
 
+namespace PF\Profiler\Component\CallStack;
+
+use PF\Profiler\Component\AbstractFactory;
+
 /**
  * This script defines factory class for creating call stack by request settings.
  *
@@ -7,19 +11,19 @@
  * @category   Performance
  * @package    Profiler
  */
-class Performance_Profiler_Component_CallStack_Factory extends Performance_Profiler_Component_AbstractFactory {
+class Factory extends AbstractFactory {
 
     /**
      * Returns call stack instance.
      *
-     * @return Performance_Profiler_Component_CallStack_Abstract
+     * @return \PF\Profiler\Component\CallStack\AbstractCallStack
      */
     public function getCallStack() {
         if ($this->getAttemptId()) {
-            $callStack = $this->getProvider()->get('Performance_Profiler_Component_CallStack_MySQL');
+            $callStack = $this->getProvider()->get('PF\Profiler\Component\CallStack\MySQL');
             $callStack->setAttemptId($this->getAttemptId());
         } else {
-            $callStack = $this->getProvider()->get('Performance_Profiler_Component_CallStack_Default');
+            $callStack = $this->getProvider()->get('PF\Profiler\Component\CallStack\Browser');
         }
 
         return $callStack;

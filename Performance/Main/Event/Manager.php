@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Event;
+
 /**
  * This script defines class for event manager. It provides registration of events and listeners. When is called method flush then all events are send to
  * target listeners.
@@ -8,7 +10,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Event_Manager implements Performance_Main_Event_Interface_Manager {
+class Manager implements Interfaces\Manager {
 
     const EVENT_BROADCAST = 'broadcast';
     const EVENT_EMIT      = 'emit';
@@ -18,21 +20,21 @@ class Performance_Main_Event_Manager implements Performance_Main_Event_Interface
     /**
      * Stack for events.
      *
-     * @var Performance_Main_Event_Action_Abstract[]
+     * @var \PF\Main\Event\Action\AbstractAction[]
      */
     private $_events = array();
 
     /**
      * Stack for listeners.
      *
-     * @var Performance_Main_Event_Listener_Abstract[]
+     * @var \PF\Main\Event\Listener\AbstractListener[]
      */
     private $_listeners = array();
 
     /**
      * Gets all registerd events.
      *
-     * @return Performance_Main_Event_Action_Abstract[]
+     * @return \PF\Main\Event\Action\AbstractAction[]
      */
     public function getEvents() {
         return $this->_events;
@@ -41,7 +43,7 @@ class Performance_Main_Event_Manager implements Performance_Main_Event_Interface
     /**
      * Gets all registerd listeners.
      *
-     * @return Performance_Main_Event_Listener_Abstract[]
+     * @return \PF\Main\Event\Listener\AbstractListener[]
      */
     public function getListeners() {
         return $this->_listeners;
@@ -50,12 +52,12 @@ class Performance_Main_Event_Manager implements Performance_Main_Event_Interface
     /**
      * This method registers event for broadcast behaviour. It means that this event is send to all listeners over all modules.
      *
-     * @param string                                   $eventName Event identificator
-     * @param Performance_Main_Event_Interface_Message $message   Message of event
+     * @param string                            $eventName Event identificator
+     * @param \PF\Main\Event\Interfaces\Message $message   Message of event
      *
-     * @return Performance_Main_Event_Manager
+     * @return \PF\Main\Event\Manager
      */
-    public function broadcast($eventName, Performance_Main_Event_Interface_Message $message = null) {
+    public function broadcast($eventName, Interfaces\Message $message = null) {
         $this->_events[] = $this->_createEvent($eventName, $message, self::EVENT_BROADCAST);
 
         return $this;
@@ -64,12 +66,12 @@ class Performance_Main_Event_Manager implements Performance_Main_Event_Interface
     /**
      * This method registers event for emit behaviour. It means that this event is send to all listeners in our module.
      *
-     * @param string                                   $eventName Event identificator
-     * @param Performance_Main_Event_Interface_Message $message   Message of event
+     * @param string                            $eventName Event identificator
+     * @param \PF\Main\Event\Interfaces\Message $message   Message of event
      *
-     * @return Performance_Main_Event_Manager
+     * @return \PF\Main\Event\Manager
      */
-    public function emit($eventName, Performance_Main_Event_Interface_Message $message = null) {
+    public function emit($eventName, Interfaces\Message $message = null) {
         $this->_events[] = $this->_createEvent($eventName, $message, self::EVENT_EMIT);
 
         return $this;
@@ -78,12 +80,12 @@ class Performance_Main_Event_Manager implements Performance_Main_Event_Interface
     /**
      * This method registers listener for all registered event with right attributes.
      *
-     * @param string  $eventName Event identificator
-     * @param Closure $closure   Closure instance with function which is called when event is fired
+     * @param string   $eventName Event identificator
+     * @param \Closure $closure   Closure instance with function which is called when event is fired
      *
-     * @return Performance_Main_Event_Manager
+     * @return \PF\Main\Event\Manager
      */
-    public function on($eventName, Closure $closure) {
+    public function on($eventName, \Closure $closure) {
         $this->_listeners[] = $this->_createListener($eventName, $closure, self::LISTENER_ON);
 
         return $this;
@@ -92,12 +94,12 @@ class Performance_Main_Event_Manager implements Performance_Main_Event_Interface
     /**
      * This method registers listener for first registered event with right attributes. It means that it is called only one.
      *
-     * @param string  $eventName Event identificator
-     * @param Closure $closure   Closure instance with function which is called when event is fired
+     * @param string   $eventName Event identificator
+     * @param \Closure $closure   Closure instance with function which is called when event is fired
      *
-     * @return Performance_Main_Event_Manager
+     * @return \PF\Main\Event\Manager
      */
-    public function once($eventName, Closure $callback) {
+    public function once($eventName, \Closure $callback) {
         $this->_listeners[] = $this->_createListener($eventName, $callback, self::LISTENER_ONCE);
 
         return $this;
@@ -106,15 +108,15 @@ class Performance_Main_Event_Manager implements Performance_Main_Event_Interface
     /**
      * This method flush all events to listeners. It means that it takes all evens and resolve their attributes and send it to right listener.
      *
-     * @return Performance_Main_Event_Manager
+     * @return \PF\Main\Event\Manager
      */
     public function flush() {
         while($this->getEvents()) {
             foreach ($this->getEvents() as $key => $event) {
-                /* @var $event Performance_Main_Event_Action_Abstract */
-                if ($event instanceof Performance_Main_Event_Action_Emit) {
+                /* @var $event \PF\Main\Event\Action\AbstractAction */
+                if ($event instanceof Action\Emit) {
                     $this->_flushEmit($event);
-                } elseif ($event instanceof Performance_Main_Event_Action_Broadcast) {
+                } elseif ($event instanceof Action\Broadcast) {
                     $this->_flushBroadcast($event);
                 }
 
@@ -128,7 +130,7 @@ class Performance_Main_Event_Manager implements Performance_Main_Event_Interface
     /**
      * It make deregistration all events and listeners.
      *
-     * @return Performance_Main_Event_Manager
+     * @return \PF\Main\Event\Manager
      */
     public function clean() {
         foreach (array_keys($this->_events) as $key) {
@@ -145,24 +147,26 @@ class Performance_Main_Event_Manager implements Performance_Main_Event_Interface
     /**
      * It creates event by given event name and message instance.
      *
-     * @param string                                   $eventName Event identificator
-     * @param Performance_Main_Event_Interface_Message $message   Message of event
-     * @param string                                   $type      Type of event (broadcast|emit)
+     * @param string                            $eventName Event identificator
+     * @param \PF\Main\Event\Interfaces\Message $message   Message of event
+     * @param string                            $type      Type of event (broadcast|emit)
      *
-     * @return Performance_Main_Event_Action_Abstract
+     * @return \PF\Main\Event\Action\AbstractAction
+     *
+     * @throws \PF\Main\Event\Exception Throws when you try create undefined event.
      */
-    private function _createEvent($eventName, Performance_Main_Event_Interface_Message $message = null, $type = self::EVENT_BROADCAST) {
+    private function _createEvent($eventName, Interfaces\Message $message = null, $type = self::EVENT_BROADCAST) {
         switch ($type) {
             case self::EVENT_BROADCAST:
-                $event = new Performance_Main_Event_Action_Broadcast();
+                $event = new Action\Broadcast();
                 break;
             case self::EVENT_EMIT:
-                $event  = new Performance_Main_Event_Action_Emit();
+                $event  = new Action\Emit();
                 $source = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
                 $event->setModule($this->_getModule($source[2]['class']));
                 break;
             default :
-                throw new Performance_Main_Event_Exception('Undefined event type.');
+                throw new Exception('Undefined event type.');
         }
 
         $event->setName($eventName);
@@ -179,32 +183,32 @@ class Performance_Main_Event_Manager implements Performance_Main_Event_Interface
      * @return string
      */
     private function _getModule($classname) {
-        $result = ltrim(strstr($classname, '_'), '_');
+        $result = ltrim(strstr($classname, '\\'), '\\');
 
-        return strstr($result, '_', true);
+        return strstr($result, '\\', true);
     }
 
     /**
      * It creates listener by given event name and closure function.
      *
-     * @param string  $eventName Event identificator
-     * @param Closure $closure   Closure instance with function which is called when event is fired
-     * @param string  $type      Type of listener (on|once)
+     * @param string   $eventName Event identificator
+     * @param \Closure $closure   Closure instance with function which is called when event is fired
+     * @param string   $type      Type of listener (on|once)
      *
-     * @return Performance_Main_Event_Listener_Abstract
+     * @return \PF\Main\Event\Listener\AbstractListener
      *
-     * @throws Performance_Main_Event_Exception Throws when listener is undefined
+     * @throws \PF\Main\Event\Exception Throws when listener is undefined
      */
-    private function _createListener($eventName, Closure $closure, $type = self::LISTENER_ON) {
+    private function _createListener($eventName, \Closure $closure, $type = self::LISTENER_ON) {
         switch ($type) {
             case self::LISTENER_ON:
-                $listener = new Performance_Main_Event_Listener_On();
+                $listener = new Listener\On();
                 break;
             case self::LISTENER_ONCE:
-                $listener = new Performance_Main_Event_Listener_Once();
+                $listener = new Listener\Once();
                 break;
             default :
-                throw new Performance_Main_Event_Exception('Undefined listener type.');
+                throw new Exception('Undefined listener type.');
         }
 
         $listener->setName($eventName);
@@ -219,27 +223,27 @@ class Performance_Main_Event_Manager implements Performance_Main_Event_Interface
     /**
      * It flush emit event to all listeners.
      *
-     * @param Performance_Main_Event_Action_Emit $event Event instance
+     * @param \PF\Main\Event\Action\Emit $event Event instance
      *
-     * @return Performance_Main_Event_Manager
+     * @return \PF\Main\Event\Manager
      *
-     * @throws Performance_Main_Event_Exception Throws when event is undefined
+     * @throws \PF\Main\Event\Exception Throws when event is undefined
      */
-    private function _flushEmit(Performance_Main_Event_Action_Emit $event) {
+    private function _flushEmit(Action\Emit $event) {
         foreach ($this->getListeners() as $key => $listener) {
             if (
-                $listener instanceof Performance_Main_Event_Listener_Once
+                $listener instanceof Listener\Once
                 && $this->_matchEventName($event, $listener) && $event->getModule() === $listener->getModule()
             ) {
                 $this->_flushEvent($event, $listener);
                 unset($this->_listeners[$key]);
             } elseif (
-                $listener instanceof Performance_Main_Event_Listener_On &&
+                $listener instanceof Listener\On &&
                 $this->_matchEventName($event, $listener) && $event->getModule() === $listener->getModule()
             ) {
                 $this->_flushEvent($event, $listener);
             } else {
-                throw new Performance_Main_Event_Exception('Undefined event type.');
+                throw new Exception('Undefined event type.');
             }
         }
 
@@ -249,16 +253,16 @@ class Performance_Main_Event_Manager implements Performance_Main_Event_Interface
     /**
      * It flush broadcast event to all listeners.
      *
-     * @param Performance_Main_Event_Action_Broadcast $event Event instance
+     * @param \PF\Main\Event\Action\Broadcast $event Event instance
      *
-     * @return Performance_Main_Event_Manager
+     * @return \PF\Main\Event\Manager
      */
-    private function _flushBroadcast(Performance_Main_Event_Action_Broadcast $event) {
+    private function _flushBroadcast(Action\Broadcast $event) {
         foreach ($this->getListeners() as $key => $listener) {
-            if ($listener instanceof Performance_Main_Event_Listener_Once && $this->_matchEventName($event, $listener)) {
+            if ($listener instanceof Listener\Once && $this->_matchEventName($event, $listener)) {
                 $this->_flushEvent($event, $listener);
                 unset($this->_listeners[$key]);
-            } elseif ($listener instanceof Performance_Main_Event_Listener_On && $this->_matchEventName($event, $listener)) {
+            } elseif ($listener instanceof Listener\On && $this->_matchEventName($event, $listener)) {
                 $this->_flushEvent($event, $listener);
             }
         }
@@ -269,12 +273,12 @@ class Performance_Main_Event_Manager implements Performance_Main_Event_Interface
     /**
      * This match names of event and listener.
      *
-     * @param Performance_Main_Event_Action_Abstract   $event    Event instance
-     * @param Performance_Main_Event_Listener_Abstract $listener Listener instance
+     * @param \PF\Main\Event\Action\AbstractAction     $event    Event instance
+     * @param \PF\Main\Event\Listener\AbstractListener $listener Listener instance
      *
      * @return boolean
      */
-    private function _matchEventName(Performance_Main_Event_Action_Abstract $event, Performance_Main_Event_Listener_Abstract $listener) {
+    private function _matchEventName(Action\AbstractAction $event, Listener\AbstractListener $listener) {
         $eventName       = $event->getName();
         $listenerPattern = $listener->getName();
 
@@ -286,14 +290,14 @@ class Performance_Main_Event_Manager implements Performance_Main_Event_Interface
     /**
      * It flush event to concrete listener.
      *
-     * @param Performance_Main_Event_Action_Abstract   $event    Event instance
-     * @param Performance_Main_Event_Listener_Abstract $listener Listener instance
+     * @param \PF\Main\Event\Action\AbstractAction     $event    Event instance
+     * @param \PF\Main\Event\Listener\AbstractListener $listener Listener instance
      *
-     * @return Performance_Main_Event_Manager
+     * @return \PF\Main\Event\Manager
      */
-    private function _flushEvent(Performance_Main_Event_Action_Abstract $event, Performance_Main_Event_Listener_Abstract $listener) {
+    private function _flushEvent(Action\AbstractAction $event, Listener\AbstractListener $listener) {
         $callback   = $listener->getClosure();
-        $reflClass  = new ReflectionFunction($callback);
+        $reflClass  = new \ReflectionFunction($callback);
         $parameters = $reflClass->getParameters();
 
         if (count($parameters) > 0) {

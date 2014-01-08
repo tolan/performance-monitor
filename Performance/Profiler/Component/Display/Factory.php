@@ -1,5 +1,9 @@
 <?php
 
+namespace PF\Profiler\Component\Display;
+
+use PF\Profiler\Component\AbstractFactory;
+
 /**
  * This script defines factory class for creating display by request settings.
  *
@@ -7,19 +11,19 @@
  * @category   Performance
  * @package    Profiler
  */
-class Performance_Profiler_Component_Display_Factory extends Performance_Profiler_Component_AbstractFactory {
+class Factory extends AbstractFactory {
 
     /**
      * Returns display instance.
      *
-     * @return Performance_Profiler_Component_Display_Abstract
+     * @return \PF\Profiler\Component\Display\AbstractDisplay
      */
     public function getStorage() {
         if ($this->getAttemptId()) {
-            $storage = $this->getProvider()->get('Performance_Profiler_Component_Display_MySQL');
+            $storage = $this->getProvider()->get('PF\Profiler\Component\Display\MySQL');
             $storage->setMeasureId($this->getAttemptId());
         } else {
-            $storage = $this->getProvider()->get('Performance_Profiler_Component_Display_Default');
+            $storage = $this->getProvider()->get('PF\Profiler\Component\Display\Browser');
         }
 
         return $storage;

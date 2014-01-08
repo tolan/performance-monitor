@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main;
+
 /**
  * This script defines class for application module loader. It provides auto start all services.
  *
@@ -7,29 +9,29 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_ModuleLoader {
+class ModuleLoader {
 
     /**
      * Config instance
      *
-     * @var Performance_Main_Config
+     * @var \PF\Main\Config
      */
     private $_config;
 
     /**
      * Provider instance
      *
-     * @var Performance_Main_Provider
+     * @var \PF\Main\Provider
      */
     private $_provider;
 
     /**
      * Construct method.
      *
-     * @param Performance_Main_Config   $config   Config instance
-     * @param Performance_Main_Provider $provider Provider instance
+     * @param \PF\Main\Config   $config   Config instance
+     * @param \PF\Main\Provider $provider Provider instance
      */
-    public function __construct(Performance_Main_Config $config, Performance_Main_Provider $provider) {
+    public function __construct(Config $config, Provider $provider) {
         $modules = $config->get('modules');
         $this->_config   = $config;
         $this->_provider = $provider;

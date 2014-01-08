@@ -4,16 +4,16 @@
         "useAutoloader" : true,
         "initServices"  : ["database", "log", "loader"],
         "serviceMap"    : {
-            "database" : "Performance_Main_Database",
-            "config"   : "Performance_Main_Config",
-            "web"      : "Performance_Main_Web_App",
-            "request"  : "Performance_Main_Web_Component_Request",
-            "response" : "Performance_Main_Web_Component_Response",
-            "log"      : "Performance_Main_Log",
-            "access"   : "Performance_Main_Access",
-            "router"   : "Performance_Main_Web_Component_Router",
-            "cache"    : "Performance_Main_Cache",
-            "loader"   : "Performance_Main_ModuleLoader"
+            "database" : "PF\\Main\\Database",
+            "config"   : "PF\\Main\\Config",
+            "web"      : "PF\\Main\\Web\\App",
+            "request"  : "PF\\Main\\Web\\Component\\Request",
+            "response" : "PF\\Main\\Web\\Component\\Response",
+            "log"      : "PF\\Main\\Log",
+            "access"   : "PF\\Main\\Access",
+            "router"   : "PF\\Main\\Web\\Component\\Router",
+            "cache"    : "PF\\Main\\Cache",
+            "loader"   : "PF\\Main\\ModuleLoader"
         }
     },
     "database" : {

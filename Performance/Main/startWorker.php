@@ -2,23 +2,23 @@
 
 include __DIR__.'/../boot.php';
 
-Performance_Main_Provider::getInstance()->loadEnum('Performance_Main_Gearman_ServerFunction');
+\PF\Main\Provider::getInstance()->loadEnum('\PF\Main\Gearman\ServerFunction');
 
 $worker= new GearmanWorker();
 $worker->addServer();
-$worker->addFunction(Performance_Main_Gearman_Enum_ServerFunction::GEARMAN_FUNCTION, 'start_gearman_server');
+$worker->addFunction(\PF\Main\Gearman\Enum\ServerFunction::GEARMAN_FUNCTION, 'start_gearman_server');
 
 while ($worker->work());
 
 function start_gearman_server(GearmanJob $job) {
     $message  = unserialize($job->workload());
-    $provider = Performance_Main_Provider::getInstance();
+    $provider = \PF\Main\Provider::getInstance();
 
-    $server = $provider->get('Performance_Main_Gearman_Server');
+    $server = $provider->get('PF\Main\Gearman\Server');
     $server->setMessage($message);
     $server->run();
 
-    $eveMan = $provider->get('Performance_Main_Event_Manager'); /* @var $eveMan Performance_Main_Event_Manager */
+    $eveMan = $provider->get('PF\Main\Event\Manager'); /* @var $eveMan \PF\Main\Event\Manager */
     $eveMan->flush();
     $eveMan->clean();
 

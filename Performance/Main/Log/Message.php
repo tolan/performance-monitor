@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Log;
+
 /**
  * This script defines class for log message.
  *
@@ -7,7 +9,8 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Log_Message {
+class Message {
+
     /**
      * Date format for logging.
      *
@@ -18,23 +21,23 @@ class Performance_Main_Log_Message {
     /**
      * Log level.
      *
-     * @var enum Performance_Main_Log_Enum_Level
+     * @var enum \PF\Main\Log\Enum\Level
      */
-    private $_level     = Performance_Main_Log_Enum_Level::OFF;
+    private $_level = Enum\Level::OFF;
 
     /**
      * File where is log called.
      *
      * @var string
      */
-    private $_file      = null;
+    private $_file = null;
 
     /**
      * Line where is log called.
      *
      * @var int
      */
-    private $_line      = null;
+    private $_line = null;
 
     /**
      * Arguments of message.
@@ -46,12 +49,10 @@ class Performance_Main_Log_Message {
     /**
      * Construct method.
      *
-     * @param enum  $level     One of Performance_Main_Log_Enum_Level
+     * @param enum  $level     One of \PF\Main\Log\Enum\Level
      * @param array $arguments Arguments of message
      * @param file  $file      File where is log called
      * @param int   $line      Line where is log called
-     *
-     * @return void
      */
     public function __construct($level, $arguments, $file, $line) {
         $this->_level     = $level;
@@ -64,6 +65,8 @@ class Performance_Main_Log_Message {
      * Write message to file.
      *
      * @param string $file Path to the file
+     *
+     * @return \PF\Main\Log\Message
      */
     public function write($file) {
         if (!file_exists($file)) {
@@ -71,6 +74,8 @@ class Performance_Main_Log_Message {
         }
 
         file_put_contents($file, $this->_compileMessage(), FILE_APPEND);
+
+        return $this;
     }
 
     /**

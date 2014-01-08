@@ -1,5 +1,9 @@
 <?php
 
+namespace PF\Profiler\Component\Statistics;
+
+use PF\Profiler\Component\AbstractFactory;
+
 /**
  * This script defnes factory class for creating profler statistic instance.
  *
@@ -7,19 +11,19 @@
  * @category   Performance
  * @package    Profiler
  */
-class Performance_Profiler_Component_Statistics_Factory extends Performance_Profiler_Component_AbstractFactory {
+class Factory extends AbstractFactory {
 
     /**
      * Returns instance of profiler statistic.
      *
-     * @return Performance_Profiler_Component_Statistics_Abstract
+     * @return \PF\Profiler\Component\Statistics\Abstract
      */
     public function getStatistics() {
         if ($this->getAttemptId()) {
-            $storage = $this->getProvider()->get('Performance_Profiler_Component_Statistics_MySQL');
+            $storage = $this->getProvider()->get('PF\Profiler\Component\Statistics\MySQL');
             $storage->setAttemptId($this->getAttemptId());
         } else {
-            $storage = $this->getProvider()->get('Performance_Profiler_Component_Statistics_Default');
+            $storage = $this->getProvider()->get('PF\Profiler\Component\Statistics\Browser');
         }
 
         return $storage;

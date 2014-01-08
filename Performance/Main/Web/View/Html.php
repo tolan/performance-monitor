@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Web\View;
+
 /**
  * Abstract class for each HTML view.
  *
@@ -7,12 +9,12 @@
  * @category   Performance
  * @package    Main
  */
-abstract class Performance_Main_Web_View_Html extends Performance_Main_Web_View_Abstract {
+abstract class Html extends AbstractView {
 
     /**
      * Generate HTML payload. Adds libraries and syles.
      *
-     * @return Performance_Main_Web_View_Html
+     * @return \PF\Main\Web\View\Html
      */
     public function getPayload() {
         $template = $this->getTemplate();
@@ -35,7 +37,7 @@ abstract class Performance_Main_Web_View_Html extends Performance_Main_Web_View_
     /**
      * Returns HTML template instance.
      *
-     * @return Performance_Main_Web_Component_Template_Html
+     * @return \PF\Main\Web\Component\Template\Html
      */
     final protected function getTemplate() {
         return parent::getTemplate();

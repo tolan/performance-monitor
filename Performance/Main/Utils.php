@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main;
+
 /**
  * This script defines class for some helper tools.
  *
@@ -7,7 +9,7 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Utils {
+class Utils {
     const MYSQL_DATETIME = 'Y-m-d H:i:s';
 
     /**

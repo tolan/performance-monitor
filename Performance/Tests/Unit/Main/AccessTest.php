@@ -1,25 +1,30 @@
 <?php
 
+namespace PF\Tests\Unit\Main;
+
+use PF\Main\Abstracts\Unit\TestCase;
+use PF\Main\Access;
+
 /**
- * This script defines class for php unit test case of class Performance_Main_Access.
+ * This script defines class for php unit test case of class \PF\Main\Access.
  *
  * @author     Martin Kovar
  * @category   Performance
  * @package    Tests
  */
-class Performance_Tests_Unit_Main_AccessTest extends Performance_Main_Abstract_Unit_TestCase {
+class AccessTest extends TestCase {
 
     /**
      * Access instance.
      *
-     * @var Performance_Main_Access
+     * @var \PF\Main\Access
      */
     private $_instance;
 
     /**
      * Server global varibale instance
      *
-     * @var Performance_Main_Web_Component_Http_Server
+     * @var \PF\Main\Web\Component\Http\Server
      */
     private $_server;
 
@@ -29,13 +34,13 @@ class Performance_Tests_Unit_Main_AccessTest extends Performance_Main_Abstract_U
      * @return void
      */
     protected function setUp() {
-        $this->_instance = $this->getProvider()->get('Performance_Main_Access');
-        $this->_server   = $this->getProvider()->get('Performance_Main_Web_Component_Request')->getServer();
+        $this->_instance = $this->getProvider()->get('PF\Main\Access');
+        $this->_server   = $this->getProvider()->get('PF\Main\Web\Component\Request')->getServer();
 
-        $config  = $this->getProvider()->get('Performance_Main_Config'); /* @var $config Performance_Main_Config */
+        $config  = $this->getProvider()->get('PF\Main\Config'); /* @var $config \PF\Main\Config */
         $config->set('access', array(
-            Performance_Main_Access_AllowFrom::CONFIG_KEY => array('192.168.1.1'),
-            Performance_Main_Access_DeniedFrom::CONFIG_KEY => array('192.168.2.2')
+            Access\AllowFrom::CONFIG_KEY => array('192.168.1.1'),
+            Access\DeniedFrom::CONFIG_KEY => array('192.168.2.2')
         ));
 
         parent::setUp();

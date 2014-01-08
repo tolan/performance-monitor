@@ -1,6 +1,18 @@
 <?php
 
-class Performance_Profiler_Component_Repository_MeasureTest extends Performance_Main_Abstract_Repository {
+namespace PF\Profiler\Component\Repository;
+
+use PF\Main\Abstracts\Repository;
+use PF\Profiler\Enum\AttemptState;
+
+/**
+ * This script defines repository for measures tests.
+ *
+ * @author     Martin Kovar
+ * @category   Performance
+ * @package    Profiler
+ */
+class MeasureTest extends Repository {
 
     /**
      * Init method for set managed table.
@@ -62,7 +74,9 @@ class Performance_Profiler_Component_Repository_MeasureTest extends Performance_
                 ->columns(
                     array(
                         'maxImmersion' => 'MAX(ad.immersion)',
-                        'started'      => 'UNIX_TIMESTAMP(ta.started)*1000'))
+                        'started'      => 'UNIX_TIMESTAMP(ta.started)*1000'
+                    )
+                )
                 ->where('ta.id = :id', array('id' => $id));
 
         return $select->fetchOne();
@@ -76,8 +90,8 @@ class Performance_Profiler_Component_Repository_MeasureTest extends Performance_
      * @return int
      */
     public function create($data) {
-        $data['state']   = Performance_Profiler_Enum_AttemptState::STATE_IDLE;
-        $data['started'] = Performance_Main_Database::convertTimeToMySQLDateTime(time());
+        $data['state']   = AttemptState::STATE_IDLE;
+        $data['started'] = $this->getUtils()->convertTimeToMySQLDateTime(time());
         return parent::create($data);
     }
 

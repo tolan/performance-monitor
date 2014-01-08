@@ -101,6 +101,9 @@ function SearchFiltersCtrl($scope, $http, $timeout) {
     };
 
     $scope.$on('menu-selected-item', $scope.selectFilter);
+    $scope.$on('search-drop-filter', function() {
+        $scope.resultTotal = undefined;
+    });
 }
 
 function SearchResultCtrl($scope) {

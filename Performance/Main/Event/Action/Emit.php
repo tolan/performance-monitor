@@ -1,5 +1,7 @@
 <?php
 
+namespace PF\Main\Event\Action;
+
 /**
  * This script defines class for emit event action.
  *
@@ -7,6 +9,5 @@
  * @category   Performance
  * @package    Main
  */
-class Performance_Main_Event_Action_Emit extends Performance_Main_Event_Action_Abstract {
-
+class Emit extends AbstractAction {
 }
