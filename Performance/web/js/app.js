@@ -2,6 +2,7 @@
 
 /* App Module */
 var countLoad = 0;
+var blockLoad = false;
 var perfModule = angular.module(
     'Perf',
     ['ui.bootstrap', '$strap.directives', 'ngRoute']
@@ -12,7 +13,7 @@ var perfModule = angular.module(
 ).config(function ($httpProvider) {
     $httpProvider.responseInterceptors.push('myHttpInterceptor');
     var spinnerFunction = function (data, headersGetter) {
-        if (countLoad === 0) {
+        if (countLoad === 0 && blockLoad === false) {
             $('#loader').fadeIn();
         }
 
@@ -25,7 +26,7 @@ var perfModule = angular.module(
     return function (promise) {
         var hideFunction = function () {
             countLoad--;
-            if (countLoad === 0) {
+            if (countLoad === 0 && blockLoad === false) {
                 setTimeout(function() {
                     if (countLoad === 0) {
                         $('#loader').fadeOut();
@@ -234,6 +235,26 @@ perfModule.run(
 
         rootScope.indexOf = function(items, item) {
             return _.indexOf(items, item);
+        };
+
+        rootScope.mask = function() {
+            blockLoad = true;
+            countLoad++;
+            $('#loader').fadeIn();
+        };
+
+        rootScope.unmask = function() {
+            countLoad--;
+            blockLoad = false;
+            setTimeout(function() {
+                if (countLoad === 0) {
+                    $('#loader').fadeOut();
+                }
+            }, 100);
+        };
+
+        rootScope.blockLoad = function(block) {
+            blockLoad = !!block;
         };
 
         rootScope.validator = validator;

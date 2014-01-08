@@ -195,7 +195,7 @@ function ProfilerMeasureDetailCtrl($scope, $http, $routeParams, $location, $time
         $scope.measure = response;
     });
 
-    $scope.loadTests = function(lastPage) {
+    $scope.loadTests = function(gotoLastPage) {
         $scope.tests = [];
         $http.get('profiler/measure/' + $scope.measureId + '/tests').success(function(tests) {
             angular.forEach(tests, function(test) {
@@ -207,7 +207,7 @@ function ProfilerMeasureDetailCtrl($scope, $http, $routeParams, $location, $time
                 $scope.tests.push(test);
             });
 
-            if(lastPage) {
+            if(gotoLastPage) {
                 $scope.currentPage = parseInt($scope.tests.length / $scope.pageSize) + 1;
             }
         });
@@ -220,9 +220,8 @@ function ProfilerMeasureDetailCtrl($scope, $http, $routeParams, $location, $time
     };
 
     $scope.deleteTest = function(id) {
-        $scope.unsetWatcher(id);
-
         $http.delete('profiler/measure/test/' + id).success(function(response) {
+            $scope.unsetWatcher(id);
             if (response === "true") {
                 var key = _.indexOf($scope.tests, _.findWhere($scope.tests, {id : id}));;
                 $scope.tests.splice(key, 1);
@@ -237,15 +236,17 @@ function ProfilerMeasureDetailCtrl($scope, $http, $routeParams, $location, $time
     };
 
     $scope.setWatcher = function(id) {
+        $scope.blockLoad(true);
         $scope.testTimer[id] = $timeout(function() {
             $http.get('profiler/measure/test/' + id).success(function(response) {
-                var key = _.indexOf($scope.tests, _.findWhere($scope.tests, {id : id}));;
-                $scope.tests[key] = response;
+                var key = _.indexOf($scope.tests, _.findWhere($scope.tests, {id : id}));
+                if (key !== -1) {
+                    $scope.tests[key] = response;
+                    $scope.unsetWatcher(id);
 
-                if (response.state !== 'statistic_generated' && response.state !== 'error') {
-                    $scope.setWatcher(id);
-                } else {
-                    $timeout.cancel($scope.testTimer[id]);
+                    if (response.state !== 'statistic_generated' && response.state !== 'error') {
+                        $scope.setWatcher(id);
+                    }
                 }
             });
         }, $scope.refreshInterval);
@@ -260,6 +261,10 @@ function ProfilerMeasureDetailCtrl($scope, $http, $routeParams, $location, $time
 
         return input;
     };
+
+    $scope.$on('$locationChangeSuccess', function() {
+        $scope.blockLoad(false);
+    });
 
     $scope.loadTests();
 }

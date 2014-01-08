@@ -318,7 +318,7 @@ class Provider {
 
         $instance = null;
 
-        if (!isset($dependencies['dependencies'])) {
+        if (!isset($dependencies['dependencies']) || empty($dependencies['dependencies'])) {
             $instance = new $name();
         } else {
             if ($dependencies['method'] === 'getInstance') {

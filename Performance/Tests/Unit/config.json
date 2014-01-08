@@ -13,7 +13,7 @@
         "user"     : "root",
         "password" : "net",
         "database" : "performance_unit_tests",
-        "install"  : true
+        "install"  : false
     },
     "access" : {
         "allowFrom" : [],
