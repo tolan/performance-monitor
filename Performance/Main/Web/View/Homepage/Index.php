@@ -28,6 +28,7 @@ class Index extends Html {
         $template->addScript('/Performance/web/js/controller/Lang.js');
         $template->addScript('/Performance/web/js/controller/Profiler.js');
         $template->addScript('/Performance/web/js/controller/Search.js');
+        $template->addScript('/Performance/web/js/controller/Statistics.js');
         $template->setBody($this->_generateHtml());
 
         return $this;

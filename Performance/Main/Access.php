@@ -38,7 +38,7 @@ class Access {
         $allowPrio  = $this->_provider->get('PF\Main\Access\AllowFrom')->checkAccess();
         $deniedPrio = $this->_provider->get('PF\Main\Access\DeniedFrom')->checkAccess();
 
-        if ($allowPrio <= $deniedPrio) {
+        if ($allowPrio <= $deniedPrio && $deniedPrio > 0) {
             throw new Access\Exception('Unauthorized access.');
         }
 

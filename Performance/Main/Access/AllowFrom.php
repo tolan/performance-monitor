@@ -23,10 +23,10 @@ class AllowFrom extends AbstractAccess {
      */
     public function checkAccess() {
         $config      = $this->getConfig();
-        $ipAddresses = $config[self::CONFIG_KEY];
+        $ipAddresses = isset($config[self::CONFIG_KEY]) ? $config[self::CONFIG_KEY] : null;
 
         if (empty($ipAddresses)) {
-            return 32;
+            return 0;
         }
 
         $remoteIp = $this->getRemoteIp();

@@ -420,7 +420,7 @@ class Provider {
         $path = $root.$classPath.'.php';
 
         if (file_exists($path)) {
-            include $path;
+            include_once $path;
 
             return true;
         }
@@ -439,15 +439,18 @@ class Provider {
      */
     private function _loadClass($class = null) {
         $class = $class === null ? get_class() : $class;
-        if (class_exists($class) === false && ($this->_useAutoloader === false || is_callable('spl_autoload_register') === false)) {
+        if (class_exists($class) === false && $this->_useAutoloader === false) {
             if (preg_match('/^Performance.*|^PF.*/', $class)) {
                 $tmp    = substr($class, strpos($class, '\\') + 1);
                 $module = substr($tmp, 0, strpos($tmp, '\\'));
                 $path   = dirname(__DIR__).'/'.$module.'/';
                 $files  = $this->_getFiles($path);
+                spl_autoload_register(array($this, '_autoloader'));
                 foreach ($files as $file) {
                     include_once $file;
                 }
+
+                spl_autoload_unregister(array($this, '_autoloader'));
             } else {
                 throw new Exception('Provider loading only classes from Performance (PF namespace).');
             }
@@ -467,10 +470,12 @@ class Provider {
         $result = array();
         $path   = rtrim($path, '/');
 
-        foreach (glob($path.'/*') as $item) {
-            if (is_dir($item)) {
-                $result += $this->_getFiles($item);
-            } elseif(preg_match('/\.php$/', $item)) {
+        foreach (glob($path.'/*', GLOB_ONLYDIR) as $item) {
+            $result = array_merge($result, $this->_getFiles($item));
+        }
+
+        foreach (glob($path.'/*.php') as $item) {
+            if (!strstr($item, 'TestCase.php') && !strstr($item, 'startWorker.php')) {
                 $result[] = $item;
             }
         }

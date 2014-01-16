@@ -84,7 +84,7 @@ class Query {
      *
      * @throws \PF\Main\Database\Exception
      */
-    public function execute($statement, $bind) {
+    public function execute($statement, $bind = array()) {
         $answer = $this->_connection->prepare($statement);
 
         if ($answer->execute($bind) === false) {

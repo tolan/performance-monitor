@@ -23,6 +23,7 @@ class Config {
      */
     final public function __construct() {
         $this->set('root', dirname(__DIR__));
+        $this->set('namespace', 'PF');
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace PF\Profiler;
 
-include __DIR__.'/../boot.php';
+include_once __DIR__.'/../boot.php';
 
 use PF\Main\Provider;
 

@@ -1,8 +1,10 @@
 <nav class="navbar navbar-default navigation" role="navigation">
-    <ul class="nav navbar-nav">
-        <li ng-repeat='item in menu' ng-include="'menu-item.html'" ng-if="!item.submenu"></li>
-        <li ng-repeat='item in menu' ng-include="'menu-item-submenu.html'" ng-if="item.submenu" class="dropdown"></li>
-    </ul>
+    <div class="navbar-inner">
+        <ul class="nav navbar-nav">
+            <li ng-repeat='item in menu' ng-include="'menu-item.html'" ng-if="!item.submenu"></li>
+            <li ng-repeat='item in menu' ng-include="'menu-item-submenu.html'" ng-if="item.submenu" class="dropdown"></li>
+        </ul>
+    </div>
 </nav>
 
 <script type="text/ng-template" id="menu-item.html">

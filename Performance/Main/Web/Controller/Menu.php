@@ -28,7 +28,7 @@ class Menu extends Abstracts\Json {
             ),
             array(
                 'text' => 'main.menu.statistics',
-                'href' => '#measure/statistics'
+                'href' => '#statistics'
             ),
             array(
                 'text' => 'main.menu.optimalization',

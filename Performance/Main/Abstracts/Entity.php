@@ -2,7 +2,6 @@
 
 namespace PF\Main\Abstracts;
 
-use PF\Main\Abstracts\Enum;
 use PF\Main\Exception;
 
 /**

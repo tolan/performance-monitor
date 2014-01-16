@@ -23,17 +23,17 @@ class DeniedFrom extends AbstractAccess {
      */
     public function checkAccess() {
         $config      = $this->getConfig();
-        $ipAddresses = $config[self::CONFIG_KEY];
+        $ipAddresses = isset($config[self::CONFIG_KEY]) ? $config[self::CONFIG_KEY] : null;
 
         if (empty($ipAddresses)) {
             return 0;
         }
 
         $remoteIp = $this->getRemoteIp();
-        $priority = 32;
+        $priority = 0;
 
         foreach ($ipAddresses as $pattern) {
-            $priority = min($this->matchIpAddress($remoteIp, $pattern), $priority);
+            $priority = max($this->matchIpAddress($remoteIp, $pattern), $priority);
         }
 
         if ($priority === 32) {
