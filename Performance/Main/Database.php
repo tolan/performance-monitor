@@ -155,7 +155,7 @@ class Database {
     /**
      * Gets instance for SQL delete statement.
      *
-     * @return \PF\Main\Database\Delte
+     * @return \PF\Main\Database\Delete
      */
     public function delete() {
         $this->connect();

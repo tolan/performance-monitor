@@ -1,0 +1,10 @@
+measure:
+    -
+        id: 1
+        name: first test
+    -
+        id: 2
+        name: second test
+    -
+        id: 3
+        name: third test

@@ -4,10 +4,12 @@ perfModule.directive('menu', function() {
         transclude: true,
         scope: {
             data: '=data',
-            title: '=dtitle'
+            title: '=dtitle',
+            class: '=dclass'
         },
         templateUrl: 'js/template/directive/menu.html',
         link: function(scope) {
+            // For translate
             scope._ = scope.$parent._;
         },
         controller: function($scope) {

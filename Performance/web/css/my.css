@@ -18,6 +18,10 @@ body {
     box-shadow: 3px 0px 10px 10px #D0D0D0 inset;
 }
 
+.inline-block {
+    display: inline-block;
+}
+
 .table thead th,
 table thead th {
     vertical-align: middle;

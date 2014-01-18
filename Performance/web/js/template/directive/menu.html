@@ -1,5 +1,5 @@
 <div class="dropdown">
-    <a data-toggle="dropdown" class="dropdown-toggle">{{_.(title)}} <b class="caret"></b></a>
+    <a data-toggle="dropdown" class="dropdown-toggle" ng-class="class">{{_.(title)}} <b class="caret"></b></a>
     <ul class="dropdown-menu">
         <li role="presentation" ng-repeat="item in data" ng-class="item.submenu ? 'dropdown-submenu' : ''" ng-include="'menu-directive-item.html'">
         </li>

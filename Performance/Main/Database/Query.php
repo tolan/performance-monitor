@@ -119,15 +119,34 @@ class Query {
      * @return string
      */
     public function __toString() {
-        $this->preFetch();
+        try {
+            $this->preFetch();
 
-        $statement = $this->_statement;
-        foreach ($this->_bind as $key => $value) {
-            if (is_numeric($key)) {
-                $statement = preg_replace('/\?/', '\''.$value.'\'', $statement, 1);
-            } else {
-                $statement = str_replace($key, '\''.$value.'\'', $statement);
+            $statement = $this->_statement;
+
+            if (substr_count($statement, '?') > 1 && substr_count($statement, '?') !== count(array_filter(array_keys($this->_bind), 'is_numeric'))) {
+                throw new Exception('Statement can not be builded for wrong binding');
+            } elseif(substr_count($statement, '?') === 1) {
+                $numBinding = array_intersect_key($this->_bind, array_flip(array_filter(array_keys($this->_bind), 'is_numeric')));
+                array_walk($numBinding, function(&$item) {
+                    if (is_string($item)) {
+                        $item = '\''.$item.'\'';
+                    }
+                });
+                $statement  = str_replace('?', join(', ', $numBinding), $statement);
             }
+
+            foreach ($this->_bind as $key => $value) {
+                if (is_numeric($key)) {
+                    $statement = preg_replace('/\?/', '\''.$value.'\'', $statement, 1);
+                } else {
+                    $value     = is_array($value) ? join(', ', $value) : $value;
+                    $statement = str_replace($key, '\''.$value.'\'', $statement);
+                }
+            }
+        } catch (Exception $exc) {
+            trigger_error(get_class($exc).': '.$exc->getMessage(), E_USER_WARNING);
+            $statement = '';
         }
 
         return $statement;

@@ -1,6 +1,6 @@
 <div class="search-filters-main">
     <div class="search-filters-menu">
-        <menu class="btn" data="menu" dtitle="'search.filter.menu.title'"></menu>
+        <menu dclass="'btn'" data="menu" dtitle="'search.filter.menu.title'"></menu>
     </div>
     <div class="search-filters-list">
         <div ng-repeat="filter in filters" class="search-filter well well-small">
@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="search-filters-menu" ng-show="filters.length">
-        <menu class="btn" data="menu" dtitle="'search.filter.menu.title'"></menu>
+        <menu class="inline-block" dclass="'btn'" data="menu" dtitle="'search.filter.menu.title'"></menu>
         <button class="btn" ng-click="sendAll()">[[_.('search.filter.button.show')]] <span ng-if="resultTotal >= 0">([[resultTotal]])</span></button>
     </div>
 </div>
