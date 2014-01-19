@@ -239,8 +239,10 @@ class Query {
      * @throws \PF\Main\Database\Exception Throws when SQL query is not created.
      */
     protected function preFetch() {
-        $this->_statement = null;
-        $this->_bind      = array();
+        if (get_called_class() !== __CLASS__) {
+            $this->_statement = null;
+            $this->_bind      = array();
+        }
 
         $this->compile();
 

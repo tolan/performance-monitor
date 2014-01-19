@@ -81,7 +81,7 @@ class DeleteTest extends TestCase {
     }
 
     /**
-     * Success test for bind of delete instance.
+     * Success test for get bind of delete instance.
      *
      * @return void
      */
