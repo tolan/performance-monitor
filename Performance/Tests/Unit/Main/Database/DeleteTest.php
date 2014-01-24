@@ -43,10 +43,10 @@ class DeleteTest extends TestCase {
         $this->assertEquals('DELETE FROM test', $delete->assemble());
 
         $delete->where('col1 IN (?)', array('aa', 'bb'));
-        $this->assertEquals('DELETE FROM test WHERE  (col1 IN (\'aa\', \'bb\'))', $delete->assemble());
+        $this->assertEquals('DELETE FROM test WHERE (col1 IN (\'aa\', \'bb\'))', $delete->assemble());
 
         $delete->orWhere('test IN (:values)', array(':values' => array('cc', 'dd')));
-        $expected = 'DELETE FROM test WHERE  (col1 IN (\'aa\', \'bb\')) OR (test IN (\'cc, dd\'))';
+        $expected = 'DELETE FROM test WHERE (col1 IN (\'aa\', \'bb\')) OR (test IN (\'cc, dd\'))';
         $this->assertEquals($expected, $delete->assemble());
     }
 
@@ -100,6 +100,6 @@ class DeleteTest extends TestCase {
     public function testGetStatement() {
         $delete = $this->_database->delete()->setTable('table')->where('id = ?', 'aaa');
 
-        $this->assertEquals('DELETE FROM table WHERE  (id = ?)', $delete->getStatement());
+        $this->assertEquals('DELETE FROM table WHERE (id = ?)', $delete->getStatement());
     }
 }

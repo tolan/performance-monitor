@@ -120,30 +120,7 @@ class Query {
      */
     public function __toString() {
         try {
-            $this->preFetch();
-
-            $statement = $this->_statement;
-
-            if (substr_count($statement, '?') > 1 && substr_count($statement, '?') !== count(array_filter(array_keys($this->_bind), 'is_numeric'))) {
-                throw new Exception('Statement can not be builded for wrong binding');
-            } elseif(substr_count($statement, '?') === 1) {
-                $numBinding = array_intersect_key($this->_bind, array_flip(array_filter(array_keys($this->_bind), 'is_numeric')));
-                array_walk($numBinding, function(&$item) {
-                    if (is_string($item)) {
-                        $item = '\''.$item.'\'';
-                    }
-                });
-                $statement  = str_replace('?', join(', ', $numBinding), $statement);
-            }
-
-            foreach ($this->_bind as $key => $value) {
-                if (is_numeric($key)) {
-                    $statement = preg_replace('/\?/', '\''.$value.'\'', $statement, 1);
-                } else {
-                    $value     = is_array($value) ? join(', ', $value) : $value;
-                    $statement = str_replace($key, '\''.$value.'\'', $statement);
-                }
-            }
+            $statement = $this->assemble();
         } catch (Exception $exc) {
             trigger_error(get_class($exc).': '.$exc->getMessage(), E_USER_WARNING);
             $statement = '';
@@ -158,7 +135,34 @@ class Query {
      * @return string
      */
     public function assemble() {
-        return (string)$this;
+        $this->preFetch();
+
+        $statement = $this->getStatement();
+
+        $unAsociationKeyBinds = array_filter(array_keys($this->getBind()), 'is_numeric');
+
+        if (substr_count($statement, '?') > 1 && substr_count($statement, '?') !== count($unAsociationKeyBinds)) {
+            throw new Exception('Statement can not be builded for wrong binding');
+        } elseif(substr_count($statement, '?') === 1) {
+            $numBinding = array_intersect_key($this->getBind(), array_flip($unAsociationKeyBinds));
+            array_walk($numBinding, function(&$item) {
+                if (is_string($item)) {
+                    $item = '\''.$item.'\'';
+                }
+            });
+            $statement  = str_replace('?', join(', ', $numBinding), $statement);
+        }
+
+        foreach ($this->getBind() as $key => $value) {
+            if (is_numeric($key)) {
+                $statement = preg_replace('/\?/', '\''.$value.'\'', $statement, 1);
+            } else {
+                $value     = is_array($value) ? join(', ', $value) : $value;
+                $statement = str_replace($key, '\''.$value.'\'', $statement);
+            }
+        }
+
+        return $statement;
     }
 
     /**
@@ -197,7 +201,7 @@ class Query {
             $this->compile();
         }
 
-        return $this->_statement;
+        return preg_replace('/\s+/', ' ', trim($this->_statement));
     }
 
     /**

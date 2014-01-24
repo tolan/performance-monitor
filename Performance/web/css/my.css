@@ -16,6 +16,7 @@ body {
     display: none;
     background: rgba(120, 120, 120, 0.2) url(../img/ajax-loader.gif) no-repeat center center fixed;
     box-shadow: 3px 0px 10px 10px #D0D0D0 inset;
+    z-index: 10000;
 }
 
 .inline-block {
