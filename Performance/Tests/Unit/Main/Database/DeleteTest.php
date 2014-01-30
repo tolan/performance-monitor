@@ -46,7 +46,7 @@ class DeleteTest extends TestCase {
         $this->assertEquals('DELETE FROM test WHERE (col1 IN (\'aa\', \'bb\'))', $delete->assemble());
 
         $delete->orWhere('test IN (:values)', array(':values' => array('cc', 'dd')));
-        $expected = 'DELETE FROM test WHERE (col1 IN (\'aa\', \'bb\')) OR (test IN (\'cc, dd\'))';
+        $expected = 'DELETE FROM test WHERE (col1 IN (\'aa\', \'bb\')) OR (test IN (\'cc\', \'dd\'))';
         $this->assertEquals($expected, $delete->assemble());
     }
 

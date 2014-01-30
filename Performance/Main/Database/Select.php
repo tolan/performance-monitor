@@ -74,7 +74,7 @@ class Select extends Where {
      * @return \PF\Main\Database\Where
      */
     public function createWhere() {
-        return new parent($this->getConnection());
+        return new parent($this->getConnection(), $this->getLogger());
     }
 
     /**

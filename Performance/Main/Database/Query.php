@@ -2,6 +2,8 @@
 
 namespace PF\Main\Database;
 
+use PF\Main\Log;
+
 /**
  * This script defines class for universal query statement of MySQL.
  *
@@ -40,12 +42,20 @@ class Query {
     protected $_connection;
 
     /**
+     * Logger instance.
+     *
+     * @var \PF\Main\Log
+     */
+    private $_logger;
+
+    /**
      * Construct method
      *
      * @param \PF\Main\Database\Connection $connection Connection to database
      */
-    final public function __construct(Connection $connection) {
+    final public function __construct(Connection $connection, Log $logger) {
         $this->_connection = $connection;
+        $this->_logger     = $logger;
     }
 
     /**
@@ -157,7 +167,7 @@ class Query {
             if (is_numeric($key)) {
                 $statement = preg_replace('/\?/', '\''.$value.'\'', $statement, 1);
             } else {
-                $value     = is_array($value) ? join(', ', $value) : $value;
+                $value     = is_array($value) ? join('\', \'', $value) : $value;
                 $statement = str_replace($key, '\''.$value.'\'', $statement);
             }
         }
@@ -248,7 +258,12 @@ class Query {
             $this->_bind      = array();
         }
 
-        $this->compile();
+        try {
+            $this->compile();
+        } catch (Exception $exc) {
+            $this->getLogger()->error('SQL statement cannot be compiled: '.$exc->getMessage());
+            throw $exc;
+        }
 
         if ($this->_statement === null) {
             throw new Exception('SQL query is not set!');
@@ -281,5 +296,14 @@ class Query {
         }
 
         return $data;
+    }
+
+    /**
+     * Returns instance of logger.
+     *
+     * @return \PF\Main\Log
+     */
+    protected function getLogger() {
+        return $this->_logger;
     }
 }

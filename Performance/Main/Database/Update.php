@@ -37,7 +37,13 @@ class Update extends Where {
      * @return \PF\Main\Database\Update
      */
     public function setTable($table) {
-        $this->_table = is_array($table) ? current($table) : $table;
+        $alias = is_array($table) ? key($table) : $table;
+        $table = is_array($table) ? current($table) : $table;
+
+        $this->_table = array(
+            'table' => $table,
+            'alias' => $alias
+        );
 
         return $this;
     }
@@ -82,7 +88,7 @@ class Update extends Where {
             throw new Exception('Data are not set.');
         }
 
-        $sql          = 'UPDATE '.$this->_table. ' SET ';
+        $sql          = 'UPDATE '.$this->_table['table'].' AS '.$this->_table['alias']. ' SET ';
         $placeholders = array();
         $bind         = array();
 

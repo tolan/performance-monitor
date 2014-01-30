@@ -2,6 +2,8 @@
 
 namespace PF\Main;
 
+use PF\Main\Log;
+
 /**
  * This script defines class for connect to MySQL database and provide basic function.
  *
@@ -67,13 +69,21 @@ class Database {
     private $_connection;
 
     /**
+     * Logger instance.
+     *
+     * @var \PF\Main\Log
+     */
+    private $_logger;
+
+    /**
      * Construct method which sets parameters to database connection.
      *
      * @param \PF\Main\Config $config Configuration
+     * @param \PF\Main\Log    $logger Logger instance
      *
      * @throws \PF\Main\Database\Exception Throws when missing some configuration option
      */
-    public function __construct(Config $config) {
+    public function __construct(Config $config, Log $logger) {
         $configuration = $config->get('database');
 
         if (count(array_diff($this->_configParams, array_keys($configuration))) > 0) {
@@ -84,6 +94,7 @@ class Database {
         $this->_user     = $configuration['user'];
         $this->_password = $configuration['password'];
         $this->_database = $configuration['database'];
+        $this->_logger   = $logger;
 
         if ($configuration['install'] === true) {
             $this->_install();
@@ -127,7 +138,7 @@ class Database {
     public function select() {
         $this->connect();
 
-        return new Database\Select($this->_connection);
+        return new Database\Select($this->_connection, $this->_logger);
     }
 
     /**
@@ -138,7 +149,7 @@ class Database {
     public function insert() {
         $this->connect();
 
-        return new Database\Insert($this->_connection);
+        return new Database\Insert($this->_connection, $this->_logger);
     }
 
     /**
@@ -149,7 +160,7 @@ class Database {
     public function update() {
         $this->connect();
 
-        return new Database\Update($this->_connection);
+        return new Database\Update($this->_connection, $this->_logger);
     }
 
     /**
@@ -160,7 +171,7 @@ class Database {
     public function delete() {
         $this->connect();
 
-        return new Database\Delete($this->_connection);
+        return new Database\Delete($this->_connection, $this->_logger);
     }
 
     /**
@@ -171,7 +182,7 @@ class Database {
     public function query() {
         $this->connect();
 
-        return new Database\Query($this->_connection);
+        return new Database\Query($this->_connection, $this->_logger);
     }
 
     /**

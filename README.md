@@ -12,7 +12,7 @@ The purpose of the framework is the analysis, optimization, control and evaluate
 
 ## Configuration
 - configuration is in file: Performance/config.json
-- there is simple array with config
+- there is simple object with config
 - look to part database for settings of MySQL
 - when you run application first time then set 'database' => 'install' to TRUE. It is for create all tables and translation.
 

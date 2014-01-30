@@ -135,7 +135,7 @@ class Log implements EventReciever {
         $constants = Level::getConstants();
 
         if (array_key_exists($level, $constants)) {
-            if ($constants[$level] <= $this->_level && $this->_level !== Level::OFF) {
+            if ($constants[$level] >= $this->_level && $this->_level !== Level::OFF) {
                 $trace    = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
                 $messsage = new Log\Message($level, $arguments, $trace[0]['file'], $trace[0]['line']);
                 $this->_addMessage($messsage);

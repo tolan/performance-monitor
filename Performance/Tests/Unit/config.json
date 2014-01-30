@@ -20,9 +20,9 @@
         "deniedFrom" : []
     },
     "log" : {
-        "level" : 6,
-        "file"  : "performance.log",
-        "cache" : true
+        "level" : 2,
+        "file"  : "performance_test.log",
+        "cache" : false
     },
     "translate" : {
         "lang" : "CS"
