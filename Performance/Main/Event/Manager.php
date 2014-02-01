@@ -226,8 +226,6 @@ class Manager implements Interfaces\Manager {
      * @param \PF\Main\Event\Action\Emit $event Event instance
      *
      * @return \PF\Main\Event\Manager
-     *
-     * @throws \PF\Main\Event\Exception Throws when event is undefined
      */
     private function _flushEmit(Action\Emit $event) {
         foreach ($this->getListeners() as $key => $listener) {
@@ -242,8 +240,6 @@ class Manager implements Interfaces\Manager {
                 $this->_matchEventName($event, $listener) && $event->getModule() === $listener->getModule()
             ) {
                 $this->_flushEvent($event, $listener);
-            } else {
-                throw new Exception('Undefined event type.');
             }
         }
 
@@ -281,10 +277,22 @@ class Manager implements Interfaces\Manager {
     private function _matchEventName(Action\AbstractAction $event, Listener\AbstractListener $listener) {
         $eventName       = $event->getName();
         $listenerPattern = $listener->getName();
+        $matched         = false;
 
-        // TODO [kovar] - implement pattern resolving
+        if ($eventName == $listenerPattern || $listenerPattern == 'all') {
+            $matched = true;
+        }
 
-        return $eventName == $listenerPattern || $listenerPattern == 'all';
+        if ($matched === false) {
+            $patterns = explode(' ', $listenerPattern);
+            $count    = count($patterns);
+
+            for($i = 0; $i < $count && $matched === false; $i++) {
+                $matched = (bool)preg_match('/'.$eventName.'/', trim($patterns[$i]));
+            }
+        }
+
+        return $matched;
     }
 
     /**
