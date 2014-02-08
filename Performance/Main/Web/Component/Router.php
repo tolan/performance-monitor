@@ -155,7 +155,7 @@ class Router {
         }
 
         $routeParams = array(
-            self::CONTROLLER => $controller,
+            self::CONTROLLER => ucfirst($controller),
             self::METHOD     => $method,
             self::PARAMS     => $params
         );

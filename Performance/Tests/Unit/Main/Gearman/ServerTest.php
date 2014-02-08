@@ -14,7 +14,7 @@ use PF\Main\Abstracts\Unit\TestCase;
 class ServerTest extends TestCase {
 
     /**
-     * Access instance.
+     * Server instance.
      *
      * @var \PF\Main\Gearman\Server
      */

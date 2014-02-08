@@ -40,11 +40,11 @@ class AccessTest extends TestCase {
      * @return void
      */
     protected function setUp() {
+        parent::setUp();
+
         $this->_instance = $this->getProvider()->get('PF\Main\Access');
         $this->_server   = $this->getProvider()->get('PF\Main\Web\Component\Request')->getServer();
         $this->_config   = $this->getProvider()->get('PF\Main\Config');
-
-        parent::setUp();
     }
 
     /**

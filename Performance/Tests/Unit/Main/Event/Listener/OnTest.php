@@ -14,7 +14,7 @@ use PF\Main\Abstracts\Unit\TestCase;
 class OnTest extends TestCase {
 
     /**
-     * Access instance.
+     * Listener instance.
      *
      * @var \PF\Main\Event\Listener\On
      */

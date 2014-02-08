@@ -23,6 +23,13 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase {
     private $_provider;
 
     /**
+     * Backup for configuration
+     *
+     * @var array
+     */
+    private $_configData = array();
+
+    /**
      * Construct method. Override and call parent method.
      *
      * @param  string $name
@@ -45,7 +52,24 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase {
     protected function setUp() {
         $this->_loadFixtures();
 
+        $config = $this->getProvider()->get('config');
+        $this->getProvider()->reset()->set($config, 'config');
+
+        $this->_configData = $config->toArray();
+
         parent::setUp();
+    }
+
+    /**
+     * Method for make some operation after each test
+     *
+     * @return void
+     */
+    protected function tearDown() {
+        $config = $this->getProvider()->get('config');
+        $config->fromArray($this->_configData);
+
+        parent::tearDown();
     }
 
     /**
@@ -63,15 +87,13 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase {
      * @return \PF\Main\Abstracts\Unit\TestCase
      */
     private function _loadFixtures() {
-        $root = $this->_provider->get('config')->get('root');
+        $root      = $this->_provider->get('config')->get('root');
         $namespace = $this->_provider->get('config')->get('namespace');
-        $class = get_called_class();
-
-        $classDir = dirname($root.ltrim(str_replace('\\', '/', $class), $namespace));
+        $class     = get_called_class();
+        $classDir  = dirname($root.ltrim(str_replace('\\', '/', $class), $namespace));
 
         $fixtureFiles = $this->_findFixtureFiles($classDir, $root.'/Tests/Unit');
-
-        $data = array();
+        $data         = array();
 
         foreach ($fixtureFiles as $file) {
             $yaml = yaml_parse_file($file);
@@ -120,7 +142,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase {
      * It deletes database and loads new data.
      *
      * @param array $data Data for load. Array('table name' => rows)
-     * 
+     *
      * @return \PF\Main\Abstracts\Unit\TestCase
      */
     private function _insertFixturesData($data) {

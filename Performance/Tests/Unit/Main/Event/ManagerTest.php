@@ -15,7 +15,7 @@ use PF\Main\Event;
 class ManagerTest extends TestCase {
 
     /**
-     * Access instance.
+     * Manager instance.
      *
      * @var \PF\Main\Event\Manager
      */

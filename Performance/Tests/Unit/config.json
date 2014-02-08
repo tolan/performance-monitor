@@ -5,7 +5,15 @@
         "initServices"  : ["database"],
         "serviceMap"    : {
             "database" : "PF\\Main\\Database",
-            "config"   : "PF\\Main\\Config"
+            "config"   : "PF\\Main\\Config",
+            "web"      : "PF\\Main\\Web\\App",
+            "request"  : "PF\\Main\\Web\\Component\\Request",
+            "response" : "PF\\Main\\Web\\Component\\Response",
+            "log"      : "PF\\Main\\Log",
+            "access"   : "PF\\Main\\Access",
+            "router"   : "PF\\Main\\Web\\Component\\Router",
+            "cache"    : "PF\\Main\\Cache",
+            "loader"   : "PF\\Main\\ModuleLoader"
         }
     },
     "database" : {

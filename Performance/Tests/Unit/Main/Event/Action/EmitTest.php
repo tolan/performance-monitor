@@ -14,7 +14,7 @@ use PF\Main\Abstracts\Unit\TestCase;
 class EmitTest extends TestCase {
 
     /**
-     * Access instance.
+     * action instance.
      *
      * @var \PF\Main\Event\Action\Emit
      */

@@ -18,7 +18,8 @@ class Json extends Controller {
      */
     final public function getResponse() {
         $template = $this->getProvider()->get('PF\Main\Web\Component\Template\Json');
-        $response = $this->getProvider()->get('response')->setTemplate($template);
+        $response = $this->getProvider()->get('response');
+        $response->setTemplate($template);
         return $response;
     }
 

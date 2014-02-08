@@ -14,7 +14,7 @@ use PF\Main\Abstracts\Unit\TestCase;
 class InsertTest extends TestCase {
 
     /**
-     * Access instance.
+     * database instance.
      *
      * @var \PF\Main\Database
      */

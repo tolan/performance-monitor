@@ -14,7 +14,7 @@ use PF\Main\Abstracts\Unit\TestCase;
 class MessageTest extends TestCase {
 
     /**
-     * Access instance.
+     * Message instance.
      *
      * @var \PF\Main\Event\Message
      */

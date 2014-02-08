@@ -14,7 +14,7 @@ use PF\Main\Abstracts\Unit\TestCase;
 class BroadcastTest extends TestCase {
 
     /**
-     * Access instance.
+     * action instance.
      *
      * @var \PF\Main\Event\Action\Broadcast
      */

@@ -40,6 +40,8 @@ class AllowFromTest extends TestCase {
      * @return void
      */
     protected function setUp() {
+        parent::setUp();
+
         $this->_instance = $this->getProvider()->get('PF\Main\Access\AllowFrom');
         $this->_server   = $this->getProvider()->get('PF\Main\Web\Component\Request')->getServer();
         $this->_config   = $this->getProvider()->get('PF\Main\Config');
@@ -51,8 +53,6 @@ class AllowFromTest extends TestCase {
                 '192.168.0.1/24'
             )
         ));
-
-        parent::setUp();
     }
 
     /**

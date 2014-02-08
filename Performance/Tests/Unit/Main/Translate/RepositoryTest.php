@@ -14,7 +14,7 @@ use PF\Main\Abstracts\Unit\TestCase;
 class RepositoryTest extends TestCase {
 
     /**
-     * Access instance.
+     * Repository instance.
      *
      * @var \PF\Main\Translate\Repository
      */

@@ -40,6 +40,8 @@ class DeniedFromTest extends TestCase {
      * @return void
      */
     protected function setUp() {
+        parent::setUp();
+
         $this->_instance = $this->getProvider()->get('PF\Main\Access\DeniedFrom');
         $this->_server   = $this->getProvider()->get('PF\Main\Web\Component\Request')->getServer();
         $this->_config   = $this->getProvider()->get('PF\Main\Config');
@@ -52,8 +54,6 @@ class DeniedFromTest extends TestCase {
                 '192.168.1.1/32'
             )
         ));
-
-        parent::setUp();
     }
 
     /**
