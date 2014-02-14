@@ -1,2 +1,0 @@
-<phpunit bootstrap="./Tests/Unit/boot.php">
-</phpunit>
