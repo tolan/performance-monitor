@@ -135,38 +135,13 @@ class Profiler extends Abstracts\Json {
             'description' => $input['description']
         ));
 
-        foreach ($input['requests'] as $request) {
-            $this->_createRequest($measureId, $request);
+        if (isset($input['requests'])) {
+            foreach ($input['requests'] as $request) {
+                $this->_createRequest($measureId, $request);
+            }
         }
 
         $this->setData($measureId);
-    }
-
-    /**
-     * Creates new request for measure with given request data.
-     *
-     * @param int   $measureId ID of measure
-     * @param array $request   Request data (url, method, toMeasure, parameters)
-     *
-     * @return \PF\Main\Web\Controller\Profiler
-     */
-    private function _createRequest($measureId, $request) {
-        $requestId = $this->_requestRepository->create(array(
-            'measureId' => $measureId,
-            'url'       => $request['url'],
-            'method'    => $request['method'],
-            'toMeasure' => $request['toMeasure']
-        ));
-
-        if (isset($request['parameters']) && !empty($request['parameters'])) {
-            foreach ($request['parameters'] as &$parameter) {
-                $parameter['requestId'] = $requestId;
-            }
-
-            $this->_parameterRepository->massCreate($request['parameters']);
-        }
-
-        return $this;
     }
 
     /**
@@ -183,18 +158,22 @@ class Profiler extends Abstracts\Json {
         $input = $this->getRequest()->getInput();
 
         $this->_measureRepository->update($id, array(
-            'name'        => $input['name'],
-            'description' => $input['description']
+            'name'        => isset($input['name']) ? $input['name'] : null,
+            'description' => isset($input['description']) ? $input['description'] : null
         ));
 
         $measure = $this->_measureRepository->getMeasure($id);
 
-        foreach ($measure['requests'] as $request) {
-            $this->_requestRepository->delete($request['id']);
+        if (isset($measure['requests'])) {
+            foreach ($measure['requests'] as $request) {
+                $this->_requestRepository->delete($request['id']);
+            }
         }
 
-        foreach ($input['requests'] as $request) {
-            $this->_createRequest($id, $request);
+        if (isset($input['requests'])) {
+            foreach ($input['requests'] as $request) {
+                $this->_createRequest($id, $request);
+            }
         }
 
         $this->setData(true);
@@ -367,5 +346,32 @@ class Profiler extends Abstracts\Json {
         }
 
         $this->setData($result);
+    }
+
+    /**
+     * Creates new request for measure with given request data.
+     *
+     * @param int   $measureId ID of measure
+     * @param array $request   Request data (url, method, toMeasure, parameters)
+     *
+     * @return \PF\Main\Web\Controller\Profiler
+     */
+    private function _createRequest($measureId, $request) {
+        $requestId = $this->_requestRepository->create(array(
+            'measureId' => $measureId,
+            'url'       => $request['url'],
+            'method'    => $request['method'],
+            'toMeasure' => $request['toMeasure']
+        ));
+
+        if (isset($request['parameters']) && !empty($request['parameters'])) {
+            foreach ($request['parameters'] as &$parameter) {
+                $parameter['requestId'] = $requestId;
+            }
+
+            $this->_parameterRepository->massCreate($request['parameters']);
+        }
+
+        return $this;
     }
 }

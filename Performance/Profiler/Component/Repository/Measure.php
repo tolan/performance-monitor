@@ -80,12 +80,15 @@ class Measure extends Repository {
                     'value'  => $item['value']
                 );
             }
-            $requests[$item['requestId']] = array(
-                'id'        => $item['requestId'],
-                'method'    => $item['method'],
-                'url'       => $item['url'],
-                'toMeasure' => (boolean)$item['toMeasure']
-            );
+
+            if (isset($item['requestId'])) {
+                $requests[$item['requestId']] = array(
+                    'id'        => $item['requestId'],
+                    'method'    => $item['method'],
+                    'url'       => $item['url'],
+                    'toMeasure' => (boolean)$item['toMeasure']
+                );
+            }
         }
 
         $result = array(

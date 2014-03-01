@@ -118,6 +118,15 @@ abstract class Controller {
     }
 
     /**
+     * Returns data for view.
+     *
+     * @return mixed
+     */
+    final public function getData() {
+        return $this->_data;
+    }
+
+    /**
      * Sets data for view (it should be used in action).
      *
      * @param mixed $data Data for view
@@ -128,15 +137,6 @@ abstract class Controller {
         $this->_data = $data;
 
         return $this;
-    }
-
-    /**
-     * Returns data for view.
-     *
-     * @return mixed
-     */
-    final protected function getData() {
-        return $this->_data;
     }
 
     /**
