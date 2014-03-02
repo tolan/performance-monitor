@@ -20,7 +20,7 @@ class Utils {
      * @return string
      */
     public function toCamelCase($string) {
-        $str = str_replace(' ', '', ucwords(str_replace('-', ' ', $string)));
+        $str = str_replace(' ', '', ucwords(strtr($string, array('-' => ' ', '_' => ' '))));
 
         return lcfirst($str);
     }
@@ -33,7 +33,7 @@ class Utils {
      * @return string
      */
     public static function convertTimeToMySQLDateTime($time = null) {
-        if (!$time) {
+        if ($time === null) {
             $time = time();
         }
 
