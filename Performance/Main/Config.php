@@ -11,6 +11,8 @@ namespace PF\Main;
  */
 class Config {
 
+    const NAME_SPACE = 'PF';
+
     /**
      * Configuration data
      *
@@ -23,7 +25,7 @@ class Config {
      */
     final public function __construct() {
         $this->set('root', dirname(__DIR__));
-        $this->set('namespace', 'PF');
+        $this->set('namespace', self::NAME_SPACE);
     }
 
     /**

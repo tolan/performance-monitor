@@ -32,7 +32,7 @@ class ModuleLoader {
      * @param \PF\Main\Provider $provider Provider instance
      */
     public function __construct(Config $config, Provider $provider) {
-        $modules = $config->get('modules');
+        $modules         = $config->get('modules');
         $this->_config   = $config;
         $this->_provider = $provider;
 

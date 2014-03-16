@@ -1,0 +1,123 @@
+measure:
+    -
+        id: 1
+        name: first test
+    -
+        id: 2
+        name: second test
+    -
+        id: 3
+        name: third test
+
+measure_request:
+    -
+        measureId: 2
+        url: perf.lc
+        method: GET
+        toMeasure: 1
+
+measure_test:
+    -
+        id: 1
+        measureId: 2
+        state: statistic_generated
+        started: 2013-12-21 13:37:49
+
+test_attempt:
+    -
+        id: 1
+        testId: 1
+        url: perf.lc
+        method: GET
+        state: statistic_generated
+        started: 2013-12-21 13:37:49
+        compensationTime: 0.0626818
+        time: 1376.51
+        calls: 50
+
+attempt_statistic_data:
+    -
+        id: 1
+        attemptId: 1
+        parentId: 0
+        file: filetest.php
+        line: 10
+        content: sleep(1);
+        time: 1000.24
+        timeSubStack: 0
+    -
+        id: 2
+        attemptId: 1
+        parentId: 0
+        file: filetest.php
+        line: 12
+        content: echo 'aaa';
+        time: 0.124
+        timeSubStack: 0
+    -
+        id: 3
+        attemptId: 1
+        parentId: 0
+        file: filetest.php
+        line: 13
+        content: die();
+        time: 1.8
+        timeSubStack: 0
+
+attempt_data:
+    -
+        id: 1
+        attemptId: 1
+        file: filetest.php
+        line: 10
+        immersion: 1
+        start: 0
+        end: 1000.24
+    -
+        id: 2
+        attemptId: 1
+        file: filetest.php
+        line: 12
+        immersion: 4
+        start: 1000.24
+        end: 1000.364
+    -
+        id: 3
+        attemptId: 1
+        file: filetest.php
+        line: 13
+        immersion: 3
+        start: 1000.364
+        end: 1002.164
+
+translate:
+    -
+        id: 1
+        lang: CS
+        module: test
+        key: text.key
+        text: 'Prostě nějaký text'
+    -
+        id: 2
+        lang: CS
+        module: test
+        key: two.key
+        text: 'Překlad'
+    -
+        id: 3
+        lang: EN
+        module: test
+        key: text.key
+        text: 'Just some text'
+    -
+        id: 4
+        lang: EN
+        module: test
+        key: two.key
+        text: 'Translate'
+    -
+        id: 5
+        lang: CS
+        module: main
+        key: third
+        text: 'Třetí'

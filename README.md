@@ -8,7 +8,7 @@ The purpose of the framework is the analysis, optimization, control and evaluate
 * MySQL:         5.5
 * Gearman:       1.1.2
 * HTTP_Request2: 2.1.1 (see: http://pear.php.net/package/HTTP_Request2)
-** YAML: 1.1.1 (from PECL) - only for unit tests
+* (YAML: 1.1.1 (from PECL) - only for unit tests)
 
 ## Configuration
 - configuration is in file: Performance/config.json
@@ -22,11 +22,11 @@ The purpose of the framework is the analysis, optimization, control and evaluate
 - include this code to your project (see example.php):
 <pre>
   include 'Performance/Profiler/Monitor.php';
-  Performance_Profiler_Monitor::getInstance()->enable();
+  \PF\Profiler\Monitor::getInstance()->enable();
   declare(ticks=1);
 
   /** Your code **/
 
-  Performance_Profiler_Monitor::getInstance()->disable();
+  \PF\Profiler\Monitor::getInstance()->disable();
 </pre>
 - next go to page http://__your-domain__/Performance/web/
