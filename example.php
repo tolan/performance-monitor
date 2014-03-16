@@ -3,41 +3,31 @@ include 'Performance/Profiler/Monitor.php';
 \PF\Profiler\Monitor::getInstance()->enable();
 declare(ticks=1);
 
-echo "hello";
+    $ans = simple(10);
+    echo $ans;
 
-a();
-
-sleep(1);
+    (new Foo())->bar(20);
 
 \PF\Profiler\Monitor::getInstance()->disable();
 
-
-function a() {
-    for($i = 0; $i < 4; $i++) {
-        b();
+function simple ($input) {
+    for($i = 0; $i < 1000; $i++) {
+        $input = sub($input, $i);
+        $time = time();
     }
 
-    $arr = array(1,2);
-    $test = 0;
+    return $input;
+}
 
-    foreach ($arr as $a) {
-        while($test < 1) {
-            $test++;
-        }
+function sub ($a, $b) {
+    return $a - $b;
+}
 
-        echo $a;
+class Foo {
+
+    public function bar($input) {
+        echo '<div>Foo->bar('.$input.'): '.simple($input).'</div>';
     }
 }
 
-function b() {
-    echo 'start b';
-    usleep(20000);
-    c();
-    usleep(20000);
-    echo 'end b';
-}
-
-function c() {
-    echo 'c';
-    usleep(50000);
-}
+\PF\Profiler\Monitor::getInstance()->display();

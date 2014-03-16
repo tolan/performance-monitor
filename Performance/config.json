@@ -34,5 +34,9 @@
     },
     "translate" : {
         "lang" : "CS"
-    }
+    },
+    "profiler" : {
+        "domain" : "https://perf.lc/Homepage/profiler"
+    },
+    "tmpDir" : ""
 }

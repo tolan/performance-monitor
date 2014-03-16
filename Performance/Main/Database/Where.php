@@ -53,8 +53,7 @@ class Where extends Query {
 
         if (count($this->_where) > 0) {
             foreach ($this->_where as $condition) {
-                $bind          = $this->cleanData($condition['bind']);
-                $compiledBinds = array_merge($compiledBinds, (array)$bind);
+                $compiledBinds = array_merge($compiledBinds, (array)$condition['bind']);
                 $operator      = $condition['operator'];
                 $condition     = $condition['condition'];
 

@@ -21,14 +21,14 @@ class Index extends Html {
     public function getPayload() {
         parent::getPayload();
         $template = $this->getTemplate();
-        $template->addScript('/Performance/web/js/app.js');
-        $template->addScript('/Performance/web/js/router.js');
-        $template->addScript('/Performance/web/js/directive.js');
-        $template->addScript('/Performance/web/js/controller/Menu.js');
-        $template->addScript('/Performance/web/js/controller/Lang.js');
-        $template->addScript('/Performance/web/js/controller/Profiler.js');
-        $template->addScript('/Performance/web/js/controller/Search.js');
-        $template->addScript('/Performance/web/js/controller/Statistics.js');
+        $template->addScript('/js/app.js');
+        $template->addScript('/js/router.js');
+        $template->addScript('/js/directive.js');
+        $template->addScript('/js/controller/Menu.js');
+        $template->addScript('/js/controller/Lang.js');
+        $template->addScript('/js/controller/Profiler.js');
+        $template->addScript('/js/controller/Search.js');
+//        $template->addScript('/js/controller/Statistics.js');
         $template->setBody($this->_generateHtml());
 
         return $this;

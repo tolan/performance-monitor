@@ -10,4 +10,7 @@ namespace PF\Profiler\Component\Display;
  * @package    Profiler
  */
 class MySQL extends AbstractDisplay {
+    
+    public function display() {
+    }
 }

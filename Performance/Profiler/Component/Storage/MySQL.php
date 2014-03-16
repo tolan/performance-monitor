@@ -2,6 +2,8 @@
 
 namespace PF\Profiler\Component\Storage;
 
+use PF\Profiler\Enum\CallParameters;
+
 /**
  * This script defines profiler storage class for access to MYSQL.
  *
@@ -55,17 +57,17 @@ class MySQL extends AbstractStorage {
         $repository = $this->getProvider()
             ->get('PF\Profiler\Component\Repository\AttemptData'); /* @var $repository \PF\Profiler\Component\Repository\AttemptData */
         $calls      = &$this->getStorageCalls();
-        $startTime  = $calls[0]['startTime'];
+        $startTime  = $calls[0][CallParameters::END_TIME];
 
         foreach ($calls as $call) {
             $repository->create(
                 array(
                     'attemptId' => $id,
-                    'file'      => $call['stack']['file'],
-                    'line'      => $call['stack']['line'],
-                    'immersion' => $call['stack']['immersion'],
-                    'start'     => ($call['startTime'] - $startTime) * 1000,
-                    'end'       => ($call['endTime'] - $startTime) * 1000
+                    'file'      => $call[CallParameters::FILE],
+                    'line'      => $call[CallParameters::LINE],
+                    'immersion' => $call[CallParameters::IMMERSION],
+                    'start'     => ($call[CallParameters::START_TIME] - $startTime) * 1000,
+                    'end'       => ($call[CallParameters::END_TIME] - $startTime) * 1000
                 )
             );
         }
@@ -115,18 +117,19 @@ class MySQL extends AbstractStorage {
         }
 
         $actual = array(
-            'file' => $bt[0]['file'],
-            'line' => $bt[0]['line'],
-            'immersion' => count($bt)
+            CallParameters::FILE => $bt[0][CallParameters::FILE],
+            CallParameters::LINE => $bt[0][CallParameters::LINE],
+            CallParameters::IMMERSION => count($bt),
+            CallParameters::START_TIME => $this->_compStack[$this->_compRuns][CallParameters::START_TIME],
+            CallParameters::END_TIME => $time
         );
 
-        $this->_compStack[$this->_compRuns]['stack']   = $actual;
-        $this->_compStack[$this->_compRuns]['endTime'] = $time;
+        $this->_compStack[$this->_compRuns]   = $actual;
 
         $this->_compRuns++;
 
         if ($this->_compRuns > 0) {
-            $this->_compStack[$this->_compRuns]['startTime'] = $time;
+            $this->_compStack[$this->_compRuns][CallParameters::START_TIME] = $time;
         }
     }
 }

@@ -155,20 +155,15 @@ class Query {
             throw new Exception('Statement can not be builded for wrong binding');
         } elseif(substr_count($statement, '?') === 1) {
             $numBinding = array_intersect_key($this->getBind(), array_flip($unAsociationKeyBinds));
-            array_walk($numBinding, function(&$item) {
-                if (is_string($item)) {
-                    $item = '\''.$item.'\'';
-                }
-            });
             $statement  = str_replace('?', join(', ', $numBinding), $statement);
         }
 
         foreach ($this->getBind() as $key => $value) {
             if (is_numeric($key)) {
-                $statement = preg_replace('/\?/', '\''.$value.'\'', $statement, 1);
+                $statement = preg_replace('/\?/', $value, $statement, 1);
             } else {
-                $value     = is_array($value) ? join('\', \'', $value) : $value;
-                $statement = str_replace($key, '\''.$value.'\'', $statement);
+                $value     = is_array($value) ? join(', ', $value) : $value;
+                $statement = str_replace($key, $value, $statement);
             }
         }
 
@@ -288,9 +283,9 @@ class Query {
 
             $data = $items;
         } elseif (is_string($data)) {
-            $data = mysql_real_escape_string($data);
+            $data = $this->_connection->quote($data);
         } elseif (is_object($data)) {
-            $data = (string)$data;
+            $data = $this->_connection->quote((string)$data);
         } elseif (is_bool($data)) {
             $data = $data === true ? 1 : 0;
         }

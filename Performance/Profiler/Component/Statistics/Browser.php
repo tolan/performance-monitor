@@ -10,4 +10,20 @@ namespace PF\Profiler\Component\Statistics;
  * @package    Profiler
  */
 class Browser extends AbstractStatistics {
+    
+    /**
+     * Call stack instance
+     * 
+     * @var \PF\Profiler\Component\CallStack\Browser 
+     */
+    private $_callStack = null;
+
+
+    protected function init() {
+        $this->_callStack = $this->getProvider()->get('PF\Profiler\Component\CallStack\Browser'); 
+    }
+
+    protected function getAnalyzedTree() {
+        return $this->_callStack->getAnalyzedTree();
+    }
 }

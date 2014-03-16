@@ -1,6 +1,6 @@
 
 function MenuCtrl($scope, $http) {
-    $scope.template = '/Performance/web/js/template/menu.html';
+    $scope.template = '/js/template/menu.html';
 
     $http.get('menu').success(function(menu) {
         $scope.menu = menu;

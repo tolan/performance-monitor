@@ -33,20 +33,6 @@ class MySQL extends AbstractCallStack {
     private $_measuredData = null;
 
     /**
-     * Indicator for immersion level.
-     *
-     * @var int
-     */
-    private $_actualLevel = 1;
-
-    /**
-     * Array with analyzed tree.
-     *
-     * @var array
-     */
-    private $_analyzedTree = array();
-
-    /**
      * This reset call stack to default values (erase analyzed tree, calls data and attempt information).
      *
      * @return \PF\Profiler\Component\CallStack\MySQL
@@ -54,8 +40,7 @@ class MySQL extends AbstractCallStack {
     public function reset() {
         $this->_attemptId    = null;
         $this->_measuredData = null;
-        $this->_actualLevel  = 1;
-        $this->_analyzedTree = array();
+        parent::reset();
 
         return $this;
     }
@@ -74,31 +59,6 @@ class MySQL extends AbstractCallStack {
     }
 
     /**
-     * This create analyzed tree from calls.
-     *
-     * @return \PF\Profiler\Component\CallStack\MySQL
-     */
-    public function analyze() {
-        if (empty($this->_analyzedTree)) {
-            $data = $this->_getData();
-            $this->_analyzedTree = $this->_analyzeTree($data);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Returns analyzed tree.
-     *
-     * @return array Array with analyzed call stack tree
-     */
-    public function getAnalyzedTree() {
-        $this->analyze();
-
-        return $this->_analyzedTree;
-    }
-
-    /**
      * Init method for set repository.
      *
      * @return void
@@ -108,40 +68,11 @@ class MySQL extends AbstractCallStack {
     }
 
     /**
-     * This analyze call stack tree from calls.
-     *
-     * @param array $stack Array with calls
-     *
-     * @return array
-     */
-    private function _analyzeTree(&$stack) {
-        $result = array();
-
-        while(!empty($stack)) {
-            $call = array_shift($stack);
-
-            if ($call['immersion'] == $this->_actualLevel) {
-                $result[] = $call;
-            } elseif ($call['immersion'] > $this->_actualLevel) {
-                $this->_actualLevel++;
-                array_unshift($stack, $call);
-                $result[] = $this->_analyzeTree($stack);
-            } else {
-                $this->_actualLevel--;
-                $call['subStack'] = $result;
-                return $call;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
      * Returns array with calls.
      *
      * @return array
      */
-    private function _getData() {
+    protected function getStorageData() {
         if ($this->_measuredData === null) {
             $this->_measuredData = $this->_repositoryData->getDataByAttemptId($this->_attemptId);
         }

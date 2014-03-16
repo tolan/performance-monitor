@@ -18,7 +18,7 @@ class Factory extends AbstractFactory {
      *
      * @return \PF\Profiler\Component\Display\AbstractDisplay
      */
-    public function getStorage() {
+    public function getDisplay() {
         if ($this->getAttemptId()) {
             $storage = $this->getProvider()->get('PF\Profiler\Component\Display\MySQL');
             $storage->setMeasureId($this->getAttemptId());

@@ -19,7 +19,7 @@ function SearchMainCtrl($scope) {
 
 
 function SearchFiltersCtrl($scope, $http, $timeout) {
-    $scope.templatePrefix = '/Performance/web/js/template/Search/Filters/';
+    $scope.templatePrefix = '/js/template/Search/Filters/';
     $scope.template = $scope.templatePrefix + 'main.html';
     $scope.target;
     $scope.menu = [];
@@ -107,7 +107,7 @@ function SearchFiltersCtrl($scope, $http, $timeout) {
 }
 
 function SearchResultCtrl($scope) {
-    $scope.templatePrefix = '/Performance/web/js/template/Search/Result/';
+    $scope.templatePrefix = '/js/template/Search/Result/';
     $scope.template = $scope.templatePrefix + 'main.html';
     $scope.templates = {
         'attempt' : $scope.templatePrefix + 'attempt.html',

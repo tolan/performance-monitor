@@ -30,6 +30,13 @@ class Monitor {
     private $_isEnabled;
 
     /**
+     * Flag that moniter function is processed. It means catched calls, analyzed and saved generted stattistics.
+     *
+     * @var boolean
+     */
+    private $_isProcessed = false;
+
+    /**
      * Provider instance.
      *
      * @var \PF\Main\Provider
@@ -37,11 +44,11 @@ class Monitor {
     private $_provider = null;
 
     /**
-     * Storage for calls
+     * Facade instance for profiler monitor api components.
      *
-     * @var \PF\Profiler\Component\Storage\AbstractStorage
+     * @var \PF\Profiler\Main\Facade
      */
-    private $_storage = null;
+    private $_facade;
 
     /**
      * Contruct method.
@@ -76,8 +83,9 @@ class Monitor {
      * @return \PF\Profiler\Monitor
      */
     public function reset() {
-        $this->_storage   = null;
-        $this->_isEnabled = false;
+        $this->_facade      = null;
+        $this->_isEnabled   = false;
+        $this->_isProcessed = false;
 
         return $this;
     }
@@ -88,17 +96,15 @@ class Monitor {
      * @return \PF\Profiler\Monitor
      */
     public function enable() {
-        if ($this->_storage === null) {
-            $this->_storage = $this->_provider->get('PF\Profiler\Component\Storage\Factory')->getStorage();
-        }
+        $this->_facade = $this->_provider->get('PF\Profiler\Main\Factory\Facade')->getFacade();
 
         $startKey = Enum\HttpKeys::PROFILER_START;
-        $get = $this->_provider->get('request')->getGet();
+        $get      = $this->_provider->get('request')->getGet();
 
         if ($get->has($startKey) && strtolower($get->get($startKey)) == '1') {
             $this->_checkEnable();
             $this->_isEnabled = true;
-            $this->_storage->start();
+            $this->_facade->start();
         }
 
         return $this;
@@ -110,95 +116,51 @@ class Monitor {
      * @return \PF\Profiler\Monitor
      */
     public function disable() {
-        if ($this->_isEnabled == false) {
-            return $this;
-        }
+        if ($this->_isEnabled === true) {
+            $this->_isEnabled = false;
 
-        $this->_isEnabled = false;
-        $this->_storage->stop();
-        $this->_storage->save();
+            $this->_facade->stop();
+        }
 
         return $this;
     }
 
-    /** OLD IMPLEMENTATION **/
+    /**
+     * Display overview of measure.
+     *
+     * @return \PF\Profiler\Monitor
+     */
+    public function display() {
+        $this->_process();
+        $this->_facade->display();
+
+        return $this;
+    }
 
     /**
-     * Method for display analyzed calls in tree.
+     * Destruct instance.
      *
      * @return void
      */
-//    public function display() {
-//        if ($this->_isDisplayed == true) {
-//            return ;
-//        }
-//
-//        $additionalInfo = array(
-//            'callsCount' => $this->getCallsCount(),
-//            'memory' => $this->getMemory(),
-//            'memoryPeak' => $this->getMemoryPeak(),
-//            'time' => $this->getTime()
-//        );
-//
-//        $start    = microtime(TRUE);
-//        $startMem = memory_get_usage();
-//
-//        $stat = $this->getStatistics();
-//
-//        $endMemPeak = memory_get_usage() - $startMem;
-//        $end        = ((microtime(TRUE)-$start)*1000000);
-//
-//        $additionalInfo['analyzeTime']    = $end;
-//        $additionalInfo['analyzedMemory'] = $endMemPeak;
-//        echo Performance_Profiler_Helper_Display::render($stat, $additionalInfo);
-//
-//        $this->_isDisplayed = true;
-//    }
+    public function __destruct() {
+        $this->_process();
+    }
 
     /**
-     * Destruct method which display result when code is ended.
+     * Process measure. It analyze catched calls, generate statistics and save statistics data.
      *
-     * @return void
+     * @return \PF\Profiler\Monitor
      */
-//    public function __destruct() {
-//        $this->disable();
-//        $this->display();
-//    }
+    private function _process() {
+        if ($this->_isProcessed === false) {
+            $this->_facade->analyzeCallStack();
+            $this->_facade->generateStatistics();
+            $this->_facade->saveStatistics();
+            $this->_isProcessed = true;
+        }
 
-
-
-    /**
-     * Analyze storage into Performance_CallStack tree.
-     *
-     * @param array $storage Array with registred calls in format by tick method
-     *
-     * @return Performance_Profiler_CallStack
-     */
-//    private function _analyzeStorage(array $storage) {
-//        $callStack       = new Performance_Profiler_CallStack();
-//        $avialableMemory = $this->_convertMemory(ini_get('memory_limit')) * 0.9;
-//
-//        return $callStack;
-//    }
-
-    /**
-     * Converts string in giga, mega, kilo - bytes to bytes.
-     *
-     * @param string $memoryString Memory string
-     *
-     * @return int
-     */
-//    private function _convertMemory($memoryString) {
-//        if (stristr($memoryString, 'G')) {
-//            return (int)strstr($memoryString, 'G', true) * pow(2, 30);
-//        } elseif (stristr($memoryString, 'M')) {
-//            return (int)strstr($memoryString, 'M', true) * pow(2, 20);
-//        } elseif (stristr($memoryString, 'K')) {
-//            return (int)strstr($memoryString, 'K', true) * pow(2, 10);
-//        } else {
-//            return (int)$memoryString;
-//        }
-//    }
+        return $this;
+    }
 
     /**
      * Checks that profile is enabled and throws exception if it is not enabled.

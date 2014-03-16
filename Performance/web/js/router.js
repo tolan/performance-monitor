@@ -2,7 +2,7 @@
 perfModule.config([
     '$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
-        var templateDir = '/Performance/web/js/template/';
+        var templateDir = '/js/template/';
         $routeProvider.
             // ### PROFILER ### //
             // measure

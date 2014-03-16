@@ -281,7 +281,7 @@ function ProfilerTestListCtrl($scope, $http, $routeParams) {
 }
 
 function ProfilerAttemptDetailCtrl($scope, $http, $routeParams) {
-    $scope.templatePrefix = '/Performance/web/js/template/Profiler/Statistic/';
+    $scope.templatePrefix = '/js/template/Profiler/Statistic/';
     $scope.tabs = [{
             title : 'profiler.measure.test.detail.summary',
             template : $scope.templatePrefix + 'summary.html'
@@ -296,7 +296,7 @@ function ProfilerAttemptDetailCtrl($scope, $http, $routeParams) {
     $scope.id = $routeParams.id;
     $scope.statistic;
 
-    $http.get('profiler/test/attempt/' + $scope.id + '/statistic').success(function(response) {
+    $http.get('/profiler/test/attempt/' + $scope.id + '/statistic').success(function(response) {
         $scope.statistic = response;
     });
 }
@@ -305,7 +305,7 @@ function ProfilerCallStackCtrl($scope, $http, $routeParams) {
     $scope.attemptId = $routeParams.id;
     $scope.calls = [];
 
-    $http.get('profiler/test/attempt/' + $scope.attemptId + '/callStack/parent/0').success(function(response) {
+    $http.get('/profiler/test/attempt/' + $scope.attemptId + '/callStack/parent/0').success(function(response) {
         $scope.calls = response;
     });
 
@@ -334,7 +334,7 @@ function ProfilerFunctionStatCtrl($scope, $http, $routeParams) {
         $scope.currentPage = pageNo;
     };
 
-    $http.get('profiler/test/attempt/' + $scope.attemptId + '/statistic/function').success(function(response) {
+    $http.get('/profiler/test/attempt/' + $scope.attemptId + '/statistic/function').success(function(response) {
         $scope.calls      = response;
         $scope.totalItems = response.length;
     });

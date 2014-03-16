@@ -2,6 +2,8 @@
 
 namespace PF\Profiler\Component\Storage;
 
+use PF\Profiler\Enum\CallParameters;
+
 /**
  * This script defines profiler storage class for direct access from browser.
  *
@@ -10,10 +12,8 @@ namespace PF\Profiler\Component\Storage;
  * @package    Profiler
  */
 class Browser extends AbstractStorage {
-
-    /**
-     * TODO
-     */
+    
     public function save() {
+        $this->getProvider()->get('PF\Profiler\Component\CallStack\Browser')->setStorage($this);
     }
 }

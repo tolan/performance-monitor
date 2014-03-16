@@ -4,6 +4,7 @@ namespace PF\Profiler\Component\Storage;
 
 use PF\Main\Provider;
 use PF\Profiler\Exception;
+use PF\Profiler\Enum\CallParameters;
 
 /**
  * Abstract class for profiler storage class which save each call and register tick function.
@@ -13,7 +14,7 @@ use PF\Profiler\Exception;
  * @package    Profiler
  */
 abstract class AbstractStorage {
-
+    
     /**
      * Pointer to next call in storage.
      *
@@ -58,7 +59,7 @@ abstract class AbstractStorage {
 
         register_tick_function(array(&$this, 'tick'));
         register_shutdown_function(array(&$this, 'shutdownTick'));
-        $this->_storage[$this->_pointer]['startTime'] = $this->_getMicrotime();
+        $this->_storage[$this->_pointer][CallParameters::START_TIME] = $this->_getMicrotime();
 
         return $this;
     }
@@ -89,18 +90,19 @@ abstract class AbstractStorage {
         }
 
         $actual = array(
-            'file'      => $bt[0]['file'],
-            'line'      => $bt[0]['line'],
-            'immersion' => count($bt)
+            CallParameters::FILE       => $bt[0][CallParameters::FILE],
+            CallParameters::LINE       => $bt[0][CallParameters::LINE],
+            CallParameters::IMMERSION  => count($bt),
+            CallParameters::START_TIME => $this->_storage[$this->_pointer][CallParameters::START_TIME],
+            CallParameters::END_TIME   => $time
         );
 
-        $this->_storage[$this->_pointer]['stack']   = $actual;
-        $this->_storage[$this->_pointer]['endTime'] = $time;
+        $this->_storage[$this->_pointer] = $actual;
 
         $this->_pointer++;
 
         if ($this->_pointer > 0) {
-            $this->_storage[$this->_pointer]['startTime'] = $time;
+            $this->_storage[$this->_pointer][CallParameters::START_TIME] = $time;
         }
     }
 
@@ -112,7 +114,7 @@ abstract class AbstractStorage {
      * @return boolean
      */
     final protected function isAllowedTrace(&$bt) {
-        if (strstr($bt[0]['file'], '/Performance/Profiler') || strstr($bt[0]['file'], '/Performance/Main')) {
+        if (strstr($bt[0][CallParameters::FILE], '/Performance/Profiler') || strstr($bt[0][CallParameters::FILE], '/Performance/Main')) {
             return false;
         }
 
@@ -126,7 +128,7 @@ abstract class AbstractStorage {
      */
     final public function shutdownTick() {
         $lastKey = end(array_keys($this->_storage));
-        if (!isset($this->_storage[$lastKey]['endTime'])) {
+        if (!isset($this->_storage[$lastKey][CallParameters::END_TIME])) {
             unset($this->_storage[$lastKey]);
         }
     }
@@ -153,7 +155,7 @@ abstract class AbstractStorage {
     public function getCallsCount() {
         return $this->_pointer;
     }
-
+    
     /**
      * Gets time in microsecond in requested format.
      *

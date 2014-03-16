@@ -301,7 +301,13 @@ class Profiler extends Abstracts\Json {
      * @return void
      */
     public function actionGetAttemptStatistic($params) {
-        $data = $this->_testRepository->getAttemptStatistic($params['id']);
+        if ($params['id'] === 'browser') {
+            $facade = $this->getProvider()->get('PF\Profiler\Main\Factory\Facade')->getFacade(); /* @var $facade \PF\Profiler\Main\Facade */
+            $stats = $facade->getStatistics();
+            $data = array();
+        } else {
+            $data = $this->_testRepository->getAttemptStatistic($params['id']);
+        }
 
         $this->setData($data);
     }

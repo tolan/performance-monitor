@@ -18,4 +18,7 @@ class Homepage extends Abstracts\Html {
      */
     public function actionIndex() {
     }
+    
+    public function actionProfiler() {
+    }
 }

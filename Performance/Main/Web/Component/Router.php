@@ -82,7 +82,8 @@ class Router {
      */
     private function _resolveController() {
         $server = $this->_request->getServer();
-
+        
+        $server->hasBASE() === false && $server->setBASE('');
         $path = substr($server->getREQUEST_URI(), strlen($server->getBASE()));
 
         $getParams = array();

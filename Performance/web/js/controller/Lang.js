@@ -1,10 +1,10 @@
 
 function LangCtrl($scope, $http) {
-    $scope.template = '/Performance/web/js/template/lang.html';
+    $scope.template = '/js/template/lang.html';
     $scope.langs = [];
     $scope.lang;
 
-    $http.get('translate/langs').success(function(langs) {
+    $http.get('/translate/langs').success(function(langs) {
         $scope.langs = langs.langs;
         $scope.lang  = _.findWhere($scope.langs, {'value': langs.default});
     });

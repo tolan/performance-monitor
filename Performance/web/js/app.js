@@ -168,7 +168,7 @@ perfModule.service(
         this.loadModule = function (module) {
             if (_.indexOf(this._loadedModules, module) === -1 && module.length) {
                 this._loadedModules.push(module);
-                $http.get('translate/module/' + module + (this._lang ? '/' + this._lang : '')).success(function(translate) {
+                $http.get('/translate/module/' + module + (this._lang ? '/' + this._lang : '')).success(function(translate) {
                     self._lang = translate.lang;
                     self._table = _.extend(self._table, translate.translate);
                 });

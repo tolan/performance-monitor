@@ -113,18 +113,15 @@ class Config {
     /**
      * Returns configuration option by name.
      *
-     * @param string $name Name of configuration option
+     * @param string $name    Name of configuration option
+     * @param mixed  $default Default value when config is not defined
      *
      * @return mixed Configuration data
      *
      * @throws \PF\Main\Exception Throws when option is not defined.
      */
-    public function get($name) {
-        if ($this->hasOwnProperty($name) === false) {
-            throw new Exception('Property "'.lcfirst($name).'" is not defined.');
-        }
-
-        return $this->_data[lcfirst($name)];
+    public function get($name, $default=null) {
+        return array_key_exists(lcfirst($name), $this->_data) ? $this->_data[lcfirst($name)] : $default;
     }
 
     /**

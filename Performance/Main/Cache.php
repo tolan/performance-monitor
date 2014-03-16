@@ -10,22 +10,15 @@ namespace PF\Main;
  * @package    Main
  */
 class Cache implements Event\Interfaces\Sender {
-    const SESSION_NAME      = 'Cache';
+
     const DEFAULT_NAMESPACE = 'Performance';
 
     /**
-     * Namespace of cache.
+     * Cache driver.
      *
-     * @var string
+     * @var Cache\Interfaces\Driver
      */
-    private $_namespace = self::DEFAULT_NAMESPACE;
-
-    /**
-     * Array with values.
-     *
-     * @var array
-     */
-    private $_cache = array();
+    private $_driver;
 
     /**
      * Mediator instance
@@ -37,21 +30,29 @@ class Cache implements Event\Interfaces\Sender {
     /**
      * Construct method.
      *
-     * @param string                  $namespace Namespace
-     * @param \PF\Main\Event\Mediator $mediator  Mediator instance
+     * @param \Cache\Interfaces\Driver $driver    Cache driver
+     * @param string                   $namespace Namespace
+     * @param \PF\Main\Event\Mediator  $mediator  Mediator instance
      *
      * @return void
      */
-    public function __construct($namespace = self::DEFAULT_NAMESPACE, Event\Mediator $mediator = null) {
-        session_start();
-        $this->_namespace = $namespace;
-        $this->_mediator  = $mediator;
-
-        if (isset($_SESSION[self::SESSION_NAME][$namespace])) {
-            $this->_cache = unserialize($_SESSION[self::SESSION_NAME][$namespace]);
+    public function __construct($driver = null, $namespace = self::DEFAULT_NAMESPACE, Event\Mediator $mediator = null) {
+        if ($driver && !($driver instanceof Cache\Interfaces\Driver)) {
+            throw new Exception('Cache driver must be instance of Cache\Interfaces\Driver.');
+        } elseif (!$driver) {
+            $driver = new Cache\Session($namespace);
         }
 
+        $this->_driver    = $driver;
+        $this->_mediator  = $mediator;
+
         $this->send('Cache is loaded.');
+    }
+
+    public function setDriver(Cache\Interfaces\Driver $driver) {
+        $this->_driver = $driver;
+
+        return $this;
     }
 
     /**
@@ -82,11 +83,7 @@ class Cache implements Event\Interfaces\Sender {
      * @throws \PF\Main\Exception Throws when variable is not defined
      */
     public function load($name) {
-        if (!$this->has($name)) {
-            throw new Exception('Undefined cache variable.');
-        }
-
-        return $this->_cache[$name];
+        return $this->_driver->load($name);
     }
 
     /**
@@ -98,7 +95,7 @@ class Cache implements Event\Interfaces\Sender {
      * @return \PF\Main\Cache
      */
     public function save($name, $value) {
-        $this->_cache[$name] = $value;
+        $this->_driver->save($name, $value);
 
         return $this;
     }
@@ -111,7 +108,7 @@ class Cache implements Event\Interfaces\Sender {
      * @return boolean
      */
     public function has($name) {
-        return isset($this->_cache[$name]);
+        return $this->_driver->has($name);
     }
 
     /**
@@ -123,12 +120,8 @@ class Cache implements Event\Interfaces\Sender {
      *
      * @throws \PF\Main\Exception Throws when variable is not set.
      */
-    public function clean($name) {
-        if (!$this->has($name)) {
-            throw new Exception('Undefined cache variable.');
-        }
-
-        unset($this->_cache[$name]);
+    public function clean($name = null) {
+        $this->_driver->clean($name);
 
         return $this;
     }
@@ -139,10 +132,6 @@ class Cache implements Event\Interfaces\Sender {
      * @return void
      */
     public function __destruct() {
-        if (!empty($this->_cache)) {
-            $_SESSION[self::SESSION_NAME][$this->_namespace] = serialize($this->_cache);
-        } elseif (isset($_SESSION[self::SESSION_NAME][$this->_namespace])) {
-            unset($_SESSION[self::SESSION_NAME][$this->_namespace]);
-        }
+        $this->_driver->flush();
     }
 }
