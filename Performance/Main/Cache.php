@@ -79,10 +79,8 @@ class Cache implements Event\Interfaces\Sender {
      * @param string $name Name of variable
      *
      * @return mixed
-     *
-     * @throws \PF\Main\Exception Throws when variable is not defined
      */
-    public function load($name) {
+    public function load($name = null) {
         return $this->_driver->load($name);
     }
 
@@ -117,21 +115,10 @@ class Cache implements Event\Interfaces\Sender {
      * @param string $name Name of variable
      *
      * @return \PF\Main\Cache
-     *
-     * @throws \PF\Main\Exception Throws when variable is not set.
      */
     public function clean($name = null) {
         $this->_driver->clean($name);
 
         return $this;
-    }
-
-    /**
-     * Destruct function saves cache variables into session.
-     *
-     * @return void
-     */
-    public function __destruct() {
-        $this->_driver->flush();
     }
 }

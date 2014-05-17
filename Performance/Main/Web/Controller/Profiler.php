@@ -2,8 +2,13 @@
 
 namespace PF\Main\Web\Controller;
 
-use PF\Profiler\Enum;
 use PF\Main\Http;
+use PF\Profiler\Monitor;
+use PF\Profiler\Gearman\Client;
+use PF\Profiler\Enum\HttpKeys;
+
+use PF\Main\Web\Component\Request;
+use PF\Main\Database;
 
 /**
  * This scripts defines class for profiler controller.
@@ -16,309 +21,346 @@ use PF\Main\Http;
  */
 class Profiler extends Abstracts\Json {
 
-    /*
-     * Measure repository
-     *
-     * @var \PF\Profiler\Component\Repository\Measure
-     */
-    private $_measureRepository = null;
-
     /**
-     * Measure statistic data repository
+     * This find all scenarios in database.
      *
-     * @var \PF\Profiler\Component\Repository\AttemptStatisticData
-     */
-    private $_statisticDataRepository = null;
-
-    /**
-     * Measure request data repository
-     *
-     * @var \PF\Profiler\Component\Repository\MeasureRequest
-     */
-    private $_requestRepository = null;
-
-    /**
-     * Measure request parameter data repository
-     *
-     * @var \PF\Profiler\Component\Repository\RequestParameter
-     */
-    private $_parameterRepository = null;
-
-    /**
-     * Measure test data repository
-     *
-     * @var \PF\Profiler\Component\Repository\MeasureTest
-     */
-    private $_testRepository = null;
-
-    /**
-     * Measure test data repository
-     *
-     * @var \PF\Profiler\Component\Repository\TestAttempt
-     */
-    private $_attemptRepository = null;
-
-    /**
-     * Init method sets repositories.
-     *
-     * @return void
-     */
-    public function init() {
-        $this->_measureRepository   = $this->getProvider()->get('PF\Profiler\Component\Repository\Measure');
-        $this->_requestRepository   = $this->getProvider()->get('PF\Profiler\Component\Repository\MeasureRequest');
-        $this->_parameterRepository = $this->getProvider()->get('PF\Profiler\Component\Repository\RequestParameter');
-
-        $this->_testRepository    = $this->getProvider()->get('PF\Profiler\Component\Repository\MeasureTest');
-        $this->_attemptRepository = $this->getProvider()->get('PF\Profiler\Component\Repository\TestAttempt');
-
-        $this->_statisticDataRepository = $this->getProvider()->get('PF\Profiler\Component\Repository\AttemptStatisticData');
-    }
-
-    /**
-     * This find all measures.
-     *
-     * @link /measures
+     * @link /mysql/scenarios
      *
      * @method GET
      *
      * @return void
      */
-    public function actionMeasures() {
-        $this->setData(
-            array_values($this->_measureRepository->getMeasures())
-        );
+    public function actionFindMySQLScenarions() {
+        $scenarioService = $this->getProvider()->get('\PF\Profiler\Service\Scenario');
+
+        $this->getExecutor()
+            ->add('findScenarios', $scenarioService);
     }
 
     /**
-     * Gets measure by id.
+     * Method for create new MySQL scenario.
      *
-     * @link /measure/{id}
-     *
-     * @method GET
-     *
-     * @return void
-     */
-    public function actionMeasure($params) {
-        $data = $this->_measureRepository->getMeasure($params['id']);
-
-        $this->setData($data);
-    }
-
-    /**
-     * Method for delete measure by id.
-     *
-     * @link /measure/{id}
-     *
-     * @method DELETE
-     *
-     * @return void
-     */
-    public function actionDelete($params) {
-        $this->_measureRepository->delete($params['id']);
-        $this->setData(true);
-    }
-
-    /**
-     * Method for create new measure.
-     *
-     * @link /measure
+     * @link /mysql/scenario
      *
      * @method POST
      *
      * @return void
      */
-    public function actionCreate() {
-        $input = $this->getRequest()->getInput();
+    public function actionCreateMySQLScenario() {
+        $scenarioService = $this->getProvider()->get('\PF\Profiler\Service\Scenario');
 
-        $measureId = $this->_measureRepository->create(array(
-            'name'        => $input['name'],
-            'description' => $input['description']
-        ));
-
-        if (isset($input['requests'])) {
-            foreach ($input['requests'] as $request) {
-                $this->_createRequest($measureId, $request);
-            }
-        }
-
-        $this->setData($measureId);
+        $this->getExecutor()
+        ->add(function(Database $database, Request $request) {
+            $database->getTransaction()->begin();
+            return array('scenarioData' => $request->getInput());
+        })
+        ->add('createScenario', $scenarioService)
+        ->add(function(Database $databasse) {
+            $databasse->getTransaction()->commitAll();
+        });
     }
 
     /**
-     * Method for update measure by id.
+     * Method for update MySQL scenario.
      *
-     * @link /measure/{id}
+     * @link /mysql/scenario/{id}
      *
      * @method PUT
      *
      * @return void
      */
-    public function actionUpdate($params) {
-        $id    = (int)$params['id'];
-        $input = $this->getRequest()->getInput();
+    public function actionUpdateMySQLScenario() {
+        $scenarioService = $this->getProvider()->get('\PF\Profiler\Service\Scenario');
+        /* @var $scenarioService \PF\Profiler\Service\Scenario */
 
-        $this->_measureRepository->update($id, array(
-            'name'        => isset($input['name']) ? $input['name'] : null,
-            'description' => isset($input['description']) ? $input['description'] : null
-        ));
-
-        $measure = $this->_measureRepository->getMeasure($id);
-
-        if (isset($measure['requests'])) {
-            foreach ($measure['requests'] as $request) {
-                $this->_requestRepository->delete($request['id']);
-            }
-        }
-
-        if (isset($input['requests'])) {
-            foreach ($input['requests'] as $request) {
-                $this->_createRequest($id, $request);
-            }
-        }
-
-        $this->setData(true);
+        $this->getExecutor()
+        ->add(function(Database $database, $input) {
+            $database->getTransaction()->begin();
+            return array('scenarioData' => $input);
+        })
+        ->add('updateScenario', $scenarioService)
+        ->add(function(Database $databasse) {
+            $databasse->getTransaction()->commitAll();
+        });
     }
 
     /**
-     * Find all tests for measure by measure id.
+     * Method for delete MySQL scenario by id.
      *
-     * @link /measure/{measureId}/tests
+     * @link /mysql/scenario/{id}
+     *
+     * @method DELETE
+     *
+     * @return void
+     */
+    public function actionDeleteMySQLScenario($id) {
+        $scenarioService = $this->getProvider()->get('\PF\Profiler\Service\Scenario');
+
+        $this->getExecutor()
+        ->add(function(Database $database) {
+            $database->getTransaction()->begin();
+        })
+        ->add('deleteScenario', $scenarioService)
+        ->add(function(Database $databasse, $data) {
+            $databasse->getTransaction()->commitAll();
+            return $data;
+        })->getResult()->setId($id);
+    }
+
+    /**
+     * This get scenario by given id.
+     *
+     * @link /mysql/scenario/{id}
      *
      * @method GET
      *
      * @return void
      */
-    public function actionTests($params) {
-        $data = $this->_testRepository->getTests($params['measureId']);
+    public function actionGetMySQLScenario($id) {
+        $scenarioService = $this->getProvider()->get('\PF\Profiler\Service\Scenario');
+        /* @var $scenarioService \PF\Profiler\Service\Scenario */
 
-        $this->setData($data);
+        $this->getExecutor()
+            ->add('getScenario', $scenarioService)
+            ->getResult()
+            ->set('includeElements', true)
+            ->setId($id);
     }
 
     /**
-     * It launch test for measure by given measure id.
+     * Find all tests for MySQL scenario by scenario id.
      *
-     * @link /measure/{measureId}/test/start
+     * @link /mysql/scenario/{scenarioId}/tests
      *
-     * @method POST
+     * @method GET
      *
-     * @param array $params Input parameters
+     * @param int $scenarioId Scenario ID
      *
      * @return void
      */
-    public function actionStartTest($params) {
-        $testId = $this->_testRepository->create(
-            array('measureId' => $params['measureId'])
-        );
+    public function actionMySQLScenarioTests($scenarioId) {
+        $testService = $this->getProvider()->get('\PF\Profiler\Service\Test');
+        /* @var $testService \PF\Profiler\Service\Test */
 
-        $this->getProvider()
-            ->get('PF\Profiler\Gearman\Client')
-            ->setData(
-                array(
-                    Enum\HttpKeys::MEASURE_ID => $params['measureId'],
-                    Enum\HttpKeys::TEST_ID    => $testId
-                )
-            )
-            ->doAsynchronize();
+        $this->getExecutor()
+            ->add('getTestsForScenario', $testService)
+            ->getResult()
+            ->setScenarioId($scenarioId);
+    }
 
-        $this->setData(true);
+    /**
+     * Delete test of MySQL scenario by given id.
+     *
+     * @link /mysql/scenario/test/{testId}
+     *
+     * @method DELETE
+     *
+     * @param int $testId Test ID of MySQL scenario
+     *
+     * @return void
+     */
+    public function actionMySQLScenarioDeleteTest($testId) {
+        $testService = $this->getProvider()->get('\PF\Profiler\Service\Test');
+        /* @var $testService \PF\Profiler\Service\Test */
+
+        $this->getExecutor()
+            ->add(function(Database $database) {
+                $database->getTransaction()->begin();
+            })
+            ->add('deleteTest', $testService)
+            ->add(function(Database $database, $data) {
+                $database->getTransaction()->commitAll();
+                return $data;
+            })
+            ->getResult()
+            ->setTestId($testId);
     }
 
     /**
      * Get test by given id.
      *
-     * @link /measure/test/{id}
+     * @link /mysql/scenario/test/{testId}
+     *
+     * @method GET
+     *
+     * @param int $testId Test ID of MySQL scenario
+     *
+     * @return void
+     */
+    public function actionGetTest($testId) {
+        $testService = $this->getProvider()->get('\PF\Profiler\Service\Test');
+        /* @var $testService \PF\Profiler\Service\Test */
+
+        $this->getExecutor()
+            ->add('getTest', $testService)
+            ->getResult()
+            ->setTestId($testId);
+    }
+
+    /**
+     * It launch test for scenario by given scenario id.
+     *
+     * @link /mysql/scenario/{scenarioId}/test/start
+     *
+     * @method POST
+     *
+     * @param int $scenarioId Scenario ID
+     *
+     * @return void
+     */
+    public function actionMySQLScenarioStartTest($scenarioId) {
+        $testService = $this->getProvider()->get('\PF\Profiler\Service\Test');
+        /* @var $testService \PF\Profiler\Service\Test */
+
+        $this->getExecutor()
+            ->add(function(Database $database) {
+                $database->getTransaction()->begin();
+            })
+            ->add('createTest', $testService)
+            ->add(function(Database $database) {
+                $database->getTransaction()->commitAll();
+            })
+            ->add(function(Client $client, $data) {
+                $client->setData(array(HttpKeys::TEST_ID => $data->getId()))
+                    ->doAsynchronize();
+            })
+            ->getResult()
+            ->setScenarioId($scenarioId);
+    }
+
+    /**
+     * This find all measures.
+     *
+     * @link /mysql/scenario/test/{testId}/measures
+     *
+     * @method GET
+     *
+     * @param int $testId Test ID of MySQL scenario
+     *
+     * @return void
+     */
+    public function actionMySQLTestMeasures($testId) {
+        $measureService = $this->getProvider()->get('\PF\Profiler\Service\Measure');
+        /* @var $measureService \PF\Profiler\Service\Measure */
+
+        $this->getExecutor()
+            ->add('findMeasuresForTest', $measureService)
+            ->getResult()
+            ->setTestId($testId);
+    }
+
+    /**
+     * Gets statistics for measure by measure id.
+     *
+     * @link /{type}/measure/{id}/summary
+     *
+     * @method GET
+     *
+     * @param enum $type One of enum \PF\Profiler\Monitor\Enum\Type
+     * @param int  $id   Measure ID
+     *
+     * @return void
+     */
+    public function actionGetMeasureStatistic($type, $id) {
+        $measureService = $this->getProvider()->get('\PF\Profiler\Service\Measure');
+        /* @var $measureSerice \PF\Profiler\Service\Measure */
+
+        $this->getExecutor()
+            ->add('getMeasureStatistics', $measureService)
+            ->getResult()
+            ->setType($type)
+            ->setMeasureId($id);
+
+        return $this->getExecutor()->execute()
+            ->reset('input')
+            ->reset('type')
+            ->reset('measureId')
+            ->toArray();
+    }
+
+    /**
+     * Gets calls stack for measure by measure id and parent call id (zero means all root calls)
+     *
+     * @link /{type}/measure/{id}/callStack/parent/{parentId}
+     *
+     * @method GET
+     *
+     * @param enum $type     One of enum \PF\Profiler\Monitor\Enum\Type
+     * @param int  $id       Measure ID
+     * @param int  $parentId ID of parent call
+     *
+     * @return void
+     */
+    public function actionGetMeasureCallStack($type, $id, $parentId) {
+        $measureService = $this->getProvider()->get('\PF\Profiler\Service\Measure');
+        /* @var $measureSerice \PF\Profiler\Service\Measure */
+
+        $this->getExecutor()
+            ->add('getMeasureCallStack', $measureService)
+            ->getResult()
+            ->setType($type)
+            ->setMeasureId($id)
+            ->setParentId($parentId);
+    }
+
+    /**
+     * Gets function statistics for measure by measure id.
+     *
+     * @link /{type}/measure/{id}/statistic/function
+     *
+     * @method GET
+     *
+     * @param enum $type     One of enum \PF\Profiler\Monitor\Enum\Type
+     * @param int  $id       Measure ID
+     *
+     * @return void
+     */
+    public function actionGetMeasureCallsStatistic($type, $id) {
+        $measureService = $this->getProvider()->get('\PF\Profiler\Service\Measure');
+        /* @var $measureSerice \PF\Profiler\Service\Measure */
+
+        $this->getExecutor()
+            ->add('getMeasureCallsStatistic', $measureService)
+            ->getResult()
+            ->setType($type)
+            ->setMeasureId($id);
+    }
+
+    /**
+     * Returns list of measures stored in files.
+     *
+     * @link /file/measures
      *
      * @method GET
      *
      * @return void
      */
-    public function actionTest($params) {
-        $data = $this->_testRepository->getTest($params['id']);
+    public function actionGetFileMeasures() {
+        $measureService = $this->getProvider()->get('\PF\Profiler\Service\Measure');
+        /* @var $measureSerice \PF\Profiler\Service\Measure */
 
-        $this->setData(current($data));
+        $this->getExecutor()->add('findFileMeasures', $measureService);
     }
 
     /**
-     * Delete test by given id.
+     * Delete action of file with measure.
      *
-     * @link /measure/test/{id}
+     * @link /file/measure/{id}
      *
      * @method DELETE
      *
-     * @param array $params Input parameters
+     * @param string $id Measure identification
      *
      * @return void
      */
-    public function actionDeleteTest($params) {
-        $this->_testRepository->delete($params['id']);
+    public function actionDeleteFileMeasure($id) {
+        $measureService = $this->getProvider()->get('\PF\Profiler\Service\Measure');
+        /* @var $measureSerice \PF\Profiler\Service\Measure */
 
-        $this->setData(true);
-    }
-
-    /**
-     * Find all attempts for test by test id.
-     *
-     * @link /measure/test/{testId}/attempts
-     *
-     * @method GET
-     *
-     * @param type $params
-     */
-    public function actionGetAttempts($params) {
-        $data = $this->_attemptRepository->getAttempts($params['testId']);
-
-        $this->setData($data);
-    }
-
-    /**
-     * Gets statistics for attempt by attempt id.
-     *
-     * @link /test/attempt/{id}/statistic
-     *
-     * @method GET
-     *
-     * @return void
-     */
-    public function actionGetAttemptStatistic($params) {
-        if ($params['id'] === 'browser') {
-            $facade = $this->getProvider()->get('PF\Profiler\Main\Factory\Facade')->getFacade(); /* @var $facade \PF\Profiler\Main\Facade */
-            $stats = $facade->getStatistics();
-            $data = array();
-        } else {
-            $data = $this->_testRepository->getAttemptStatistic($params['id']);
-        }
-
-        $this->setData($data);
-    }
-
-    /**
-     * Gets calls stack for attempt by attempt id and parent call id (zero means all root calls)
-     *
-     * @link /test/attempt/{id}/callStack/parent/{parentId}
-     *
-     * @method GET
-     *
-     * @return void
-     */
-    public function actionGetAttemptCallStack($params) {
-        $data = $this->_statisticDataRepository->getAttemptCallStack($params['id'], $params['parentId']);
-
-        $this->setData($data);
-    }
-
-    /**
-     * Gets function statistics for attempt by attempt id.
-     *
-     * @link /test/attempt/{id}/statistic/function
-     *
-     * @method GET
-     *
-     * @return void
-     */
-    public function actionGetAttemptFunctionStatistic($params) {
-        $data = $this->_statisticDataRepository->getAttemptFunctionStatistic($params['id']);
-
-        $this->setData($data);
+        $this->getExecutor()
+            ->add('deleteFileMeasure', $measureService)
+            ->getResult()
+            ->setMeasureId($id);
     }
 
     /**
@@ -355,29 +397,23 @@ class Profiler extends Abstracts\Json {
     }
 
     /**
-     * Creates new request for measure with given request data.
+     * Gets options for filters
      *
-     * @param int   $measureId ID of measure
-     * @param array $request   Request data (url, method, toMeasure, parameters)
+     * @link /filter/options
      *
-     * @return \PF\Main\Web\Controller\Profiler
+     * @method GET
+     *
+     * @return void
      */
-    private function _createRequest($measureId, $request) {
-        $requestId = $this->_requestRepository->create(array(
-            'measureId' => $measureId,
-            'url'       => $request['url'],
-            'method'    => $request['method'],
-            'toMeasure' => $request['toMeasure']
-        ));
+    public function actionGetFilterOptions() {
+        $this->getExecutor()->add(function($data = array()) {
+            $data['types'] = Monitor\Filter\Enum\Type::getSelection('profiler.filter.type.');
 
-        if (isset($request['parameters']) && !empty($request['parameters'])) {
-            foreach ($request['parameters'] as &$parameter) {
-                $parameter['requestId'] = $requestId;
-            }
+            return array('data' => $data);
+        })->add(function($data = array()) {
+            $data['params'] = Monitor\Filter\Association::getAssociation();
 
-            $this->_parameterRepository->massCreate($request['parameters']);
-        }
-
-        return $this;
+            return array('data' => $data);
+        });
     }
 }

@@ -20,11 +20,12 @@ class Profiler extends Html {
      */
     public function getPayload() {
         parent::getPayload();
+        $path = $this->getAbsolutePath();
         $template = $this->getTemplate();
-        $template->addScript('/js/app.js');
-        $template->addScript('/js/directive.js');
-        $template->addScript('/js/controller/Lang.js');
-        $template->addScript('/js/controller/Profiler.js');
+        $template->addScript($path.'/js/app.js');
+        $template->addScript($path.'/js/directive.js');
+        $template->addScript($path.'/js/controller/Lang.js');
+        $template->addScript($path.'/js/controller/Profiler.js');
         $template->setBody($this->_generateHtml());
 
         return $this;
@@ -43,7 +44,7 @@ class Profiler extends Html {
                         . '</div>'
                     .'</div>'
                     . '<div id="loader"></div>'
-                    . '<div ng-controller="ProfilerBrowserCtrl" class="content" ng-include="template">'
+                    . '<div ng-controller="ProfilerAttemptDetailCtrl" class="content" ng-include="template">'
                         . 'Application error.'
                     . '</div>'
                 . '</div>';

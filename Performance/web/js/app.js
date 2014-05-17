@@ -1,6 +1,7 @@
 'use strict';
 
 /* App Module */
+var global = {};
 var countLoad = 0;
 var blockLoad = false;
 var perfModule = angular.module(
@@ -11,8 +12,20 @@ var perfModule = angular.module(
         $interpolateProvider.startSymbol('[[').endSymbol(']]');
     }
 ).config(function ($httpProvider) {
+    $httpProvider.interceptors.push(function ($q) {
+        return {
+            'request': function (config) {
+                if (!global.templateCache.get(config.url) && config.url.search(base) !== 0) {
+                    config.url = base + '/' + config.url.replace(/^\/+/, '');
+                }
+
+                return config || $q.when(config);
+            }
+        };
+     });
+
     $httpProvider.responseInterceptors.push('myHttpInterceptor');
-    var spinnerFunction = function (data, headersGetter) {
+    var spinnerFunction = function (data) {
         if (countLoad === 0 && blockLoad === false) {
             $('#loader').fadeIn();
         }
@@ -163,7 +176,7 @@ perfModule.service(
 
             $rootScope.$broadcast('translate:switchLang');
             return this;
-        }
+        };
 
         this.loadModule = function (module) {
             if (_.indexOf(this._loadedModules, module) === -1 && module.length) {
@@ -217,10 +230,12 @@ perfModule.service(
 );
 
 perfModule.run(
-    ['$rootScope', 'translate', 'validator',
-    function (rootScope, translate, validator) {
-        rootScope.translate = translate;
-        rootScope._         = function (key, placeholders) {
+    ['$rootScope', '$templateCache', 'translate', 'validator', '$window', '$location',
+    function (rootScope, templateCache, translate, validator, $window, location) {
+        global.templateCache = templateCache;
+        rootScope.translate  = translate;
+        rootScope.__ = _;
+        rootScope._          = function (key, placeholders) {
             return translate._(key, placeholders);
         };
 
@@ -255,6 +270,14 @@ perfModule.run(
 
         rootScope.blockLoad = function(block) {
             blockLoad = !!block;
+        };
+
+        rootScope.back = function(url) {
+            if($window.history.length > 0) {
+                $window.history.back();
+            } else {
+                location.path(url);
+            }
         };
 
         rootScope.validator = validator;

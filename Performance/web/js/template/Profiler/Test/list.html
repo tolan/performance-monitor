@@ -27,20 +27,20 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="attempt in attempts | filter:search | orderBy:predicate:reverse">
-                <td>[[indexOf(attempts, attempt) + 1]]</td>
-                <td>[[attempt.url]]</td>
-                <td ng-switch on="attempt.state">
-                    <a href="#/profiler/test/[[testId]]/attempt/[[attempt.id]]" ng-switch-when="statistic_generated">
-                        [[_.('profiler.measure.test.showStatistic')]]
+            <tr ng-repeat="measure in measures | filter:search | orderBy:predicate:reverse">
+                <td>[[indexOf(measures, measure) + 1]]</td>
+                <td>[[measure.url]]</td>
+                <td ng-switch on="measure.state">
+                    <a href="#/profiler/mysql/scenario/test/measure/[[measure.id]]" ng-switch-when="statistic_generated">
+                        [[_.('profiler.scenario.test.measure.showStatistic')]]
                     </a>
-                    <span ng-switch-default>[[_.('profiler.measure.test.state.' + attempt.state)]]</span>
+                    <span ng-switch-default>[[_.('profiler.scenario.test.measure.state.' + measure.state)]]</span>
                 </td>
-                <td>[[attempt.parameters]]</td>
-                <td>[[attempt.body]]</td>
-                <td>[[attempt.started | date:'d.M.yyyy H:mm:ss']]</td>
-                <td>[[attempt.time]]</td>
-                <td>[[attempt.calls]]</td>
+                <td>[[measure.parameters]]</td>
+                <td>[[measure.body]]</td>
+                <td>[[measure.started | date:'d.M.yyyy H:mm:ss']]</td>
+                <td>[[measure.time]]</td>
+                <td>[[measure.calls]]</td>
             </tr>
         </tbody>
     </table>

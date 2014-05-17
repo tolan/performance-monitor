@@ -28,15 +28,16 @@
         "deniedFrom" : []
     },
     "log" : {
-        "level" : 5,
+        "level" : 3,
         "file"  : "performance.log",
-        "cache" : true
+        "cache" : false
     },
     "translate" : {
         "lang" : "CS"
     },
     "profiler" : {
-        "domain" : "https://perf.lc/Homepage/profiler"
+        "domain" : "http://perf.lc/Homepage/profiler",
+        "type"   : "file"
     },
     "tmpDir" : ""
 }

@@ -2,6 +2,13 @@
 
 namespace PF\Main\Interfaces;
 
+/**
+ * Interface for observer objects.
+ *
+ * @author     Martin Kovar
+ * @category   Performance
+ * @package    Main
+ */
 interface Observer {
 
     /**
@@ -11,5 +18,5 @@ interface Observer {
      *
      * @return this
      */
-    public function update (Observable $subject);
+    public function updateObserver (Observable $subject);
 }

@@ -1,8 +1,9 @@
 
 function MenuCtrl($scope, $http) {
-    $scope.template = '/js/template/menu.html';
+    $scope.template = base + '/js/template/menu.html';
+    $scope.item = {};
 
     $http.get('menu').success(function(menu) {
-        $scope.menu = menu;
+        $scope.item.submenu = menu;
     });
 }

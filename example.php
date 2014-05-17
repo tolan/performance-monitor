@@ -8,10 +8,10 @@ declare(ticks=1);
 
     (new Foo())->bar(20);
 
-\PF\Profiler\Monitor::getInstance()->disable();
+\PF\Profiler\Monitor::getInstance()->disable()->display();
 
 function simple ($input) {
-    for($i = 0; $i < 1000; $i++) {
+    for($i = 0; $i < 3; $i++) {
         $input = sub($input, $i);
         $time = time();
     }
@@ -29,5 +29,3 @@ class Foo {
         echo '<div>Foo->bar('.$input.'): '.simple($input).'</div>';
     }
 }
-
-\PF\Profiler\Monitor::getInstance()->display();

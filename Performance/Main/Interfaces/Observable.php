@@ -2,6 +2,13 @@
 
 namespace PF\Main\Interfaces;
 
+/**
+ * Interface for observable objects.
+ *
+ * @author     Martin Kovar
+ * @category   Performance
+ * @package    Main
+ */
 interface Observable {
 
     /**

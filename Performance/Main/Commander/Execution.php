@@ -98,9 +98,9 @@ class Execution implements Interfaces\Execution {
         $result = array();
 
         foreach ($attributes as $name => $attribut) {
-            if (is_a($entityResult, $attribut)) {
+            if (is_string($attribut) && is_a($entityResult, $attribut)) {
                 $result[$name] = $entityResult;
-            } elseif (class_exists($attribut)) {
+            } elseif (is_string($attribut) && class_exists($attribut)) {
                 $result[$name] = $provider->get($attribut);
             } elseif ($entityResult->has($name)) {
                 $result[$name] = $entityResult->get($name);
@@ -145,14 +145,13 @@ class Execution implements Interfaces\Execution {
      * @return \PF\Main\Commander\Execution
      */
     private function _saveAnswer($answer, Result $result) {
-        if ($answer) {
-            if (is_array($answer) || $answer instanceof \ArrayIterator) {
-                foreach ($answer as $name => $value) {
-                    $result->set($name, $value);
-                }
-            } else {
-                $result->setData($answer);
+        // code: array_keys... means checking for non-associative array
+        if (!empty($answer) && (is_array($answer) || $answer instanceof \ArrayIterator) && (array_keys($answer) !== range(0, count($answer) - 1))) {
+            foreach ($answer as $name => $value) {
+                $result->set($name, $value);
             }
+        } elseif($answer !== null) {
+            $result->setData($answer);
         }
 
         return $this;

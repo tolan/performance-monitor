@@ -41,6 +41,24 @@ class Utils {
     }
 
     /**
+     * Helper method for convert time from MySQL datetime format.
+     *
+     * @param string  $datetime   MySQL datetime
+     * @param boolean $forFclient Flag for convert it to microseconds (it use fclient)
+     *
+     * @return int
+     */
+    public static function convertTimeFromMySQLDateTime($datetime, $forFclient = true) {
+        $time = strtotime($datetime);
+
+        if ($forFclient) {
+            $time = $time * 1000;
+        }
+
+        return $time;
+    }
+
+    /**
      * Helper method for convert string of memory to bytes value.
      *
      * @param string $memoryString String in memory format

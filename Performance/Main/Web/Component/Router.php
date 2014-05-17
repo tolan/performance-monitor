@@ -82,7 +82,7 @@ class Router {
      */
     private function _resolveController() {
         $server = $this->_request->getServer();
-        
+
         $server->hasBASE() === false && $server->setBASE('');
         $path = substr($server->getREQUEST_URI(), strlen($server->getBASE()));
 
@@ -173,8 +173,8 @@ class Router {
      * @return array Array with parameters (like as array('id' => '2')
      */
     private function _getPathParams($path, $link) {
-        $path = trim($path, '/');
-        $link = trim($link, '/');
+        $path = '/'.trim($path, '/');
+        $link = '/'.trim($link, '/');
 
         $result = null;
         while(strpos($link, '{')) {

@@ -3,6 +3,7 @@
 namespace PF\Main\Web\Controller\Abstracts;
 
 use PF\Main\Provider;
+use PF\Main\Commander;
 
 /**
  * Abstract class for all controllers.
@@ -19,6 +20,13 @@ abstract class Controller {
      * @var \PF\Main\Provider
      */
     private $_provider = null;
+
+    /**
+     * Commander instance.
+     *
+     * @var \PF\Main\Commander
+     */
+    private $_commander = null;
 
     /**
      * Action name
@@ -44,10 +52,14 @@ abstract class Controller {
     /**
      * Construct method.
      *
-     * @param \PF\Main\Provider $provider Provider instnace
+     * @param \PF\Main\Provider  $provider  Provider instnace
+     * @param \PF\Main\Commander $commander Commander instnace
+     *
+     * @return void
      */
-    final public function __construct(Provider $provider) {
-        $this->_provider = $provider;
+    final public function __construct(Provider $provider, Commander $commander) {
+        $this->_provider  = $provider;
+        $this->_commander = $commander;
         $this->init();
     }
 
@@ -99,15 +111,23 @@ abstract class Controller {
      * @return \PF\Main\Web\Controller\Abstracts\Controller
      */
     final public function run() {
-        if ($this->_params === null) {
-            $answer = $this->{'action'.ucfirst($this->_action)}();
-        } else {
-            $answer = $this->{'action'.ucfirst($this->_action)}($this->_params);
-        }
+        $this->getExecutor()->getResult()
+            ->fromArray($this->_params)
+            ->set('input', $this->getRequest()->getInput());
+
+        $method = 'action'.ucfirst($this->_action);
+        $answer = forward_static_call_array(array($this, $method), (array)$this->_params);
 
         // If data was not set with $this->setData() then set data from returned action
-        if ($answer && $this->getData() === null) {
+        if ($answer !== null && $this->getData() === null) {
             $this->setData($answer);
+        }
+
+        // If data was not set then use executor
+        if ($answer === null && $this->getData() === null) {
+            $result = $this->getExecutor()->execute();
+            $data   = $result->hasData() ? $result->getData() : null;
+            $this->setData($data);
         }
 
         $view = $this->getView();
@@ -155,6 +175,15 @@ abstract class Controller {
      */
     final protected function getRequest() {
         return $this->_provider->get('request');
+    }
+
+    /**
+     * Returns executor instance for sharing result and using common scope.
+     *
+     * @return \PF\Main\Commander\Executor
+     */
+    final protected function getExecutor() {
+        return $this->_commander->getExecutor($this->getAction());
     }
 
     /**

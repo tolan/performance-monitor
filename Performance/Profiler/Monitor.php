@@ -5,9 +5,13 @@ namespace PF\Profiler;
 include_once __DIR__.'/../boot.php';
 
 use PF\Main\Provider;
+use PF\Profiler\Monitor\Storage\State;
 
 /**
- * This script defines class of the performance profiler.
+ * This script defines class of the performance profiler monitor.
+ * The monitor measure information about each call (each line of processed code) and transform it
+ * into call stack structure with statistics information.
+ * Parameters for enable measure are in GET request parameters.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -30,7 +34,7 @@ class Monitor {
     private $_isEnabled;
 
     /**
-     * Flag that moniter function is processed. It means catched calls, analyzed and saved generted stattistics.
+     * Flag that monitor function was processed. It means catched calls, analyzed and saved generted stattistics.
      *
      * @var boolean
      */
@@ -44,24 +48,28 @@ class Monitor {
     private $_provider = null;
 
     /**
-     * Facade instance for profiler monitor api components.
+     * Facade instance.
      *
-     * @var \PF\Profiler\Main\Facade
+     * @var \PF\Profiler\Monitor\Facade
      */
-    private $_facade;
+    private $_facade = null;
 
     /**
      * Contruct method.
      *
-     * @param \PF\Main\Provider $provider
+     * @param \PF\Main\Provider $provider Provider instance
+     *
+     * @return void
      */
     private function __construct(Provider $provider = null) {
         if ($provider === null) {
             $provider = Provider::getInstance();
         }
 
-        $this->reset();
         $this->_provider = $provider;
+        $this->_facade   = $this->_provider->get('PF\Profiler\Monitor\Factory\Facade')->getFacade();
+
+        $this->reset();
     }
 
     /**
@@ -78,48 +86,52 @@ class Monitor {
     }
 
     /**
-     * Reset method.
+     * Reset method. It clean all stored data and sets init values.
      *
      * @return \PF\Profiler\Monitor
      */
     public function reset() {
-        $this->_facade      = null;
         $this->_isEnabled   = false;
         $this->_isProcessed = false;
+
+        $this->_facade->reset();
 
         return $this;
     }
 
     /**
-     * Method for enable profiling.
+     * Method for enable measure.
      *
      * @return \PF\Profiler\Monitor
      */
     public function enable() {
-        $this->_facade = $this->_provider->get('PF\Profiler\Main\Factory\Facade')->getFacade();
-
         $startKey = Enum\HttpKeys::PROFILER_START;
         $get      = $this->_provider->get('request')->getGet();
 
-        if ($get->has($startKey) && strtolower($get->get($startKey)) == '1') {
-            $this->_checkEnable();
-            $this->_isEnabled = true;
-            $this->_facade->start();
+        if ($get->has($startKey)) {
+            $startValue = strtolower($get->get($startKey));
+            if ($startValue == '1' || $startValue == 'true') {
+                $execTime = ini_get('max_execution_time');
+                ini_set('max_execution_time', $execTime * 10);
+
+                $this->_checkEnable();
+                $this->_isEnabled = true;
+                $this->_facade->start();
+            }
         }
 
         return $this;
     }
 
     /**
-     * Method to disable profiling.
+     * Method to disable measure.
      *
      * @return \PF\Profiler\Monitor
      */
     public function disable() {
         if ($this->_isEnabled === true) {
-            $this->_isEnabled = false;
-
             $this->_facade->stop();
+            $this->_isEnabled = false;
         }
 
         return $this;
@@ -131,6 +143,7 @@ class Monitor {
      * @return \PF\Profiler\Monitor
      */
     public function display() {
+        $this->_checkEnable();
         $this->_process();
         $this->_facade->display();
 
@@ -143,6 +156,7 @@ class Monitor {
      * @return void
      */
     public function __destruct() {
+        $this->disable();
         $this->_process();
     }
 
@@ -152,10 +166,11 @@ class Monitor {
      * @return \PF\Profiler\Monitor
      */
     private function _process() {
-        if ($this->_isProcessed === false) {
+        if ($this->_isProcessed === false && $this->_facade->getState() === State::STATE_TICKED) {
             $this->_facade->analyzeCallStack();
             $this->_facade->generateStatistics();
             $this->_facade->saveStatistics();
+
             $this->_isProcessed = true;
         }
 

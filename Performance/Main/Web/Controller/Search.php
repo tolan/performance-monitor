@@ -52,10 +52,13 @@ class Search extends Abstracts\Json {
      *
      * @method GET
      *
+     * @param enum $target One of enum \PF\Search\Enum\Target
+     * @param enum $filter One of \PF\Search\Enum\Filter
+     *
      * @return void
      */
-    public function actionGetFilterParams($params) {
-        $result = $this->getProvider()->get('PF\Search\Component\Association')->getFilter($params['target'], $params['filter']);
+    public function actionGetFilterParams($target, $filter) {
+        $result = $this->getProvider()->get('PF\Search\Component\Association')->getFilter($target, $filter);
 
         $this->setData($result);
     }

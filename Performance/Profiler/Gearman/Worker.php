@@ -2,9 +2,9 @@
 
 namespace PF\Profiler\Gearman;
 
-use PF\Profiler\Enum\HttpKeys;
-use PF\Profiler\Enum\AttemptState;
 use PF\Main\Http\Enum\ParameterType;
+use PF\Profiler\Monitor\Enum\HttpKeys;
+use PF\Profiler\Monitor\Enum\Type;
 
 /**
  * This script defines profiler gearman worker.
@@ -16,55 +16,22 @@ use PF\Main\Http\Enum\ParameterType;
 class Worker extends \PF\Main\Abstracts\Gearman\Worker implements \PF\Main\Event\Interfaces\Sender {
 
     /**
-     * Measure test data repository
-     *
-     * @var \PF\Profiler\Component\Repository\MeasureTest
-     */
-    private $_testRepository = null;
-
-    /**
-     * Measure data repository
-     *
-     * @var \PF\Profiler\Component\Repository\Measure
-     */
-    private $_measureRepository = null;
-
-    /**
-     * Attempt test repository.
-     *
-     * @var \PF\Profiler\Component\Repository\TestAttempt
-     */
-    private $_attemptRepository = null;
-
-    /**
-     * ID of measure.
-     *
-     * @var int
-     */
-    private $_measureId = null;
-
-    /**
-     * ID of test
+     * Test ID of MySQL scenario
      *
      * @var int
      */
     private $_testId = null;
 
     /**
-     * Process method which execute measure, analyze and create statistic for attempt of measure.
+     * Process method which execute test of scenario.
      *
      * @return void
      */
     public function process() {
-        $this->_measureRepository  = $this->getProvider()->get('PF\Profiler\Component\Repository\Measure');
-        $this->_testRepository     = $this->getProvider()->get('PF\Profiler\Component\Repository\MeasureTest');
-        $this->_attemptRepository  = $this->getProvider()->get('PF\Profiler\Component\Repository\TestAttempt');
-        $messageData               = $this->getMessageData();
-        $this->_measureId          = $messageData[HttpKeys::MEASURE_ID];
-        $this->_testId             = $messageData[HttpKeys::TEST_ID];
+        $messageData   = $this->getMessageData();
+        $this->_testId = $messageData[HttpKeys::TEST_ID];
 
-        $this->_processMeasure();
-        $this->_processAnalyze();
+        $this->_processTest();
     }
 
     /**
@@ -77,99 +44,78 @@ class Worker extends \PF\Main\Abstracts\Gearman\Worker implements \PF\Main\Event
     }
 
     /**
-     * It provides measure part of whole process. It creates new attempt and make http GET request by measure settings.
+     * This method process test. It loads test and send it.
      *
      * @return void
      */
-    private function _processMeasure() {
-        $measure = $this->_measureRepository->getMeasure($this->_measureId);
+    private function _processTest() {
+        $testService     = $this->getProvider()->get('PF\Profiler\Service\Test'); /* @var $testService \PF\Profiler\Service\Test */
+        $scenarioService = $this->getProvider()->get('PF\Profiler\Service\Scenario'); /* @var $commander \PF\Main\Commander\Executor */
+        $commander       = $this->getProvider()->get('PF\Main\Commander\Executor')
+            ->clean()
+            ->add('getTest', $testService)
+            ->add(function(\PF\Main\Commander\Result $result) {
+                $test = $result->getData();
+                $result->setTest($test)
+                    ->setId($test->getScenarioId())
+                    ->setIncludeElements(true);
+            })
+            ->add('getScenario', $scenarioService);
+        $commander->getResult()->setTestId($this->_testId);
+
+        $result   = $commander->execute();
+        $test     = $result->getTest();
+        $scenario = $result->getData();
 
         try {
-            $this->_testRepository->update($this->_testId, array('state' => AttemptState::STATE_MEASURE_ACTIVE));
-            $this->_sendMeasure($measure);
-            $this->_testRepository->update($this->_testId, array('state' => AttemptState::STATE_MEASURED));
+            $this->_sendTest($test, $scenario);
+            $commander->clean()->add('updateTestState', $testService)->execute();
         } catch (Exception $e) {
+            $commander->clean()->add('updateTestState', $testService)->execute();
             $this->send($e);
-            $this->_testRepository->update($this->_testId, array('state' => AttemptState::STATE_ERROR));
         }
     }
 
     /**
-     * It provides analyze and statistics part of whole measure process. It takes measured call and transform it to analyzed tree and save statistics.
-     *
-     * @return void
-     */
-    private function _processAnalyze() {
-        $attempts = $this->_attemptRepository->getAttempts($this->_testId);
-
-        try {
-            $this->_testRepository->update($this->_testId, array('state' => AttemptState::STATE_ANALYZE_ACTIVE));
-            foreach ($attempts as $attempt) {
-                // this is set for factories
-                $this->getProvider()->get('request')->getGet()->set(HttpKeys::ATTEMPT_ID, $attempt['id']);
-                $callStack = $this->getProvider()->get('PF\Profiler\Component\CallStack\Factory')
-                    ->getCallStack(); /* @var $callStack \PF\Profiler\Component\CallStack\MySQL */
-                $statictics = $this->getProvider()->get('PF\Profiler\Component\Statistics\Factory')
-                    ->getStatistics(); /* @var $callStack \PF\Profiler\Component\Statistics\MySQL */
-
-                $this->_attemptRepository->update($attempt['id'], array('state' => AttemptState::STATE_ANALYZE_ACTIVE));
-                $callStack->reset();
-                $callStack->setAttemptId($attempt['id']);
-                $callStack->analyze();
-                $this->_attemptRepository->update($attempt['id'], array('state' => AttemptState::STATE_ANALYZED));
-
-                $this->_attemptRepository->update($attempt['id'], array('state' => AttemptState::STATE_STATISTIC_GENERATING));
-                $statictics->reset();
-                $statictics->setAttemptId($attempt['id']);
-                $statictics->generate();
-                $statictics->save();
-                $this->_attemptRepository->update($attempt['id'], array('state' => AttemptState::STATE_STATISTIC_GENERATED));
-            }
-
-            $this->_testRepository->update($this->_testId, array('state' => AttemptState::STATE_STATISTIC_GENERATED));
-        } catch (Exception $e) {
-            $this->send($e);
-            $this->_testRepository->update($this->_testId, array('state' => AttemptState::STATE_ERROR));
-        }
-    }
-
-    /**
-     * This method send requests of measure to test enviroment.
+     * This method send requests of test to monitored enviroment.
      *
      * @param array $measure Measure data
      *
      * @return void
      */
-    private function _sendMeasure($measure) {
-        $client = $this->getProvider()->prototype('PF\Main\Http\Client', true); /* @var $client \PF\Main\Http\Client */
+    private function _sendTest($test, $scenario) {
+        $client         = $this->getProvider()->prototype('PF\Main\Http\Client', true); /* @var $client \PF\Main\Http\Client */
+        $measureService = $this->getProvider()->get('PF\Profiler\Service\Measure'); /* @var $measureService \PF\Profiler\Service\Measure */
+        $commander      = $this->getProvider()->get('PF\Main\Commander\Executor')
+            ->clean()
+            ->add('createMySQLMeasure', $measureService);
+        /* @var $commander \PF\Main\Commander\Executor */
 
-        foreach ($measure['requests'] as $request) {
-            $request['parameters'] = isset($request['parameters']) ? $request['parameters'] : array();
-            if ($request['toMeasure'] == true) {
-                $attemptId               = $this->_attemptRepository->create(
-                    array(
-                        'testId'     => $this->_testId,
-                        'url'        => $request['url'],
-                        'method'     => $request['method'],
-                        'parameters' => $this->_getParameters($request),
-                        'body'       => $this->_getBody($request)
-                    )
-                );
-                $request['parameters'][] = array(
-                    'method' => ParameterType::GET, 'name' => HttpKeys::PROFILER_START, 'value' => true
-                );
-                $request['parameters'][] = array(
-                    'method' => ParameterType::GET, 'name' => HttpKeys::MEASURE_ID, 'value' => $measure['id']
-                );
-                $request['parameters'][] = array(
-                    'method' => ParameterType::GET, 'name' => HttpKeys::TEST_ID, 'value' => $this->_testId
-                );
-                $request['parameters'][] = array(
-                    'method' => ParameterType::GET, 'name' => HttpKeys::ATTEMPT_ID, 'value' => $attemptId
-                );
+        foreach ($scenario->getRequests() as $request) {
+            $parameters = $request->get('parameters', array());
+            foreach ($parameters as $key => $parameter) {
+                $parameters[$key] = $parameter->toAraay();
             }
 
-            $request = $client->createRequest($request['method'], $request['url'], $request['parameters']);
+            if ($request->getToMeasure() == true) {
+                $commander->getResult()->setMeasureData(
+                    array(
+                        'testId'     => $test->getId(),
+                        'url'        => $request->get('url'),
+                        'method'     => $request->get('method'),
+                        'parameters' => $this->_getParametersString($request),
+                        'body'       => $this->_getBodyString($request)
+                    )
+                );
+
+                $measureId = $commander->execute()->getData()->getId();
+
+                $parameters[] = array('method' => ParameterType::GET, 'name' => HttpKeys::PROFILER_START, 'value' => true);
+                $parameters[] = array('method' => ParameterType::GET, 'name' => HttpKeys::TYPE,           'value' => Type::MYSQL);
+                $parameters[] = array('method' => ParameterType::GET, 'name' => HttpKeys::MEASURE_ID,     'value' => $measureId);
+            }
+
+            $request = $client->createRequest($request->getMethod(), $request->getUrl(), $parameters);
             $client->addRequest($request);
         }
 
@@ -183,13 +129,11 @@ class Worker extends \PF\Main\Abstracts\Gearman\Worker implements \PF\Main\Event
      *
      * @return string
      */
-    private function _getParameters($request) {
+    private function _getParametersString($request) {
         $result = array();
-        if (isset($request['parameters'])) {
-            foreach ($request['parameters'] as $parameter) {
-                if ($parameter['method'] == ParameterType::GET) {
-                    $result[] = $parameter['name'].' = '.$parameter['value'];
-                }
+        foreach ($request->get('parameters', array()) as $parameter) {
+            if ($parameter->get('method') == ParameterType::GET) {
+                $result[] = $parameter->get('name').' = '.$parameter->get('value');
             }
         }
 
@@ -203,13 +147,11 @@ class Worker extends \PF\Main\Abstracts\Gearman\Worker implements \PF\Main\Event
      *
      * @return string
      */
-    private function _getBody($request) {
+    private function _getBodyString($request) {
         $result = array();
-        if (isset($request['parameters'])) {
-            foreach ($request['parameters'] as $parameter) {
-                if ($parameter['method'] == ParameterType::POST) {
-                    $result[] = $parameter['name'].' = '.$parameter['value'];
-                }
+        foreach ($request->get('parameters', array()) as $parameter) {
+            if ($parameter->get('method') == ParameterType::POST) {
+                $result[] = $parameter->get('name').' = '.$parameter->get('value');
             }
         }
 

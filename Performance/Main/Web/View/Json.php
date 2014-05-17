@@ -2,6 +2,8 @@
 
 namespace PF\Main\Web\View;
 
+use PF\Main\Abstracts\Entity;
+
 /**
  * Abstract class for each JSON view.
  *
@@ -17,7 +19,26 @@ class Json extends AbstractView {
      * @return mixed
      */
     public function getPayload() {
-        return $this->getData();
+        return $this->_extractData($this->getData());
+    }
+
+    /**
+     * Extracts data for json.
+     *
+     * @param mixed $data Data to extracct
+     *
+     * @return mixed
+     */
+    private function _extractData($data) {
+        if (is_array($data) || $data instanceof \Iterator) {
+            foreach ($data as $key => $item) {
+                $data[$key] = $this->_extractData($item);
+            }
+        } elseif ($data instanceof Entity) {
+            $data = $data->toArray(true);
+        }
+
+        return $data;
     }
 
     /**

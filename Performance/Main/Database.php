@@ -49,6 +49,13 @@ class Database {
     private $_isConnected = false;
 
     /**
+     * Instance for transaction control.
+     *
+     * @var \PF\Main\Database\Transaction
+     */
+    private $_transaction = null;
+
+    /**
      * Required options from configuration
      *
      * @var array
@@ -186,6 +193,20 @@ class Database {
     }
 
     /**
+     * Returns singleton instance of database transaction.
+     *
+     * @return \PF\Main\Databasse\Transaction
+     */
+    public function getTransaction() {
+        if ($this->_transaction === null) {
+            $this->connect();
+            $this->_transaction = new Database\Transaction($this->_connection);
+        }
+
+        return $this->_transaction;
+    }
+
+    /**
      * Method for installing database with all tables.
      *
      * @return \PF\Main\Database
@@ -197,6 +218,7 @@ class Database {
             );
         $connection = new Database\Connection($this->_address, $this->_user, $this->_password, null, $options);
 
+        // TODO create install UC
         $connection->exec("CREATE DATABASE IF NOT EXISTS `".$this->_database."` CHARACTER SET utf8 COLLATE=utf8_general_ci");
         $connection->exec("USE ".$this->_database);
 

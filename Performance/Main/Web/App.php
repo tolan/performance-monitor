@@ -67,6 +67,8 @@ class App {
      * @return \PF\Main\Web\App
      */
     protected function init() {
+        session_write_close();
+
         try {
             $this->_provider->get('access')->checkAccess();
         } catch (AccessException $exc) {

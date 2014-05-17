@@ -5,7 +5,8 @@ perfModule.directive('menu', function() {
         scope: {
             data: '=data',
             title: '=dtitle',
-            class: '=dclass'
+            class: '=dclass',
+            scope: '=dscope'
         },
         templateUrl: 'js/template/directive/menu.html',
         link: function(scope) {
@@ -14,7 +15,7 @@ perfModule.directive('menu', function() {
         },
         controller: function($scope) {
             $scope.onClick = function(item) {
-                $scope.$emit('menu-selected-item', item);
+                $scope.$emit('menu-selected-item', item, $scope.scope);
             };
         }
     };

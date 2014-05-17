@@ -6,10 +6,11 @@ use PF\Main\Abstracts\Enum;
 
 /**
  * This script defines enum with keys for http GET request.
+ * TODO merge with PF\Profiler\Monitor\Enum\HttpKeys
  *
  * @author     Martin Kovar
  * @category   Performance
- * @package    Main
+ * @package    Profiler
  */
 class HttpKeys extends Enum {
 

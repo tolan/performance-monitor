@@ -19,12 +19,23 @@ class Request {
     private $_instances = array();
 
     /**
+     * Cache for input of PHP.
+     *
+     * @var mixed
+     */
+    private $_input = null;
+
+    /**
      * Return php input decoded from JSON
      *
      * @return mixed
      */
     public function getInput() {
-        return json_decode(file_get_contents('php://input'), true);
+        if ($this->_input === null) {
+            $this->_input = json_decode(file_get_contents('php://input'), true);
+        }
+
+        return $this->_input;
     }
 
     /**

@@ -28,6 +28,15 @@ abstract class Entity extends Enum {
     private $_version = 0;
 
     /**
+     * Construct method for load data.
+     *
+     * @param array $data Array with values.
+     */
+    public function __construct($data = array()) {
+        $this->fromArray($data);
+    }
+
+    /**
      * Method for transforming from array.
      *
      * @param array $array Array with values.
@@ -67,44 +76,6 @@ abstract class Entity extends Enum {
     }
 
     /**
-     * Returns transformed item to array or scalar.
-     *
-     * @param mixed   $item      Item of self object
-     * @param boolean $recursive Flag for recursive call toArray.
-     *
-     * @return mixed
-     */
-    private function _getItemValue($item, $recursive = true) {
-        if ($recursive == FALSE) {
-            if (is_array($item)) {
-                $tmp = array();
-                foreach ($item as $value) {
-                    $tmp[] = $this->_getItemValue($value, $recursive);
-                }
-
-                return $tmp;
-            } else {
-                return $item;
-            }
-        }
-
-        if ($item instanceof \IteratorAggregate || is_array($item)) {
-            $tmp = array();
-            foreach($item as $key => $val) {
-                $tmp[$key] = $this->_getItemValue($val, $recursive);
-            }
-
-            return $tmp;
-        } elseif ($item instanceof Entity) {
-            return $item->toArray($recursive);
-        } else {
-            return $item;
-        }
-
-        return NULL;
-    }
-
-    /**
      * Returns version of state instance.
      *
      * @return int $version Version of entity
@@ -114,18 +85,23 @@ abstract class Entity extends Enum {
     }
 
     /**
-     * Geter for variable.
+     * Geter for attribute.
      *
-     * @param string $name Name of variable.
+     * @param string $name    Name of attribute.
+     * @param mixed  $default Default value when given attribute is not set (it can not be NULL)
      *
-     * @return mixed Value of variable
+     * @return mixed Value of attribute
      *
      * @throws \PF\Main\Exception Throws when parameter has not been set.
      */
-    final public function get($name) {
+    final public function get($name, $default = null) {
         $name = lcfirst($name);
 
         if (!$this->has($name)) {
+            if ($default !== null) {
+                return $default;
+            }
+
             throw new Exception ('Parameter '.$name.' has not been set.');
         }
 
@@ -141,10 +117,10 @@ abstract class Entity extends Enum {
     }
 
     /**
-     * Seter for variable.
+     * Seter for attribute.
      *
-     * @param string $name  Name of variable.
-     * @param mixed  $value Vale of variable.
+     * @param string $name  Name of attribute.
+     * @param mixed  $value Vale of attribute.
      *
      * @return \PF\Main\Abstracts\Entity
      */
@@ -164,9 +140,9 @@ abstract class Entity extends Enum {
     }
 
     /**
-     * Unset variable or explicited variable set to null.
+     * Unset attribute or explicited attribute set to null.
      *
-     * @param string $name Name of variable.
+     * @param string $name Name of attribute.
      *
      * @return \PF\Main\Abstracts\Entity
      *
@@ -188,9 +164,9 @@ abstract class Entity extends Enum {
     }
 
     /**
-     * Returns whether the variable exists.
+     * Returns whether the attribute exists.
      *
-     * @param string $name Name of variable.
+     * @param string $name Name of attribute.
      *
      * @return boolean It is true when varaible is set.
      */
@@ -202,11 +178,11 @@ abstract class Entity extends Enum {
     }
 
     /**
-     * Returns whether the variable is empty.
+     * Returns whether the attribute is empty.
      *
-     * @param string $name Name of variable.
+     * @param string $name Name of attribute.
      *
-     * @return boolean It is true when variable is empty.
+     * @return boolean It is true when attribute is empty.
      *
      * @throws \PF\Main\Exception Throws when parameter has not been defined.
      */
@@ -253,7 +229,7 @@ abstract class Entity extends Enum {
     /**
      * Calling methods with support fluent interface.
      *
-     * @param string $name      Name of variable.
+     * @param string $name      Name of attribute.
      * @param mixed  $arguments Arguments for methods.
      *
      * @return \PF\Main\Abstracts\Entity | mixed | boolean
@@ -291,15 +267,53 @@ abstract class Entity extends Enum {
     }
 
     /**
-     * It unsets variable if exists.
+     * It unsets attribute if exists.
      *
      * @param string $name Name of varible.
      *
      * @return \PF\Main\Abstracts\Entity
      *
-     * @throws \PF\Main\Exception Throw when variable does not exist.
+     * @throws \PF\Main\Exception Throw when attribute does not exist.
      */
     final public function __unset($name) {
         return $this->reset($name);
+    }
+
+    /**
+     * Returns transformed item to array or scalar.
+     *
+     * @param mixed   $item      Item of self object
+     * @param boolean $recursive Flag for recursive call toArray.
+     *
+     * @return mixed
+     */
+    private function _getItemValue($item, $recursive = true) {
+        if ($recursive == FALSE) {
+            if (is_array($item)) {
+                $tmp = array();
+                foreach ($item as $value) {
+                    $tmp[] = $this->_getItemValue($value, $recursive);
+                }
+
+                return $tmp;
+            } else {
+                return $item;
+            }
+        }
+
+        if ($item instanceof \IteratorAggregate || is_array($item)) {
+            $tmp = array();
+            foreach($item as $key => $val) {
+                $tmp[$key] = $this->_getItemValue($val, $recursive);
+            }
+
+            return $tmp;
+        } elseif ($item instanceof Entity) {
+            return $item->toArray($recursive);
+        } else {
+            return $item;
+        }
+
+        return NULL;
     }
 }

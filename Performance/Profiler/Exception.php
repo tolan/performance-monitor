@@ -7,7 +7,7 @@ namespace PF\Profiler;
  *
  * @author     Martin Kovar
  * @category   Performance
- * @package    Main
+ * @package    Profiler
  */
 class Exception extends \PF\Main\Exception {
 }

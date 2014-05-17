@@ -19,35 +19,24 @@ class Menu extends Abstracts\Json {
     public function actionIndex() {
         $menu = array(
             array(
-                'text' => 'main.menu.summary',
-                'href' => '#profiler/list'
-            ),
-            array(
-                'text' => 'main.menu.search',
-                'href' => '#search'
-            ),
-            array(
-                'text' => 'main.menu.statistics',
-                'href' => '#statistics'
-            ),
-            array(
-                'text' => 'main.menu.optimalization',
-                'href' => '#measure/optimalization'
-            ),
-            array(
-                'text' => 'main.menu.setup',
+                'text'    => 'main.menu.summary',
                 'submenu' => array(
-                    array(
-                        'text' => 'main.menu.cron',
-                        'href' => '#/settings/cron'
-                    ),
-                    array(
-                        'text' => 'main.menu.about',
-                        'href' => '#/settings/about'
-                    ),
+                    array('text' => 'main.menu.summary.mysql', 'href' => '#profiler/mysql/scenarios'),
+                    array('text' => 'main.menu.summary.file', 'href' => '#profiler/file/list')
+                )
+            ),
+            array('text' => 'main.menu.search', 'href' => '#search'),
+            array('text' => 'main.menu.statistics', 'href' => '#statistics'),
+            array('text' => 'main.menu.optimalization', 'href' => '#measure/optimalization'),
+            array(
+                'text'    => 'main.menu.setup',
+                'submenu' => array(
+                    array('text' => 'main.menu.cron', 'href' => '#/settings/cron'),
+                    array('text' => 'main.menu.about', 'href' => '#/settings/about')
                 )
             )
         );
+
         $this->setData($menu);
     }
 }

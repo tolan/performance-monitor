@@ -3,6 +3,7 @@
 namespace PF\Main\Web\View;
 
 use PF\Main\Web\Component\Template\AbstractTemplate;
+use PF\Main\Web\Component\Request;
 
 /**
  * Abstract class for view.
@@ -26,6 +27,22 @@ abstract class AbstractView {
      * @var \PF\Main\Web\Component\Template\AbstractTemplate
      */
     private $_template = null;
+
+    /**
+     * Request instance.
+     *
+     * @var \PF\Main\Web\Component\Request
+     */
+    private $_request = null;
+
+    /**
+     * Contruct method.
+     *
+     * @param \PF\Main\Web\Component\Request $requesst Request instance
+     */
+    public function __construct(Request $requesst) {
+        $this->_request = $requesst;
+    }
 
     /**
      * Sets data for template.
@@ -60,6 +77,29 @@ abstract class AbstractView {
         $this->_template = $template;
 
         return $this;
+    }
+
+    /**
+     * Returns request instance.
+     *
+     * @return \PF\Main\Web\Component\Request
+     */
+    protected function getRequest() {
+        return $this->_request;
+    }
+
+    /**
+     * Returns absolute path from reqeust.
+     *
+     * @return string
+     */
+    protected function getAbsolutePath() {
+        $server  = $this->_request->getServer();
+        $domain = $server->getSERVER_NAME();
+        $path   = $server->getBASE();
+        $protocol = strtolower(strstr($server->getSERVER_PROTOCOL(), '/', true));
+
+        return $protocol.'://'.$domain.$path;
     }
 
     /**

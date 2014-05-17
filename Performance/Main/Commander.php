@@ -76,6 +76,29 @@ class Commander implements Commander\Interfaces\Commander {
     }
 
     /**
+     * This method cleans executor by given name. When name is null then it cleans all executors.
+     *
+     * @param string $name Name of command set
+     *
+     * @return \PF\Main\Commander
+     *
+     * @throws \PF\Main\Exception Throws when executor doesn't exist.
+     */
+    public function cleanExecutor($name = null) {
+        if ($name === null) {
+            foreach (array_keys($this->_executors) as $name) { /* @var $executor \PF\Main\Commander\Executor */
+                $this->cleanExecutor($name);
+            }
+        } elseif(!$this->hasExecutor($name)) {
+            throw new Exception('Executor with name "'.$name.'" doesn\'t exist.');
+        } else {
+            $this->_executors[$name]->clean();
+        }
+
+        return $this;
+    }
+
+    /**
      * Returns a flag if there is an executor.
      *
      * @param string $name Name of command set
@@ -83,6 +106,8 @@ class Commander implements Commander\Interfaces\Commander {
      * @return boolean
      */
     public function hasExecutor($name) {
+        $this->_validateName($name);
+
         return array_key_exists($name, $this->_executors);
     }
 
@@ -107,7 +132,7 @@ class Commander implements Commander\Interfaces\Commander {
      * Create new executor by given name and save it into list of executors.
      *
      * @param string $name Name of command set
-     * 
+     *
      * @return \PF\Main\Commander
      */
     private function _createExecutor($name) {

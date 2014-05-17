@@ -17,19 +17,21 @@ abstract class Html extends AbstractView {
      * @return \PF\Main\Web\View\Html
      */
     public function getPayload() {
+        $path     = $this->getAbsolutePath();
         $template = $this->getTemplate();
         $template->addHeaderTag('<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">');
-        $template->addStyle('/css/bootstrap.css');
-        $template->addStyle('/css/my.css');
-        $template->addScript('/js/lib/jquery-2.0.3.js');
-        $template->addScript('/js/lib/bootstrap.js');
-        $template->addScript('/js/lib/angular.js');
-        $template->addScript('/js/lib/angular-loader.js');
-        $template->addScript('/js/lib/angular-resource.js');
-        $template->addScript('/js/lib/angular-strap.js');
-        $template->addScript('/js/lib/angular-route.js');
-        $template->addScript('/js/lib/ui-bootstrap-tpls.js');
-        $template->addScript('/js/lib/underscore.js');
+        $template->addStyle($path.'/css/bootstrap.css');
+        $template->addStyle($path.'/css/my.css');
+        $template->addScript($path.'/js/lib/jquery-2.0.3.js');
+        $template->addScript($path.'/js/lib/bootstrap.js');
+        $template->addScript($path.'/js/lib/angular.js');
+        $template->addScript($path.'/js/lib/angular-loader.js');
+        $template->addScript($path.'/js/lib/angular-resource.js');
+        $template->addScript($path.'/js/lib/angular-strap.js');
+        $template->addScript($path.'/js/lib/angular-route.js');
+        $template->addScript($path.'/js/lib/ui-bootstrap-tpls.js');
+        $template->addScript($path.'/js/lib/underscore.js');
+        $template->addHeaderTag('<script type="text/javascript">var base="'.$path.'"</script>');
 
         return $this;
     }

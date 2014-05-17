@@ -22,9 +22,9 @@ function start_gearman_server(GearmanJob $job) {
     $eveMan->flush();
     $eveMan->clean();
 
-    $result = $server->getResult();
+    $provider->get('PF\Main\Commander')->cleanExecutor();
 
-    unset($provider);
+    $result = $server->getResult();
 
     return $result;
 }

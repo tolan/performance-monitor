@@ -44,10 +44,12 @@ class Translate extends Abstracts\Json {
      *
      * @method GET
      *
+     * @param enum $module One of \PF\Main\Translate\Enum\Module
+     *
      * @return void
      */
-    public function actionTranslate($params) {
-        $this->setData($this->_getTranslation($params['module'], $this->_defaultLang));
+    public function actionTranslate($module) {
+        $this->setData($this->_getTranslation($module, $this->_defaultLang));
     }
 
     /**
@@ -57,13 +59,16 @@ class Translate extends Abstracts\Json {
      *
      * @method GET
      *
+     * @param enum $module One of \PF\Main\Translate\Enum\Module
+     * @param enum $lang   One of \PF\Main\Translate\Enum\Lang
+     * 
      * @return void
      */
-    public function actionTranslateByLang($params) {
+    public function actionTranslateByLang($module, $lang) {
         // sets selected language to cache
-        $this->getProvider()->get('cache')->save('lang', $params['lang']);
+        $this->getProvider()->get('cache')->save('lang', $lang);
 
-        $this->setData($this->_getTranslation($params['module'], $params['lang']));
+        $this->setData($this->_getTranslation($module, $lang));
     }
 
     /**

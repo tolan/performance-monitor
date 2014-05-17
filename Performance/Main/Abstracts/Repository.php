@@ -71,7 +71,7 @@ abstract class Repository {
 
     /**
      * Returns utils instance.
-     * 
+     *
      * @return \PF\Main\Utils
      */
     protected function getUtils() {
@@ -81,16 +81,19 @@ abstract class Repository {
     /**
      * Function for delete item by id in database.
      *
-     * @param int $id Id of item
+     * @param int    $id        Id of item
+     * @param string $tableName Name of table [optional]
      *
      * @return int Count of affected rows
      */
-    protected function delete($id) {
+    protected function delete($id, $tableName=null) {
         $this->_checkSetTable();
+
+        $tableName = $tableName === null ? $this->getTableName() : $tableName;
 
         return $this->getDatabase()
             ->delete()
-            ->setTable($this->getTableName())
+            ->setTable($tableName)
             ->where('id = :id', array(':id' => $id))
             ->run();
     }
@@ -98,16 +101,19 @@ abstract class Repository {
     /**
      * Function for create item with data in database.
      *
-     * @param array $data Data which will be inserted.
+     * @param array  $data      Data which will be inserted.
+     * @param string $tableName Name of table [optional]
      *
      * @return int Inserted ID
      */
-    protected function create($data) {
+    protected function create($data, $tableName=null) {
         $this->_checkSetTable();
+
+        $tableName = $tableName === null ? $this->getTableName() : $tableName;
 
         return $this->getDatabase()
             ->insert()
-            ->setTable($this->getTableName())
+            ->setTable($tableName)
             ->setInsertData($data)
             ->run();
     }
@@ -115,17 +121,20 @@ abstract class Repository {
     /**
      * Function for update item with data by id in database.
      *
-     * @param int   $id   Id of item
-     * @param array $data Data for update
+     * @param int    $id        Id of item
+     * @param array  $data      Data for update
+     * @param string $tableName Name of table [optional]
      *
      * @return int Count of affected rows
      */
-    protected function update($id, $data) {
+    protected function update($id, $data, $tableName=null) {
         $this->_checkSetTable();
+
+        $tableName = $tableName === null ? $this->getTableName() : $tableName;
 
         return $this->getDatabase()
             ->update()
-            ->setTable($this->getTableName())
+            ->setTable($tableName)
             ->setUpdateData($data)
             ->where('id = :id', array(':id' => $id))
             ->run();

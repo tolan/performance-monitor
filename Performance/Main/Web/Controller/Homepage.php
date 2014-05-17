@@ -18,7 +18,12 @@ class Homepage extends Abstracts\Html {
      */
     public function actionIndex() {
     }
-    
+
+    /**
+     * Profiler action for show measure from browser.
+     *
+     * @return void
+     */
     public function actionProfiler() {
     }
 }
