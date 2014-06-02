@@ -1,0 +1,35 @@
+<td class="search-result-item-name">
+    <a href="#/profiler/mysql/scenario/detail/[[item.id]]">
+        <span class="label label-default">[[_.('search.filter.target.' + target)]] ([[item.id]])</span>
+    </a>
+</td>
+<td class="search-result-item-attributes">
+    <div ng-show="item.name">
+        <span class="search-result-item-attributes-name">[[_.('search.filter.scenario.name')]]:</span>
+        <span class="search-result-item-attributes-value">[[item.name]]</span>
+    </div>
+    <div ng-show="item.description">
+        <span class="search-result-item-attributes-name">[[_.('search.filter.scenario.description')]]:</span>
+        <span class="search-result-item-attributes-value">[[item.description]]</span>
+    </div>
+    <div ng-show="item.edited">
+        <span class="search-result-item-attributes-name">[[_.('search.filter.scenario.edited')]]:</span>
+        <span class="search-result-item-attributes-value">[[item.edited | date:'d.M.yyyy H:mm:ss']]</span>
+    </div>
+    <div ng-show="item.started">
+        <span class="search-result-item-attributes-name">[[_.('search.filter.scenario.started')]]:</span>
+        <span class="search-result-item-attributes-value">[[item.started | date:'d.M.yyyy H:mm:ss']]</span>
+    </div>
+    <div ng-show="item.url">
+        <span class="search-result-item-attributes-name">[[_.('search.filter.scenario.url')]]:</span>
+        <span class="search-result-item-attributes-value">[[item.url]]</span>
+    </div>
+    <div ng-show="item.calls">
+        <span class="search-result-item-attributes-name">[[_.('search.filter.scenario.calls')]]:</span>
+        <span class="search-result-item-attributes-value">[[item.calls]]</span>
+    </div>
+    <div ng-show="item.time">
+        <span class="search-result-item-attributes-name">[[_.('search.filter.scenario.time')]]:</span>
+        <span class="search-result-item-attributes-value">[[item.time]] ms</span>
+    </div>
+</td>

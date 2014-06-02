@@ -12,7 +12,7 @@ use PF\Main\Abstracts\Enum;
  * @package    Search
  */
 class Target extends Enum {
-    const MEASURE = 'measure';
-    const TEST    = 'test';
-    const ATTEMPT = 'attempt';
+    const SCENARIO = 'scenario';
+    const TEST     = 'test';
+    const MEASURE  = 'measure';
 }

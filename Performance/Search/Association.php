@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Search\Component;
+namespace PF\Search;
 
 use PF\Search\Enum;
 
@@ -66,14 +66,11 @@ class Association {
      * @var array
      */
     private $_enums = array(
-        Enum\Target::MEASURE => array(
-            Enum\Filter::METHOD => '\PF\Main\Http\Enum\Method'
-        ),
         Enum\Target::TEST => array(
-            Enum\Filter::STATE => '\PF\Profiler\Enum\AttemptState'
+            Enum\Filter::STATE => '\PF\Profiler\Enum\TestState'
         ),
-        Enum\Target::ATTEMPT =>array(
-            Enum\Filter::STATE  => '\PF\Profiler\Enum\AttemptState',
+        Enum\Target::MEASURE =>array(
+            Enum\Filter::STATE  => '\PF\Profiler\Monitor\Storage\State',
             Enum\Filter::METHOD => '\PF\Main\Http\Enum\Method'
         )
     );
@@ -84,11 +81,10 @@ class Association {
      * @var array
      */
     private $_association = array(
-        Enum\Target::MEASURE => array(
+        Enum\Target::SCENARIO => array(
             Enum\Filter::FULLTEXT => Enum\Type::QUERY,
             Enum\Filter::NAME     => Enum\Type::STRING,
             Enum\Filter::EDITED   => Enum\Type::DATE,
-            Enum\Filter::METHOD   => Enum\Type::ENUM,
             Enum\Filter::URL      => Enum\Type::STRING,
             Enum\Filter::STARTED  => Enum\Type::DATE,
             Enum\Filter::TIME     => Enum\Type::FLOAT,
@@ -102,7 +98,7 @@ class Association {
             Enum\Filter::TIME     => Enum\Type::FLOAT,
             Enum\Filter::CALLS    => Enum\Type::INT
         ),
-        Enum\Target::ATTEMPT => array(
+        Enum\Target::MEASURE => array(
             Enum\Filter::FULLTEXT      => Enum\Type::QUERY,
             Enum\Filter::URL           => Enum\Type::STRING,
             Enum\Filter::STATE         => Enum\Type::ENUM,

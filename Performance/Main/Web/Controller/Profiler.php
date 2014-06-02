@@ -373,22 +373,18 @@ class Profiler extends Abstracts\Json {
      * @return void
      */
     public function actionGetMethods() {
-        $methods = Http\Enum\Method::getConstants();
+        $methods = Http\Enum\Method::getSelection('profiler.scenario.request.method.');
 
-        $result = array();
-        foreach ($methods as $method) {
-            $result['requests'][] = array(
-                'value' => $method,
-                'name'  => 'profiler.measure.request.method.'.strtolower($method)
-            );
-        }
+        $result = array(
+            'requests' => $methods
+        );
 
         $paramMethods = Http\Enum\ParameterType::getAllowedParams();
         foreach ($paramMethods as $method => $allowed) {
             foreach ($allowed as $allow) {
                 $result['params'][$method][] = array(
                     'value' => $allow,
-                    'name'  => 'profiler.measure.request.method.'.strtolower($allow)
+                    'name'  => 'profiler.scenario.request.method.'.$allow
                 );
             }
         }
@@ -407,7 +403,7 @@ class Profiler extends Abstracts\Json {
      */
     public function actionGetFilterOptions() {
         $this->getExecutor()->add(function($data = array()) {
-            $data['types'] = Monitor\Filter\Enum\Type::getSelection('profiler.filter.type.');
+            $data['types'] = Monitor\Filter\Enum\Type::getSelection('profiler.scenario.request.filter.type.');
 
             return array('data' => $data);
         })->add(function($data = array()) {

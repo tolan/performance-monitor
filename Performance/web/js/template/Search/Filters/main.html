@@ -4,8 +4,9 @@
     </div>
     <div class="search-filters-list">
         <div ng-repeat="filter in filters" class="search-filter well well-small">
+            <button class="pull-right close" ng-click="dropFilter(filter)">&times;</button>
             <div ng-include="templates[filter.type]" class="search-filter-item"></div>
-            <a class="search-filter-remove" ng-click="dropFilter(filter)"><b class="icon-remove"></b></a>
+            <div ng-show="filter.isValid === false" class="search-filter-invalid alert alert-danger">[[_.('search.filter.invalid')]]</div>
         </div>
     </div>
     <div class="search-filters-menu" ng-show="filters.length">

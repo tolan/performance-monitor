@@ -201,11 +201,11 @@ function ProfilerMySQLScenarioCreate($scope, $http, $routeParams) {
         $scope.alerts = [];
 
         if (_.isEmpty(scenario.name)) {
-            $scope.addAlert('profiler.measure.name', 'main.validate.required');
+            $scope.addAlert('profiler.scenario.name', 'main.validate.required');
         }
 
         if (_.isEmpty(scenario.requests)) {
-            $scope.addAlert('profiler.measure.request.list', 'main.validate.required');
+            $scope.addAlert('profiler.scenario.request.list', 'main.validate.required');
         } else {
             angular.forEach(scenario.requests, function(request){
                 $scope.validateRequest(request);
@@ -217,7 +217,7 @@ function ProfilerMySQLScenarioCreate($scope, $http, $routeParams) {
 
     $scope.validateRequest = function(request) {
         if (_.isEmpty(request.url)) {
-            $scope.addAlert('profiler.request.url', 'main.validate.required');
+            $scope.addAlert('profiler.scenario.url', 'main.validate.required');
         }
 
         if (request.hasOwnProperty('parameters') && request.parameters.length > 0) {
@@ -235,23 +235,23 @@ function ProfilerMySQLScenarioCreate($scope, $http, $routeParams) {
 
     $scope.validateParameter = function(request, parameter) {
         if (_.isEmpty(parameter.name)) {
-            $scope.addAlert('profiler.request.parameter.name', 'main.validate.required');
+            $scope.addAlert('profiler.scenario.request.parameter.name', 'main.validate.required');
         }
 
         if (_.isEmpty(parameter.value)) {
-            $scope.addAlert('profiler.request.parameter.value', 'main.validate.required');
+            $scope.addAlert('profiler.scenario.request.parameter.value', 'main.validate.required');
         }
 
         var allowedMethods = _.pluck($scope.methodsParams[request.method], 'value');
 
         if (_.indexOf(allowedMethods, parameter.method) === -1) {
-            $scope.addAlert('profiler.request.method', 'main.validate.required');
+            $scope.addAlert('profiler.scenario.request.method', 'main.validate.required');
         }
     };
 
     $scope.validateFilter = function(filter) {
         if (!filter.hasOwnProperty('parameters') || !filter.parameters.length) {
-            $scope.addAlert('profiler.request.filter.parameter', 'main.validate.required');
+            $scope.addAlert('profiler.scenario.request.filter.parameter', 'main.validate.required');
         } else {
             angular.forEach(filter.parameters, function(parameter) {
                 $scope.validateFilterParameter(parameter);
@@ -472,14 +472,14 @@ function ProfilerMeasureDetailCtrl($scope, $http, $routeParams) {
     $scope.template = '/js/template/Profiler/Measure/detail.html';
     $scope.templatePrefix = '/js/template/Profiler/Measure/';
     $scope.tabs = [{
-            title : 'profiler.measure.test.detail.summary',
+            title : 'profiler.scenario.test.measure.detail.summary',
             template : $scope.templatePrefix + 'summary.html',
             active : true
         }, {
-            title : 'profiler.measure.test.detail.callStack',
+            title : 'profiler.scenario.test.measure.detail.callStack',
             template : $scope.templatePrefix + 'callStack.html'
         }, {
-            title : 'profiler.measure.test.detail.functionStatistics',
+            title : 'profiler.scenario.test.measure.detail.functionStatistics',
             template : $scope.templatePrefix + 'functionStat.html'
     }];
 

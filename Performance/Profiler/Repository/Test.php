@@ -63,6 +63,9 @@ class Test extends Repository {
             ->where('id = ?', $id);
 
         $data = $select->fetchOne();
+        $data['id']         = (int)$data['id'];
+        $data['scenarioId'] = (int)$data['scenarioId'];
+        $data['started']    = $this->getUtils()->convertTimeFromMySQLDateTime($data['started']);
 
         return new Entity\Test($data);
     }
@@ -104,7 +107,7 @@ class Test extends Repository {
      * Deletes scenario entity by given ID.
      *
      * @param int $testId ID of test
-     * 
+     *
      * @return boolean
      */
     public function delete($testId) {

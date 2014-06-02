@@ -20,11 +20,11 @@ function SearchMainCtrl($scope) {
 
 function SearchFiltersCtrl($scope, $http, $timeout) {
     $scope.templatePrefix = '/js/template/Search/Filters/';
-    $scope.template = $scope.templatePrefix + 'main.html';
+    $scope.template       = $scope.templatePrefix + 'main.html';
     $scope.target;
-    $scope.menu = [];
+    $scope.menu         = [];
     $scope.originalMenu = [];
-    $scope.filters = [];
+    $scope.filters      = [];
     $scope.templates = {
         'query'  : $scope.templatePrefix + 'query.html',
         'string' : $scope.templatePrefix + 'string.html',
@@ -72,18 +72,60 @@ function SearchFiltersCtrl($scope, $http, $timeout) {
     $scope._sendFilters = function(filters, show) {
         var request = {
             'target'  : $scope.target,
-            'filters' : filters
+            'filters' : $scope.getValidFilters()
         };
 
-        $http.post('search/find', request).success(function(response) {
-            $scope.resultTotal = response.result.length;
+        if (request.filters.length > 0) {
+            $http.post('search/find', request).success(function(response) {
+                $scope.resultTotal = response.result.length;
 
-            if (show && $scope.resultTotal > 0) {
-                $scope.$emit('search-finded', response);
+                if (show && $scope.resultTotal > 0) {
+                    $scope.$emit('search-finded', response);
+                }
+            }).error(function() {
+                $scope.$emit('search-error');
+            });
+        } else {
+            $scope.resultTotal = undefined;
+        }
+    };
+
+    $scope.getValidFilters = function() {
+        var index, filter, filters = [];
+
+        for(index = 0; index < $scope.filters.length; index++) {
+            filter = $scope.filters[index];
+            if ($scope.isValid(filter) === true) {
+                filters.push(filter);
             }
-        }).error(function() {
-            $scope.$emit('search-error');
-        });
+        }
+
+        return filters;
+    };
+
+    $scope.isValid = function(filter) {
+        var isValid = true;
+
+        switch (filter.type) {
+            case 'query':
+            case 'string':
+                isValid = !_.isEmpty(filter.value);
+                break;
+            case 'int':
+            case 'float':
+                isValid = _.isFinite(filter.value);
+                break;
+        }
+
+        if (filter.hasOwnProperty('isValid')) {
+            delete(filter.isValid);
+        }
+
+        if (isValid === false) {
+            filter.isValid = isValid;
+        }
+
+        return isValid;
     };
 
     $scope.dropFilter = function(filter) {
@@ -110,9 +152,9 @@ function SearchResultCtrl($scope) {
     $scope.templatePrefix = '/js/template/Search/Result/';
     $scope.template = $scope.templatePrefix + 'main.html';
     $scope.templates = {
-        'attempt' : $scope.templatePrefix + 'attempt.html',
-        'test'    : $scope.templatePrefix + 'test.html',
-        'measure' : $scope.templatePrefix + 'measure.html'
+        'scenario' : $scope.templatePrefix + 'scenario.html',
+        'test'     : $scope.templatePrefix + 'test.html',
+        'measure'  : $scope.templatePrefix + 'measure.html'
     };
 
     $scope.target;

@@ -94,7 +94,7 @@ class Worker extends \PF\Main\Abstracts\Gearman\Worker implements \PF\Main\Event
         foreach ($scenario->getRequests() as $request) {
             $parameters = $request->get('parameters', array());
             foreach ($parameters as $key => $parameter) {
-                $parameters[$key] = $parameter->toAraay();
+                $parameters[$key] = $parameter->toArray();
             }
 
             if ($request->getToMeasure() == true) {

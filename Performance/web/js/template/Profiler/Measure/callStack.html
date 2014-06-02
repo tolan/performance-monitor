@@ -8,7 +8,7 @@
 
 <script type="text/ng-template"  id="callStack.html">
     <div>
-        <span>[[_.('profiler.measure.test.subStack')]]</span>
+        <span>[[_.('profiler.scenario.test.measure.callStack.subStack')]]:</span>
         <div>
             <accordion close-others="false">
                 <accordion-group ng-repeat="call in call.calls" ng-click="showCall(call)" heading="[[call.timeSubStack]] ms - [[call.content | limitTo : 200]]">
@@ -21,15 +21,15 @@
 <script type="text/ng-template"  id="call.html">
     <table>
         <tr>
-            <td>[[_.('profiler.measure.test.file')]]</td>
+            <td>[[_.('profiler.scenario.test.measure.callStack.file')]]:</td>
             <td>[[call.file]]</td>
         </tr>
         <tr>
-            <td>[[_.('profiler.measure.test.line')]]</td>
+            <td>[[_.('profiler.scenario.test.measure.callStack.line')]]:</td>
             <td>[[call.line]]</td>
         </tr>
         <tr>
-            <td>[[_.('profiler.measure.test.time')]]</td>
+            <td>[[_.('profiler.scenario.test.measure.callStack.time')]]:</td>
             <td>[[call.timeSubStack]]</td>
         </tr>
     </table>

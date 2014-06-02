@@ -6,13 +6,13 @@ use PF\Search\Filter\Select;
 use PF\Search\Filter\Condition\AbstractCondition;
 
 /**
- * This script defines class for junction between test and condition of filter.
+ * This script defines class for junction between scenario and condition of filter.
  *
  * @author     Martin Kovar
  * @category   Performance
  * @package    Search
  */
-class Test extends AbstractJunction {
+class Scenario extends AbstractJunction {
 
     /**
      * This method is called after is junction created. It sets group function.
@@ -36,13 +36,38 @@ class Test extends AbstractJunction {
      * @return void
      */
     protected function fulltext(Select $select, AbstractCondition $condition=null) {
+        $this->name($select, $condition);
+        $this->edited($select, $condition);
         $this->url($select, $condition);
-        $this->state($select, $condition);
         $this->started($select, $condition);
         $this->time($select, $condition);
         $this->calls($select, $condition);
 
         $condition->fulltext($select);
+    }
+
+    /**
+     * This method provider search by name.
+     *
+     * @param \PF\Search\Filter\Select                      $select    Select instance
+     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
+     *
+     * @return void
+     */
+    protected function name(Select $select, AbstractCondition $condition) {
+        $condition->addFilter($select, 'target', 'name');
+    }
+
+    /**
+     * This method provider search by edited.
+     *
+     * @param \PF\Search\Filter\Select                      $select    Select instance
+     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
+     *
+     * @return void
+     */
+    protected function edited(Select $select, AbstractCondition $condition) {
+        $condition->addFilter($select, 'target', 'edited');
     }
 
     /**
@@ -55,21 +80,9 @@ class Test extends AbstractJunction {
      */
     protected function url(Select $select, AbstractCondition $condition) {
         $alias = $select->getUniqueTableAlias();
-        $select->joinInner(array($alias => 'test_measure'), $alias.'.testId = target.id', array('url'));
+        $select->joinInner(array($alias => 'scenario_request'), $alias.'.scenarioId = target.id', array('url'));
 
         $condition->addFilter($select, $alias, 'url');
-    }
-
-    /**
-     * This method provider search by state.
-     *
-     * @param \PF\Search\Filter\Select                      $select    Select instance
-     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
-     *
-     * @return void
-     */
-    protected function state(Select $select, AbstractCondition $condition) {
-        $condition->addFilter($select, 'target', 'state');
     }
 
     /**
@@ -81,7 +94,10 @@ class Test extends AbstractJunction {
      * @return void
      */
     protected function started(Select $select, AbstractCondition $condition) {
-        $condition->addFilter($select, 'target', 'started');
+        $alias = $select->getUniqueTableAlias();
+        $select->joinInner(array($alias => 'scenario_test'), $alias.'.scenarioId = target.id', array('started'));
+
+        $condition->addFilter($select, $alias, 'started');
     }
 
     /**
@@ -93,10 +109,13 @@ class Test extends AbstractJunction {
      * @return void
      */
     protected function time(Select $select, AbstractCondition $condition) {
-        $alias = $select->getUniqueTableAlias();
-        $select->joinInner(array($alias => 'test_measure'), $alias.'.testId = target.id', array('time'));
+        $aliasTest    = $select->getUniqueTableAlias();
+        $aliasMeasure = $select->getUniqueTableAlias();
 
-        $condition->addFilter($select, $alias, 'time');
+        $select->joinInner(array($aliasTest => 'scenario_test'), $aliasTest.'.scenarioId = target.id', array());
+        $select->joinInner(array($aliasMeasure => 'test_measure'), $aliasMeasure.'.testId = '.$aliasTest.'.id', array('time'));
+
+        $condition->addFilter($select, $aliasMeasure, 'time');
     }
 
     /**
@@ -108,9 +127,12 @@ class Test extends AbstractJunction {
      * @return void
      */
     protected function calls(Select $select, AbstractCondition $condition) {
-        $alias = $select->getUniqueTableAlias();
-        $select->joinInner(array($alias => 'test_measure'), $alias.'.testId = target.id', array('calls'));
+        $aliasTest    = $select->getUniqueTableAlias();
+        $aliasMeasure = $select->getUniqueTableAlias();
 
-        $condition->addFilter($select, $alias, 'calls');
+        $select->joinInner(array($aliasTest => 'scenario_test'), $aliasTest.'.scenarioId = target.id', array());
+        $select->joinInner(array($aliasMeasure => 'test_measure'), $aliasMeasure.'.testId = '.$aliasTest.'.id', array('calls'));
+
+        $condition->addFilter($select, $aliasMeasure, 'calls');
     }
 }

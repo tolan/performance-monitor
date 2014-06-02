@@ -95,7 +95,9 @@ class Container {
     public function fetchAll() {
         $this->_compile($this->_select, $this->_target, $this->_filters);
 
-        return $this->_select->fetchAll();
+        $data = $this->_select->fetchAll();
+
+        return $this->_target->format($data);
     }
 
     /**

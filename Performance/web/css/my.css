@@ -101,6 +101,46 @@ a:hover {
     width: 40%;
 }
 
+.width-100 {
+    width: 100%;
+}
+
+.width-90 {
+    width: 90%;
+}
+
+.width-80 {
+    width: 80%;
+}
+
+.width-70 {
+    width: 70%;
+}
+
+.width-60 {
+    width: 60%;
+}
+
+.width-50 {
+    width: 50%;
+}
+
+.width-40 {
+    width: 40%;
+}
+
+.width-30 {
+    width: 30%;
+}
+
+.width-20 {
+    width: 20%;
+}
+
+.width-10 {
+    width: 10%;
+}
+
 .list .search-query {
     display: inline-block;
     margin-left: 1%;
@@ -161,6 +201,11 @@ a:hover {
     background-color: #FFFFFF;
 }
 
+.request-parameter-container,
+.request-filter-container{
+    margin-right: 15px;
+}
+
 .scenario-edit .request-list .request-parameter-list .request-parameter,
 .scenario-edit .request-list .request-filter-list .request-filter {
     border: 1px #DDDDDD solid;
@@ -177,7 +222,7 @@ a:hover {
 }
 
 .scenario-edit .request-list .request {
-    background-color: #FAFAFA;
+    background-color: #F4F4F4;
     border-radius: 10px;
     padding: 10px;
 }
@@ -185,7 +230,7 @@ a:hover {
 .scenario-edit .request-list .request,
 .scenario-edit .request-list .caption {
     border-bottom: 1px #DDDDDD solid;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .scenario-edit .input-group-addon {
@@ -281,22 +326,26 @@ a:hover {
     padding: 0px;
 }
 
-.search-filter .search-filter-remove {
-    vertical-align: top;
-    position: relative;
-    top: -5px;
-    left: 5px;
+.search-filter .search-filter-invalid,
+.search-filter-item .search-filter-item-name,
+.search-filter-item .search-filter-item-operator,
+.search-filter-item .search-filter-item-input {
+    display: block;
+    padding-top: 2px;
+    padding-bottom: 4px;
+    margin-top: 2px;
+    margin-bottom: 5px;
+    margin-right: 10px;
+}
+
+.search-filter .search-filter-invalid {
+    margin-right: 22px;
 }
 
 .search-filter-item .search-filter-item-name,
 .search-filter-item .search-filter-item-operator,
 .search-filter-item .search-filter-item-input {
     min-width: 340px;
-    display: block;
-    padding-top: 2px;
-    padding-bottom: 4px;
-    margin-top: 2px;
-    margin-bottom: 5px;
 }
 
 .search-filter-item .search-filter-item-name {

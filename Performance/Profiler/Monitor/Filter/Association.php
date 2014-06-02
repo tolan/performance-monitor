@@ -42,8 +42,8 @@ class Association {
      * @return array
      */
     public static function getAssociation() {
-        $selection = Parameter::getSelection('profiler.filter.parameter.');
-        $operators = Operator::getSelection('profiler.filter.parameter.operator.');
+        $selection = Parameter::getSelection('profiler.scenario.request.filter.parameter.');
+        $operators = Operator::getSelection('profiler.scenario.request.filter.parameter.operator.');
         foreach ($operators as $key => $operator) {
             unset($operators[$key]);
             $operators[$operator['value']] = $operator;

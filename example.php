@@ -8,6 +8,7 @@ declare(ticks=1);
 
     (new Foo())->bar(20);
 
+    sleep(3);
 \PF\Profiler\Monitor::getInstance()->disable()->display();
 
 function simple ($input) {

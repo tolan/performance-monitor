@@ -11,7 +11,7 @@ use PF\Main;
  * @category   Performance
  * @package    Main
  */
-abstract class State implements Main\Interfaces\State {
+abstract class State extends Enum implements Main\Interfaces\State {
 
     /**
      * Actual state.

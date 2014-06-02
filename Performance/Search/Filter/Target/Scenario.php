@@ -6,13 +6,13 @@ use PF\Search\Filter\Select;
 use PF\Search\Enum\Format;
 
 /**
- * This script defines class for target measure entity.
+ * This script defines class for target scenario entity.
  *
  * @author     Martin Kovar
  * @category   Performance
  * @package    Search
  */
-class Measure extends AbstractTarget {
+class Scenario extends AbstractTarget {
 
     /**
      * Format list.
@@ -20,21 +20,20 @@ class Measure extends AbstractTarget {
      * @var array
      */
     protected $_format = array(
-        'testId'  => Format::INT,
+        'edited'  => Format::DATETIME,
         'started' => Format::DATETIME,
         'time'    => Format::FLOAT,
-        'calls'   => Format::INT,
-        'line'    => Format::INT
+        'calls'   => Format::INT
     );
 
     /**
-     * It sets table into select for measure entity.
+     * It sets table into select for scenario entity.
      *
      * @param \PF\Search\Filter\Select $select Select instnace
      *
      * @return void
      */
     public function setTarget(Select $select) {
-        $select->from(array('target' => 'test_measure'));
+        $select->from(array('target' => 'scenario'));
     }
 }

@@ -209,7 +209,7 @@ class Cache implements Interfaces\Measure {
      *
      * @return array
      */
-    public function getMeasureCallStack($measureId, $parentId) {
+    public function getMeasureCallStack($measureId, $parentId = 0) {
         $callFlyWeight = $this->_cache->load(self::CACHE_FLYWEIGHT_CALL_KEY); /* @var $callFlyWeight \PF\Profiler\Monitor\Interfaces\Call */
 
         $calls  = array_diff_key($this->_cache->load(), array(self::CACHE_FLYWEIGHT_CALL_KEY => true));

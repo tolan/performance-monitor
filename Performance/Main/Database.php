@@ -222,85 +222,7 @@ class Database {
         $connection->exec("CREATE DATABASE IF NOT EXISTS `".$this->_database."` CHARACTER SET utf8 COLLATE=utf8_general_ci");
         $connection->exec("USE ".$this->_database);
 
-        $connection->exec("CREATE TABLE IF NOT EXISTS `measure` (
-                `id`          INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `name`        VARCHAR(64) NULL,
-                `description` TEXT NULL,
-                `edited`      DATETIME NULL
-            ) ENGINE='InnoDB'"
-        );
-
-        $connection->exec("CREATE TABLE IF NOT EXISTS `measure_request` (
-                `id`        INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `measureId` INT UNSIGNED NOT NULL,
-                `url`       VARCHAR(255) NULL,
-                `method`    VARCHAR(16) NULL,
-                `toMeasure` TINYINT(1) NULL,
-                FOREIGN KEY (`measureId`) REFERENCES `measure` (`id`) ON DELETE CASCADE
-            ) ENGINE='InnoDB'"
-        );
-
-        $connection->exec("CREATE TABLE IF NOT EXISTS `request_parameter` (
-                `id`        INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `requestId` INT UNSIGNED NOT NULL,
-                `method`    VARCHAR(16) NOT NULL,
-                `name`      VARCHAR(64) NOT NULL,
-                `value`     VARCHAR(255) NOT NULL,
-                FOREIGN KEY (`requestId`) REFERENCES `measure_request` (`id`) ON DELETE CASCADE
-            ) ENGINE='InnoDB'"
-        );
-
-        $connection->exec("CREATE TABLE IF NOT EXISTS `measure_test` (
-                `id`        INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `measureId` INT UNSIGNED NOT NULL,
-                `state`     VARCHAR(32) NULL,
-                `started`   DATETIME NULL,
-                FOREIGN KEY (`measureId`) REFERENCES `measure` (`id`) ON DELETE CASCADE
-            ) ENGINE='InnoDB'"
-        );
-
-        $connection->exec("CREATE TABLE IF NOT EXISTS `test_attempt` (
-                `id`               INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `testId`           INT UNSIGNED NOT NULL,
-                `url`              VARCHAR(255) NULL,
-                `method`           VARCHAR(16) NOT NULL,
-                `parameters`       TEXT NULL,
-                `body`             TEXT NULL,
-                `state`            VARCHAR(32) NULL,
-                `started`          DATETIME NULL,
-                `compensationTime` FLOAT NOT NULL DEFAULT 0,
-                `time`             FLOAT NOT NULL,
-                `calls`            INT NOT NULL,
-                FOREIGN KEY (`testId`) REFERENCES `measure_test` (`id`) ON DELETE CASCADE
-            ) ENGINE='InnoDB'"
-        );
-
-        $connection->exec("CREATE TABLE IF NOT EXISTS `attempt_data` (
-                `id`        BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `attemptId` INT UNSIGNED NOT NULL,
-                `file`      VARCHAR(512) NOT NULL,
-                `line`      INT NOT NULL,
-                `immersion` INT NOT NULL,
-                `start`     FLOAT NOT NULL,
-                `end`       FLOAT NOT NULL,
-                FOREIGN KEY (`attemptId`) REFERENCES `test_attempt` (`id`) ON DELETE CASCADE
-            ) ENGINE='InnoDB'"
-        );
-
-        $connection->exec("CREATE TABLE IF NOT EXISTS `attempt_statistic_data` (
-                `id`           BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `attemptId`    INT UNSIGNED NOT NULL,
-                `parentId`     BIGINT UNSIGNED NOT NULL,
-                `file`         VARCHAR(512) NOT NULL,
-                `line`         INT NOT NULL,
-                `content`      TEXT NOT NULL,
-                `time`         FLOAT UNSIGNED NOT NULL,
-                `timeSubStack` FLOAT UNSIGNED NOT NULL,
-                FOREIGN KEY (`attemptId`) REFERENCES `test_attempt` (`id`) ON DELETE CASCADE
-            ) ENGINE='InnoDB'"
-        );
-
-        $translateFile = dirname(__DIR__).'/translate.sql';
+        $translateFile = dirname(__DIR__).'/install.sql';
         if (file_exists($translateFile)) {
             $sql = explode(";\n", file_get_contents($translateFile));
             foreach ($sql as $query) {
@@ -309,7 +231,7 @@ class Database {
                 }
             }
 
-            rename($translateFile, dirname(__DIR__).'/translateLoaded.sql');
+            rename($translateFile, dirname(__DIR__).'/installed.sql');
         }
 
 

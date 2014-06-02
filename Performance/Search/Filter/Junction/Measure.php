@@ -36,53 +36,15 @@ class Measure extends AbstractJunction {
      * @return void
      */
     protected function fulltext(Select $select, AbstractCondition $condition=null) {
-        $this->name($select, $condition);
-        $this->edited($select, $condition);
-        $this->method($select, $condition);
         $this->url($select, $condition);
+        $this->state($select, $condition);
         $this->started($select, $condition);
+        $this->method($select, $condition);
+        $this->time($select, $condition);
         $this->calls($select, $condition);
+        $this->file($select, $condition);
 
         $condition->fulltext($select);
-    }
-
-    /**
-     * This method provider search by name.
-     *
-     * @param \PF\Search\Filter\Select                      $select    Select instance
-     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
-     *
-     * @return void
-     */
-    protected function name(Select $select, AbstractCondition $condition) {
-        $condition->addFilter($select, 'target', 'name');
-    }
-
-    /**
-     * This method provider search by edited.
-     *
-     * @param \PF\Search\Filter\Select                      $select    Select instance
-     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
-     *
-     * @return void
-     */
-    protected function edited(Select $select, AbstractCondition $condition) {
-        $condition->addFilter($select, 'target', 'edited');
-    }
-
-    /**
-     * This method provider search by method.
-     *
-     * @param \PF\Search\Filter\Select                      $select    Select instance
-     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
-     *
-     * @return void
-     */
-    protected function method(Select $select, AbstractCondition $condition) {
-        $alias = $select->getUniqueTableAlias();
-        $select->joinInner(array($alias => 'measure_request'), $alias.'.measureId = target.id', array('method'));
-
-        $condition->addFilter($select, $alias, 'method');
     }
 
     /**
@@ -94,10 +56,19 @@ class Measure extends AbstractJunction {
      * @return void
      */
     protected function url(Select $select, AbstractCondition $condition) {
-        $alias = $select->getUniqueTableAlias();
-        $select->joinInner(array($alias => 'measure_request'), $alias.'.measureId = target.id', array('url'));
+        $condition->addFilter($select, 'target', 'url');
+    }
 
-        $condition->addFilter($select, $alias, 'url');
+    /**
+     * This method provider search by state.
+     *
+     * @param \PF\Search\Filter\Select                      $select    Select instance
+     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
+     *
+     * @return void
+     */
+    protected function state(Select $select, AbstractCondition $condition) {
+        $condition->addFilter($select, 'target', 'state');
     }
 
     /**
@@ -109,10 +80,19 @@ class Measure extends AbstractJunction {
      * @return void
      */
     protected function started(Select $select, AbstractCondition $condition) {
-        $alias = $select->getUniqueTableAlias();
-        $select->joinInner(array($alias => 'measure_test'), $alias.'.measureId = target.id', array('started'));
+        $condition->addFilter($select, 'target', 'started');
+    }
 
-        $condition->addFilter($select, $alias, 'started');
+    /**
+     * This method provider search by method.
+     *
+     * @param \PF\Search\Filter\Select                      $select    Select instance
+     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
+     *
+     * @return void
+     */
+    protected function method(Select $select, AbstractCondition $condition) {
+        $condition->addFilter($select, 'target', 'method');
     }
 
     /**
@@ -124,13 +104,7 @@ class Measure extends AbstractJunction {
      * @return void
      */
     protected function time(Select $select, AbstractCondition $condition) {
-        $aliasTest    = $select->getUniqueTableAlias();
-        $aliasAttempt = $select->getUniqueTableAlias();
-
-        $select->joinInner(array($aliasTest => 'measure_test'), $aliasTest.'.measureId = target.id', array());
-        $select->joinInner(array($aliasAttempt => 'test_attempt'), $aliasAttempt.'.testId = '.$aliasTest.'.id', array('time'));
-
-        $condition->addFilter($select, $aliasAttempt, 'time');
+        $condition->addFilter($select, 'target', 'time');
     }
 
     /**
@@ -142,12 +116,62 @@ class Measure extends AbstractJunction {
      * @return void
      */
     protected function calls(Select $select, AbstractCondition $condition) {
-        $aliasTest    = $select->getUniqueTableAlias();
-        $aliasAttempt = $select->getUniqueTableAlias();
+        $condition->addFilter($select, 'target', 'calls');
+    }
 
-        $select->joinInner(array($aliasTest => 'measure_test'), $aliasTest.'.measureId = target.id', array());
-        $select->joinInner(array($aliasAttempt => 'test_attempt'), $aliasAttempt.'.testId = '.$aliasTest.'.id', array('calls'));
+    /**
+     * This method provider search by file.
+     *
+     * @param \PF\Search\Filter\Select                      $select    Select instance
+     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
+     *
+     * @return void
+     */
+    protected function file(Select $select, AbstractCondition $condition) {
+        $alias = $select->getUniqueTableAlias();
+        $select->joinInner(array($alias => 'measure_statistic_data'), 'target.id = '.$alias.'.measureId', array('file'));
+        $condition->addFilter($select, $alias, 'file');
+    }
 
-        $condition->addFilter($select, $aliasAttempt, 'calls');
+    /**
+     * This method provider search by line.
+     *
+     * @param \PF\Search\Filter\Select                      $select    Select instance
+     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
+     *
+     * @return void
+     */
+    protected function line(Select $select, AbstractCondition $condition) {
+        $alias = $select->getUniqueTableAlias();
+        $select->joinInner(array($alias => 'measure_statistic_data'), 'target.id = '.$alias.'.measureId', array('line'));
+        $condition->addFilter($select, $alias, 'line');
+    }
+
+    /**
+     * This method provider search by content.
+     *
+     * @param \PF\Search\Filter\Select                      $select    Select instance
+     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
+     *
+     * @return void
+     */
+    protected function content(Select $select, AbstractCondition $condition) {
+        $alias = $select->getUniqueTableAlias();
+        $select->joinInner(array($alias => 'measure_statistic_data'), 'target.id = '.$alias.'.measureId', array('content'));
+        $condition->addFilter($select, $alias, 'content');
+    }
+
+    /**
+     * This method provider search by immersion.
+     *
+     * @param \PF\Search\Filter\Select                      $select    Select instance
+     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
+     *
+     * @return void
+     */
+    protected function immersion(Select $select, AbstractCondition $condition) {
+        $alias = $select->getUniqueTableAlias();
+        $select->joinInner(array($alias => 'measure_statistic_data'), 'target.id = '.$alias.'.measureId', array('immersion'));
+        $condition->addFilter($select, $alias, 'immersion');
     }
 }

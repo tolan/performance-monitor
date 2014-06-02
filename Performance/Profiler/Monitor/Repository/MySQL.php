@@ -207,7 +207,7 @@ class MySQL extends AbstractRepository {
     private function _updateMeasure($start, $calls, $time) {
         $this->_checkMeasureId();
         $data = array(
-            'started' => $this->getUtils()->convertTimeToMySQLDateTime($start),
+            'started' => $this->getUtils()->convertTimeToMySQLDateTime($start / 1000),
             'calls'   => $calls,
             'time'    => $time,
         );

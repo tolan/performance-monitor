@@ -8,7 +8,7 @@
 <script type="text/ng-template" id="menu-items.html">
     <li ng-repeat='item in item.submenu' class="dropdown">
         <a ng-if="!item.submenu" ng-href="[[item.href]]">[[_.(item.text)]]</a>
-        <a ng-if="item.submenu" ng-href="[[item.href]]" class="dropdown-toggle" data-toggle="dropdown">[[_.(item.text)]]<b class="caret"></b></a>
+        <a ng-if="item.submenu" ng-href="[[item.href]]" class="dropdown-toggle" data-toggle="dropdown">[[_.(item.text)]]&nbsp;<b class="caret"></b></a>
         <ul ng-if="item.submenu" class="dropdown-menu"  ng-include="'menu-items.html'">
         </ul>
     </li>

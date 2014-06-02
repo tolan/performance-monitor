@@ -23,7 +23,7 @@ class Search extends Abstracts\Json {
      * @return void
      */
     public function actionFilterMenu() {
-        $data = $this->getProvider()->get('PF\Search\Component\Association')->getMenu();
+        $data = $this->getProvider()->get('PF\Search\Association')->getMenu();
         $menu = array();
 
         foreach ($data as $target => $filters) {
@@ -58,7 +58,7 @@ class Search extends Abstracts\Json {
      * @return void
      */
     public function actionGetFilterParams($target, $filter) {
-        $result = $this->getProvider()->get('PF\Search\Component\Association')->getFilter($target, $filter);
+        $result = $this->getProvider()->get('PF\Search\Association')->getFilter($target, $filter);
 
         $this->setData($result);
     }
