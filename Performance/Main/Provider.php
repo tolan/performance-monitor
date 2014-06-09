@@ -34,6 +34,13 @@ class Provider {
     private $_useAutoloader = true;
 
     /**
+     * Flag for allow kill app which have memory leak.
+     *
+     * @var boolean
+     */
+    private $_allowKillApp = false;
+
+    /**
      * Self singleton instance
      *
      * @var \PF\Main\Provider
@@ -55,7 +62,22 @@ class Provider {
     private $_serviceMap = array();
 
     /**
+     * List of file which are excluded from manual loading files.
+     *
+     * @var array
+     */
+    private $_excludeFilesFromLoad = array(
+        'Main/Abstracts/Unit/TestCase.php',
+        'Main/startWorker.php',
+        'Main/memoryLeakCleaner.php'
+    );
+
+    /**
      * Construct method which initialize instance and prepare autoloder.
+     *
+     * @var $config Config instance
+     *
+     * @return void
      */
     public function __construct(Config $config = null) {
         $services = array();
@@ -63,6 +85,7 @@ class Provider {
             $this->set($config);
             $providerConfig       = $config->hasOwnProperty('provider') ? $config->get('provider') : array();
             $this->_useAutoloader = isset($providerConfig['useAutoloader']) ? $providerConfig['useAutoloader'] : $this->_useAutoloader;
+            $this->_allowKillApp  = isset($providerConfig['allowKillApp']) ? $providerConfig['allowKillApp'] : $this->_allowKillApp;
             $services             = isset($providerConfig['initServices']) ? $providerConfig['initServices'] : array();
             $this->_serviceMap    = isset($providerConfig['serviceMap']) ? $providerConfig['serviceMap'] : array();
         }
@@ -83,6 +106,8 @@ class Provider {
 
     /**
      * Return singleton instance.
+     *
+     * @var $config Config instance
      *
      * @return \PF\Main\Provider
      */
@@ -136,14 +161,14 @@ class Provider {
         if ($name === null) {
             $this->_instances = array();
         } else {
-            foreach ($this->_instances as $key =>$instance) {
+            foreach ($this->_instances as $key => $instance) {
                 if ($instance['name'] === $name) {
                     unset($this->_instances[$key]);
                     return $this;
                 }
             }
 
-            foreach ($this->_instances as $key =>$instance) {
+            foreach ($this->_instances as $key => $instance) {
                 if ($instance['classname'] === $name) {
                     unset($this->_instances[$key]);
                     return $this;
@@ -155,15 +180,25 @@ class Provider {
     }
 
     /**
-     * Destruct function destroys all instances.
+     * Destruct function destroys all instances and check memory leak.
      *
      * @return void
      */
     public function __destruct() {
-        $list = $this->getListInstances();
+        $list    = $this->getListInstances();
+        $root    = $this->get('config')->get('root');
+        $memory  = $this->get('PF\Main\System\Memory'); /* @var $memory \PF\Main\System\Memory */
+        $process = $this->get('PF\Main\System\Process'); /* @var $process \PF\Main\System\Process */
 
         foreach ($list as $instance) {
             $this->reset($instance['name']);
+        }
+
+        if ($this->_allowKillApp && $memory->getRelativeUsage() > 0.2) {
+            $pid    = $process->getPid();
+            $script = 'php '.$root.'/Main/memoryLeakCleaner.php '.$pid;
+            $this->get('PF\Main\Log')->warning('Application was killed with PID: '.$pid);
+            $process->exec($script);
         }
     }
 
@@ -469,13 +504,17 @@ class Provider {
     private function _getFiles($path = '') {
         $result = array();
         $path   = rtrim($path, '/');
+        $root   = $this->get('config')->get('root');
 
-        foreach (glob($path.'/*', GLOB_ONLYDIR) as $item) {
-            $result = array_merge($result, $this->_getFiles($item));
+        foreach ((array)glob($path.'/*', GLOB_ONLYDIR) as $item) {
+            if (strlen($item) > strlen($path)) {
+                $result = array_merge($result, $this->_getFiles($item));
+            }
         }
 
-        foreach (glob($path.'/*.php') as $item) {
-            if (!strstr($item, 'TestCase.php') && !strstr($item, 'startWorker.php')) {
+        foreach ((array)glob($path.'/*.php') as $item) {
+            $shortPath = substr($item, strlen($root));
+            if (!in_array($shortPath, $this->_excludeFilesFromLoad)) {
                 $result[] = $item;
             }
         }

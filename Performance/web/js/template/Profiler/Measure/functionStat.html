@@ -22,14 +22,27 @@
                 <th ng-click="predicate='avgTime'; reverse=!reverse" class="center time">
                     <i ng-class="selectSortClass('avgTime', predicate, reverse)"></i>&nbsp;[[_.('profiler.scenario.test.measure.callStack.avgTime')]]
                 </th>
+                <th ng-click="predicate='minTime'; reverse=!reverse" class="center time">
+                    <i ng-class="selectSortClass('minTime', predicate, reverse)"></i>&nbsp;[[_.('profiler.scenario.test.measure.callStack.minTime')]]
+                </th>
+                <th ng-click="predicate='maxTime'; reverse=!reverse" class="center time">
+                    <i ng-class="selectSortClass('maxTime', predicate, reverse)"></i>&nbsp;[[_.('profiler.scenario.test.measure.callStack.maxTime')]]
+                </th>
                 <th ng-click="predicate='timeSubStack'; reverse=!reverse" class="center time">
                     <i ng-class="selectSortClass('timeSubStack', predicate, reverse)"></i>&nbsp;[[_.('profiler.scenario.test.measure.callStack.timeSubStack')]]
                 </th>
                 <th ng-click="predicate='avgTimeSubStack'; reverse=!reverse" class="center time">
                     <i ng-class="selectSortClass('avgTimeSubStack', predicate, reverse)"></i>&nbsp;[[_.('profiler.scenario.test.measure.callStack.avgTimeSubStack')]]
                 </th>
+                <th ng-click="predicate='minTimeSubStack'; reverse=!reverse" class="center time">
+                    <i ng-class="selectSortClass('minTimeSubStack', predicate, reverse)"></i>&nbsp;[[_.('profiler.scenario.test.measure.callStack.minTimeSubStack')]]
+                </th>
+                <th ng-click="predicate='maxTimeSubStack'; reverse=!reverse" class="center time">
+                    <i ng-class="selectSortClass('maxTimeSubStack', predicate, reverse)"></i>&nbsp;[[_.('profiler.scenario.test.measure.callStack.maxTimeSubStack')]]
+                </th>
                 <th ng-click="predicate='count'; reverse=!reverse" class="center count-calls">
-                    <i ng-class="selectSortClass('count', predicate, reverse)"></i>&nbsp;[[_.('profiler.scenario.test.measure.callStack.calls')]]
+                    <i ng-class="selectSortClass('count', predicate, reverse)"></i>
+                    &nbsp;[[_.('profiler.scenario.test.measure.callStack.calls')]] / [[_.('profiler.scenario.test.measure.callStack.relativeCount')]]
                 </th>
             </tr>
         </thead>
@@ -41,23 +54,19 @@
                 <td>[[call.content | limitTo : 200]]</td>
                 <td>[[call.time | round:5]]</td>
                 <td>[[call.avgTime | round:5]]</td>
+                <td>[[call.minTime | round:5]]</td>
+                <td>[[call.maxTime | round:5]]</td>
                 <td>[[call.timeSubStack | round:5]]</td>
                 <td>[[call.avgTimeSubStack | round:5]]</td>
-                <td class="center">[[call.count]]</td>
+                <td>[[call.minTimeSubStack | round:5]]</td>
+                <td>[[call.maxTimeSubStack | round:5]]</td>
+                <td class="center">[[call.count]] / [[(call.count/count) * 100 | number:3]]</td>
             </tr>
         </tbody>
     </table>
     <div class="center">
-        <pagination
-            boundary-links="true"
-            total-items="totalItems"
-            page="currentPage"
-            items-per-page="pageSize"
-            max-size="10"
-            previous-text="&lsaquo;"
-            next-text="&rsaquo;"
-            first-text="&laquo;"
-            last-text="&raquo;">
+        <pagination boundary-links="true" total-items="totalItems" page="currentPage" items-per-page="pageSize" max-size="10" previous-text="&lsaquo;"
+            next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
         </pagination>
     </div>
 </div>

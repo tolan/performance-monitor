@@ -153,7 +153,7 @@ a:hover {
 }
 
 .profiler-attempt-call-list .file {
-    width: 30%;
+    width: 300px;
 }
 .pageSize {
     width: 70px;
@@ -171,7 +171,7 @@ a:hover {
 }
 
 .profiler-attempt-call-list .count-calls {
-    width: 110px;
+    width: 130px;
 }
 
 

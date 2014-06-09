@@ -256,6 +256,8 @@ class Profiler extends Abstracts\Json {
      *
      * @method GET
      *
+     * @session_write_close false
+     *
      * @param enum $type One of enum \PF\Profiler\Monitor\Enum\Type
      * @param int  $id   Measure ID
      *
@@ -285,6 +287,8 @@ class Profiler extends Abstracts\Json {
      *
      * @method GET
      *
+     * @session_write_close false
+     *
      * @param enum $type     One of enum \PF\Profiler\Monitor\Enum\Type
      * @param int  $id       Measure ID
      * @param int  $parentId ID of parent call
@@ -309,6 +313,8 @@ class Profiler extends Abstracts\Json {
      * @link /{type}/measure/{id}/statistic/function
      *
      * @method GET
+     * 
+     * @session_write_close false
      *
      * @param enum $type     One of enum \PF\Profiler\Monitor\Enum\Type
      * @param int  $id       Measure ID

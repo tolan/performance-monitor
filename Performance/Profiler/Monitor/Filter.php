@@ -75,7 +75,9 @@ class Filter implements Interfaces\Filter {
         do {
             $levelCall = current($backtrace);
 
-            $call['files'][$levelCall['file']][] = $levelCall['line'];
+            if (isset($levelCall['line'])) {
+                $call['files'][$levelCall['file']][] = $levelCall['line'];
+            }
         } while ($this->_allowStack && next($backtrace));
 
         $isApplicable = $this->_evaluateImmersion($call);

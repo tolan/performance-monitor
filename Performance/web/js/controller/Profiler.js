@@ -514,6 +514,7 @@ function ProfilerFunctionStatCtrl($scope, $http, $routeParams) {
     $scope.type      = $routeParams.type || 'Session';
     $scope.measureId = $routeParams.id || 1;
     $scope.calls = [];
+    $scope.count = 0;
 
     $scope.totalItems  = 0;
     $scope.currentPage = 1;
@@ -526,6 +527,10 @@ function ProfilerFunctionStatCtrl($scope, $http, $routeParams) {
     };
 
     $http.get('/profiler/' + $scope.type + '/measure/' + $scope.measureId + '/statistic/function').success(function(response) {
+        $scope.count = _.reduce(response, function(sum, el) {
+            return sum + el.count;
+        }, 0);
+
         $scope.calls      = response;
         $scope.totalItems = response.length;
     });

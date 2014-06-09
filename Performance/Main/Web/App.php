@@ -67,8 +67,6 @@ class App {
      * @return \PF\Main\Web\App
      */
     protected function init() {
-        session_write_close();
-
         try {
             $this->_provider->get('access')->checkAccess();
         } catch (AccessException $exc) {
@@ -77,9 +75,18 @@ class App {
             return $this->_showAccessDenied($exc);
         }
 
-        $this->_response = $this->_router
-            ->route()
-            ->getController()
+        $controller = $this->_router->getController();
+        $routeInfo  = $this->_router->getRouteInfo();
+
+        if (!isset($routeInfo[Component\Router::ANNOTATION]) ||
+            !isset($routeInfo[Component\Router::ANNOTATION]['session_write_close']) ||
+            $routeInfo[Component\Router::ANNOTATION]['session_write_close'] != 'false') {
+            session_write_close();
+        } elseif (session_id() === '') {
+            session_start();
+        }
+
+        $this->_response = $controller
             ->run()
             ->getResponse();
 

@@ -161,7 +161,12 @@ class Call implements Interfaces\Call {
 
         if (!isset($this->_linesCache[$filename]) || !isset($this->_linesCache[$filename][$line])) {
             if (!isset(self::$_filesCache[$filename])) {
-                self::$_filesCache[$filename] = file($filename);
+                if (file_exists($filename)) {
+                    self::$_filesCache[$filename] = file($filename);
+                } else {
+                    self::$_filesCache[$filename] = array();
+                }
+
                 $this->_linesCache[$filename] = array();
             }
 
@@ -228,7 +233,7 @@ class Call implements Interfaces\Call {
      *
      * @param array $call       Array with information about call
      * @param arry  $attributes Array with required attribute names
-     * 
+     *
      * @return boolean
      */
     private function _hasAttributes($call, $attributes = array()) {

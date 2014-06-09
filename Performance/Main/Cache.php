@@ -121,4 +121,15 @@ class Cache implements Event\Interfaces\Sender {
 
         return $this;
     }
+
+    /**
+     * Flush unsaved data to storage.
+     *
+     * @return \PF\Main\Cache
+     */
+    public function commit() {
+        $this->_driver->commit();
+
+        return $this;
+    }
 }

@@ -68,7 +68,7 @@ class Utils {
     public function convertMemory($memoryString) {
         $value = 0;
         if (stristr($memoryString, 'G')) {
-            $value = (int)strstr($memoryString, 'G', true) * pow(2, 30);
+            $value = (int)strstr($memoryString, 'G', true) * pow(2, 30); // There can be limit by 32-bit system
         } elseif (stristr($memoryString, 'M')) {
             $value = (int)strstr($memoryString, 'M', true) * pow(2, 20);
         } elseif (stristr($memoryString, 'K')) {

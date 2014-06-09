@@ -12,7 +12,7 @@ declare(ticks=1);
 \PF\Profiler\Monitor::getInstance()->disable()->display();
 
 function simple ($input) {
-    for($i = 0; $i < 3; $i++) {
+    for($i = 0; $i < 2000; $i++) {
         $input = sub($input, $i);
         $time = time();
     }

@@ -9,5 +9,5 @@ namespace PF\Main\Commander;
  * @category   Performance
  * @package    Main
  */
-class Exception extends PF\Main\Exception {
+class Exception extends \PF\Main\Exception {
 }

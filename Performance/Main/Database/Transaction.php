@@ -49,6 +49,7 @@ class Transaction {
         }
 
         if ($this->_isInTransaction() === false) {
+            $this->_connection->prepare('')->closeCursor();
             $this->_connection->beginTransaction();
         }
 
@@ -71,6 +72,7 @@ class Transaction {
             $this->clear($name);
 
             if (empty($this->_transactions)) {
+                $this->_connection->prepare('')->closeCursor();
                 $this->_connection->commit();
             }
         } else {
@@ -89,6 +91,7 @@ class Transaction {
         if ($this->_isInTransaction()) {
             $this->clearAll();
 
+            $this->_connection->prepare('')->closeCursor();
             $this->_connection->commit();
         }
 
@@ -133,6 +136,7 @@ class Transaction {
      * @return \PF\Main\Database\Transaction
      */
     public function rollBack() {
+        $this->_connection->prepare('')->closeCursor();
         $this->_connection->rollBack();
 
         return $this;
@@ -155,6 +159,7 @@ class Transaction {
      * @throws \PF\Main\Database\Exception Throws when database is in transaction but here is no stored transactions.
      */
     private function _isInTransaction() {
+        $this->_connection->prepare('')->closeCursor();
         $inTransaction = $this->_connection->inTransaction();
 
         if ($inTransaction === false && !empty($this->_transactions)) {

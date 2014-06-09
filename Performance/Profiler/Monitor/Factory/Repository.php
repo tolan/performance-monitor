@@ -85,7 +85,7 @@ class Repository extends AbstractFactory {
     private function _getFileRepository($params = null) {
         $filepath    = $this->getProvider()->get('config')->getRoot().'/tmp/Profiler';
         // TODO extract file path to better place
-        $file        = new Filesystem\File($filepath, $params[HttpKeys::MEASURE_ID], true, true);
+        $file        = new Filesystem\File($filepath, $params[HttpKeys::MEASURE_ID], false, false);
         $cacheDriver = new Cache\File($file);
         $cache       = $this->getProvider()->prototype('cache'); /* @var $cache \PF\Main\Cache */
         $cache->setDriver($cacheDriver);

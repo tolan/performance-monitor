@@ -93,18 +93,25 @@ class Cache implements Interfaces\Measure {
 
         $result['started'] = $this->_dir->getFile($measureId)->getModificationDate() * 1000;
 
-        $baseCalls = $this->getMeasureCallStack($measureId, 0);
-        foreach ($baseCalls as $call) {
-            $result['time'] += $call[CallAttributes::TIME_SUB_STACK];
-        }
+        $calls           = $this->_cache->load();
+        $result['calls'] = count($calls) - 1;
 
-        $calls  = array_diff_key($this->_cache->load(), array(self::CACHE_FLYWEIGHT_CALL_KEY => true));
-        $result['calls'] = count($calls);
+        while ($call = current($calls)) {
+            $key = key($calls);
+            if ($key !== self::CACHE_FLYWEIGHT_CALL_KEY) {
+                if(isset($call[CallAttributes::IMMERSION]) && $call[CallAttributes::IMMERSION] > $result['maxImmersion']) {
+                    $result['maxImmersion'] = $call[CallAttributes::IMMERSION];
+                }
 
-        foreach ($calls as $call) {
-            if (isset($call[CallAttributes::IMMERSION]) && $call[CallAttributes::IMMERSION] > $result['maxImmersion']) {
-                $result['maxImmersion'] = $call[CallAttributes::IMMERSION];
+                if ((string)$call['parentId'] === '0' && isset($call[CallAttributes::TIME])) {
+                    $result['time'] += $call[CallAttributes::TIME];
+                }
+                if ((string)$call['parentId'] === '0' && isset($call[CallAttributes::TIME_SUB_STACK])) {
+                    $result['time'] += $call[CallAttributes::TIME_SUB_STACK];
+                }
             }
+
+            next($calls);
         }
 
         return $result;
@@ -118,56 +125,56 @@ class Cache implements Interfaces\Measure {
      * @return array
      */
     public function getMeasureCallsStatistic($measureId) {
-        $callFlyWeight = $this->_cache->load(self::CACHE_FLYWEIGHT_CALL_KEY); /* @var $callFlyWeight \PF\Profiler\Monitor\Interfaces\Call */
+        $calls         = $this->_cache->load();
+        $callFlyWeight = $calls[self::CACHE_FLYWEIGHT_CALL_KEY];
+        $data          = array();
+        $result        = array();
 
-        $calls  = array_diff_key($this->_cache->load(), array(self::CACHE_FLYWEIGHT_CALL_KEY => true));
-        $data   = array();
-        $result = array();
+        while($call = current($calls)) {
+            $key = key($calls);
+            if ($key !== self::CACHE_FLYWEIGHT_CALL_KEY) {
+                $call[CallAttributes::CONTENT] = isset($call[CallAttributes::CONTENT]) ? $callFlyWeight->decodeContentHash($call[CallAttributes::CONTENT]) : '';
+                $file                          = isset($call[CallAttributes::FILE])    ? $callFlyWeight->decodeFilenameHash($call[CallAttributes::FILE])   : '';
+                $time                          = isset($call[CallAttributes::TIME])           ? $call[CallAttributes::TIME] : 0;
+                $timeSubStack                  = isset($call[CallAttributes::TIME_SUB_STACK]) ? $call[CallAttributes::TIME_SUB_STACK] : 0;
+                $line                          = isset($call[CallAttributes::LINE])           ? $call[CallAttributes::LINE] : 0;
 
-        foreach ($calls as $call) {
-            $content      = isset($call[CallAttributes::CONTENT])        ? $callFlyWeight->decodeContentHash($call[CallAttributes::CONTENT]) : '';
-            $file         = isset($call[CallAttributes::FILE])           ? $callFlyWeight->decodeFilenameHash($call[CallAttributes::FILE])   : '';
-            $time         = isset($call[CallAttributes::TIME])           ? $call[CallAttributes::TIME] : 0;
-            $timeSubStack = isset($call[CallAttributes::TIME_SUB_STACK]) ? $call[CallAttributes::TIME_SUB_STACK] : 0;
-            $line         = isset($call[CallAttributes::LINE])           ? $call[CallAttributes::LINE] : 0;
-            $start        = isset($call[CallAttributes::START_TIME])     ? $call[CallAttributes::START_TIME] : 0;
-            $end          = isset($call[CallAttributes::END_TIME])       ? $call[CallAttributes::END_TIME] : 0;
-
-            $call[CallAttributes::CONTENT]        = $content;
-            $call[CallAttributes::FILE]           = $file;
-            $call[CallAttributes::TIME]           = $time;
-            $call[CallAttributes::TIME_SUB_STACK] = $timeSubStack;
-            $call[CallAttributes::START_TIME]     = $start * 1000000;
-            $call[CallAttributes::END_TIME]       = $end * 1000000;
-            $call['count']                        = 1;
-            $call['avgTime']                      = $time;
-            $call['timeSubStack']                 = $timeSubStack;
-            $call['avgTimeSubStack']              = $timeSubStack;
-            $call['min']                          = $time;
-            $call['max']                          = $time;
-
-            if (isset($data[$file]) && isset($data[$file][$line])) {
-                $item = $data[$file][$line];
-                $item['count']++;
-                $item['time']            += $time;
-                $item['avgTime']          = $item['time'] / $item['count'];
-                $item['timeSubStack']    += $timeSubStack;
-                $item['avgTimeSubStack']  = $item['timeSubStack'] / $item['count'];
-                $item['min']              = min($item['min'], $time);
-                $item['max']              = max($item['max'], $time);
-
-                $data[$file][$line] = $item;
-            } else {
                 if (!isset($data[$file])) {
                     $data[$file] = array();
                 }
 
-                $data[$file][$line] = $call;
+                if (isset($data[$file][$line])) {
+                    $item = &$data[$file][$line];
+
+                    $item['count']++;
+                    $item['time']            += $time;
+                    $item['timeSubStack']    += $timeSubStack + $time;
+                    $item['minTime']          = min($item['minTime'], $time);
+                    $item['maxTime']          = max($item['maxTime'], $time);
+                    $item['minTimeSubStack']  = min($item['minTimeSubStack'], $timeSubStack + $time);
+                    $item['maxTimeSubStack']  = max($item['maxTimeSubStack'], $timeSubStack + $time);
+                } else {
+                    $call[CallAttributes::FILE]           = $file;
+                    $call[CallAttributes::TIME]           = $time;
+                    $call[CallAttributes::TIME_SUB_STACK] = $timeSubStack;
+                    $call['count']                        = 1;
+                    $call['timeSubStack']                 = $timeSubStack + $time;
+                    $call['minTime']                      = $time;
+                    $call['maxTime']                      = $time;
+                    $call['minTimeSubStack']              = $call['timeSubStack'];
+                    $call['maxTimeSubStack']              = $call['timeSubStack'];
+
+                    $data[$file][$line] = $call;
+                }
             }
+
+            next($calls);
         }
 
         foreach ($data as $fileData) {
             foreach ($fileData as $call) {
+                $call['avgTime']         = $call['time'] / $call['count'];
+                $call['avgTimeSubStack'] = $call['timeSubStack'] / $call['count'];
                 $result[] = $call;
             }
         }
@@ -210,26 +217,26 @@ class Cache implements Interfaces\Measure {
      * @return array
      */
     public function getMeasureCallStack($measureId, $parentId = 0) {
-        $callFlyWeight = $this->_cache->load(self::CACHE_FLYWEIGHT_CALL_KEY); /* @var $callFlyWeight \PF\Profiler\Monitor\Interfaces\Call */
+        $calls         = $this->_cache->load();
+        $callFlyWeight = $calls[self::CACHE_FLYWEIGHT_CALL_KEY]; /* @var $callFlyWeight \PF\Profiler\Monitor\Interfaces\Call */
+        $result        = array();
+        $parentId      = (string)$parentId;
 
-        $calls  = array_diff_key($this->_cache->load(), array(self::CACHE_FLYWEIGHT_CALL_KEY => true));
-        $result = array();
-
-        foreach ($calls as $call) {
-            if ((string)$call['parentId'] === (string)$parentId) {
+        foreach ($calls as $key => $call) {
+            if ($key !== self::CACHE_FLYWEIGHT_CALL_KEY && (string)$call['parentId'] === $parentId) {
                 $content      = isset($call[CallAttributes::CONTENT])        ? $callFlyWeight->decodeContentHash($call[CallAttributes::CONTENT]) : '';
                 $file         = isset($call[CallAttributes::FILE])           ? $callFlyWeight->decodeFilenameHash($call[CallAttributes::FILE])   : '';
                 $time         = isset($call[CallAttributes::TIME])           ? $call[CallAttributes::TIME] : 0;
                 $timeSubStack = isset($call[CallAttributes::TIME_SUB_STACK]) ? $call[CallAttributes::TIME_SUB_STACK] : 0;
-                $start        = isset($call[CallAttributes::START_TIME])     ? $call[CallAttributes::START_TIME] : 0;
-                $end          = isset($call[CallAttributes::END_TIME])       ? $call[CallAttributes::END_TIME] : 0;
 
                 $call[CallAttributes::CONTENT]        = $content;
                 $call[CallAttributes::FILE]           = $file;
                 $call[CallAttributes::TIME]           = $time;
-                $call[CallAttributes::TIME_SUB_STACK] = $timeSubStack;
-                $call[CallAttributes::START_TIME]     = $start * 1000000;
-                $call[CallAttributes::END_TIME]       = $end * 1000000;
+                $call[CallAttributes::TIME_SUB_STACK] = $timeSubStack + $time;
+
+                if (isset($call[CallAttributes::SUB_STACK])) {
+                    unset($call[CallAttributes::SUB_STACK]);
+                }
 
                 $result[] = $call;
             }

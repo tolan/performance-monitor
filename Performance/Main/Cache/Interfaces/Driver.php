@@ -54,4 +54,11 @@ interface Driver {
      * @throws \PF\Main\Cache\Exception Throws when variable is not set.
      */
     public function clean($name=null);
+
+    /**
+     * Flush unsaved data to storage.
+     *
+     * @return \PF\Main\Cache\Interfaces\Driver
+     */
+    public function commit();
 }

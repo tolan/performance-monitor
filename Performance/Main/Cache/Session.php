@@ -23,9 +23,10 @@ class Session extends AbstractDriver implements Interfaces\Driver {
     public function __construct($namespace = self::DEFAULT_NAMESPACE) {
         $this->_namespace = $namespace;
 
-        session_start();
-        if (isset($_SESSION[self::SESSION_NAME][$namespace])) {
-            $this->_data = unserialize($_SESSION[self::SESSION_NAME][$namespace]);
+        if (session_id()) {
+            if (isset($_SESSION[self::SESSION_NAME][$namespace])) {
+                $this->_data = unserialize($_SESSION[self::SESSION_NAME][$namespace]);
+            }
         }
     }
 

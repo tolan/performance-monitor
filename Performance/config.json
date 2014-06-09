@@ -2,6 +2,7 @@
     "modules" : ["Profiler"],
     "provider" : {
         "useAutoloader" : true,
+        "allowKillApp"  : true,
         "initServices"  : ["database", "log", "loader"],
         "serviceMap"    : {
             "database" : "PF\\Main\\Database",

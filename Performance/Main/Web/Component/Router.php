@@ -16,6 +16,7 @@ class Router {
     const CONTROLLER = 'controller';
     const METHOD     = 'action';
     const PARAMS     = 'params';
+    const ANNOTATION = 'annotation';
 
     /**
      * Http request
@@ -37,6 +38,13 @@ class Router {
      * @var \PF\Main\Web\Controller\Abstracts\Controller
      */
     private $_controller = null;
+
+    /**
+     * There is stored routing information.
+     *
+     * @var array
+     */
+    private $_routeInfo = array();
 
     /**
      * Construct method
@@ -68,11 +76,20 @@ class Router {
      * @return \PF\Main\Web\Controller\Abstracts\Controller
      */
     public function getController() {
-        if ($this->_controller === null) {
-            $this->_controller = $this->_resolveController();
-        }
+        $this->route();
 
         return $this->_controller;
+    }
+
+    /**
+     * Returns information about routing process.
+     *
+     * @return array
+     */
+    public function getRouteInfo() {
+        $this->route();
+
+        return $this->_routeInfo;
     }
 
     /**
@@ -83,7 +100,10 @@ class Router {
     private function _resolveController() {
         $server = $this->_request->getServer();
 
-        $server->hasBASE() === false && $server->setBASE('');
+        if($server->hasBASE() === false) {
+            $server->setBASE('');
+        }
+
         $path = substr($server->getREQUEST_URI(), strlen($server->getBASE()));
 
         $getParams = array();
@@ -103,6 +123,8 @@ class Router {
         $controller = $this->_provider->get('PF\Main\Web\Controller\\'.$route[self::CONTROLLER]);
         $controller->setAction($route[self::METHOD]);
         $controller->setParams($route[self::PARAMS]);
+
+        $this->_routeInfo = $route;
 
         return $controller;
     }
@@ -133,16 +155,18 @@ class Router {
 
         $requestMethod = $this->_request->getServer()->getREQUEST_METHOD();
 
-        $method = null;
-        $params = array();
+        $method     = null;
+        $params     = array();
+        $annotation = array();
 
         foreach ($classMethodsAnnot as $methodName => $annot) {
             if (isset($annot['link'])) {
                 $regExpMethod = preg_replace('#\{[a-zA-Z]+\}#', '[a-zA-Z0-9-]+', $annot['link']);
                 $regExp = '#/'.$controller.'/'.ltrim($regExpMethod, '/').'#';
                 if (preg_match($regExp, $path) && ((isset($annot['method']) && $requestMethod == $annot['method']) || !isset($annot['method']))) {
-                    $method = substr($methodName, strlen('action'));
-                    $params = $this->_getPathParams($action, $annot['link']);
+                    $method     = substr($methodName, strlen('action'));
+                    $params     = $this->_getPathParams($action, $annot['link']);
+                    $annotation = $annot;
                 }
             }
         }
@@ -158,7 +182,8 @@ class Router {
         $routeParams = array(
             self::CONTROLLER => ucfirst($controller),
             self::METHOD     => $method,
-            self::PARAMS     => $params
+            self::PARAMS     => $params,
+            self::ANNOTATION => $annotation
         );
 
         return $routeParams;

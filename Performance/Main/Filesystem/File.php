@@ -127,6 +127,15 @@ class File {
     }
 
     /**
+     * Returns flag that file is open.
+     *
+     * @return boolean
+     */
+    public function isOpen() {
+        return $this->_filePointer !== null;
+    }
+
+    /**
      * Open file and sets pointer to default values.
      *
      * @param boolean $autoCreate Flag for automatic create file when doesn't exist
@@ -136,6 +145,10 @@ class File {
     public function open($autoCreate = false) {
         if ($autoCreate === false) {
             $this->_checkFileExist();
+        }
+
+        if ($this->isOpen()) {
+            $this->close();
         }
 
         $this->_createFile();
@@ -216,8 +229,13 @@ class File {
      */
     public function file() {
         $this->_checkFileExist();
+        $data = array();
 
-        return file($this->_getFilepath());
+        while(($line = fgets($this->_filePointer))) {
+            $data[] = $line;
+        }
+
+        return $data;
     }
 
     /**
@@ -243,7 +261,7 @@ class File {
      * @return \PF\Main\Filesystem\File
      */
     public function delete() {
-        if ($this->_isOpen() === true) {
+        if ($this->isOpen() === true) {
             $this->close();
         }
 
@@ -301,12 +319,21 @@ class File {
     }
 
     /**
+     * Returns that file exists in filesystem.
+     *
+     * @return boolean
+     */
+    public function fileExist() {
+        return $this->_isFileExist();
+    }
+
+    /**
      * Destruct method. It close file pointer.
      *
      * @return void
      */
     public function __destruct() {
-        if ($this->_filePointer !== null) {
+        if ($this->_filePointer !== null && $this->isOpen() === true) {
             $this->close();
         }
     }
@@ -389,19 +416,10 @@ class File {
      * @throws \PF\Main\Filesystem\Exception Throws when file is not open.
      */
     private function _checkOpen() {
-        if ($this->_isOpen() === false) {
+        if ($this->isOpen() === false) {
             throw new Exception('File is not open.');
         }
 
         return $this;
-    }
-
-    /**
-     * Returns flag that file is open.
-     *
-     * @return boolean
-     */
-    private function _isOpen() {
-        return $this->_filePointer !== null;
     }
 }

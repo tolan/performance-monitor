@@ -85,4 +85,13 @@ abstract class AbstractDriver implements Interfaces\Driver {
 
         return $this;
     }
+
+    /**
+     * Flush unsaved data to storage.
+     *
+     * @return \PF\Main\Cache\AbstractDriver
+     */
+    public function commit() {
+        return $this;
+    }
 }

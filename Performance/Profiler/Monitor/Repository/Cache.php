@@ -26,7 +26,7 @@ class Cache extends AbstractRepository {
     /**
      * Key to call
      */
-    const CACHE_CALL_KEY           = 'profiler_call_';
+    const CACHE_CALL_KEY = 'profiler_call_';
 
     /**
      * Key to monitor call fly weight
@@ -64,6 +64,7 @@ class Cache extends AbstractRepository {
      */
     public function saveCallStatistics(Monitor\Interfaces\Storage $storage) {
         $this->_saveStats($storage);
+        $this->_cache->commit();
 
         return $this;
     }
@@ -100,6 +101,7 @@ class Cache extends AbstractRepository {
      */
     public function saveCallFlyweight(Monitor\Interfaces\Call $call) {
         $this->_cache->save(self::CACHE_FLYWEIGHT_CALL_KEY, $call);
+        $this->_cache->commit();
 
         return $this;
     }

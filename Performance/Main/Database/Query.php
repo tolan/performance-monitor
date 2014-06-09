@@ -67,8 +67,9 @@ class Query {
         $this->preFetch();
 
         $this->_response = $this->execute($this->_statement, $this->_bind);
+        $data            = $this->_response->fetchAll(\PDO::FETCH_ASSOC);
 
-        return $this->_response->fetchAll(\PDO::FETCH_ASSOC);
+        return $data;
     }
 
     /**
@@ -96,6 +97,7 @@ class Query {
      */
     public function execute($statement, $bind = array()) {
         $answer = $this->_connection->prepare($statement);
+        $answer->closeCursor();
 
         if ($answer->execute($bind) === false) {
             throw new Exception('Database error. Check sql statement: '.$this->_connection->errorInfo());
