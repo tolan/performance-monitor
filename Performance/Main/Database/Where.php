@@ -65,6 +65,10 @@ class Where extends Query {
             }
         }
 
+        if (array_keys($compiledBinds) === range(0, count($compiledBinds) - 1) && count($compiledBinds) > 0) {
+            $result = str_replace('?', join(', ', array_fill(0, count($compiledBinds), '?')), $result);
+        }
+
         $this->setStatement($result);
         $this->setBind($compiledBinds);
 

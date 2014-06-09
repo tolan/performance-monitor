@@ -511,7 +511,7 @@ function ProfilerCallStackCtrl($scope, $http, $routeParams) {
     };
 
     $scope.$on('select', function(event, type) {
-        if (type === 'callStack' && $scope.calls.length === 0) {
+        if (type === $scope.tab.type && $scope.calls.length === 0) {
             $http.get('/profiler/' + $scope.type + '/measure/' + $scope.measureId + '/callStack/parent/0').success(function(response) {
                 $scope.calls = response;
             });
@@ -538,7 +538,7 @@ function ProfilerFunctionStatCtrl($scope, $http, $routeParams) {
     };
 
     $scope.$on('select', function(event, type) {
-        if (type === 'functionStat' && $scope.calls.length === 0) {
+        if (type === $scope.tab.type && $scope.calls.length === 0) {
             $http.get('/profiler/' + $scope.type + '/measure/' + $scope.measureId + '/statistic/function').success(function(response) {
                 $scope.count = _.reduce(response, function(sum, el) {
                     return sum + el.count;
