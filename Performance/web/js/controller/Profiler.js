@@ -472,15 +472,18 @@ function ProfilerMeasureDetailCtrl($scope, $http, $routeParams) {
     $scope.template = '/js/template/Profiler/Measure/detail.html';
     $scope.templatePrefix = '/js/template/Profiler/Measure/';
     $scope.tabs = [{
-            title : 'profiler.scenario.test.measure.detail.summary',
+            title    : 'profiler.scenario.test.measure.detail.summary',
             template : $scope.templatePrefix + 'summary.html',
-            active : true
+            type     : 'summary',
+            active   : true
         }, {
-            title : 'profiler.scenario.test.measure.detail.callStack',
-            template : $scope.templatePrefix + 'callStack.html'
+            title    : 'profiler.scenario.test.measure.detail.callStack',
+            template : $scope.templatePrefix + 'callStack.html',
+            type     : 'callStack'
         }, {
-            title : 'profiler.scenario.test.measure.detail.functionStatistics',
-            template : $scope.templatePrefix + 'functionStat.html'
+            title    : 'profiler.scenario.test.measure.detail.functionStatistics',
+            template : $scope.templatePrefix + 'functionStat.html',
+            type     : 'functionStat'
     }];
 
     $scope.summary;
@@ -488,6 +491,10 @@ function ProfilerMeasureDetailCtrl($scope, $http, $routeParams) {
     $http.get('/profiler/' + $scope.type + '/measure/' + $scope.id + '/summary').success(function(response) {
         $scope.summary = response;
     });
+
+    $scope.selectTab = function(type) {
+        $scope.$broadcast('select', type);
+    };
 }
 
 function ProfilerCallStackCtrl($scope, $http, $routeParams) {
@@ -495,17 +502,21 @@ function ProfilerCallStackCtrl($scope, $http, $routeParams) {
     $scope.measureId = $routeParams.id || 1;
     $scope.calls = [];
 
-    $http.get('/profiler/' + $scope.type + '/measure/' + $scope.measureId + '/callStack/parent/0').success(function(response) {
-        $scope.calls = response;
-    });
-
     $scope.showCall = function(call) {
         if (call.calls === undefined) {
-            $http.get('/profiler/' + $scope.type + '/measure/' + $scope.measureId + '/callStack/parent/' + call.id).success(function(response) {
-                call.calls = response;
-            });
+        $http.get('/profiler/' + $scope.type + '/measure/' + $scope.measureId + '/callStack/parent/' + call.id).success(function(response) {
+            call.calls = response;
+        });
         }
     };
+
+    $scope.$on('select', function(event, type) {
+        if (type === 'callStack' && $scope.calls.length === 0) {
+            $http.get('/profiler/' + $scope.type + '/measure/' + $scope.measureId + '/callStack/parent/0').success(function(response) {
+                $scope.calls = response;
+            });
+        }
+    });
 }
 
 function ProfilerFunctionStatCtrl($scope, $http, $routeParams) {
@@ -526,13 +537,17 @@ function ProfilerFunctionStatCtrl($scope, $http, $routeParams) {
         $scope.currentPage = pageNo;
     };
 
-    $http.get('/profiler/' + $scope.type + '/measure/' + $scope.measureId + '/statistic/function').success(function(response) {
-        $scope.count = _.reduce(response, function(sum, el) {
-            return sum + el.count;
-        }, 0);
+    $scope.$on('select', function(event, type) {
+        if (type === 'functionStat' && $scope.calls.length === 0) {
+            $http.get('/profiler/' + $scope.type + '/measure/' + $scope.measureId + '/statistic/function').success(function(response) {
+                $scope.count = _.reduce(response, function(sum, el) {
+                    return sum + el.count;
+                }, 0);
 
-        $scope.calls      = response;
-        $scope.totalItems = response.length;
+                $scope.calls      = response;
+                $scope.totalItems = response.length;
+            });
+        }
     });
 
     $scope.refresh = function(input) {
