@@ -126,7 +126,7 @@ class MySQL extends Repository implements Interfaces\Measure {
         $data = $select->fetchAll();
 
         foreach ($data as &$item) {
-            $item['id'] = (int)$item['id'];
+            $item['id']           = (int)$item['id'];
             $item['measureId']    = (int)$item['measureId'];
             $item['parentId']     = (int)$item['parentId'];
             $item['line']         = (int)$item['line'];
@@ -158,11 +158,13 @@ class MySQL extends Repository implements Interfaces\Measure {
                     'content'          => 'content',
                     'time'             => 'SUM(time)',
                     'avgTime'          => 'AVG(time)',
-                    'timeSubStack'     => 'SUM(timeSubStack)',
-                    'avgTimeSubStack'  => 'AVG(timeSubStack)',
-                    'count'            => 'COUNT(CONCAT(file, line))',
-                    'min'              => 'MIN(time)',
-                    'max'              => 'MAX(time)'
+                    'minTime'          => 'MIN(time)',
+                    'maxTime'          => 'MAX(time)',
+                    'timeSubStack'     => 'SUM(timeSubStack) + SUM(time)',
+                    'avgTimeSubStack'  => 'AVG(timeSubStack) + AVG(time)',
+                    'minTimeSubStack'  => 'MIN(timeSubStack + time)',
+                    'maxTimeSubStack'  => 'MAX(timeSubStack + time)',
+                    'count'            => 'COUNT(CONCAT(file, line))'
                 )
             )
             ->from(self::STATS_TABLE, array())
@@ -176,11 +178,13 @@ class MySQL extends Repository implements Interfaces\Measure {
             $call['line']            = (int)$call['line'];
             $call['time']            = (float)$call['time'];
             $call['avgTime']         = (float)$call['avgTime'];
+            $call['minTime']         = (float)$call['minTime'];
+            $call['maxTime']         = (float)$call['maxTime'];
             $call['timeSubStack']    = (float)$call['timeSubStack'];
             $call['avgTimeSubStack'] = (float)$call['avgTimeSubStack'];
+            $call['minTimeSubStack'] = (float)$call['minTimeSubStack'];
+            $call['maxTimeSubStack'] = (float)$call['maxTimeSubStack'];
             $call['count']           = (int)$call['count'];
-            $call['min']             = (float)$call['min'];
-            $call['max']             = (float)$call['max'];
         }
 
         return $data;

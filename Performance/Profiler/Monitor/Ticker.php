@@ -3,6 +3,7 @@
 namespace PF\Profiler\Monitor;
 
 use PF\Profiler\Entity;
+use PF\Profiler\Monitor\Filter\Enum;
 
 /**
  * This script defines class for monitor ticker. This class catch each call and process it.
@@ -180,11 +181,24 @@ class Ticker implements Interfaces\Ticker {
 
     /**
      * Loads default filter. It is for avoid catch calls in PF.
-     * 
+     *
      * @return \PF\Profiler\Monitor\Filter
      */
     private function _getDefaultFilter() {
         // TODO move to another place
-        return new Filter(new Entity\Filter(array()));
+        $filter = array(
+            'type' => Enum\Type::NEGATIVE,
+            'parameters' => array(
+                array(
+                    'operator'  => Enum\Operator::REG_EXP,
+                    'value'     => dirname(dirname(__DIR__)),
+                    'parameter' => Enum\Parameter::FILE
+                )
+            )
+        );
+
+        return new Filter(
+            new Entity\Filter($filter)
+        );
     }
 }

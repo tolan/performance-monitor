@@ -96,8 +96,7 @@ class Cache implements Interfaces\Measure {
         $calls           = $this->_cache->load();
         $result['calls'] = count($calls) - 1;
 
-        while ($call = current($calls)) {
-            $key = key($calls);
+        foreach ($calls as $key => $call) {
             if ($key !== self::CACHE_FLYWEIGHT_CALL_KEY) {
                 if(isset($call[CallAttributes::IMMERSION]) && $call[CallAttributes::IMMERSION] > $result['maxImmersion']) {
                     $result['maxImmersion'] = $call[CallAttributes::IMMERSION];
@@ -110,8 +109,6 @@ class Cache implements Interfaces\Measure {
                     $result['time'] += $call[CallAttributes::TIME_SUB_STACK];
                 }
             }
-
-            next($calls);
         }
 
         return $result;
@@ -128,16 +125,13 @@ class Cache implements Interfaces\Measure {
         $calls         = $this->_cache->load();
         $callFlyWeight = $calls[self::CACHE_FLYWEIGHT_CALL_KEY];
         $data          = array();
-        $result        = array();
 
-        while($call = current($calls)) {
-            $key = key($calls);
+        foreach ($calls as $key => $call) {
             if ($key !== self::CACHE_FLYWEIGHT_CALL_KEY) {
-                $call[CallAttributes::CONTENT] = isset($call[CallAttributes::CONTENT]) ? $callFlyWeight->decodeContentHash($call[CallAttributes::CONTENT]) : '';
-                $file                          = isset($call[CallAttributes::FILE])    ? $callFlyWeight->decodeFilenameHash($call[CallAttributes::FILE])   : '';
-                $time                          = isset($call[CallAttributes::TIME])           ? $call[CallAttributes::TIME] : 0;
-                $timeSubStack                  = isset($call[CallAttributes::TIME_SUB_STACK]) ? $call[CallAttributes::TIME_SUB_STACK] : 0;
-                $line                          = isset($call[CallAttributes::LINE])           ? $call[CallAttributes::LINE] : 0;
+                $file                          = isset($call[CallAttributes::FILE]) ? $callFlyWeight->decodeFilenameHash($call[CallAttributes::FILE])   : '';
+                $line                          = isset($call[CallAttributes::LINE]) ? $call[CallAttributes::LINE] : 0;
+                $time                          = isset($call[CallAttributes::TIME]) ? $call[CallAttributes::TIME] : 0;
+                $timeSubStack                  = $time + (isset($call[CallAttributes::TIME_SUB_STACK]) ? $call[CallAttributes::TIME_SUB_STACK] : 0);
 
                 if (!isset($data[$file])) {
                     $data[$file] = array();
@@ -147,30 +141,41 @@ class Cache implements Interfaces\Measure {
                     $item = &$data[$file][$line];
 
                     $item['count']++;
-                    $item['time']            += $time;
-                    $item['timeSubStack']    += $timeSubStack + $time;
-                    $item['minTime']          = min($item['minTime'], $time);
-                    $item['maxTime']          = max($item['maxTime'], $time);
-                    $item['minTimeSubStack']  = min($item['minTimeSubStack'], $timeSubStack + $time);
-                    $item['maxTimeSubStack']  = max($item['maxTimeSubStack'], $timeSubStack + $time);
+                    $item['time']         += $time;
+                    $item['timeSubStack'] += $timeSubStack;
+                    if ($item['minTime'] > $time) {
+                        $item['minTime'] = $time;
+                    }
+
+                    if ($item['maxTime'] < $time) {
+                        $item['maxTime'] =  $time;
+                    }
+
+                    if ($item['minTimeSubStack'] > $timeSubStack) {
+                        $item['minTimeSubStack']  =  $timeSubStack;
+                    }
+
+                    if ($item['maxTimeSubStack'] < $timeSubStack) {
+                        $item['maxTimeSubStack']  = $timeSubStack;
+                    }
                 } else {
+                    $call[CallAttributes::CONTENT]        = isset($call[CallAttributes::CONTENT])
+                        ? $callFlyWeight->decodeContentHash($call[CallAttributes::CONTENT]) : '';
                     $call[CallAttributes::FILE]           = $file;
                     $call[CallAttributes::TIME]           = $time;
                     $call[CallAttributes::TIME_SUB_STACK] = $timeSubStack;
-                    $call['count']                        = 1;
-                    $call['timeSubStack']                 = $timeSubStack + $time;
                     $call['minTime']                      = $time;
                     $call['maxTime']                      = $time;
-                    $call['minTimeSubStack']              = $call['timeSubStack'];
-                    $call['maxTimeSubStack']              = $call['timeSubStack'];
+                    $call['minTimeSubStack']              = $timeSubStack;
+                    $call['maxTimeSubStack']              = $timeSubStack;
+                    $call['count']                        = 1;
 
                     $data[$file][$line] = $call;
                 }
             }
-
-            next($calls);
         }
 
+        $result = array();
         foreach ($data as $fileData) {
             foreach ($fileData as $call) {
                 $call['avgTime']         = $call['time'] / $call['count'];
@@ -226,13 +231,17 @@ class Cache implements Interfaces\Measure {
             if ($key !== self::CACHE_FLYWEIGHT_CALL_KEY && (string)$call['parentId'] === $parentId) {
                 $content      = isset($call[CallAttributes::CONTENT])        ? $callFlyWeight->decodeContentHash($call[CallAttributes::CONTENT]) : '';
                 $file         = isset($call[CallAttributes::FILE])           ? $callFlyWeight->decodeFilenameHash($call[CallAttributes::FILE])   : '';
-                $time         = isset($call[CallAttributes::TIME])           ? $call[CallAttributes::TIME] : 0;
-                $timeSubStack = isset($call[CallAttributes::TIME_SUB_STACK]) ? $call[CallAttributes::TIME_SUB_STACK] : 0;
+                if (!isset($call[CallAttributes::TIME])) {
+                    $call[CallAttributes::TIME] = 0;
+                }
 
-                $call[CallAttributes::CONTENT]        = $content;
-                $call[CallAttributes::FILE]           = $file;
-                $call[CallAttributes::TIME]           = $time;
-                $call[CallAttributes::TIME_SUB_STACK] = $timeSubStack + $time;
+                if (!isset($call[CallAttributes::TIME_SUB_STACK])) {
+                    $call[CallAttributes::TIME_SUB_STACK] =  0;
+                }
+
+                $call[CallAttributes::CONTENT]         = $content;
+                $call[CallAttributes::FILE]            = $file;
+                $call[CallAttributes::TIME_SUB_STACK] += $call[CallAttributes::TIME];
 
                 if (isset($call[CallAttributes::SUB_STACK])) {
                     unset($call[CallAttributes::SUB_STACK]);
