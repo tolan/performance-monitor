@@ -65,7 +65,7 @@ class Where extends Query {
             }
         }
 
-        if (array_keys($compiledBinds) === range(0, count($compiledBinds) - 1) && count($compiledBinds) > 0) {
+        if (array_keys($compiledBinds) === range(0, count($compiledBinds) - 1) && count($compiledBinds) > 0 && substr_count($result, '?') === 1) {
             $result = str_replace('?', join(', ', array_fill(0, count($compiledBinds), '?')), $result);
         }
 

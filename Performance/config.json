@@ -1,5 +1,5 @@
 {
-    "modules" : ["Profiler"],
+    "modules" : ["Profiler", "Search"],
     "provider" : {
         "useAutoloader" : true,
         "allowKillApp"  : true,
@@ -37,7 +37,6 @@
         "lang" : "CS"
     },
     "profiler" : {
-        "domain" : "http://perf.lc/Homepage/profiler",
         "type"   : "file"
     },
     "tmpDir" : ""
