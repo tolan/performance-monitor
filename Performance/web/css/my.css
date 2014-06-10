@@ -152,30 +152,14 @@ a:hover {
     width: 130px;
 }
 
-.profiler-attempt-call-list .file {
-    width: 300px;
-}
 .pageSize {
     width: 70px;
     float: right;
     margin: 1%;
 }
 
-.profiler-attempt-call-list .index ,
-.profiler-attempt-call-list .line {
-    width: 60px;
-}
-
-.profiler-attempt-call-list .time {
-    width: 150px;
-}
-
-.profiler-attempt-call-list .count-calls {
-    width: 130px;
-}
-
-
-.scenario-edit {
+.scenario-edit,
+.scenario-detail {
     border: 1px #DDDDDD solid;
     padding: 15px;
     margin: 15px;
@@ -183,7 +167,8 @@ a:hover {
     box-shadow: 0px 0px 5px #DDDDDD;
 }
 
-.scenario-edit .request-list {
+.scenario-edit .request-list,
+.scenario-detail .request-list {
     border: 1px #DDDDDD solid;
     padding: 10px;
     margin: 10px;
@@ -191,8 +176,8 @@ a:hover {
     box-shadow: 0px 0px 3px #DDDDDD inset;
 }
 
-.scenario-edit .request-list .request-parameter-list,
-.scenario-edit .request-list .request-filter-list {
+.request-list .request-parameter-list,
+.request-list .request-filter-list {
     border: 1px #DDDDDD solid;
     padding: 10px;
     margin: 10px;
@@ -206,8 +191,8 @@ a:hover {
     margin-right: 15px;
 }
 
-.scenario-edit .request-list .request-parameter-list .request-parameter,
-.scenario-edit .request-list .request-filter-list .request-filter {
+.request-list .request-parameter-list .request-parameter,
+.request-list .request-filter-list .request-filter {
     border: 1px #DDDDDD solid;
     padding: 10px;
     margin: 5px;
@@ -216,34 +201,39 @@ a:hover {
     display: inline-block;
 }
 
-.scenario-edit .request-parameter > .input-group,
-.scenario-edit .request-filter > .input-group {
+.request-parameter > .input-group,
+.request-filter > .input-group {
     padding-right: 20px;
 }
 
-.scenario-edit .request-list .request {
+.request-filter table td {
+    border: 1px solid #D0D0D0;
+    padding: 4px;
+}
+
+.request-list .request {
     background-color: #F4F4F4;
     border-radius: 10px;
     padding: 10px;
 }
 
-.scenario-edit .request-list .request,
-.scenario-edit .request-list .caption {
+.request-list .request,
+.request-list .caption {
     border-bottom: 1px #DDDDDD solid;
     margin-bottom: 10px;
 }
 
-.scenario-edit .input-group-addon {
+.input-group-addon {
     width: 80px;
     display: inline-block;
 }
 
-.scenario-edit .filter-parameter label {
+.filter-parameter label {
     padding-right: 20px;
 }
 
-.scenario-edit .filter-parameter .control-label,
-.scenario-edit .filter-parameter .controls{
+.filter-parameter .control-label,
+.filter-parameter .controls{
     width: 130px;
     display: inline-block;
     margin: 0px 5px 0px 5px;
@@ -255,34 +245,9 @@ a:hover {
     width: 90%;
 }
 
-.scenario-detail {
-    margin-bottom: 0px;
-}
-
 .scenario-detail span.label {
     width: 70px;
     margin-right: 5px;
-}
-
-.scenario-detail span {
-    margin-right: 15px;
-}
-
-.scenario-detail-requests {
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-.scenario-detail-requests .request,
-.scenario-detail-requests .request-filter,
-.scenario-detail-request-parameters .request-parameter {
-    border: 1px #D0D0D0 solid;
-    padding: 5px;
-}
-
-.scenario-detail-requests .request-filter,
-.scenario-detail-request-parameters .request-parameter {
-    display: inline-block;
 }
 
 .measure-test-list {
