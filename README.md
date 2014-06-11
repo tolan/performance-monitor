@@ -4,7 +4,7 @@ The purpose of the framework is the analysis, optimization, control and evaluate
 
 ## Requirements
 * Apache:        2.2
-* PHP:           5.4+
+* PHP:           5.4
 * MySQL:         5.5
 * Gearman:       1.1.2
 * HTTP_Request2: 2.1.1 (see: http://pear.php.net/package/HTTP_Request2)
@@ -18,8 +18,8 @@ The purpose of the framework is the analysis, optimization, control and evaluate
 
 
 ## Run example
-- for measure you must start worker server. Run file startWorker.php in Performance/Main without parameters.
-- include this code to your project (see example.php):
+- for measure you must start gearman server. Run file startWorker.php in Performance/Main without parameters.
+- include this code to your project (see to example.php):
 <pre>
   include 'Performance/Profiler/Monitor.php';
   \PF\Profiler\Monitor::getInstance()->enable();
@@ -27,7 +27,7 @@ The purpose of the framework is the analysis, optimization, control and evaluate
 
   /** Your code **/
 
-  \PF\Profiler\Monitor::getInstance()->disable();
+  \PF\Profiler\Monitor::getInstance()->disable()->display(); // This line is optional. If you remove it then it is called in destruct.
 </pre>
 - next go to page http://__your-domain__/Performance/web/
 
