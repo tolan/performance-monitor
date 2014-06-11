@@ -48,7 +48,13 @@ class Directory {
     public function glob($pattern, $flags = 0) {
         $this->_checkDir();
 
-        return glob($this->_path.'/'.$pattern, $flags);
+        $ans = (glob($this->_path.'/'.$pattern, $flags));
+
+        if ($ans === false) {
+            $ans = array();
+        }
+
+        return $ans;
     }
 
     /**
@@ -58,7 +64,7 @@ class Directory {
      */
     public function getAll() {
         $elements = array();
-        foreach ($this->glob('*') as $filepath) {
+        foreach ((array)$this->glob('*') as $filepath) {
             if (is_file($filepath)) {
                 $elements[] = $this->getFile(basename($filepath));
             } elseif (is_dir($filepath)) {

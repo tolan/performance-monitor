@@ -217,6 +217,7 @@ class Database {
                 Database\Connection::MYSQL_ATTR_INIT_COMMAND => "SET CHARACTER SET UTF8; SET NAMES UTF8"
             );
         $connection = new Database\Connection($this->_address, $this->_user, $this->_password, null, $options);
+        $connection->prepare('')->closeCursor();
 
         // TODO create install UC
         $connection->exec("CREATE DATABASE IF NOT EXISTS `".$this->_database."` CHARACTER SET utf8 COLLATE=utf8_general_ci");

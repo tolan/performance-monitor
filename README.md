@@ -30,3 +30,6 @@ The purpose of the framework is the analysis, optimization, control and evaluate
   \PF\Profiler\Monitor::getInstance()->disable();
 </pre>
 - next go to page http://__your-domain__/Performance/web/
+
+## Version info
+- version: 0.1

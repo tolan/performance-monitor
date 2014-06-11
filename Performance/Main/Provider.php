@@ -513,7 +513,7 @@ class Provider {
         }
 
         foreach ((array)glob($path.'/*.php') as $item) {
-            $shortPath = substr($item, strlen($root));
+            $shortPath = substr($item, strlen($root) + 1);
             if (!in_array($shortPath, $this->_excludeFilesFromLoad)) {
                 $result[] = $item;
             }
