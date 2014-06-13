@@ -249,9 +249,15 @@ class Router {
      * @param string $class Class name
      *
      * @return array Array with annotation
+     *
+     * @throws \PF\Main\Web\Exception Throws when controller doesn't exist.
      */
     private function _getClassAnnotations($class) {
         $annotations = array();
+
+        if (class_exists($class) === false) {
+            throw new Exception('Routing error. Controller cannot be resolved.');
+        }
 
         $refl = new \ReflectionClass($class);
         $doc  = $refl->getDocComment();

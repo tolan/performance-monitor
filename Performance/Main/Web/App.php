@@ -75,14 +75,17 @@ class App {
             return $this->_showAccessDenied($exc);
         }
 
-        $controller = $this->_router->getController();
-        $routeInfo  = $this->_router->getRouteInfo();
+        try {
+            $controller = $this->_router->getController();
+            $routeInfo  = $this->_router->getRouteInfo();
+        } catch (Exception $ex) {
+            return $this->_showRoutingError($ex);
+        }
 
-        if (!isset($routeInfo[Component\Router::ANNOTATION]) ||
-            !isset($routeInfo[Component\Router::ANNOTATION]['session_write_close']) ||
-            $routeInfo[Component\Router::ANNOTATION]['session_write_close'] != 'false') {
-            session_write_close();
-        } elseif (session_id() === '') {
+        if (isset($routeInfo[Component\Router::ANNOTATION]) &&
+            isset($routeInfo[Component\Router::ANNOTATION]['session_write_close']) &&
+            $routeInfo[Component\Router::ANNOTATION]['session_write_close'] === 'false' &&
+            session_id() === '') {
             session_start();
         }
 
@@ -111,7 +114,9 @@ class App {
      * @return \PF\Main\Web\App
      */
     protected function render() {
-        $this->_response->flush();
+        if ($this->_response !== null) {
+            $this->_response->flush();
+        }
 
         return $this;
     }
@@ -132,8 +137,22 @@ class App {
      * Forward to access denied page.
      *
      * @param \PF\Main\Access\Exception $exc Exception
+     *
+     * @return \PF\Main\Web\App
      */
     private function _showAccessDenied(AccessException $exc) {
+        // TODO
+        return $this;
+    }
+
+    /**
+     * Forward to router error page.
+     *
+     * @param \PF\Main\Web\Exception $exc Exception
+     *
+     * @return \PF\Main\Web\App
+     */
+    private function _showRoutingError(Exception $exc) {
         // TODO
         return $this;
     }
