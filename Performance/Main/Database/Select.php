@@ -58,6 +58,20 @@ class Select extends Where {
     private $_having = null;
 
     /**
+     * ORDER part of statement
+     *
+     * @var string
+     */
+    private $_order = null;
+
+    /**
+     * LIMIT part of statement
+     *
+     * @var string
+     */
+    private $_limit = null;
+
+    /**
      * It adds DISTINCT to SQL statement.
      *
      * @return \PF\Main\Database\Select
@@ -169,6 +183,47 @@ class Select extends Where {
     }
 
     /**
+     * It adds ORDER function to SQL statement.
+     *
+     * @param string|array $columns ORDER condition
+     *
+     * @return \PF\Main\Database\Select
+     */
+    public function order($columns = array()) {
+        if ($columns === null || $columns === false) {
+            $this->_order = null;
+        }
+        if (is_array($columns)) {
+            foreach ($columns as $alias => $column) {
+                $this->_order[] .= $alias.'.'.$column;
+            }
+        } else {
+            $this->_order[] = (string)$columns;
+        }
+
+        $this->_order = array_unique($this->_order);
+
+        return $this;
+    }
+
+    /**
+     * It adds LIMIT function to SQL statement.
+     *
+     * @param string $limit LIMIT condition
+     *
+     * @return \PF\Main\Database\Select
+     */
+    public function limit($limit='0') {
+        if ($limit === '0' || $limit === 0 || $limit === false || $limit === null) {
+            $this->_limit = null;
+        } else {
+            $this->_limit = $limit;
+        }
+
+        return $this;
+    }
+
+    /**
      * It creates SQL select statement.
      *
      * @return \PF\Main\Database\Select
@@ -214,6 +269,8 @@ class Select extends Where {
 
         $sql .= $this->_group  === null ? '' : ' GROUP BY '.$this->_group;
         $sql .= $this->_having === null ? '' : ' HAVING '.$this->_having;
+        $sql .= $this->_order  === null ? '' : ' ORDER BY '.trim(join(', ', $this->_order));
+        $sql .= $this->_limit  === null ? '' : ' LIMIT '.$this->_limit;
 
         $this->setStatement($sql);
 

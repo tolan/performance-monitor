@@ -105,6 +105,27 @@ class MySQL extends Repository implements Interfaces\Measure {
         $data['calls']        = (int)$data['calls'];
         $data['maxImmersion'] = (int)$data['maxImmersion'];
 
+        $callSelect = $this->getDatabase()
+            ->select()
+            ->from(self::STATS_TABLE)
+            ->columns('time + timeSubStack as timeSubStack')
+            ->where('measureId = ?', $measureId)
+            ->order('time DESC')
+            ->limit(1);
+
+        $slowestCall = $callSelect->fetchOne();
+
+        $slowestCall['id']           = (int)$slowestCall['id'];
+        $slowestCall['measureId']    = (int)$slowestCall['measureId'];
+        $slowestCall['parentId']     = (int)$slowestCall['parentId'];
+        $slowestCall['line']         = (int)$slowestCall['line'];
+        $slowestCall['lines']        = (int)$slowestCall['lines'];
+        $slowestCall['time']         = (float)$slowestCall['time'];
+        $slowestCall['timeSubStack'] = (float)$slowestCall['timeSubStack'];
+        $slowestCall['immersion']    = (int)$slowestCall['immersion'];
+
+        $data['slowestCall'] = $slowestCall;
+
         return $data;
     }
 
@@ -132,7 +153,7 @@ class MySQL extends Repository implements Interfaces\Measure {
             $item['line']         = (int)$item['line'];
             $item['lines']        = (int)$item['lines'];
             $item['time']         = (float)$item['time'];
-            $item['timeSubStack'] = (float)$item['timeSubStack'];
+            $item['timeSubStack'] = (float)$item['timeSubStack'] + (float)$item['time'];
             $item['immersion']    = (int)$item['immersion'];
         }
 
