@@ -48,7 +48,7 @@ class Analyzator implements Interfaces\Analyzator {
 
             $tree = $this->_analyzeTree($this->_storage);
             reset($tree);
-            $analyzed = $this->_checkCycle($tree);
+            $analyzed = $this->_checkStatement($tree);
             $this->_storage->fromArray($analyzed);
 
             $this->_storage->setState(Storage\State::STATE_ANALYZED);
@@ -82,11 +82,22 @@ class Analyzator implements Interfaces\Analyzator {
                 $this->_actualLevel++;
                 $analyzed = $this->_analyzeTree($storage);
                 $result[] = isset($analyzed[Enum\CallAttributes::SUB_STACK]) ? $analyzed : array(Enum\CallAttributes::SUB_STACK => $analyzed);
-            } else {
+            } else if ($this->_actualLevel == ($call[Enum\CallAttributes::IMMERSION] + 1)) {
                 $this->_actualLevel--;
+                foreach ($result as $item) {
+                    if (isset($item[Enum\CallAttributes::SUB_STACK]) && !isset($item[Enum\CallAttributes::FILE])) {
+                        $result = $item[Enum\CallAttributes::SUB_STACK];
+                        break;
+                    }
+                }
+
+                reset($result);
                 $call[Enum\CallAttributes::SUB_STACK] = $result;
                 $result = $call;
                 unset($storage[$key]);
+                break;
+            } else { // actual level is higher than immersion of call by 2 or more steps
+                $this->_actualLevel--;
                 break;
             }
         }
@@ -101,20 +112,20 @@ class Analyzator implements Interfaces\Analyzator {
      *
      * @return void
      */
-    private function _checkCycle(&$tree) {
+    private function _checkStatement(&$tree) {
         while(current($tree)) {
             $key  = key($tree);
             $call = &$tree[$key];
 
             if (!isset($call[Enum\CallAttributes::SUB_STACK])) {
-                if (isset($tree[$key-1]) && $call[Enum\CallAttributes::LINE] === $tree[$key-1][Enum\CallAttributes::LINE] &&
-                    $this->_storage->getCallInstance()->isCycle($call)) {
+                if (isset($tree[$key - 1]) && $call[Enum\CallAttributes::LINE] === $tree[$key - 1][Enum\CallAttributes::LINE] &&
+                    $this->_storage->getCallInstance()->isStatement($call)) {
                     unset ($tree[$key]); // unsets last call of cycle because it is end of cycle without throughput
-                } elseif($call[Enum\CallAttributes::LINES] > 1 && $this->_storage->getCallInstance()->isCycle($call)) {
-                    $this->_handleCycleSubStack($tree, $call, $key);
+                } elseif($call[Enum\CallAttributes::LINES] > 1 && $this->_storage->getCallInstance()->isStatement($call)) {
+                    $this->_handleStatementSubStack($tree, $call, $key);
                 }
             } else {
-                $this->_checkCycle($call[Enum\CallAttributes::SUB_STACK]);
+                $this->_checkStatement($call[Enum\CallAttributes::SUB_STACK]);
             }
 
             next($tree);
@@ -132,7 +143,7 @@ class Analyzator implements Interfaces\Analyzator {
      *
      * @return \PF\Profiler\Monitor\Analyzator
      */
-    private function _handleCycleSubStack(&$tree, &$cycleCall, $key) {
+    private function _handleStatementSubStack(&$tree, &$cycleCall, $key) {
         $startLine = $cycleCall[Enum\CallAttributes::LINE] - ($cycleCall[Enum\CallAttributes::LINES] - 1);
         $endLine   = $cycleCall[Enum\CallAttributes::LINE];
         $startKey  = max ($key - ($cycleCall[Enum\CallAttributes::LINES]), 0);
