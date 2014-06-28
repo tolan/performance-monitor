@@ -12,21 +12,25 @@ namespace PF\Profiler\Monitor;
  */
 class Call implements Interfaces\Call {
 
+    const COMPLETE = 0;
+    const FORWARD  = 1;
+    const BACKWARD = 2;
+
     /**
-     * Patterns for resolve cycles.
+     * Patterns for resolve statement.
      *
      * @var array
      */
-    private $_cyclesPaterns = array(
-        'while ?\(', 'for ?\(', 'foreach ?\(', 'do ?\{'
+    private $_statementPaterns = array(
+        '[^a-z0-9]if|^if ?\(', '[^a-z0-9]else|^else ?\{', '[^a-z0-9]else|^else ?if ?\(', 'while ?\(', 'for ?\(', 'foreach ?\(', 'do ?\{'
     );
 
     /**
-     * Compiled cycle patterns. It is for performance optimalization.
+     * Compiled statement patterns. It is for performance optimalization.
      *
      * @var string
      */
-    private $_cycleRegExp = null;
+    private $_statementRegExp = null;
 
     /**
      * Cache for loaded files.
@@ -43,7 +47,7 @@ class Call implements Interfaces\Call {
     private $_linesCache = array();
 
     /**
-     * Array for keep hashes betwwen content hash and real content.
+     * Array for keep hashes between content hash and real content.
      *
      * @var array
      */
@@ -69,7 +73,7 @@ class Call implements Interfaces\Call {
      * @return void
      */
     final public function __construct() {
-        $this->_cycleRegExp = '#('.join('|', $this->_cyclesPaterns).')#';
+        $this->_statementRegExp = '#('.join('|', $this->_statementPaterns).')#';
     }
 
     /**
@@ -86,7 +90,7 @@ class Call implements Interfaces\Call {
         if (isset($this->_fileHashes[$filename])) {
             $fileHash = $this->_fileHashes[$filename];
         } else {
-            $fileHash = uniqid();
+            $fileHash                         = uniqid();
             $this->_fileHashes[$filename]     = $fileHash;
             $this->_fileHashesFlip[$fileHash] = $filename;
         }
@@ -129,7 +133,7 @@ class Call implements Interfaces\Call {
      *
      * @return boolean
      */
-    public function isCycle($call) {
+    public function isStatement($call) {
         $isCycle = false;
 
         if (!empty($call) && $this->_hasAttributes($call, array(Enum\CallAttributes::FILE, Enum\CallAttributes::LINE))) {
@@ -137,7 +141,7 @@ class Call implements Interfaces\Call {
                 $call[Enum\CallAttributes::CONTENT] = $this->getContent($call)[Enum\CallAttributes::CONTENT];
             }
 
-            $isCycle = preg_match($this->_cycleRegExp, $this->_contentsHashes[$call[Enum\CallAttributes::CONTENT]]);
+            $isCycle = preg_match($this->_statementRegExp, $this->_contentsHashes[$call[Enum\CallAttributes::CONTENT]]);
         }
 
         return $isCycle;
@@ -172,14 +176,26 @@ class Call implements Interfaces\Call {
 
             $file        = self::$_filesCache[$filename];
             $pointerLine = $line;
+            $maxLine     = count($file);
 
             $result       = trim($file[$pointerLine - 1]);
+            $lineContent  = '';
             $countOfLines = 1;
 
-            while(!$this->_checkCompleteContent($result) && $pointerLine > 1) {
-                $pointerLine--;
+            while(($completed = $this->_checkCompleteContent($lineContent.' '.$result)) !== self::COMPLETE && $pointerLine > 1 && $pointerLine <= $maxLine) {
+                if ($completed === self::FORWARD) {
+                    $pointerLine++;
+                    $lineContent = $lineContent.' '.trim($file[$pointerLine - 1]);
+                } else {
+                    $pointerLine--;
+                    $lineContent = trim($file[$pointerLine - 1]).' '.$lineContent;
+                }
+
                 $countOfLines++;
-                $result = trim($file[$pointerLine - 1]).' '.$result;
+            }
+
+            if ($countOfLines > 1) {
+                $result = trim($file[$pointerLine - 1]).' ... '.$result;
             }
 
             $resultHash = uniqid();
@@ -204,7 +220,7 @@ class Call implements Interfaces\Call {
      */
     private function _checkCompleteContent($content) {
         $content = trim($content);
-        $result  = true;
+        $result  = self::COMPLETE;
         $pairs   = array(
             array('{', '}'),
             array('(', ')'),
@@ -214,13 +230,16 @@ class Call implements Interfaces\Call {
         );
 
         foreach ($pairs as $pair) {
-            if (substr_count($content, $pair[0]) !== substr_count($content, $pair[1])) {
-                $result = false;
+            if (substr_count($content, $pair[0]) > substr_count($content, $pair[1])) {
+                $result = self::FORWARD;
+                break;
+            } elseif (substr_count($content, $pair[0]) < substr_count($content, $pair[1])) {
+                $result = self::BACKWARD;
                 break;
             }
 
             if (strpos($content, $pair[1]) === 0) {
-                $result = false;
+                $result = self::BACKWARD;
                 break;
             }
         }
