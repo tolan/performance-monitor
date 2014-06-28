@@ -30,13 +30,13 @@ interface Call {
     public function getContent($call);
 
     /**
-     * Returns flag that call is cycle (one of for, while, foreach ...)
+     * Returns flag that call is statement (one of if, for, while, foreach ...)
      *
      * @param array $call Array with information about call
      *
      * @return boolean
      */
-    public function isCycle($call);
+    public function isStatement($call);
 
     /**
      * Returns content of line and file by hash. It is stored in cache.
