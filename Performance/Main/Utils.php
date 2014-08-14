@@ -79,4 +79,15 @@ class Utils {
 
         return $value;
     }
+
+    /**
+     * Returns that the input array is associative.
+     *
+     * @param array $array Array
+     *
+     * @return boolean
+     */
+    public function isAssociativeArray(array $array) {
+        return array_keys($array) !== range(0, count($array) - 1);
+    }
 }

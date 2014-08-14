@@ -1,20 +1,22 @@
-<div class="list list-80 profiler-scenario-list">
-    <input type="text" ng-model="search" class="search-query" placeholder="[[_.('main.list.search')]]">
-    <select ng-model="pageSize" ng-options="size for size in pageSizes" class="pageSize"></select>
+<div class="width-80 width-max-1200 center-block">
+    <input type="text" ng-model="search" class="form-control search-query" placeholder="[[_.('main.list.search')]]">
+    <select ng-model="pageSize" ng-options="size for size in pageSizes" class="form-control pageSize"></select>
     <table class="table table-striped table-bordered table-hover table-responsive">
         <thead>
             <tr>
-                <th ng-click="predicate='name'; reverse=!reverse">
+                <th ng-click="predicate='name'; reverse=!reverse" class="pointer">
                     <i ng-class="selectSortClass('name', predicate, reverse)"></i>&nbsp;[[_.('profiler.scenario.list.name')]]
                 </th>
                 <th>
                     [[_.('profiler.scenario.list.description')]]
                 </th>
-                <th ng-click="predicate='edited'; reverse=!reverse">
+                <th ng-click="predicate='edited'; reverse=!reverse" class="pointer">
                     <i ng-class="selectSortClass('edited', predicate, reverse)"></i>&nbsp;[[_.('profiler.scenario.list.edited')]]
                 </th>
-                <th class="center actions"><a href="#/profiler/mysql/scenario/create">
-                    <i class="icon-plus-sign" title="[[_.('profiler.scenario.list.create')]]"></i></a>
+                <th class="center actions">
+                    <a href="#/profiler/mysql/scenario/create">
+                        <i class="glyphicon glyphicon-plus" title="[[_.('profiler.scenario.list.create')]]"></i>
+                    </a>
                 </th>
             </tr>
         </thead>
@@ -23,34 +25,42 @@
                 <td><a href="#/profiler/mysql/scenario/detail/[[scenario.id]]" >[[scenario.name]]</a></td>
                 <td>[[scenario.description]]</td>
                 <td>[[scenario.edited | date:'d.M.yyyy H:mm:ss']]</td>
-                <td class="center btn-group actions">
-                    <a href="#/profiler/mysql/scenario/edit/[[scenario.id]]" class="btn" title="[[_.('profiler.scenario.list.edit')]]">
-                        <i class="icon-pencil"></i>
+                <td class="center">
+                    <a href="#/profiler/mysql/scenario/edit/[[scenario.id]]" title="[[_.('profiler.scenario.list.edit')]]">
+                        <i class="glyphicon glyphicon-pencil"></i>
                     </a>
-                    <a ng-click="deleteScenarioDialog(scenario.id)" class="btn" title="[[_.('profiler.scenario.list.delete')]]">
-                        <i class="icon-trash"></i>
+                    &nbsp;
+                    <a ng-click="deleteScenarioDialog(scenario.id)" title="[[_.('profiler.scenario.list.delete')]]">
+                        <i class="glyphicon glyphicon-trash"></i>
                     </a>
                 </td>
             </tr>
         </tbody>
     </table>
     <div class="center">
-        <pagination boundary-links="true" total-items="totalItems" page="currentPage" items-per-page="pageSize" max-size="10" previous-text="&lsaquo;"
+        <pagination boundary-links="true" total-items="totalItems" ng-model="currentPage" items-per-page="pageSize" max-size="10" previous-text="&lsaquo;"
             next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
         </pagination>
     </div>
 </div>
 
-<script type="text/ng-template" id="modal-delete.html">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">[[_.('profiler.scenario.list.delete')]]</h3>
-    </div>
-    <div class="modal-body">
-        [[_.('profiler.scenario.list.delete.text')]]
-    </div>
-    <div class="modal-footer">
-      <button class="btn" ng-click="deleteScenario(deleteScenarioId); dismiss();">[[_.('main.yes')]]</button>
-      <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">[[_.('main.no')]]</button>
+<script type="text/ng-template" id="profiler-scenario-modal-delete.html">
+    <div class="modal" tabindex="-1" role="dialog" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" ng-click="$hide()">&times;</button>
+                    <h3 id="myModalLabel">[[_.('profiler.scenario.list.delete')]]</h3>
+                </div>
+                <div class="modal-body">
+                    [[_.('profiler.scenario.list.delete.text')]]
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="deleteScenario(deleteScenarioId); $hide()">[[_.('main.yes')]]</button>
+                    <button type="button" class="btn btn-default" ng-click="$hide()">[[_.('main.no')]]</button>
+                </div>
+            </div>
+        </div>
     </div>
 </script>
+

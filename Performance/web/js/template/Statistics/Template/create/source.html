@@ -1,0 +1,53 @@
+<div class="form-horizontal panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">[[_.('statistic.template.source')]]</h3>
+    </div>
+    <div class="panel-body">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">[[_.('statistic.template.search')]]</h3>
+            </div>
+            <div class="alert alert-danger" ng-show="searchErrorMessage">
+                [[searchErrorMessage && _.(searchErrorMessage)]]
+            </div>
+            <div ng-controller="SearchFiltersCtrl" ng-init="setUsage('statistics')" ng-include="templateSearch" class="panel-body">
+            </div>
+        </div>
+        <div class="panel panel-default well-sm" ng-show="template.source.target">
+            <div class="btn-group inline-block width-10">
+                <span>[[_.('statistic.template.source.set')]]:</span>
+            </div>
+            <div class="btn-group inline-block width-min-240">
+                <label class="btn btn-default" ng-model="template.source.type" btn-radio="'template'">[[_.('statistic.template.source.template')]]</label>
+                <label class="btn btn-default" ng-model="template.source.type" btn-radio="'all'">[[_.('statistic.template.source.all')]]</label>
+                <label class="btn btn-default" ng-model="template.source.type" btn-radio="'manual'">[[_.('statistic.template.source.manual')]]</label>
+            </div>
+
+            <div ng-show="template.source.type === 'manual'" class="inline-block">
+                <button class="btn btn-default" ng-click="selectPage(currentPage, pageSize)">[[_.('statistic.template.source.manual.selectPage')]]</button>
+                <button class="btn btn-default" ng-click="cleanSelect()">[[_.('statistic.template.source.manual.cleanSelect')]]</button>
+            </div>
+
+            <div class="search-result-list list-80" ng-show="items.length > 0">
+                <select ng-model="pageSize" ng-options="size for size in pageSizes" class="form-control pageSize"></select>
+                <table class="table table-striped table-bordered table-hover table-responsive statistics-source-list"
+                       ng-class="template.source.type === 'manual' ? 'statistics-source-list-enable' : 'statistics-source-list-disable'">
+                    <tr class="search-result-item search-result-[[template.source.target]]"
+                        ng-include="searchTemplates[template.source.target]"
+                        ng-repeat="item in items | startFrom:(currentPage-1)*pageSize | limitTo:pageSize"
+                        ng-click='select(item)'
+                        ng-class="template.source.type === 'manual' && __.indexOf(selected, item.id) !== -1 ? 'success' : ''">
+                    </tr>
+                </table>
+                <div class="center">
+                    <pagination boundary-links="true" total-items="totalItems" ng-model="currentPage" items-per-page="pageSize" previous-text="&lsaquo;"
+                        next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+                    </pagination>
+                </div>
+            </div>
+        </div>
+        <div ng-show="validation.source" class="alerts margin-1-top">
+            <div class="alert alert-danger"><b>[[_.('statistic.template.source')]]</b>: [[ _.('main.validate.invalid')]]</div>
+        </div>
+    </div>
+</div>

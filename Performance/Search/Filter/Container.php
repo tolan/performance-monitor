@@ -2,6 +2,8 @@
 
 namespace PF\Search\Filter;
 
+use PF\Main\Database;
+use PF\Main\Log;
 use PF\Search\Filter\Select;
 use PF\Search\Filter\Target\AbstractTarget;
 use PF\Search\Filter\Junction\AbstractJunction;
@@ -43,9 +45,16 @@ class Container {
     /**
      * Construct method.
      *
-     * @param \PF\Search\Filter\Select $select Select instnace
+     * @param \PF\Main\Database $database Database instnace
+     * @param \PF\Main\Log      $log      Log instnace
+     *
+     * @return void
      */
-    public function __construct(Select $select) {
+    public function __construct(Database $database, Log $log) {
+        $connection = $database->getConnection();
+
+        $select = new Select($connection, $log);
+
         $this->_select = $select;
     }
 

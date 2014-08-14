@@ -31,7 +31,7 @@ class Profiler extends Abstracts\Json {
      * @return void
      */
     public function actionFindMySQLScenarions() {
-        $scenarioService = $this->getProvider()->get('\PF\Profiler\Service\Scenario');
+        $scenarioService = $this->getProvider()->get('\PF\Profiler\Service\Scenario'); /* @var \PF\Profiler\Service\Scenario */
 
         $this->getExecutor()
             ->add('findScenarios', $scenarioService);
@@ -313,7 +313,7 @@ class Profiler extends Abstracts\Json {
      * @link /{type}/measure/{id}/statistic/function
      *
      * @method GET
-     * 
+     *
      * @session_write_close false
      *
      * @param enum $type     One of enum \PF\Profiler\Monitor\Enum\Type

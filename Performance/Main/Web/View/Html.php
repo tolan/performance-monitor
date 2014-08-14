@@ -21,15 +21,18 @@ abstract class Html extends AbstractView {
         $template = $this->getTemplate();
         $template->addHeaderTag('<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">');
         $template->addStyle($path.'/css/bootstrap.css');
+        $template->addStyle($path.'/css/bootstrap-theme.css');
+        $template->addStyle($path.'/css/bootstrap-extend.css');
         $template->addStyle($path.'/css/my.css');
-        $template->addScript($path.'/js/lib/jquery-2.0.3.js');
+        $template->addScript($path.'/js/lib/jquery-2.1.1.js');
         $template->addScript($path.'/js/lib/bootstrap.js');
         $template->addScript($path.'/js/lib/angular.js');
         $template->addScript($path.'/js/lib/angular-loader.js');
         $template->addScript($path.'/js/lib/angular-resource.js');
         $template->addScript($path.'/js/lib/angular-strap.js');
+        $template->addScript($path.'/js/lib/angular-strap.tpl.js');
         $template->addScript($path.'/js/lib/angular-route.js');
-        $template->addScript($path.'/js/lib/ui-bootstrap-tpls.js');
+        $template->addScript($path.'/js/lib/ui-bootstrap-tpls-0.11.0.js');
         $template->addScript($path.'/js/lib/underscore.js');
         $template->addHeaderTag('<script type="text/javascript">var base="'.$path.'"</script>');
 

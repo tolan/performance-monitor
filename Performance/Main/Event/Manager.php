@@ -18,6 +18,13 @@ class Manager implements Interfaces\Manager {
     const LISTENER_ONCE   = 'once';
 
     /**
+     * Repository instance.
+     *
+     * @var \PF\Main\Event\Repository
+     */
+    private $_repository = null;
+
+    /**
      * Stack for events.
      *
      * @var \PF\Main\Event\Action\AbstractAction[]
@@ -30,6 +37,17 @@ class Manager implements Interfaces\Manager {
      * @var \PF\Main\Event\Listener\AbstractListener[]
      */
     private $_listeners = array();
+
+    /**
+     * Construct method
+     *
+     * @param \PF\Main\Event\Repository $repository Repository instance
+     *
+     * @return void
+     */
+    public function __construct(Repository $repository) {
+        $this->_repository = $repository;
+    }
 
     /**
      * Gets all registerd events.
@@ -81,12 +99,12 @@ class Manager implements Interfaces\Manager {
      * This method registers listener for all registered event with right attributes.
      *
      * @param string   $eventName Event identificator
-     * @param \Closure $closure   Closure instance with function which is called when event is fired
+     * @param \Closure $callback  Closure instance with function which is called when event is fired
      *
      * @return \PF\Main\Event\Manager
      */
-    public function on($eventName, \Closure $closure) {
-        $this->_listeners[] = $this->_createListener($eventName, $closure, self::LISTENER_ON);
+    public function on($eventName, \Closure $callback) {
+        $this->_listeners[] = $this->_createListener($eventName, $callback, self::LISTENER_ON);
 
         return $this;
     }
@@ -95,7 +113,7 @@ class Manager implements Interfaces\Manager {
      * This method registers listener for first registered event with right attributes. It means that it is called only one.
      *
      * @param string   $eventName Event identificator
-     * @param \Closure $closure   Closure instance with function which is called when event is fired
+     * @param \Closure $callback  Closure instance with function which is called when event is fired
      *
      * @return \PF\Main\Event\Manager
      */
@@ -159,6 +177,8 @@ class Manager implements Interfaces\Manager {
         switch ($type) {
             case self::EVENT_BROADCAST:
                 $event = new Action\Broadcast();
+                $source = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
+                $event->setModule($this->_getModule($source[2]['class']));
                 break;
             case self::EVENT_EMIT:
                 $event  = new Action\Emit();
@@ -307,6 +327,8 @@ class Manager implements Interfaces\Manager {
         $callback   = $listener->getClosure();
         $reflClass  = new \ReflectionFunction($callback);
         $parameters = $reflClass->getParameters();
+
+        $this->_repository->saveEvent($event, $listener);
 
         if (count($parameters) > 0) {
             $callback($event->getData());

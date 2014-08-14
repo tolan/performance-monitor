@@ -2,6 +2,7 @@
     <a href="#/profiler/mysql/scenario/test/measure/[[item.id]]">
         <span class="label label-default">[[_.('search.filter.target.' + target)]] ([[item.id]])</span>
     </a>
+    <span ng-repeat="filter in item.applied_filters" class="badge">[[filter]]</span>
 </td>
 <td class="search-result-item-attributes">
     <div ng-show="item.started">

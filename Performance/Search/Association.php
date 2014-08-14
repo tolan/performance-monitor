@@ -110,7 +110,27 @@ class Association {
             Enum\Filter::LINE          => Enum\Type::INT,
             Enum\Filter::CONTENT       => Enum\Type::STRING,
             Enum\Filter::IMMERSION     => Enum\Type::INT
+        ),
+        Enum\Target::CALL => array(
+            Enum\Filter::FULLTEXT      => Enum\Type::QUERY,
+            Enum\Filter::FILE          => Enum\Type::STRING,
+            Enum\Filter::LINE          => Enum\Type::INT,
+            Enum\Filter::CONTENT       => Enum\Type::STRING,
+            Enum\Filter::TIME          => Enum\Type::FLOAT,
+            Enum\Filter::IMMERSION     => Enum\Type::INT
         )
+    );
+
+    /**
+     * It defines that search target has allowed logic expression.
+     *
+     * @var array
+     */
+    private $_isAllowedLogic = array(
+        Enum\Target::SCENARIO => true,
+        Enum\Target::TEST     => true,
+        Enum\Target::MEASURE  => true,
+        Enum\Target::CALL     => false
     );
 
     /**
@@ -120,6 +140,17 @@ class Association {
      */
     public function getMenu() {
         return $this->_association;
+    }
+
+    /**
+     * Returns that search target has allowed logic expression.
+     *
+     * @param enum $target One of enum \PF\Search\Enum\Target
+     *
+     * @return boolean
+     */
+    public function isAllowedLogic($target) {
+        return $this->_isAllowedLogic[$target];
     }
 
     /**
@@ -137,9 +168,10 @@ class Association {
             $result = $this->_getFilterOptions($target, $filter, $result);
         }
 
-        $result['name']   = 'search.filter.'.$target.'.'.$filter;
-        $result['target'] = $target;
-        $result['filter'] = $filter;
+        $result['name']           = 'search.filter.'.$target.'.'.$filter;
+        $result['target']         = $target;
+        $result['filter']         = $filter;
+        $result['isAllowedLogic'] = $this->isAllowedLogic($target);
 
         return $result;
     }

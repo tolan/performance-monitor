@@ -1,4 +1,7 @@
 <?php
+/**
+ * This file contains script for starting gearman worker.
+ */
 
 include __DIR__.'/../boot.php';
 

@@ -136,7 +136,7 @@ abstract class Repository {
             ->update()
             ->setTable($tableName)
             ->setUpdateData($data)
-            ->where('id = :id', array(':id' => $id))
+            ->where($tableName.'.id = :id', array(':id' => $id))
             ->run();
     }
 

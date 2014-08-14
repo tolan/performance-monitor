@@ -1,46 +1,50 @@
-<table class="form-inline">
+<table class="form-inline datetime-picker">
     <tr class="text-center">
-        <td><a ng-click="incrementYears()" class="btn btn-link"><i class="icon-chevron-up"></i></a></td>
+        <td><a ng-click="incrementYears()" class="btn btn-link zero-padding"><i class="glyphicon glyphicon-chevron-up"></i></a></td>
         <td>&nbsp;</td>
-        <td><a ng-click="incrementMonths()" class="btn btn-link"><i class="icon-chevron-up"></i></a></td>
+        <td><a ng-click="incrementMonths()" class="btn btn-link zero-padding"><i class="glyphicon glyphicon-chevron-up"></i></a></td>
         <td>&nbsp;</td>
-        <td><a ng-click="incrementDays()" class="btn btn-link"><i class="icon-chevron-up"></i></a></td>
+        <td><a ng-click="incrementDays()" class="btn btn-link zero-padding"><i class="glyphicon glyphicon-chevron-up"></i></a></td>
         <td>&nbsp;</td>
-        <td><a ng-click="incrementHours()" class="btn btn-link"><i class="icon-chevron-up"></i></a></td>
+        <td><a ng-click="incrementHours()" class="btn btn-link zero-padding"><i class="glyphicon glyphicon-chevron-up"></i></a></td>
         <td>&nbsp;</td>
-        <td><a ng-click="incrementMinutes()" class="btn btn-link"><i class="icon-chevron-up"></i></a></td>
+        <td><a ng-click="incrementMinutes()" class="btn btn-link zero-padding"><i class="glyphicon glyphicon-chevron-up"></i></a></td>
         <td ng-show="showMeridian"></td>
     </tr>
     <tr>
         <td class="control-group" ng-class="{'error': invalidYears}">
-            <input type="text" ng-model="years" ng-change="updateYears()" class="span1 text-center" ng-mousewheel="incrementYears()" ng-readonly="readonlyInput" maxlength="4">
+            <input type="text" ng-model="years" ng-change="updateYears()" class="form-control text-center" ng-mousewheel="incrementYears()" ng-readonly="readonlyInput" maxlength="4">
         </td>
         <td>.</td>
         <td class="control-group" ng-class="{'error': invalidMonths}">
-            <input type="text" ng-model="months" ng-change="updateMonths()" class="span1 text-center" ng-mousewheel="incrementMonths()" ng-readonly="readonlyInput" maxlength="2">
+            <input type="text" ng-model="months" ng-change="updateMonths()" class="form-control text-center" ng-mousewheel="incrementMonths()" ng-readonly="readonlyInput" maxlength="2">
         </td>
         <td>.</td>
         <td class="control-group" ng-class="{'error': invalidDays}">
-            <input type="text" ng-model="days" ng-change="updateDays()" class="span1 text-center" ng-mousewheel="incrementDays()" ng-readonly="readonlyInput" maxlength="2">
+            <input type="text" ng-model="days" ng-change="updateDays()" class="form-control text-center" ng-mousewheel="incrementDays()" ng-readonly="readonlyInput" maxlength="2">
         </td>
         <td>&nbsp;-&nbsp;</td>
         <td class="control-group" ng-class="{'error': invalidHours}">
-            <input type="text" ng-model="hours" ng-change="updateHours()" class="span1 text-center" ng-mousewheel="incrementHours()" ng-readonly="readonlyInput" maxlength="2">
+            <input type="text" ng-model="hours" ng-change="updateHours()" class="form-control text-center" ng-mousewheel="incrementHours()" ng-readonly="readonlyInput" maxlength="2">
         </td>
         <td>:</td>
-        <td class="control-group" ng-class="{'error': invalidMinutes}"><input type="text" ng-model="minutes" ng-change="updateMinutes()" class="span1 text-center" ng-readonly="readonlyInput" maxlength="2"></td>
-        <td ng-show="showMeridian"><button type="button" ng-click="toggleMeridian()" class="btn text-center">{{meridian}}</button></td>
+        <td class="control-group" ng-class="{'error': invalidMinutes}">
+            <input type="text" ng-model="minutes" ng-change="updateMinutes()" class="form-control text-center" ng-readonly="readonlyInput" maxlength="2">
+        </td>
+        <td ng-show="showMeridian">
+            <button type="button" ng-click="toggleMeridian()" class="btn text-center">{{meridian}}</button>
+        </td>
     </tr>
     <tr class="text-center">
-        <td><a ng-click="decrementYears()" class="btn btn-link"><i class="icon-chevron-down"></i></a></td>
+        <td><a ng-click="decrementYears()" class="btn btn-link zero-padding"><i class="glyphicon glyphicon-chevron-down"></i></a></td>
         <td>&nbsp;</td>
-        <td><a ng-click="decrementMonths()" class="btn btn-link"><i class="icon-chevron-down"></i></a></td>
+        <td><a ng-click="decrementMonths()" class="btn btn-link zero-padding"><i class="glyphicon glyphicon-chevron-down"></i></a></td>
         <td>&nbsp;</td>
-        <td><a ng-click="decrementDays()" class="btn btn-link"><i class="icon-chevron-down"></i></a></td>
+        <td><a ng-click="decrementDays()" class="btn btn-link zero-padding"><i class="glyphicon glyphicon-chevron-down"></i></a></td>
         <td>&nbsp;</td>
-        <td><a ng-click="decrementHours()" class="btn btn-link"><i class="icon-chevron-down"></i></a></td>
+        <td><a ng-click="decrementHours()" class="btn btn-link zero-padding"><i class="glyphicon glyphicon-chevron-down"></i></a></td>
         <td>&nbsp;</td>
-        <td><a ng-click="decrementMinutes()" class="btn btn-link"><i class="icon-chevron-down"></i></a></td>
+        <td><a ng-click="decrementMinutes()" class="btn btn-link zero-padding"><i class="glyphicon glyphicon-chevron-down"></i></a></td>
         <td ng-show="showMeridian"></td>
     </tr>
 </table>

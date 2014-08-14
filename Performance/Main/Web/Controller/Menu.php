@@ -26,8 +26,13 @@ class Menu extends Abstracts\Json {
                 )
             ),
             array('text' => 'main.menu.search', 'href' => '#search'),
-            array('text' => 'main.menu.statistics', 'href' => '#statistics'),
-            array('text' => 'main.menu.optimalization', 'href' => '#measure/optimalization'),
+            array(
+                'text'    => 'main.menu.statistics',
+                'submenu' => array(
+                    array('text' => 'main.menu.statistics.template', 'href' => '#statistic/templates'),
+                    array('text' => 'main.menu.statistics.data', 'href' => '#statistic/data')
+                )
+            ),
             array(
                 'text'    => 'main.menu.setup',
                 'submenu' => array(

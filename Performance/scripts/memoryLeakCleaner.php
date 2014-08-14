@@ -1,4 +1,8 @@
 <?php
+/**
+ * This file contains script for kill process by given process ID.
+ * It is fired when application ends with memory leak.
+ */
 
 include __DIR__.'/../boot.php';
 

@@ -1,19 +1,11 @@
 
 function ProfilerMySQLScenariosList($scope, $http, $modal) {
-    $scope.predicate = 'name';
-    $scope.reverse   = false;
+    $scope.initList('id');
     $scope.scenarios = [];
     $scope.deleteScenarioId;
 
-    $scope.totalItems  = 0;
-    $scope.currentPage = 1;
-    $scope.maxSize     = 5;
-    $scope.pageSize    = 10;
-    $scope.pageSizes   = [10, 20, 50, 100];
-
     $http.get('/profiler/mysql/scenarios').success(function(response) {
         $scope.scenarios  = response;
-        $scope.totalItems = response.length;
     });
 
     $scope.deleteScenario = function(id) {
@@ -28,18 +20,11 @@ function ProfilerMySQLScenariosList($scope, $http, $modal) {
     $scope.deleteScenarioDialog = function(id) {
         $scope.deleteScenarioId = id;
         $modal({
-            template : 'modal-delete.html',
+            template : 'profiler-scenario-modal-delete.html',
             persist  : true,
             show     : true,
-            backdrop : 'static',
             scope    : $scope
         });
-    };
-
-    $scope.refresh = function(input) {
-        $scope.totalItems = input.length;
-
-        return input;
     };
 }
 
@@ -217,7 +202,7 @@ function ProfilerMySQLScenarioCreate($scope, $http, $routeParams) {
 
     $scope.validateRequest = function(request) {
         if (_.isEmpty(request.url)) {
-            $scope.addAlert('profiler.scenario.url', 'main.validate.required');
+            $scope.addAlert('profiler.scenario.request.url', 'main.validate.required');
         }
 
         if (request.hasOwnProperty('parameters') && request.parameters.length > 0) {
@@ -500,7 +485,12 @@ function ProfilerMeasureDetailCtrl($scope, $http, $routeParams) {
 function ProfilerCallStackCtrl($scope, $http, $routeParams) {
     $scope.type      = $routeParams.type || 'Session';
     $scope.measureId = $routeParams.id || 1;
-    $scope.calls = [];
+    $scope.calls     = [];
+    $scope.filter    = {
+        type:     'timeSubStack',
+        operator: 'higherThan',
+        value:    null
+    };
 
     $scope.showCall = function(call) {
         if (call.calls === undefined) {
@@ -508,6 +498,27 @@ function ProfilerCallStackCtrl($scope, $http, $routeParams) {
             call.calls = response;
         });
         }
+    };
+
+    $scope.filterCall = function(call) {
+        var filter = false, value = call[$scope.filter.type], regexp;
+
+        switch ($scope.filter.operator) {
+            case 'higherThan':
+                filter = value < $scope.filter.value;
+                break;
+            case 'lowerThan':
+                filter = value > $scope.filter.value;
+                break;
+            case 'regExp':
+                if (!_.isEmpty($scope.filter.value)) {
+                    regexp = new RegExp($scope.filter.value);
+                    filter = _.isEmpty(value.match(regexp));
+                }
+                break;
+        }
+
+        return filter;
     };
 
     $scope.$on('select', function(event, type) {
