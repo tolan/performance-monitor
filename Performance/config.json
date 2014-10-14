@@ -14,7 +14,8 @@
             "access"   : "PF\\Main\\Access",
             "router"   : "PF\\Main\\Web\\Component\\Router",
             "cache"    : "PF\\Main\\Cache",
-            "loader"   : "PF\\Main\\ModuleLoader"
+            "loader"   : "PF\\Main\\ModuleLoader",
+            "utils"    : "PF\\Main\\Utils"
         }
     },
     "database" : {

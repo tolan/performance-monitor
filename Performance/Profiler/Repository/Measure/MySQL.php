@@ -49,6 +49,32 @@ class MySQL extends Repository implements Interfaces\Measure {
     }
 
     /**
+     * Returns measure entity by id.
+     *
+     * @param int $measureId Id of measure
+     * 
+     * @return \PF\Profiler\Entity\Measure
+     */
+    public function getMeasure($measureId) {
+        $select = $this->getDatabase()
+            ->select()
+            ->from($this->getTableName())
+            ->where('id = ?', $measureId);
+
+        $data = $select->fetchOne();
+
+        $data['id']      = (int)$data['id'];
+        $data['testId']  = (int)$data['testId'];
+        $data['started'] = $this->getUtils()->convertTimeFromMySQLDateTime($data['started']);
+        $data['time']    = (float)$data['time'];
+        $data['calls']   = (int)$data['calls'];
+
+        $result = new Entity\Measure($data);
+
+        return $result;
+    }
+
+    /**
      * Find measures for test.
      *
      * @param int $testId ID of test
@@ -105,6 +131,27 @@ class MySQL extends Repository implements Interfaces\Measure {
         $data['calls']        = (int)$data['calls'];
         $data['maxImmersion'] = (int)$data['maxImmersion'];
 
+        $callSelect = $this->getDatabase()
+            ->select()
+            ->from(self::STATS_TABLE)
+            ->columns('time + timeSubStack as timeSubStack')
+            ->where('measureId = ?', $measureId)
+            ->order('time DESC')
+            ->limit(1);
+
+        $slowestCall = $callSelect->fetchOne();
+
+        $slowestCall['id']           = (int)$slowestCall['id'];
+        $slowestCall['measureId']    = (int)$slowestCall['measureId'];
+        $slowestCall['parentId']     = (int)$slowestCall['parentId'];
+        $slowestCall['line']         = (int)$slowestCall['line'];
+        $slowestCall['lines']        = (int)$slowestCall['lines'];
+        $slowestCall['time']         = (float)$slowestCall['time'];
+        $slowestCall['timeSubStack'] = (float)$slowestCall['timeSubStack'];
+        $slowestCall['immersion']    = (int)$slowestCall['immersion'];
+
+        $data['slowestCall'] = $slowestCall;
+
         return $data;
     }
 
@@ -132,7 +179,7 @@ class MySQL extends Repository implements Interfaces\Measure {
             $item['line']         = (int)$item['line'];
             $item['lines']        = (int)$item['lines'];
             $item['time']         = (float)$item['time'];
-            $item['timeSubStack'] = (float)$item['timeSubStack'];
+            $item['timeSubStack'] = (float)$item['timeSubStack'] + (float)$item['time'];
             $item['immersion']    = (int)$item['immersion'];
         }
 

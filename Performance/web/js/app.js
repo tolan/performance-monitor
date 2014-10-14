@@ -4,245 +4,130 @@
 var global = {};
 var countLoad = 0;
 var blockLoad = false;
+var timerLoad;
 var perfModule = angular.module(
     'Perf',
-    ['ui.bootstrap', '$strap.directives', 'ngRoute']
+    ['ui.bootstrap', 'mgcrea.ngStrap', 'ngRoute', 'googlechart']
 ).config(
     function($interpolateProvider) {
         $interpolateProvider.startSymbol('[[').endSymbol(']]');
     }
 ).config(function ($httpProvider) {
     $httpProvider.interceptors.push(function ($q) {
+        var responseFunction = function (response) {
+            countLoad = countLoad === 0 ? 0 : countLoad - 1;
+            if (countLoad === 0 && blockLoad === false) {
+                clearInterval(timerLoad);
+                timerLoad = setInterval(function() {
+
+                    if (countLoad === 0 && blockLoad === false) {
+                        $('#loader').fadeOut();
+                        clearInterval(timerLoad);
+                    }
+                }, 300);
+            }
+
+            return response;
+        };
+
         return {
             'request': function (config) {
                 if (!global.templateCache.get(config.url) && config.url.search(base) !== 0) {
                     config.url = base + '/' + config.url.replace(/^\/+/, '');
+                    if (countLoad === 0 && blockLoad === false) {
+                        $('#loader').fadeIn();
+                    }
+
+                    countLoad++;
                 }
 
-                return config || $q.when(config);
+                return config;
+            },
+            'response':      responseFunction,
+            'responseError': function(response) {
+                response = responseFunction(response);
+
+                return $q.reject(response);
             }
         };
-     });
-
-    $httpProvider.responseInterceptors.push('myHttpInterceptor');
-    var spinnerFunction = function (data) {
-        if (countLoad === 0 && blockLoad === false) {
-            $('#loader').fadeIn();
-        }
-
-        countLoad++;
-        return data;
-    };
-
-    $httpProvider.defaults.transformRequest.push(spinnerFunction);
-}).factory('myHttpInterceptor', function ($q, $window) {
-    return function (promise) {
-        var hideFunction = function () {
-            countLoad--;
-            if (countLoad === 0 && blockLoad === false) {
-                setTimeout(function() {
-                    if (countLoad === 0) {
-                        $('#loader').fadeOut();
-                    }
-                }, 100);
-            }
-        };
-
-        return promise.then(function (response) {
-            hideFunction();
-            return response;
-        }, function (response) {
-            hideFunction();
-            return $q.reject(response);
-        });
-    };
+    });
 });
 
-
-perfModule.service(
-    'validator',
-    function() {
-        this._selected   = {};
-        this._validators = {
-            required : function (value, test) {
-                if (value === undefined || value.length === 0 && test === true) {
-                    return 'main.validator.required';
-                }
-
-                return null;
-            },
-
-            minLength : function (value, test) {
-                if (value === undefined || value.length < test) {
-                    return 'main.validator.minLength';
-                }
-
-                return null;
-            },
-
-            maxLength : function (value, test) {
-                if (value.length > test) {
-                    return 'main.validator.maxLength';
-                }
-
-                return null;
-            },
-
-            password : function (value, test) {
-                if (value === undefined || test === true && value.match(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).+/) === null) {
-                    // with special chars /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[/*-+&#@]).+/
-                    return 'main.validator.password';
-                } else if (angular.isString(test) && value.match(test) === null) {
-                    return 'main.validator.password';
-                }
-
-                return null;
-            },
-
-            regex : function (value, test) {
-                if (value === undefined || value.match(test) === null) {
-                    return 'main.validator.regex';
-                }
-
-                return null;
-            }
-        };
-
-        this.addValidator = function (type, validator) {
-            this._validators[type] = validator;
-
-            return this;
-        };
-
-        this.selectValidators = function (validators) {
-            if (angular.isObject(validators)) {
-                this._selected = validators;
-            } else if (validators !== undefined && validators !== null) {
-                throw 'Validators must be object.';
-            }
-
-            return this;
-        };
-
-        this.validate = function (value, validators) {
-            this.selectValidators(validators);
-            var message = null, test, type,
-                result = {
-                    message : null,
-                    valid   : true
-                };
-
-            for(type in this._selected) {
-                if (this._selected.hasOwnProperty(type)) {
-                    test    = this._selected[type];
-                    message = this._validators[type](value, test);
-
-                    if (message !== null) {
-                        result.message = message;
-                        result.valid   = false;
-                    }
-                }
-            }
-            return result;
-        };
-    }
-);
-
-perfModule.service(
-    'translate',
-    function($rootScope, $http) {
-        var self = this;
-        this._lang = null;
-        this._placeholders = {};
-        this._table = {};
-        this._loadedModules = [];
-
-        this.switchLang = function(lang) {
-            var i, modules = this._loadedModules;
-
-            if (lang === this._lang) {
-                return this;
-            }
-
-            this._lang = lang;
-            this._loadedModules = [];
-            //this._table = {};
-
-            for(i in modules) {
-                if (modules.hasOwnProperty(i)) {
-                    this.loadModule(modules[i]);
-                }
-            }
-
-            $rootScope.$broadcast('translate:switchLang');
-            return this;
-        };
-
-        this.loadModule = function (module) {
-            if (_.indexOf(this._loadedModules, module) === -1 && module.length) {
-                this._loadedModules.push(module);
-                $http.get('/translate/module/' + module + (this._lang ? '/' + this._lang : '')).success(function(translate) {
-                    self._lang = translate.lang;
-                    self._table = _.extend(self._table, translate.translate);
-                });
-            }
-        };
-
-        this._ = function (key, placeholders) {
-            var string = key;
-            if (this._table.hasOwnProperty(key)) {
-                string = this._table[key];
-            } else {
-                var module = key.substring(0, _.indexOf(key, '.'));
-                this.loadModule(module);
-            }
-
-            string = this._replace(string, placeholders);
-            string = this._replace(string, this._placeholders);
-
-            return string;
-        };
-
-        this.setPlaceholders = function (placeholders) {
-            this._placeholders = placeholders;
-
-            return this;
-        };
-
-        this._replace = function(string, placeholders) {
-            if (string === null || (angular.isString(string) && string.search('#') === -1) || angular.isObject(placeholders) === false) {
-                return string;
-            }
-
-            var key, placeholder;
-            for(key in placeholders) {
-                if (placeholders.hasOwnProperty(key)) {
-                    placeholder = placeholders[key];
-                    string = string.replace(key, placeholder);
-                }
-            }
-
-            return string;
-        };
-
-        this.loadModule('main');
-    }
-);
-
 perfModule.run(
-    ['$rootScope', '$templateCache', 'translate', 'validator', '$window', '$location',
-    function (rootScope, templateCache, translate, validator, $window, location) {
+    ['$rootScope', '$templateCache', 'translate', 'validator', 'myCache', '$window', '$location', '$filter',
+    function (rootScope, templateCache, translate, validator, myCache, $window, location, $filter) {
+        rootScope.$filter = $filter;
+
+        rootScope.$once = function(name, listener) {
+            var firedOnce = false;
+
+            return rootScope.$on(name, function() {
+                if (firedOnce) {
+                    listener.apply(this, arguments);
+                }
+
+                firedOnce = true;
+            });
+        };
+
         global.templateCache = templateCache;
         rootScope.translate  = translate;
-        rootScope.__ = _;
+        rootScope.__         = _;
         rootScope._          = function (key, placeholders) {
             return translate._(key, placeholders);
         };
 
+        rootScope.cache = myCache;
+        rootScope.cacheObject = function(name, object) {
+            if (_.isObject(object) === false) {
+                if (this.hasOwnProperty(name) && _.isObject(this[name]) === true) {
+                    object = this[name];
+                } else {
+                    throw 'Parameter "object" must be an object.';
+                }
+            }
+
+            var cacheName = (this.cachePrefix || 'cache') + '.' + name;
+
+            if (myCache.get(cacheName) !== undefined) {
+                this[name] = myCache.get(cacheName);
+            } else {
+                this[name] = object;
+            }
+
+            myCache.put(cacheName, this[name]);
+        };
+
+        rootScope.cleanCache = function(name) {
+            var cacheName = (this.cachePrefix || 'cache') + '.' + name;
+
+            if (myCache.get(cacheName) !== undefined) {
+                myCache.remove(cacheName);
+            }
+        };
+
+        rootScope.initList = function(predicate) {
+            var self         = this;
+            this.predicate   = predicate;
+            this.reverse     = false;
+            this.totalItems  = 0;
+            this.currentPage = 1;
+            this.pageSize    = 10;
+            this.pageSizes   = [10, 20, 50, 100];
+
+            this.refresh = function(input) {
+                if (_.isArray(input)) {
+                    self.totalItems = input.length;
+                }
+
+                return input;
+            };
+        };
+
         rootScope.selectSortClass = function(column, predicate, reverse) {
-            var style = 'icon-minus';
+            var style = 'glyphicon glyphicon-minus';
             if (column === predicate) {
-                style = 'icon-chevron-' + ((reverse === undefined || reverse === true) ? 'up' : 'down');
+                style = 'glyphicon glyphicon-chevron-' + ((reverse === undefined || reverse === true) ? 'up' : 'down');
             }
 
             return style;
@@ -256,20 +141,26 @@ perfModule.run(
             blockLoad = true;
             countLoad++;
             $('#loader').fadeIn();
+
+            return this;
         };
 
         rootScope.unmask = function() {
-            countLoad--;
+            countLoad = countLoad === 0 ? 0 : countLoad - 1;
             blockLoad = false;
             setTimeout(function() {
                 if (countLoad === 0) {
                     $('#loader').fadeOut();
                 }
             }, 100);
+
+            return this;
         };
 
         rootScope.blockLoad = function(block) {
             blockLoad = !!block;
+
+            return this;
         };
 
         rootScope.back = function(url) {
@@ -278,29 +169,9 @@ perfModule.run(
             } else {
                 location.path(url);
             }
+
+            return this;
         };
 
         rootScope.validator = validator;
 }]);
-
-perfModule.filter('startFrom', function() {
-    return function(input, start) {
-        start = +start; //parse to int
-        return _.rest(input, start);
-    };
-});
-
-perfModule.filter('customFilter', function() {
-    return function(input, filter) {
-        return filter(input);
-    };
-});
-
-perfModule.filter('round', function() {
-    return function(input, precision) {
-        precision = precision || 0;
-        var exp = Math.pow(10, precision);
-
-        return  Math.round(input*exp)/exp;
-    };
-});

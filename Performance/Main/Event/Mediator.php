@@ -28,11 +28,23 @@ class Mediator implements Interfaces\Mediator, Interfaces\Reciever {
     private $_recievers = array();
 
     /**
+     * Repository instance.
+     *
+     * @var \PF\Main\Event\Repository
+     */
+    private $_repository = null;
+
+    /**
      * Construct method. Register default recivevers.
      *
-     * @param \PF\Main\Provider $provider
+     * @param \PF\Main\Provider         $provider   Provider instance
+     * @param \PF\Main\Event\Repository $repository Repository instance
+     *
+     * @return void
      */
-    public function __construct(Provider $provider) {
+    public function __construct(Provider $provider, Repository $repository) {
+        $this->_repository = $repository;
+
         foreach ($this->_initRecievers as $recieverClass) {
             $this->register($provider->get($recieverClass));
         }
@@ -97,6 +109,7 @@ class Mediator implements Interfaces\Mediator, Interfaces\Reciever {
             if (is_a($message, $messageClass, false)) {
                 foreach ($recievers as $reciever) {
                     if ($reciever !== $sender) {
+                        $this->_repository->saveMessage($message, $sender, $reciever);
                         $reciever->recieve($message, $sender);
                     }
                 }

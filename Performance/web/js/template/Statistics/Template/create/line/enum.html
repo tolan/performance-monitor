@@ -1,0 +1,12 @@
+<div>
+    <div class="col-sm-6 col-xs-6">
+        <span class="inline-block control-label">[[_.('statistic.view.line.enum.select')]]:</span>
+    </div>
+    <div class="col-sm-6 col-xs-6">
+        <select class="form-control" ng-model="line.value">
+            <option ng-repeat="value in enumMap[line.type]" value="[[value.value]]" ng-selected="line.value === value.value">
+                [[_.(value.text)]]
+            </option>
+        </select>
+    </div>
+</div>

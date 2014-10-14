@@ -68,8 +68,8 @@ class Worker extends \PF\Main\Abstracts\Gearman\Worker implements \PF\Main\Event
         $scenario = $result->getData();
 
         try {
-            $this->_sendTest($test, $scenario);
             $commander->clean()->add('updateTestState', $testService)->execute();
+            $this->_sendTest($test, $scenario);
         } catch (Exception $e) {
             $commander->clean()->add('updateTestState', $testService)->execute();
             $this->send($e);

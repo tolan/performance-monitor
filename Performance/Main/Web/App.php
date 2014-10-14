@@ -4,6 +4,7 @@ namespace PF\Main\Web;
 
 use PF\Main\Provider;
 use PF\Main\Access\Exception as AccessException;
+use PF\Main\Exception as MainException;
 
 /**
  * This script defines main class for run application.
@@ -67,6 +68,8 @@ class App {
      * @return \PF\Main\Web\App
      */
     protected function init() {
+        set_error_handler(array($this, 'errorHandler'));
+
         try {
             $this->_provider->get('access')->checkAccess();
         } catch (AccessException $exc) {
@@ -75,20 +78,27 @@ class App {
             return $this->_showAccessDenied($exc);
         }
 
-        $controller = $this->_router->getController();
-        $routeInfo  = $this->_router->getRouteInfo();
+        try {
+            $controller = $this->_router->getController();
+            $routeInfo  = $this->_router->getRouteInfo();
+        } catch (Exception $ex) {
+            return $this->_showRoutingError($ex);
+        }
 
-        if (!isset($routeInfo[Component\Router::ANNOTATION]) ||
-            !isset($routeInfo[Component\Router::ANNOTATION]['session_write_close']) ||
-            $routeInfo[Component\Router::ANNOTATION]['session_write_close'] != 'false') {
-            session_write_close();
-        } elseif (session_id() === '') {
+        if (isset($routeInfo[Component\Router::ANNOTATION]) &&
+            isset($routeInfo[Component\Router::ANNOTATION]['session_write_close']) &&
+            $routeInfo[Component\Router::ANNOTATION]['session_write_close'] === 'false' &&
+            session_id() === '') {
             session_start();
         }
 
-        $this->_response = $controller
-            ->run()
-            ->getResponse();
+        try {
+            $this->_response = $controller
+                ->run()
+                ->getResponse();
+        } catch (\Exception $exc) {
+            $this->_returnApplicationError($exc);
+        }
 
         return $this;
     }
@@ -100,6 +110,7 @@ class App {
      */
     protected function beforeRender() {
         $eveMan = $this->_provider->get('PF\Main\Event\Manager'); /* @var $eveMan \PF\Main\Event\Manager */
+        $eveMan->broadcast('app:'.__FUNCTION__);
         $eveMan->flush();
 
         return $this;
@@ -111,7 +122,9 @@ class App {
      * @return \PF\Main\Web\App
      */
     protected function render() {
-        $this->_response->flush();
+        if ($this->_response !== null) {
+            $this->_response->flush();
+        }
 
         return $this;
     }
@@ -123,6 +136,7 @@ class App {
      */
     protected function afterRender() {
         $eveMan = $this->_provider->get('PF\Main\Event\Manager'); /* @var $eveMan \PF\Main\Event\Manager */
+        $eveMan->broadcast('app:'.__FUNCTION__);
         $eveMan->flush();
 
         return $this;
@@ -132,9 +146,67 @@ class App {
      * Forward to access denied page.
      *
      * @param \PF\Main\Access\Exception $exc Exception
+     *
+     * @return \PF\Main\Web\App
      */
     private function _showAccessDenied(AccessException $exc) {
-        // TODO
+        $this->_returnApplicationError($exc); // TODO
+
         return $this;
+    }
+
+    /**
+     * Forward to router error page.
+     *
+     * @param \PF\Main\Web\Exception $exc Exception
+     *
+     * @return \PF\Main\Web\App
+     */
+    private function _showRoutingError(Exception $exc) {
+        $this->_returnApplicationError($exc); // TODO
+
+        return $this;
+    }
+
+    /**
+     * Forward to application error.
+     *
+     * @param \PF\Main\Web\Exception $exc Exception
+     *
+     * @return \PF\Main\Web\App
+     */
+    private function _returnApplicationError(MainException $exc) {
+        $eveMan = $this->_provider->get('PF\Main\Event\Manager'); /* @var $eveMan \PF\Main\Event\Manager */
+        $eveMan->broadcast('app:'.__FUNCTION__);
+        $eveMan->flush();
+
+        $template = $this->_provider->get('PF\Main\Web\Component\Template\Error'); /* @var $template \PF\Main\Web\Component\Template\Error */
+        $template->setData($exc);
+        $response = $this->_provider->get('response'); /* @var $response \PF\Main\Web\Component\Response */
+        $response->setTemplate($template)->flush();
+
+        $this->_provider->get('log')->error($exc);
+
+        return $this;
+    }
+
+    /**
+     * Handler for catchable error.
+     *
+     * @param int    $errno  Number of error
+     * @param string $errstr Error message
+     */
+    public function errorHandler($errno, $errstr) {
+        if ($errno > E_STRICT) {
+            $template  = $this->_provider->get('PF\Main\Web\Component\Template\Error'); /* @var $template \PF\Main\Web\Component\Template\Error */
+            $exception = new MainException($errstr);
+            $template->setData($exception);
+            $response = $this->_provider->get('response'); /* @var $response \PF\Main\Web\Component\Response */
+            $response->setTemplate($template)->flush();
+
+            $this->_provider->get('log')->error($exception);
+
+            die($errstr);
+        }
     }
 }

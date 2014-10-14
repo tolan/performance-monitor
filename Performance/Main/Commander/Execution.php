@@ -100,10 +100,10 @@ class Execution implements Interfaces\Execution {
         foreach ($attributes as $name => $attribut) {
             if (is_string($attribut) && is_a($entityResult, $attribut)) {
                 $result[$name] = $entityResult;
-            } elseif (is_string($attribut) && class_exists($attribut)) {
-                $result[$name] = $provider->get($attribut);
             } elseif ($entityResult->has($name)) {
                 $result[$name] = $entityResult->get($name);
+            } elseif (is_string($attribut) && class_exists($attribut)) {
+                $result[$name] = $provider->get($attribut);
             } else {
                 $result[$name] = $attribut;
             }

@@ -45,6 +45,7 @@ abstract class AbstractHttp extends Entity {
                 $data = $_SERVER;
                 break;
             case 'SESSION':
+                session_start();
                 $data = $_SESSION;
                 break;
             default :

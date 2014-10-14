@@ -3,6 +3,8 @@
 namespace PF\Profiler\Monitor\Repository;
 
 use PF\Main\Interfaces\Observable;
+use PF\Main\Interfaces\Observer;
+use PF\Main\Traits;
 
 use PF\Profiler\Monitor\Interfaces\Storage;
 use PF\Profiler\Monitor\Interfaces\Call;
@@ -15,7 +17,9 @@ use PF\Profiler\Monitor;
  * @category   Performance
  * @package    Profiler
  */
-class MySQL extends AbstractRepository {
+class MySQL extends AbstractRepository implements Observer, Observable {
+
+    use Traits\Observable;
 
     /**
      * table name for measures
@@ -57,6 +61,17 @@ class MySQL extends AbstractRepository {
      */
     public function updateObserver(Observable $storage) {
         parent::update($this->_measureId, array('state' => $storage->getState()));
+
+        $this->notify();
+    }
+
+    /**
+     * Returns measure ID.
+     *
+     * @return int
+     */
+    public function getMeasureId() {
+        return $this->_measureId;
     }
 
     /**

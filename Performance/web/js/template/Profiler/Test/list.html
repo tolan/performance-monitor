@@ -1,47 +1,54 @@
-<div class="measure-test-list list-90">
-    <table class="table table-striped table-bordered table-hover table-responsive">
-        <thead>
-            <tr>
-                <th ng-click="predicate='id'; reverse=!reverse">#</th>
-                <th ng-click="predicate='url'; reverse=!reverse">
-                    <i ng-class="selectSortClass('url', predicate, reverse)"></i>[[_.('profiler.scenario.test.url')]]
-                </th>
-                <th ng-click="predicate='state'; reverse=!reverse">
-                    <i ng-class="selectSortClass('state', predicate, reverse)"></i>[[_.('profiler.scenario.test.state')]]
-                </th>
-                <th ng-click="predicate='parameters'; reverse=!reverse">
-                    <i ng-class="selectSortClass('parameters', predicate, reverse)"></i>[[_.('profiler.scenario.test.parameters')]]
-                </th>
-                <th ng-click="predicate='body'; reverse=!reverse">
-                    <i ng-class="selectSortClass('body', predicate, reverse)"></i>[[_.('profiler.scenario.test.body')]]
-                </th>
-                <th ng-click="predicate='started'; reverse=!reverse">
-                    <i ng-class="selectSortClass('started', predicate, reverse)"></i>[[_.('profiler.scenario.test.started')]]
-                </th>
-                <th ng-click="predicate='time'; reverse=!reverse">
-                    <i ng-class="selectSortClass('time', predicate, reverse)"></i>[[_.('profiler.scenario.test.time')]]
-                </th>
-                <th ng-click="predicate='calls'; reverse=!reverse">
-                    <i ng-class="selectSortClass('calls', predicate, reverse)"></i>[[_.('profiler.scenario.test.calls')]]
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="measure in measures | filter:search | orderBy:predicate:reverse">
-                <td>[[indexOf(measures, measure) + 1]]</td>
-                <td>[[measure.url]]</td>
-                <td ng-switch on="measure.state">
-                    <a href="#/profiler/mysql/scenario/test/measure/[[measure.id]]" ng-switch-when="statistic_generated">
-                        [[_.('profiler.scenario.test.measure.showStatistic')]]
-                    </a>
-                    <span ng-switch-default>[[_.('profiler.scenario.test.measure.state.' + measure.state)]]</span>
-                </td>
-                <td>[[measure.parameters]]</td>
-                <td>[[measure.body]]</td>
-                <td>[[measure.started | date:'d.M.yyyy H:mm:ss']]</td>
-                <td>[[measure.time]]</td>
-                <td>[[measure.calls]]</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="width-90 width-max-1200 width-min-640 center-block">
+    <div class="inline-block width-5 pull-left">
+        <button class="close pull-left" ng-click="back('/profiler/mysql/scenarios')" title="[[_.('main.back')]]">
+            <i class="glyphicon glyphicon-chevron-left"></i>
+        </button>
+    </div>
+    <div class="inline-block width-90">
+        <table class="table table-striped table-bordered table-hover table-responsive">
+            <thead>
+                <tr>
+                    <th ng-click="predicate='id'; reverse=!reverse" class="pointer">#</th>
+                    <th ng-click="predicate='url'; reverse=!reverse" class="pointer">
+                        <i ng-class="selectSortClass('url', predicate, reverse)"></i>&nbsp;[[_.('profiler.scenario.test.url')]]
+                    </th>
+                    <th ng-click="predicate='state'; reverse=!reverse" class="pointer">
+                        <i ng-class="selectSortClass('state', predicate, reverse)"></i>&nbsp;[[_.('profiler.scenario.test.state')]]
+                    </th>
+                    <th ng-click="predicate='parameters'; reverse=!reverse" class="pointer">
+                        <i ng-class="selectSortClass('parameters', predicate, reverse)"></i>&nbsp;[[_.('profiler.scenario.test.parameters')]]
+                    </th>
+                    <th ng-click="predicate='body'; reverse=!reverse" class="pointer">
+                        <i ng-class="selectSortClass('body', predicate, reverse)"></i>&nbsp;[[_.('profiler.scenario.test.body')]]
+                    </th>
+                    <th ng-click="predicate='started'; reverse=!reverse" class="pointer">
+                        <i ng-class="selectSortClass('started', predicate, reverse)"></i>&nbsp;[[_.('profiler.scenario.test.started')]]
+                    </th>
+                    <th ng-click="predicate='time'; reverse=!reverse" class="pointer">
+                        <i ng-class="selectSortClass('time', predicate, reverse)"></i>&nbsp;[[_.('profiler.scenario.test.time')]]
+                    </th>
+                    <th ng-click="predicate='calls'; reverse=!reverse" class="pointer">
+                        <i ng-class="selectSortClass('calls', predicate, reverse)"></i>&nbsp;[[_.('profiler.scenario.test.calls')]]
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="measure in measures | filter:search | orderBy:predicate:reverse">
+                    <td>[[indexOf(measures, measure) + 1]]</td>
+                    <td>[[measure.url]]</td>
+                    <td ng-switch on="measure.state">
+                        <a href="#/profiler/mysql/scenario/test/measure/[[measure.id]]" ng-switch-when="statistic_generated">
+                            [[_.('profiler.scenario.test.measure.showStatistic')]]
+                        </a>
+                        <span ng-switch-default>[[_.('profiler.scenario.test.measure.state.' + measure.state)]]</span>
+                    </td>
+                    <td>[[measure.parameters]]</td>
+                    <td>[[measure.body]]</td>
+                    <td>[[measure.started | date:'d.M.yyyy H:mm:ss']]</td>
+                    <td>[[measure.time]]</td>
+                    <td>[[measure.calls]]</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

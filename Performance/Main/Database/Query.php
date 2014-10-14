@@ -156,11 +156,17 @@ class Query {
         if (substr_count($statement, '?') > 1 && substr_count($statement, '?') !== count($unAsociationKeyBinds)) {
             throw new Exception('Statement can not be builded for wrong binding');
         } elseif(substr_count($statement, '?') === 1) {
-            $numBinding = array_intersect_key($this->getBind(), array_flip($unAsociationKeyBinds));
+            $numBinding = $this->cleanData(
+                array_intersect_key($this->getBind(), array_flip($unAsociationKeyBinds))
+            );
             $statement  = str_replace('?', join(', ', $numBinding), $statement);
         }
 
         foreach ($this->getBind() as $key => $value) {
+            if (strpos($value, '%') === 0 || strrpos($value, '%') === strlen($value)) {
+                $value = "'".$value."'";
+            }
+
             if (is_numeric($key)) {
                 $statement = preg_replace('/\?/', $value, $statement, 1);
             } else {
@@ -170,6 +176,17 @@ class Query {
         }
 
         return $statement;
+    }
+
+    /**
+     * Returns escaped name with `.
+     *
+     * @param string $name Table name
+     *
+     * @return string
+     */
+    public function getTableName($name) {
+        return '`'.trim($name, '`').'`';
     }
 
     /**
@@ -209,6 +226,28 @@ class Query {
         }
 
         return preg_replace('/\s+/', ' ', trim($this->_statement));
+    }
+
+    /**
+     * Get part of statement.
+     *
+     * @param string $part Name of part
+     *
+     * @return mixed
+     */
+    public function getPart($part = null) {
+        throw new Exception('Query doesn\'t have defined part.');
+    }
+
+    /**
+     * Reset part of statement to default value.
+     *
+     * @param string $part Name of part
+     *
+     * @return \PF\Main\Database\Query
+     */
+    function resetPart($part = null) {
+        throw new Exception('Query doesn\'t have defined part.');
     }
 
     /**
@@ -276,7 +315,7 @@ class Query {
      *
      * @return mixed Cleaned data
      */
-    protected function cleanData($data) {
+    public function cleanData($data) {
         if (is_array($data)) {
             $items = array();
             foreach ($data as $key => $item) {

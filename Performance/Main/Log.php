@@ -2,12 +2,8 @@
 
 namespace PF\Main;
 
-use PF\Main\Event\Interfaces\Reciever as EventReciever;
-use PF\Main\Event\Interfaces\Message as EventMessage;
-use PF\Main\Event\Interfaces\Sender as EventSender;
 use PF\Main\Log\Enum\Level;
 use PF\Main\Config;
-use PF\Main\Event\Mediator;
 
 /**
  * This script defines class for logging messages to file.
@@ -23,7 +19,7 @@ use PF\Main\Event\Mediator;
  * @method \PF\Main\Log error(mixed $message)   It provides logging into file with error level.
  * @method \PF\Main\Log fatal(mixed $message)   It provides logging into file with fatal level.
  */
-class Log implements EventReciever {
+class Log {
 
     /**
      * Singleton instance of \PF\Main\Log.
@@ -63,14 +59,11 @@ class Log implements EventReciever {
     /**
      * Construct method.
      *
-     * @param \PF\Main\Config         $config   Config instance
-     * @param \PF\Main\Event\Mediator $mediator Mediator instance
+     * @param \PF\Main\Config $config Config instance
+     *
+     * @return void
      */
-    private function __construct(Config $config = null, Mediator $mediator = null) {
-        if ($mediator) {
-            $mediator->register($this);
-        }
-
+    private function __construct(Config $config = null) {
         if ($config !== null) {
             $settings = $config->get('log');
             $this->_caching = isset($settings['cache']) ? $settings['cache'] : $this->_caching;
@@ -80,41 +73,15 @@ class Log implements EventReciever {
     }
 
     /**
-     * It recieve message from mediator.
-     *
-     * @param \PF\Main\Event\Interface\Message $message Message instance
-     * @param \PF\Main\Event\Interface\Sender  $sender  Sender instance
-     *
-     * @return \PF\Main\Log
-     */
-    public function recieve(EventMessage $message, EventSender $sender) {
-        if ($this->_level <= Level::DEBUG) {
-            $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-
-            $messsage = new Log\Message(
-                'MESSAGE',
-                array(get_class($sender), $message->getData()),
-                $trace[1]['file'],
-                $trace[1]['line']
-            );
-
-            $this->_addMessage($messsage);
-        }
-
-        return $this;
-    }
-
-    /**
      * Returns singleton instance.
      *
-     * @param \PF\Main\Config         $config   Config instance
-     * @param \PF\Main\Event\Mediator $mediator Mediator instance
+     * @param \PF\Main\Config $config Config instance
      *
      * @return \PF\Main\Log
      */
-    public static function getInstance(Config $config = null, Mediator $mediator = null) {
+    public static function getInstance(Config $config = null) {
         if (self::$_instance === false) {
-            self::$_instance = new self($config, $mediator);
+            self::$_instance = new self($config);
         }
 
         return self::$_instance;

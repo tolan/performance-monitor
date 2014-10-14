@@ -1,0 +1,56 @@
+<div class="form-horizontal panel panel-default" ng-show="template.source.target">
+    <div class="panel-heading">
+        <h3 class="panel-title">[[_.('statistic.template.views')]]</h3>
+    </div>
+    <div class="panel-body">
+        <menu class="inline-block zero-margin zero-padding" data="entitiesMenu[template.source.target]"
+              dtitle="'statistic.template.views.addView'" event="'menu-selected-view'">
+        </menu>
+        <div ng-repeat="view in template.views" class="panel panel-primary margin-0 margin-1-top margin-1-bottom">
+            <div class="panel-heading ">
+                <div class="inline-block form-inline width-min-200">
+                    <span class="inline-block control-label width-50">
+                        [[_.('statistic.view.entity.base')]]
+                    </span>
+                    <select ng-model="view.type" class="form-control width-90">
+                        <option ng-repeat="type in graphTypes" value="[[type.value]]" ng-selected="type.value === view.type">[[_.(type.text)]]</option>
+                    </select>
+                </div>
+                <menu class="inline-block zero-margin zero-padding" data="menus[$index]" dtitle="'statistic.template.views.addLine'"
+                      dscope="view" event="'menu-selected-line'">
+                </menu>
+                <button class="close" ng-click="dropView(view)">&times;</button>
+            </div>
+            <div class="panel-body">
+                <div class="text-center">
+                    <h4 class="">[[_.('statistic.view.entity.' + view.target)]]</h4>
+                </div>
+                <div>
+                    <div ng-repeat="line in view.lines" class="col-lg-4 col-sm-6 col-xs-6 padding-1">
+                        <div class="panel panel-default zero-padding">
+                            <div class="panel-heading">
+                                <button class="close" ng-click="dropLine(line, view)">&times;</button>
+                                <span>[[_.('statistic.view.line.type.' + line.type)]]</span>
+                                <span>([[_.('statistic.view.line.function.' + line.function).toLowerCase()]])</span>
+                            </div>
+                            <div class="panel-body" ng-include="lineTypeMap[line.type] ? lineTemplatesPrefix + lineTypeMap[line.type] + '.html' : null">
+                            </div>
+                            <div ng-show="validation.views[__.indexOf(template.views, view)][$index].required" class="alerts margin-1-top">
+                                <div class="alert alert-danger margin-0"><b>[[_.('statistic.template.views.lines.value')]]</b>: [[ _.('main.validate.required')]]</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="validation.views[$index].empty" class="alerts margin-1-top">
+                <div class="alert alert-danger margin-0"><b>[[_.('statistic.template.views.lines')]]</b>: [[ _.('statistic.template.validate.views.view.empty')]]</div>
+            </div>
+        </div>
+        <menu class="inline-block zero-margin zero-padding" data="entitiesMenu[template.source.target]"
+              dtitle="'statistic.template.views.addView'" event="'menu-selected-view'" ng-show="template.views.length">
+        </menu>
+        <div ng-show="validation.views.empty" class="alerts margin-1-top">
+            <div class="alert alert-danger"><b>[[_.('statistic.template.views')]]</b>: [[ _.('statistic.template.validate.views.empty')]]</div>
+        </div>
+    </div>
+</div>

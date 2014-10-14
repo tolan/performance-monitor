@@ -1,0 +1,30 @@
+<div class="statistics-create width-80 center-block width-min-800">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <span class="control-label col-lg-1 col-sm-2 col-xs-2">[[_.('statistic.template.name')]]</span>
+            <div class="col-lg-11 col-sm-10 col-xs-10">
+                <input type="text" class="form-control" ng-model="template.name" placeholder="[[_.('statistic.template.name')]]">
+            </div>
+            <div ng-show="validation.name" class="alerts margin-1-top col-lg-offset-1 col-lg-11 col-sm-offset-2 col-sm-10 col-xs-offset-2 col-xs-10">
+                <div class="alert alert-danger"><b>[[_.('statistic.template.name')]]</b>: [[ _.('main.validate.required')]]</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <span class="control-label col-lg-1 col-sm-2 col-xs-2">[[_.('statistic.template.description')]]</span>
+            <div class="col-lg-11 col-sm-10 col-xs-10">
+                <textarea class="form-control" ng-model="template.description" placeholder="[[_.('statistic.template.description')]]" rows="4"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div ng-controller="StatisticTemplateSource" ng-include="htmlTemplate">
+    </div>
+
+    <div ng-controller="StatisticTemplateViews" ng-include="htmlTemplate">
+    </div>
+
+    <div class="text-center">
+        <button class="btn btn-primary" ng-click="save()">[[_.('main.save')]]</button>
+        <button class="btn btn-default" ng-click="back('/statistic/template')">[[_.('main.cancel')]]</button>
+    </div>
+</div>

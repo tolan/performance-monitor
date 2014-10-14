@@ -15,4 +15,5 @@ class Target extends Enum {
     const SCENARIO = 'scenario';
     const TEST     = 'test';
     const MEASURE  = 'measure';
+    const CALL     = 'call';
 }

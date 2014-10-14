@@ -77,6 +77,15 @@ class Cache implements Interfaces\Measure {
     }
 
     /**
+     * Returns measure entity by id.
+     *
+     * @param int $measureId Id of measure
+     */
+    public function getMeasure($measureId) {
+        // TODO
+    }
+
+    /**
      * Get measure statistics like as count of calls, consumed time, date of start, etc.
      *
      * @param int $measureId ID of measure
@@ -84,16 +93,23 @@ class Cache implements Interfaces\Measure {
      * @return array
      */
     public function getMeasureStatistics($measureId) {
+        $slowestCall = array(
+            CallAttributes::TIME           => 0,
+            CallAttributes::TIME_SUB_STACK => 0
+        );
+
         $result = array(
             'started'      => 0,
             'time'         => 0,
             'calls'        => 0,
-            'maxImmersion' => 0
+            'maxImmersion' => 0,
+            'slowestCall'  => $slowestCall
         );
 
         $result['started'] = $this->_dir->getFile($measureId)->getModificationDate() * 1000;
 
         $calls           = $this->_cache->load();
+        $callFlyWeight   = $calls[self::CACHE_FLYWEIGHT_CALL_KEY];
         $result['calls'] = count($calls) - 1;
 
         foreach ($calls as $key => $call) {
@@ -105,11 +121,29 @@ class Cache implements Interfaces\Measure {
                 if ((string)$call['parentId'] === '0' && isset($call[CallAttributes::TIME])) {
                     $result['time'] += $call[CallAttributes::TIME];
                 }
+
                 if ((string)$call['parentId'] === '0' && isset($call[CallAttributes::TIME_SUB_STACK])) {
                     $result['time'] += $call[CallAttributes::TIME_SUB_STACK];
                 }
+
+                if ((isset($call[CallAttributes::TIME]) && isset($call[CallAttributes::TIME_SUB_STACK])) &&
+                    ($slowestCall[CallAttributes::TIME] < $call[CallAttributes::TIME] ||
+                    $slowestCall[CallAttributes::TIME_SUB_STACK] < $call[CallAttributes::TIME_SUB_STACK])
+                ) {
+                    $slowestCall                                 = $call;
+                    $slowestCall[CallAttributes::TIME_SUB_STACK] = $call[CallAttributes::TIME] + $call[CallAttributes::TIME_SUB_STACK];
+                }
             }
         }
+
+        if (isset($slowestCall[CallAttributes::ID])) {
+            $slowestCall[CallAttributes::FILE]    = isset($slowestCall[CallAttributes::FILE]) ?
+                $callFlyWeight->decodeFilenameHash($slowestCall[CallAttributes::FILE])   : '';
+            $slowestCall[CallAttributes::CONTENT] = isset($slowestCall[CallAttributes::CONTENT]) ?
+                $callFlyWeight->decodeContentHash($slowestCall[CallAttributes::CONTENT]) : '';
+        }
+
+        $result['slowestCall'] = $slowestCall;
 
         return $result;
     }

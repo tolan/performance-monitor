@@ -67,9 +67,7 @@ class Provider {
      * @var array
      */
     private $_excludeFilesFromLoad = array(
-        'Main/Abstracts/Unit/TestCase.php',
-        'Main/startWorker.php',
-        'Main/memoryLeakCleaner.php'
+        'Main/Abstracts/Unit/TestCase.php'
     );
 
     /**
@@ -196,7 +194,7 @@ class Provider {
 
         if ($this->_allowKillApp && $memory->getRelativeUsage() > 0.2) {
             $pid    = $process->getPid();
-            $script = 'php '.$root.'/Main/memoryLeakCleaner.php '.$pid;
+            $script = 'php '.$root.'/scripts/memoryLeakCleaner.php '.$pid;
             $this->get('PF\Main\Log')->warning('Application was killed with PID: '.$pid);
             $process->exec($script);
         }
@@ -221,6 +219,35 @@ class Provider {
         self::$_preventCycleDependencies = array();
 
         return $instance;
+    }
+
+    /**
+     * Returns that provider has created requested instance.
+     *
+     * @param string $name Name of class
+     *
+     * @return boolean
+     */
+    public function has($name) {
+        $has  = false;
+        $name = ltrim($name, '\\');
+        if (isset($this->_serviceMap[$name])) {
+            $name = $this->_serviceMap[$name];
+        }
+
+        foreach ($this->_instances as $instance) {
+            if ($name === $instance['name']) {
+                $has = true;
+            }
+        }
+
+        foreach ($this->_instances as $instance) {
+            if ($name === $instance['classname']) {
+                $has = true;
+            }
+        }
+
+        return $has;
     }
 
     /**
@@ -261,10 +288,18 @@ class Provider {
      */
     public function prototype($name, $deep=false) {
         if ($deep === false) {
-            $singleton = $this->get($name);
+            $singleton = null;
+            if ($this->has($name)) {
+                $singleton = $this->get($name);
+            }
+
             $this->reset($name);
             $prototype = $this->get($name);
-            $this->set($singleton, $name);
+            $this->reset($name);
+
+            if ($singleton) {
+                $this->set($singleton, $name);
+            }
         } else {
             $instances = $this->_instances;
             $this->reset();
@@ -326,7 +361,7 @@ class Provider {
     private function _createInstance($name) {
         $this->_loadClass($name);
         if (in_array($name, self::$_preventCycleDependencies)) {
-            throw new Exception('Object has cycling dependencies!');
+            throw new Exception('Object has cycling dependencies: ['.join(', ', self::$_preventCycleDependencies).']!');
         }
 
         self::$_preventCycleDependencies[] = $name;
@@ -353,8 +388,12 @@ class Provider {
 
         $instance = null;
 
-        if (!isset($dependencies['dependencies']) || empty($dependencies['dependencies'])) {
-            $instance = new $name();
+        if (array_key_exists('dependencies', $dependencies) === false || empty($dependencies['dependencies'])) {
+            if (isset($dependencies['method']) && $dependencies['method'] === 'getInstance') {
+                $instance = forward_static_call_array(array($name, 'getInstance'), array());
+            } else {
+                $instance = new $name();
+            }
         } else {
             if ($dependencies['method'] === 'getInstance') {
                 $instance = forward_static_call_array(array($name, 'getInstance'), $arguments);

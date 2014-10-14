@@ -44,6 +44,10 @@ abstract class Entity extends Enum {
      * @return \PF\Main\Abstracts\Entity
      */
     public function fromArray($array) {
+        if ($array instanceof Entity) {
+            $array = $array->toArray();
+        }
+
         foreach ((array)$array as $name => $value) {
             $this->set($name, $value);
         }

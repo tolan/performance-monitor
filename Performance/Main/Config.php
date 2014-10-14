@@ -21,11 +21,31 @@ class Config {
     private $_data = array();
 
     /**
+     * Config instance
+     *
+     * @var \PF\Main\Config
+     */
+    private static $_instance = null;
+
+    /**
      * Construct method for init default values.
      */
-    final public function __construct() {
+    private function __construct() {
         $this->set('root', dirname(__DIR__));
         $this->set('namespace', self::NAME_SPACE);
+    }
+
+    /**
+     * Returns singleton instance.
+     *
+     * @return \PF\Main\Config
+     */
+    public static function getInstance() {
+        if (self::$_instance === null) {
+            self::$_instance = new self();
+        }
+
+        return self::$_instance;
     }
 
     /**

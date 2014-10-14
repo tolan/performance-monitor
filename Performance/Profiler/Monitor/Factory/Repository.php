@@ -72,6 +72,10 @@ class Repository extends AbstractFactory {
         /* @var $repository \PF\Profiler\Monitor\Repository\MySQL */
         $repository->setMeasureId($params[HttpKeys::MEASURE_ID]);
 
+        $helper = $this->getProvider()->get('PF\Profiler\Monitor\Helper\State');
+        /* @var $helper \PF\Profiler\Monitor\Helper\State */
+        $repository->attach($helper);
+
         return $repository;
     }
 

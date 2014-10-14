@@ -11,12 +11,49 @@ namespace PF\Main\Database;
  */
 class Where extends Query {
 
+    const PART_WHERE = 'where';
+
     /**
      * List of where conditions
      *
      * @var array
      */
     private $_where = array();
+
+    /**
+     * Get dynamic part of statement.
+     *
+     * @param string $part Name of part
+     *
+     * @return mixed
+     */
+    public function getPart($part = null) {
+        $result = null;
+        if ($part === self::PART_WHERE) {
+            $result = $this->_where;
+        } else {
+            $result = parent::getPart($part);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Reset dynamic part to default value.
+     *
+     * @param string $part Name of part
+     *
+     * @return \PF\Main\Database\Where
+     */
+    public function resetPart($part = null) {
+        if ($part === self::PART_WHERE) {
+            $this->_where = array();
+        } else {
+            parent::resetPart($part);
+        }
+
+        return $this;
+    }
 
     /**
      * It adds condition with AND operator.
@@ -55,12 +92,12 @@ class Where extends Query {
             foreach ($this->_where as $condition) {
                 $compiledBinds = array_merge($compiledBinds, (array)$condition['bind']);
                 $operator      = $condition['operator'];
-                $condition     = $condition['condition'];
+                $statement     = (string)$condition['condition'];
 
                 if ($result === '') {
-                    $result = ' ('.$condition.')';
+                    $result = ' ('.$statement.')';
                 } else {
-                    $result .= ' '.$operator.' ('.$condition.')';
+                    $result .= ' '.$operator.' ('.$statement.')';
                 }
             }
         }

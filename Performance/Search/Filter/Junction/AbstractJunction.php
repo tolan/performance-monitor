@@ -23,7 +23,7 @@ abstract class AbstractJunction {
      *
      * @return \PF\Search\Filter\Junction\AbstractJunction
      */
-    public function prepareJunction($filterName, Select $select, AbstractCondition $condition=null) {
+    public function prepareJunction($filterName, Select $select, AbstractCondition $condition = null) {
         $this->beforeFilter($filterName, $select, $condition);
         $this->$filterName($select, $condition);
         $this->afterFilter($filterName, $select, $condition);
@@ -40,7 +40,7 @@ abstract class AbstractJunction {
      *
      * @return void
      */
-    protected function beforeFilter($filterName, Select $select, AbstractCondition $condition=null) {
+    protected function beforeFilter($filterName, Select $select, AbstractCondition $condition = null) {
     }
 
     /**
@@ -52,6 +52,6 @@ abstract class AbstractJunction {
      *
      * @return void
      */
-    protected function afterFilter($filterName, Select $select, AbstractCondition $condition=null) {
+    protected function afterFilter($filterName, Select $select, AbstractCondition $condition = null) {
     }
 }

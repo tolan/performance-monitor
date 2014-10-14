@@ -14,6 +14,13 @@ class Session extends AbstractDriver implements Interfaces\Driver {
     private $_namespace;
 
     /**
+     * Flag for fully loaded data from session.
+     *
+     * @var boolean
+     */
+    private $_loaded = false;
+
+    /**
      * Construct method. It loads data from SESSION.
      *
      * @param string $namespace Default namespace which is user as key in storage
@@ -22,12 +29,34 @@ class Session extends AbstractDriver implements Interfaces\Driver {
      */
     public function __construct($namespace = self::DEFAULT_NAMESPACE) {
         $this->_namespace = $namespace;
+    }
 
-        if (session_id()) {
-            if (isset($_SESSION[self::SESSION_NAME][$namespace])) {
-                $this->_data = unserialize($_SESSION[self::SESSION_NAME][$namespace]);
-            }
-        }
+    /**
+     * Load variable from cache.
+     *
+     * @param string $name Name of variable
+     *
+     * @return mixed
+     *
+     * @throws \PF\Main\Cache\Exception Throws when variable is not defined
+     */
+    public function load($name = null) {
+        $this->_loadSessionData();
+
+        return parent::load($name);
+    }
+
+    /**
+     * Returns that variable is set.
+     *
+     * @param string $name Name of variable
+     *
+     * @return boolean
+     */
+    public function has($name) {
+        $this->_loadSessionData();
+
+        return parent::has($name);
     }
 
     /**
@@ -37,9 +66,29 @@ class Session extends AbstractDriver implements Interfaces\Driver {
      */
     public function __destruct() {
         if (!empty($this->_data)) {
-            $_SESSION[self::SESSION_NAME][$this->_namespace] = serialize($this->_data);
+            $_SESSION[self::SESSION_NAME][$this->_namespace] = $this->_data;
         } elseif (isset($_SESSION[self::SESSION_NAME][$this->_namespace])) {
             unset($_SESSION[self::SESSION_NAME][$this->_namespace]);
         }
+    }
+
+    /**
+     * Loads data from session.
+     *
+     * @return \PF\Main\Cache\Session
+     */
+    private function _loadSessionData() {
+        if ($this->_loaded === false) {
+            if (session_id() === '') {
+                session_start();
+            }
+
+            if (isset($_SESSION[self::SESSION_NAME][$this->_namespace])) {
+                $this->_data   = $_SESSION[self::SESSION_NAME][$this->_namespace];
+                $this->_loaded = true;
+            }
+        }
+
+        return $this;
     }
 }

@@ -3,6 +3,7 @@
 namespace PF\Main;
 
 use PF\Main\Log;
+use PF\scripts\Install;
 
 /**
  * This script defines class for connect to MySQL database and provide basic function.
@@ -85,12 +86,13 @@ class Database {
     /**
      * Construct method which sets parameters to database connection.
      *
-     * @param \PF\Main\Config $config Configuration
-     * @param \PF\Main\Log    $logger Logger instance
+     * @param \PF\Main\Config   $config   Configuration
+     * @param \PF\Main\Log      $logger   Logger instance
+     * @param \PF\Main\Provider $provider Provider instance (needed for installation)
      *
      * @throws \PF\Main\Database\Exception Throws when missing some configuration option
      */
-    public function __construct(Config $config, Log $logger) {
+    public function __construct(Config $config, Log $logger, Provider $provider) {
         $configuration = $config->get('database');
 
         if (count(array_diff($this->_configParams, array_keys($configuration))) > 0) {
@@ -104,7 +106,8 @@ class Database {
         $this->_logger   = $logger;
 
         if ($configuration['install'] === true) {
-            $this->_install();
+            $provider->set($this);
+            Install\Manager::run($provider);
         }
     }
 
@@ -121,6 +124,20 @@ class Database {
             );
             $this->_connection  = new Database\Connection($this->_address, $this->_user, $this->_password, $this->_database, $options);
             $this->_isConnected = true;
+        }
+
+        return $this;
+    }
+
+    /**
+     * This method disconnect connection to database.
+     *
+     * @return \PF\Main\Database
+     */
+    public function disconnect() {
+        if ($this->_isConnected === true) {
+            $this->_connection = null;
+            $this->_isConnected = false;
         }
 
         return $this;
@@ -204,38 +221,5 @@ class Database {
         }
 
         return $this->_transaction;
-    }
-
-    /**
-     * Method for installing database with all tables.
-     *
-     * @return \PF\Main\Database
-     */
-    private function _install() {
-        $options = array(
-                Database\Connection::ATTR_ERRMODE            => Database\Connection::ERRMODE_EXCEPTION,
-                Database\Connection::MYSQL_ATTR_INIT_COMMAND => "SET CHARACTER SET UTF8; SET NAMES UTF8"
-            );
-        $connection = new Database\Connection($this->_address, $this->_user, $this->_password, null, $options);
-        $connection->prepare('')->closeCursor();
-
-        // TODO create install UC
-        $connection->exec("CREATE DATABASE IF NOT EXISTS `".$this->_database."` CHARACTER SET utf8 COLLATE=utf8_general_ci");
-        $connection->exec("USE ".$this->_database);
-
-        $translateFile = dirname(__DIR__).'/install.sql';
-        if (file_exists($translateFile)) {
-            $sql = explode(";\n", file_get_contents($translateFile));
-            foreach ($sql as $query) {
-                if (!empty($query)) {
-                    $connection->exec($query);
-                }
-            }
-
-            rename($translateFile, dirname(__DIR__).'/installed.sql');
-        }
-
-
-        return $this;
     }
 }

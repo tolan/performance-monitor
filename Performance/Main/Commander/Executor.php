@@ -53,11 +53,14 @@ class Executor implements Interfaces\Executor {
      *
      * @param string|\Closure $command Name of function in scope or Closure function
      * @param Object          $scope   If command is only name of function then must be defined scope (class) where is command triggered
+     * @param mixed           $data    Input data for execute
      *
      * @return \PF\Main\Commander\Executor
      */
-    public function add($command, $scope = null) {
+    public function add($command, $scope = null, $data = array()) {
         $this->_executions[] = new Execution($command, $scope);
+
+        $this->getResult()->fromArray($data);
 
         return $this;
     }

@@ -2,6 +2,8 @@
 
 namespace PF\Search\Filter;
 
+use PF\Main\Database;
+use PF\Main\Log;
 use PF\Search\Filter\Select;
 use PF\Search\Filter\Target\AbstractTarget;
 use PF\Search\Filter\Junction\AbstractJunction;
@@ -41,11 +43,25 @@ class Container {
     private $_filters = array();
 
     /**
+     * It means whether container was compiled.
+     *
+     * @var boolean
+     */
+    private $_compiled = false;
+
+    /**
      * Construct method.
      *
-     * @param \PF\Search\Filter\Select $select Select instnace
+     * @param \PF\Main\Database $database Database instnace
+     * @param \PF\Main\Log      $log      Log instnace
+     *
+     * @return void
      */
-    public function __construct(Select $select) {
+    public function __construct(Database $database, Log $log) {
+        $connection = $database->getConnection();
+
+        $select = new Select($connection, $log);
+
         $this->_select = $select;
     }
 
@@ -63,6 +79,10 @@ class Container {
             throw new Exception('You can not set target again.');
         }
 
+        if ($this->_compiled === true) {
+            throw new Exception('You can not set target again because container is compiled.');
+        }
+
         $this->_target = $target;
 
         return $this;
@@ -78,6 +98,10 @@ class Container {
      * @return \PF\Search\Filter\Container
      */
     public function addFilter($filter, AbstractJunction $junction, AbstractCondition $condition) {
+        if ($this->_compiled === true) {
+            throw new Exception('Filter can\'t be added because container is compiled.');
+        }
+
         $this->_filters[] = array(
             self::FILTER    => $filter,
             self::JUNCTION  => $junction,
@@ -101,6 +125,28 @@ class Container {
     }
 
     /**
+     * Returns compiled searching select.
+     *
+     * @return \PF\Search\Filter\Select
+     */
+    public function getSelect() {
+        $this->_compile($this->_select, $this->_target, $this->_filters);
+
+        return $this->_select;
+    }
+
+    /**
+     * Returns compiled select and converted to string.
+     *
+     * @return string
+     */
+    public function __toString() {
+        $this->_compile($this->_select, $this->_target, $this->_filters);
+
+        return $this->_select->assemble();
+    }
+
+    /**
      * It compile target and all filters to one statement for database select.
      *
      * @param \PF\Search\Filter\Select                $select  Select instnace
@@ -110,14 +156,20 @@ class Container {
      * @return void
      */
     private function _compile(Select $select, AbstractTarget $target, $filters) {
-        $target->setTarget($select);
+        if ($this->_compiled === false) {
+            $target->setTarget($select);
 
-        foreach ($filters as $filter) {
-            $condition = $filter[self::CONDITION];
-            $junction  = $filter[self::JUNCTION];
+            foreach ($filters as $filter) {
+                $condition = $filter[self::CONDITION];
+                $junction  = $filter[self::JUNCTION];
 
-            $condition->prepareFilter($filter[self::FILTER]['operator'], $filter[self::FILTER]['value']);
-            $junction->prepareJunction($filter[self::FILTER]['filter'], $select, $condition);
+                $condition->prepareFilter($filter[self::FILTER]['operator'], $filter[self::FILTER]['value']);
+                $junction->prepareJunction($filter[self::FILTER]['filter'], $select, $condition);
+            }
+
+            $this->_compiled = true;
         }
+
+        return $this;
     }
 }

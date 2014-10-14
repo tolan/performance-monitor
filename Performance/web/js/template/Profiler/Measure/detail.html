@@ -1,8 +1,8 @@
-<div class="list">
+<div class="width-95 center-block width-min-640">
     <tabset>
         <tab ng-click="back()">
             <tab-heading>
-                <i class="icon-chevron-left"></i>
+                <i class="glyphicon glyphicon-chevron-left"></i>
             </tab-heading>
         </tab>
         <tab ng-repeat="tab in tabs" heading="[[_.(tab.title)]]" active="tab.active" select="selectTab(tab.type)">

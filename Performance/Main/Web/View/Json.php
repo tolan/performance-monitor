@@ -19,7 +19,10 @@ class Json extends AbstractView {
      * @return mixed
      */
     public function getPayload() {
-        return $this->_extractData($this->getData());
+        $data          = $this->getData();
+        $extractedData = $this->_extractData($data);
+
+        return $extractedData;
     }
 
     /**

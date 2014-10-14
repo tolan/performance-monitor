@@ -67,7 +67,14 @@ class Server {
         $worker = $this->_provider->get($target);
 
         $worker->setMessage($this->_message);
+
+        $start = microtime(true);
+
         $worker->process();
+
+        $end = ((microtime(true) - $start) * 1000);
+        $this->_provider->get('log')->info('The job taken '.$end.' ms.');
+
         $this->_result = $worker->getResult();
 
         return $this;

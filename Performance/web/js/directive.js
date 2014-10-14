@@ -6,7 +6,8 @@ perfModule.directive('menu', function() {
             data: '=data',
             title: '=dtitle',
             class: '=dclass',
-            scope: '=dscope'
+            scope: '=dscope',
+            event: '='
         },
         templateUrl: 'js/template/directive/menu.html',
         link: function(scope) {
@@ -15,7 +16,12 @@ perfModule.directive('menu', function() {
         },
         controller: function($scope) {
             $scope.onClick = function(item) {
-                $scope.$emit('menu-selected-item', item, $scope.scope);
+                var event = 'menu-selected-item';
+                if (!_.isEmpty($scope.event)) {
+                    event = $scope.event;
+                }
+
+                $scope.$emit(event, item, $scope.scope);
             };
         }
     };
@@ -36,7 +42,9 @@ perfModule.constant('datetimepickerConfig', {
         restrict: 'EA',
         require: '?^ngModel',
         replace: true,
-        scope: {},
+        scope: {
+            ngModel: "="
+        },
         templateUrl: 'js/template/directive/datetimepicker.html',
         link: function(scope, element, attrs, ngModel) {
             if (!ngModel) {
@@ -44,7 +52,7 @@ perfModule.constant('datetimepickerConfig', {
             }
 
             var
-                selected = new Date(),
+                selected  = scope.ngModel ? new Date(scope.ngModel) : new Date(),
                 meridians = datetimepickerConfig.meridians;
 
             var yearStep = datetimepickerConfig.yearStep;

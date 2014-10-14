@@ -2,6 +2,9 @@
 
 namespace PF\Main\Web\Controller;
 
+use PF\Main\Database;
+use PF\Main\Web\Component\Request;
+
 /**
  * This scripts defines class for search controller.
  *
@@ -76,12 +79,118 @@ class Search extends Abstracts\Json {
      */
     public function actionFind() {
         $data = $this->getRequest()->getInput();
-
-        $find = $this->getProvider()->get('PF\Search\Engine')->find($data['filters'], $data['target']);
+        $find = $this->getProvider()->get('PF\Search\Engine')->find($data['template']);
 
         $this->setData(array(
-            'target' => $data['target'],
+            'target' => $data['template']['target'],
             'result' => $find
         ));
+    }
+
+    /**
+     * This find all search templates in database.
+     *
+     * @link /templates/{usage}
+     *
+     * @method GET
+     *
+     * @return void
+     */
+    public function actionFindTemplates($usage) {
+        $searchService = $this->getProvider()->get('\PF\Search\Service\Template'); /* @var $searchService \PF\Search\Service\Template */
+
+        $this->getExecutor()
+            ->add('findTemplates', $searchService)
+            ->getResult()
+            ->setUsage($usage);
+    }
+
+    /**
+     * Get search template by ID.
+     *
+     * @link /template/{id}
+     *
+     * @method GET
+     *
+     * @return void
+     */
+    public function actionGetTemplate($id) {
+        $searchService = $this->getProvider()->get('\PF\Search\Service\Template'); /* @var $searchService \PF\Search\Service\Template */
+
+        $this->getExecutor()
+            ->add('getTemplate', $searchService)
+            ->getResult()
+            ->setId($id);
+    }
+
+    /**
+     * Creates new search template by given data.
+     *
+     * @link /template
+     *
+     * @method POST
+     *
+     * @return void
+     */
+    public function actionCreateTemplate() {
+        $searchService = $this->getProvider()->get('\PF\Search\Service\Template'); /* @var $searchService \PF\Search\Service\Template */
+
+        $this->getExecutor()
+        ->add(function(Database $database, Request $request) {
+            $database->getTransaction()->begin();
+            return array('templateData' => $request->getInput());
+        })
+        ->add('createTemplate', $searchService)
+        ->add(function(Database $databasse) {
+            $databasse->getTransaction()->commitAll();
+        });
+    }
+
+    /**
+     * Updates search template by given data and ID.
+     *
+     * @link /template/{id}
+     *
+     * @method PUT
+     *
+     * @return void
+     */
+    public function actionUpdateTemplate($id) {
+        $searchService = $this->getProvider()->get('\PF\Search\Service\Template'); /* @var $searchService \PF\Search\Service\Template */
+        /* @var $scenarioService \PF\Profiler\Service\Scenario */
+
+        $this->getExecutor()
+        ->add(function(Database $database, $input) use ($id) {
+            $database->getTransaction()->begin();
+            $input['id'] = $id;
+            return array('templateData' => $input);
+        })
+        ->add('updateTemplate', $searchService)
+        ->add(function(Database $databasse) {
+            $databasse->getTransaction()->commitAll();
+        });
+    }
+
+    /**
+     * Deletes search template by given ID.
+     *
+     * @link /template/{id}
+     *
+     * @method DELETE
+     *
+     * @return void
+     */
+    public function actionDeleteTemplate($id) {
+        $searchService = $this->getProvider()->get('\PF\Search\Service\Template'); /* @var $searchService \PF\Search\Service\Template */
+
+        $this->getExecutor()
+        ->add(function(Database $database) {
+            $database->getTransaction()->begin();
+        })
+        ->add('deleteTemplate', $searchService)
+        ->add(function(Database $databasse, $data) {
+            $databasse->getTransaction()->commitAll();
+            return $data;
+        })->getResult()->setId($id);
     }
 }

@@ -1,7 +1,14 @@
-<div class="search-filter-string">
-    <h3><span class="search-filter-item-name label label-default">[[_.(filter.name)]]</span></h3>
-    <select class="search-filter-item-operator" ng-model="filter.operator" ng-change="send(filter)">
-        <option ng-repeat="operator in filter.operators" value="[[operator.value]]">[[_.(operator.text)]]</option>
-    </select>
-    <datetimepicker class="search-filter-item-input" ng-model="filter.value" ng-change="send(filter)"></datetimepicker>
+<div class="width-100 height-40 search-filters-item-operator">
+    <div>
+        <select class="form-control" ng-model="filter.operator" ng-change="send(filter)">
+            <option ng-repeat="operator in filter.operators" value="[[operator.value]]" ng-selected="filter.operator === operator.value">
+                [[_.(operator.text)]]
+            </option>
+        </select>
+    </div>
+</div>
+<div class="width-100 height-60 search-filters-item-operand zero-padding">
+    <div class="center width-min-320">
+        <datetimepicker class="inline-block" ng-model="filter.value" ng-change="send(filter)"></datetimepicker>
+    </div>
 </div>

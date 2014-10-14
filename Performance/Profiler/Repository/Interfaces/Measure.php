@@ -41,4 +41,11 @@ interface Measure {
      * @param int $measureId ID of measure
      */
     public function getMeasureCallsStatistic($measureId);
+
+    /**
+     * Returns measure entity.
+     *
+     * @param int $measureId Id of measure
+     */
+    public function getMeasure($measureId);
 }

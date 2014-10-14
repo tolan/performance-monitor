@@ -87,6 +87,13 @@ class Message {
         $text = date(self::$_dateFormat)."# ".$this->_level."\r\n";
         $text .= $this->_file.':'.$this->_line."#\r\n";
         foreach ($this->_arguments as $argument) {
+            if ($argument instanceof \Exception) {
+                $argument = array(
+                    'message' => $argument->getMessage(),
+                    'trace'   => $argument->getTraceAsString()
+                );
+            }
+
             $text .= var_export($argument, TRUE)."\r\n";
         }
 

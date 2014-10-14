@@ -49,9 +49,9 @@ class Utils {
      * @return int
      */
     public static function convertTimeFromMySQLDateTime($datetime, $forFclient = true) {
-        $time = strtotime($datetime);
+        $time = $datetime === null ? $datetime : strtotime($datetime);
 
-        if ($forFclient) {
+        if ($forFclient && $datetime !== null) {
             $time = $time * 1000;
         }
 
@@ -78,5 +78,27 @@ class Utils {
         }
 
         return $value;
+    }
+
+    /**
+     * Returns that the input array is associative.
+     *
+     * @param array $array Array
+     *
+     * @return boolean
+     */
+    public function isAssociativeArray(array $array) {
+        return array_keys($array) !== range(0, count($array) - 1);
+    }
+
+    /**
+     * Converts string value to boolean.
+     *
+     * @param string $value Value
+     *
+     * @return boolean
+     */
+    public function convertToBoolean($value) {
+        return $value !== 'false' && $value !== 0 && $value !== false;
     }
 }

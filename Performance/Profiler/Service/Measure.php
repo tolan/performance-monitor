@@ -18,6 +18,21 @@ use PF\Profiler\Entity;
 class Measure extends Service {
 
     /**
+     * Returns measure entity by id.
+     *
+     * @param int                $measureId ID of measure
+     * @param Repository\Factory $factory   Repository factory instance
+     * @param enum               $type      One of PF\Profiler\Monitor\Enum\Type
+     *
+     * @return Entity\Measure
+     */
+    public function getMeasure($measureId, Repository\Factory $factory, $type = Type::SESSION) {
+        $repository = $factory->getMeasure($type); /* @var $repository \PF\Profiler\Repository\Interfaces\Measure */
+
+        return $repository->getMeasure($measureId);
+    }
+
+    /**
      * Creates new measure to MySQL database.
      *
      * @param array                           $measureData Array with measure data

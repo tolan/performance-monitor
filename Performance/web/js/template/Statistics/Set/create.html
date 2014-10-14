@@ -1,0 +1,64 @@
+<div class="template-set-create width-80 center-block width-min-800">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <span class="control-label col-lg-1 col-sm-2 col-xs-2">[[_.('statistic.set.name')]]</span>
+            <div class="col-lg-11 col-sm-10 col-xs-10">
+                <input type="text" class="form-control" ng-model="set.name" placeholder="[[_.('statistic.set.name')]]">
+            </div>
+            <div ng-show="validation.name" class="alerts margin-1-top col-lg-offset-1 col-lg-11 col-sm-offset-2 col-sm-10 col-xs-offset-2 col-xs-10">
+                <div class="alert alert-danger"><b>[[_.('statistic.set.name')]]</b>: [[ _.('main.validate.required')]]</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <span class="control-label col-lg-1 col-sm-2 col-xs-2">[[_.('statistic.set.description')]]</span>
+            <div class="col-lg-11 col-sm-10 col-xs-10">
+                <textarea class="form-control" ng-model="set.description" placeholder="[[_.('statistic.set.description')]]" rows="4"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-horizontal">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">[[_.('statistic.set.templates.assigning')]]</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped table-bordered table-hover table-responsive" ng-show="set.templates.length > 0 && templates.length > 0">
+                    <thead>
+                        <tr>
+                            <th>
+                                [[_.('statistic.template.list.name')]]
+                            </th>
+                            <th>
+                                [[_.('statistic.template.list.description')]]
+                            </th>
+                            <th class="center actions"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="templateId in set.templates" ng-init="template = __.findWhere(templates, {id : templateId})">
+                            <td>[[template.name]]</td>
+                            <td>[[template.description]]</td>
+                            <td class="center">
+                                <a ng-click="addTemplate(templateId)" title="[[_.('statistic.template.list.unassign')]]">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
+                    <button type="button" class="btn btn-primary" ng-click="openTemplateDialog();">[[_.('statistic.set.template.dialog')]]</button>
+                </div>
+                <div ng-show="validation.templates" class="alerts margin-1-top">
+                    <div class="alert alert-danger"><b>[[_.('statistic.set.templates.assigning')]]</b>: [[ _.('main.validate.required')]]</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <button class="btn btn-primary" ng-click="save()">[[_.('main.save')]]</button>
+        <button class="btn btn-default" ng-click="back('/statistic/template')">[[_.('main.cancel')]]</button>
+    </div>
+</div>

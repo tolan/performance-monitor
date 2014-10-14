@@ -17,26 +17,15 @@ class Menu extends Abstracts\Json {
      * @return void
      */
     public function actionIndex() {
-        $menu = array(
-            array(
-                'text'    => 'main.menu.summary',
-                'submenu' => array(
-                    array('text' => 'main.menu.summary.mysql', 'href' => '#profiler/mysql/scenarios'),
-                    array('text' => 'main.menu.summary.file', 'href' => '#profiler/file/list')
-                )
-            ),
-            array('text' => 'main.menu.search', 'href' => '#search'),
-            array('text' => 'main.menu.statistics', 'href' => '#statistics'),
-            array('text' => 'main.menu.optimalization', 'href' => '#measure/optimalization'),
-            array(
-                'text'    => 'main.menu.setup',
-                'submenu' => array(
-                    array('text' => 'main.menu.cron', 'href' => '#/settings/cron'),
-                    array('text' => 'main.menu.about', 'href' => '#/settings/about')
-                )
-            )
-        );
+        $repository = $this->getProvider()->get('PF\Main\Navigation\Repository'); /* @var $repository \PF\Main\Navigation\Repository */
+        $convertor  = $this->getProvider()->prototype('PF\Main\Tree\Convertor'); /* @var $convertor \PF\Main\Tree\Convertor */
+        $config     = $this->getProvider()->prototype('PF\Main\Tree\Config'); /* @var $config \PF\Main\Tree\Config */
+        $config->setChildrenIdentificator('submenu');
 
-        $this->setData($menu);
+        $this->getExecutor()->add('getMenuItems', $repository)
+                ->add(function($data) {
+                    return array('list' => $data);
+                })
+                ->add('convert', $convertor, array('config' => $config));
     }
 }
