@@ -42,6 +42,7 @@ class Measure extends AbstractJunction {
         $this->method($select, $condition);
         $this->time($select, $condition);
         $this->calls($select, $condition);
+        $this->file($select, $condition);
 
         $condition->fulltext($select);
     }
