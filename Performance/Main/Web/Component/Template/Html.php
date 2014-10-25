@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Web\Component\Template;
+namespace PM\Main\Web\Component\Template;
 
 /**
  * This script defines template for HTML view.
@@ -30,7 +30,7 @@ class Html extends AbstractTemplate {
      *
      * @param string $stylePath Path of file with styles.
      *
-     * @return \PF\Main\Web\Component\Template\Html
+     * @return \PM\Main\Web\Component\Template\Html
      */
     public function addStyle($stylePath) {
         $this->_headers[] = '<link type="text/css" rel="stylesheet" href="'.$stylePath.'" />';
@@ -43,7 +43,7 @@ class Html extends AbstractTemplate {
      *
      * @param string $sciptPath Path of file with javasscript.
      *
-     * @return \PF\Main\Web\Component\Template\Html
+     * @return \PM\Main\Web\Component\Template\Html
      */
     public function addScript($sciptPath) {
         $this->_headers[] = '<script type="text/javascript" src="'.$sciptPath.'" ></script>';
@@ -56,7 +56,7 @@ class Html extends AbstractTemplate {
      *
      * @param string $element Whole HTML string for head item
      *
-     * @return \PF\Main\Web\Component\Template\Html
+     * @return \PM\Main\Web\Component\Template\Html
      */
     public function addHeaderTag($element) {
         $this->_headers[] = $element;
@@ -69,7 +69,7 @@ class Html extends AbstractTemplate {
      *
      * @param string $bodyHtml HTML string of body
      *
-     * @return \PF\Main\Web\Component\Template\Html
+     * @return \PM\Main\Web\Component\Template\Html
      */
     public function setBody($bodyHtml) {
         $this->_body = $bodyHtml;

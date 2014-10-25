@@ -1,10 +1,10 @@
 <?php
 
-namespace PF\Statistic\Service;
+namespace PM\Statistic\Service;
 
-use PF\Statistic\Repository;
-use PF\Statistic\Entity;
-use PF\Main\Abstracts\Service;
+use PM\Statistic\Repository;
+use PM\Statistic\Entity;
+use PM\Main\Abstracts\Service;
 
 /**
  * This script defines class for run service of statistic data.
@@ -115,7 +115,7 @@ class Run extends Service {
     /**
      * It updates state of statistic run.
      *
-     * @param string         $state      One of enum \PF\Statistic\Enum\Run\State
+     * @param string         $state      One of enum \PM\Statistic\Enum\Run\State
      * @param Entity\Run     $run        Statistic run entity instance
      * @param Repository\Run $repository Repository run instance
      *

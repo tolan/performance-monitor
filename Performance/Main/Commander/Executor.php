@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Commander;
+namespace PM\Main\Commander;
 
-use PF\Main\Provider;
+use PM\Main\Provider;
 
 /**
  * This script defines class for executor (set of commands).
@@ -17,29 +17,29 @@ class Executor implements Interfaces\Executor {
     /**
      * Result instance.
      *
-     * @var \PF\Main\Commander\Result
+     * @var \PM\Main\Commander\Result
      */
     private $_result;
 
     /**
      * Provider instance.
      *
-     * @var \PF\Main\Provider
+     * @var \PM\Main\Provider
      */
     private $_provider;
 
     /**
      * Set of executions (commands)
      *
-     * @var \PF\Main\Commander\Execution[]
+     * @var \PM\Main\Commander\Execution[]
      */
     private $_executions = array();
 
     /**
      * Construct method.
      *
-     * @param \PF\Main\Commander\Result $result   Entity for saving data from commands
-     * @param \PF\Main\Provider         $provider Provider instance
+     * @param \PM\Main\Commander\Result $result   Entity for saving data from commands
+     * @param \PM\Main\Provider         $provider Provider instance
      *
      * @return void
      */
@@ -55,7 +55,7 @@ class Executor implements Interfaces\Executor {
      * @param Object          $scope   If command is only name of function then must be defined scope (class) where is command triggered
      * @param mixed           $data    Input data for execute
      *
-     * @return \PF\Main\Commander\Executor
+     * @return \PM\Main\Commander\Executor
      */
     public function add($command, $scope = null, $data = array()) {
         $this->_executions[] = new Execution($command, $scope);
@@ -68,7 +68,7 @@ class Executor implements Interfaces\Executor {
     /**
      * Returns all executions (set of commands).
      *
-     * @return \PF\Main\Commander\Execution[]
+     * @return \PM\Main\Commander\Execution[]
      */
     public function get() {
         return $this->_executions;
@@ -77,7 +77,7 @@ class Executor implements Interfaces\Executor {
     /**
      * Clean all executions (set of commands) from list.
      *
-     * @return \PF\Main\Commander\Executor
+     * @return \PM\Main\Commander\Executor
      */
     public function clean() {
         $this->_executions = array();
@@ -88,7 +88,7 @@ class Executor implements Interfaces\Executor {
     /**
      * Returns result instance with processed data.
      *
-     * @return \PF\Main\Commander\Result
+     * @return \PM\Main\Commander\Result
      */
     public function getResult() {
         return $this->_result;
@@ -97,9 +97,9 @@ class Executor implements Interfaces\Executor {
     /**
      * It provides set result instance for sharing one instance between executors.
      *
-     * @param \PF\Main\Commander\Result $result Entity for saving data from commands
+     * @param \PM\Main\Commander\Result $result Entity for saving data from commands
      *
-     * @return \PF\Main\Commander\Executor
+     * @return \PM\Main\Commander\Executor
      */
     public function setResult(Result $result) {
         $this->_result = $result;
@@ -110,7 +110,7 @@ class Executor implements Interfaces\Executor {
     /**
      * This method triggers execute on all executions (all commands).
      *
-     * @return \PF\Main\Commander\Result
+     * @return \PM\Main\Commander\Result
      */
     public function execute() {
         $result = $this->_result;

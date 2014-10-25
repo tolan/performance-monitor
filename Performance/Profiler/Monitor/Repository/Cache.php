@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Profiler\Monitor\Repository;
+namespace PM\Profiler\Monitor\Repository;
 
-use PF\Main\Cache as MainCache;
-use PF\Main\Interfaces\Observable;
-use PF\Profiler\Monitor;
-use PF\Profiler\Monitor\Enum\CallAttributes;
+use PM\Main\Cache as MainCache;
+use PM\Main\Interfaces\Observable;
+use PM\Profiler\Monitor;
+use PM\Profiler\Monitor\Enum\CallAttributes;
 
 /**
  * This script defines class for monitor repository working with cache.
@@ -19,7 +19,7 @@ class Cache extends AbstractRepository {
     /**
      * Cache instance
      *
-     * @var \PF\Main\Cache
+     * @var \PM\Main\Cache
      */
     private $_cache;
 
@@ -36,9 +36,9 @@ class Cache extends AbstractRepository {
     /**
      * Sets cache instance.
      *
-     * @param \PF\Main\Cache $cache
+     * @param \PM\Main\Cache $cache
      *
-     * @return \PF\Profiler\Monitor\Repository\Cache
+     * @return \PM\Profiler\Monitor\Repository\Cache
      */
     public function setCache(MainCache $cache) {
         $this->_cache = $cache;
@@ -49,7 +49,7 @@ class Cache extends AbstractRepository {
     /**
      * Method for notify that observable is updated.
      *
-     * @param \PF\Main\Interfaces\Observable $subject Observable instance
+     * @param \PM\Main\Interfaces\Observable $subject Observable instance
      *
      * @return void
      */
@@ -58,9 +58,9 @@ class Cache extends AbstractRepository {
     /**
      * Saves statistics from calls stack in storage. Before it must be saved monitor call fly weight.
      *
-     * @param \PF\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
+     * @param \PM\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
      *
-     * @return \PF\Profiler\Monitor\Repository\Cache
+     * @return \PM\Profiler\Monitor\Repository\Cache
      */
     public function saveCallStatistics(Monitor\Interfaces\Storage $storage) {
         $this->_saveStats($storage);
@@ -72,12 +72,12 @@ class Cache extends AbstractRepository {
     /**
      * Loads call statistics into storage.
      *
-     * @param \PF\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
+     * @param \PM\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
      *
-     * @return \PF\Profiler\Monitor\Interfaces\Storage
+     * @return \PM\Profiler\Monitor\Interfaces\Storage
      */
     public function loadCallStatistics(Monitor\Interfaces\Storage $storage) {
-        $callFlyWeight = $this->_cache->load(self::CACHE_FLYWEIGHT_CALL_KEY); /* @var $callFlyWeight \PF\Profiler\Monitor\Interfaces\Call */
+        $callFlyWeight = $this->_cache->load(self::CACHE_FLYWEIGHT_CALL_KEY); /* @var $callFlyWeight \PM\Profiler\Monitor\Interfaces\Call */
 
         $storage->setState(Monitor\Storage\State::STATE_STAT_GENERATED);
         $storage->fromArray(array_diff_key($this->_cache->load(), array(self::CACHE_FLYWEIGHT_CALL_KEY => true)));
@@ -95,9 +95,9 @@ class Cache extends AbstractRepository {
     /**
      * Save monitor call fly weight instance. It is required for save others calls.
      *
-     * @param \PF\Profiler\Monitor\Interfaces\Call $call Monitor call fly weight instance
+     * @param \PM\Profiler\Monitor\Interfaces\Call $call Monitor call fly weight instance
      *
-     * @return \PF\Profiler\Monitor\Repository\Cache
+     * @return \PM\Profiler\Monitor\Repository\Cache
      */
     public function saveCallFlyweight(Monitor\Interfaces\Call $call) {
         $this->_cache->save(self::CACHE_FLYWEIGHT_CALL_KEY, $call);
@@ -109,7 +109,7 @@ class Cache extends AbstractRepository {
     /**
      * Clean cache and all data.
      *
-     * @return \PF\Profiler\Monitor\Repository\Cache
+     * @return \PM\Profiler\Monitor\Repository\Cache
      */
     public function reset() {
         $this->_cache->clean();
@@ -120,10 +120,10 @@ class Cache extends AbstractRepository {
     /**
      * It saves all calls to cache.
      *
-     * @param array|\PF\Profiler\Monitor\Interfaces\Storage $stack    Monitor storage instance or array with calls
+     * @param array|\PM\Profiler\Monitor\Interfaces\Storage $stack    Monitor storage instance or array with calls
      * @param int                                           $parentId ID of parent call
      *
-     * @return \PF\Profiler\Monitor\Repository\Cache
+     * @return \PM\Profiler\Monitor\Repository\Cache
      */
     private function _saveStats($stack, $parentId = 0) {
         foreach ($stack as $call) {

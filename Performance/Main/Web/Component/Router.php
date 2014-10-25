@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main\Web\Component;
+namespace PM\Main\Web\Component;
 
-use PF\Main\Provider;
-use PF\Main\Web\Exception;
+use PM\Main\Provider;
+use PM\Main\Web\Exception;
 
 /**
  * This script defines class for application router.
@@ -22,21 +22,21 @@ class Router {
     /**
      * Http request
      *
-     * @var \PF\Main\Web\Component\Request
+     * @var \PM\Main\Web\Component\Request
      */
     private $_request;
 
     /**
      * Provider instance
      *
-     * @var \PF\Main\Provider
+     * @var \PM\Main\Provider
      */
     private $_provider;
 
     /**
      * Controller instance
      *
-     * @var \PF\Main\Web\Controller\Abstracts\Controller
+     * @var \PM\Main\Web\Controller\Abstracts\Controller
      */
     private $_controller = null;
 
@@ -50,8 +50,8 @@ class Router {
     /**
      * Construct method
      *
-     * @param \PF\Main\Provider              $provider Provider instnace
-     * @param \PF\Main\Web\Component\Request $request  Request instance
+     * @param \PM\Main\Provider              $provider Provider instnace
+     * @param \PM\Main\Web\Component\Request $request  Request instance
      */
     public function __construct(Provider $provider, Request $request) {
         $this->_provider = $provider;
@@ -61,7 +61,7 @@ class Router {
     /**
      * Resolve route and create controller instance.
      *
-     * @return \PF\Main\Web\Component\Router
+     * @return \PM\Main\Web\Component\Router
      */
     public function route() {
         if ($this->_controller === null) {
@@ -74,7 +74,7 @@ class Router {
     /**
      * Returns instance of controller.
      *
-     * @return \PF\Main\Web\Controller\Abstracts\Controller
+     * @return \PM\Main\Web\Controller\Abstracts\Controller
      */
     public function getController() {
         $this->route();
@@ -96,7 +96,7 @@ class Router {
     /**
      * This method resolve route and return controller instance.
      *
-     * @return \PF\Main\Web\Controller\Abstracts\Controller
+     * @return \PM\Main\Web\Controller\Abstracts\Controller
      */
     private function _resolveController() {
         $server = $this->_request->getServer();
@@ -121,7 +121,7 @@ class Router {
             }
         }
 
-        $controller = $this->_provider->get('PF\Main\Web\Controller\\'.$route[self::CONTROLLER]);
+        $controller = $this->_provider->get($route[self::CONTROLLER]);
         $controller->setAction($route[self::METHOD]);
         $controller->setParams($route[self::PARAMS]);
 
@@ -137,14 +137,21 @@ class Router {
      *
      * @return array
      *
-     * @throws \PF\Main\Web\Exception Throws when controller has wrong base path.
+     * @throws \PM\Main\Web\Exception Throws when controller has wrong base path.
      */
     private function _resolveNewRoute($path) {
-        list($controller, $action) =  explode('/', trim($path, '/').'/', 2);
+        list($module, $controller, $action) =  explode('/', trim($path, '/').'/', 3);
 
+        if (!$action) {
+            $action     = $controller;
+            $controller = $module;
+            $module     = 'Main';
+        }
+
+        $module     = $module ? ucfirst($module) : $module;
         $controller = $controller === '' ? 'Homepage' : $controller;
 
-        $class = '\PF\Main\Web\Controller\\'.ucfirst($controller);
+        $class = '\PM\\'.$module.'\Web\Controller\\'.ucfirst($controller);
 
         $classAnnot = $this->_getClassAnnotations($class);
 
@@ -181,7 +188,7 @@ class Router {
         }
 
         $routeParams = array(
-            self::CONTROLLER => ucfirst($controller),
+            self::CONTROLLER => $class,
             self::METHOD     => $method,
             self::PARAMS     => $params,
             self::ANNOTATION => $annotation
@@ -251,7 +258,7 @@ class Router {
      *
      * @return array Array with annotation
      *
-     * @throws \PF\Main\Web\Exception Throws when controller doesn't exist.
+     * @throws \PM\Main\Web\Exception Throws when controller doesn't exist.
      */
     private function _getClassAnnotations($class) {
         $annotations = array();
@@ -283,8 +290,15 @@ class Router {
      * @return array Route parameters
      */
     private function _resolveRoute($pathParams) {
+        $controller = null;
+        if (is_null($pathParams[self::CONTROLLER])) {
+            $controller = 'PM\Main\Web\Controller\Homepage';
+        } else {
+            $controller = 'PM\\'.ucfirst($pathParams[self::CONTROLLER]).'\Web\Controller\\'.ucfirst($pathParams[self::CONTROLLER]);
+        }
+
         $routeParams = array(
-            self::CONTROLLER => is_null($pathParams[self::CONTROLLER]) ? 'Homepage' : ucfirst($pathParams[self::CONTROLLER]),
+            self::CONTROLLER => $controller,
             self::METHOD     => is_null($pathParams[self::METHOD])     ? 'Index' : ucfirst($pathParams[self::METHOD]),
             self::PARAMS     => is_null($pathParams[self::PARAMS])     ? null : $pathParams[self::PARAMS]
         );

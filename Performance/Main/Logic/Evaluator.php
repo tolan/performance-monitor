@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Logic;
+namespace PM\Main\Logic;
 
 /**
  * This script defines class for logic evaluate.
@@ -14,7 +14,7 @@ class Evaluator {
     /**
      * Analyzed logic tree structure.
      *
-     * @var \PF\Main\Logic\Analyze\AbstractElement
+     * @var \PM\Main\Logic\Analyze\AbstractElement
      */
     private $_logic;
 
@@ -42,7 +42,7 @@ class Evaluator {
     /**
      * Performer instance.
      *
-     * @var \PF\Main\Logic\Evaluate\AbstractPerformer
+     * @var \PM\Main\Logic\Evaluate\AbstractPerformer
      */
     private $_performer = null;
 
@@ -56,7 +56,7 @@ class Evaluator {
     /**
      * Returns analyzed logic.
      *
-     * @return \PF\Main\Logic\Analyze\AbstractElement
+     * @return \PM\Main\Logic\Analyze\AbstractElement
      */
     public function getLogic() {
         return $this->_logic;
@@ -67,7 +67,7 @@ class Evaluator {
      *
      * @param mixed $scope Scope range (border for result and data)
      *
-     * @return \PF\Main\Logic\Evaluator
+     * @return \PM\Main\Logic\Evaluator
      */
     public function setScope($scope) {
         $this->_scope  = $scope;
@@ -91,7 +91,7 @@ class Evaluator {
      * @param string $name Identificator of data
      * @param mixed  $data Data for evaluate
      *
-     * @return \PF\Main\Logic\Evaluator
+     * @return \PM\Main\Logic\Evaluator
      */
     public function setData($name, $data) {
         $this->_data[$name] = $data;
@@ -105,7 +105,7 @@ class Evaluator {
      *
      * @param string $name Identificator of data
      *
-     * @return \PF\Main\Logic\Evaluator
+     * @return \PM\Main\Logic\Evaluator
      */
     public function removeData($name) {
         if (isset($this->_data[$name])) {
@@ -135,7 +135,7 @@ class Evaluator {
     /**
      * Returns performer for evaluate.
      *
-     * @return \PF\Main\Logic\Evaluate\AbstractPerformer
+     * @return \PM\Main\Logic\Evaluate\AbstractPerformer
      */
     public function getPerformer() {
         if ($this->_performer === null) {
@@ -148,9 +148,9 @@ class Evaluator {
     /**
      * Sets performer for evaluate.
      *
-     * @param \PF\Main\Logic\Evaluate\AbstractPerformer $performer Performer instance
+     * @param \PM\Main\Logic\Evaluate\AbstractPerformer $performer Performer instance
      *
-     * @return \PF\Main\Logic\Evaluator
+     * @return \PM\Main\Logic\Evaluator
      */
     public function setPerformer(Evaluate\AbstractPerformer $performer) {
         $this->_performer = $performer;
@@ -161,7 +161,7 @@ class Evaluator {
     /**
      * Returns result of evaluation from logic expression and data in storage (it can be restricted by scope).
      *
-     * @param \PF\Main\Logic\Evaluate\AbstractPerformer $performer Performer instance
+     * @param \PM\Main\Logic\Evaluate\AbstractPerformer $performer Performer instance
      *
      * @return mixed
      */

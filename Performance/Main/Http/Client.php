@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Http;
+namespace PM\Main\Http;
 
 /**
  * This script defines class for http request client.
@@ -8,8 +8,8 @@ namespace PF\Main\Http;
  *
  * Example usage:
  *
- * $cookie = new \PF\Main\Http\Cookies();
- * $client = new \PF\Main\Http\Client($cookie);
+ * $cookie = new \PM\Main\Http\Cookies();
+ * $client = new \PM\Main\Http\Client($cookie);
  *
  * $params = array(
  *     '0' => array(
@@ -18,7 +18,7 @@ namespace PF\Main\Http;
  *         'method' => 'GET'
  *     )
  * );
- * $request = $client->createRequest(\PF\Main\Http\Enum\Method::GET, 'http://perf.lc/test.php', $params);
+ * $request = $client->createRequest(\PM\Main\Http\Enum\Method::GET, 'http://perf.lc/test.php', $params);
  * $client->addRequest($request);
  * $client->addRequest($request);
  * $client->addRequest($request);
@@ -33,7 +33,7 @@ class Client {
     /**
      * Cookies instance for sharing one cookies over all requests.
      *
-     * @var \PF\Main\Http\Cookies
+     * @var \PM\Main\Http\Cookies
      */
     private $_cookies = null;
 
@@ -47,7 +47,7 @@ class Client {
     /**
      * Construct method.
      *
-     * @param \PF\Main\Http\Cookies $cookies Cookies instance
+     * @param \PM\Main\Http\Cookies $cookies Cookies instance
      */
     public function __construct(Cookies $cookies) {
         $this->_cookies = $cookies;
@@ -56,9 +56,9 @@ class Client {
     /**
      * It adds one request to stack and sets cookies.
      *
-     * @param \PF\Main\Http\Request\AbstractRequest $request Request instance
+     * @param \PM\Main\Http\Request\AbstractRequest $request Request instance
      *
-     * @return \PF\Main\Http\Client
+     * @return \PM\Main\Http\Client
      */
     public function addRequest(Request\AbstractRequest $request) {
         $request->setCookieJar($this->_cookies);
@@ -70,9 +70,9 @@ class Client {
     /**
      * It removes request from stack.
      *
-     * @param \PF\Main\Http\Request\AbstractRequest $request Request instance
+     * @param \PM\Main\Http\Request\AbstractRequest $request Request instance
      *
-     * @return \PF\Main\Http\Client
+     * @return \PM\Main\Http\Client
      */
     public function removeRequest(Request\AbstractRequest $request) {
         foreach ($this->_requests as $key => $req) {
@@ -87,11 +87,11 @@ class Client {
     /**
      * It creates and returns request intance by given method, url and parameters.
      *
-     * @param enum   $method     One of \PF\Main\Http\Enum\Method
+     * @param enum   $method     One of \PM\Main\Http\Enum\Method
      * @param string $url        Url of target address
      * @param array  $parameters Array with parameters as POST, GET, etc.
      *
-     * @return \PF\Main\Http\Request\AbstractRequest
+     * @return \PM\Main\Http\Request\AbstractRequest
      */
     public function createRequest($method, $url, $parameters = array()) {
         $request = Request\Factory::getInstance($method);
@@ -105,12 +105,12 @@ class Client {
     /**
      * It adds parameters to given request.
      *
-     * @param \PF\Main\Http\Request\AbstractRequest $request    Request instance
+     * @param \PM\Main\Http\Request\AbstractRequest $request    Request instance
      * @param array                                 $parameters Array with parameters as POST, GET, etc.
      *
-     * @return \PF\Main\Http\Request\AbstractRequest
+     * @return \PM\Main\Http\Request\AbstractRequest
      *
-     * @throws \PF\Main\Http\Exception Throws when parameters is not allowed on request type.
+     * @throws \PM\Main\Http\Exception Throws when parameters is not allowed on request type.
      */
     private function _addParameters(Request\AbstractRequest $request, $parameters = array()) {
         $allowedParams = Enum\ParameterType::getAllowedParams($request->getMethod());
@@ -129,11 +129,11 @@ class Client {
     /**
      * It adds concrete parameter to request.
      *
-     * @param \PF\Main\Http\Request\AbstractRequest $request Request instance
-     * @param enum                                  $method  One of \PF\Main\Http\Enum\ParameterType
+     * @param \PM\Main\Http\Request\AbstractRequest $request Request instance
+     * @param enum                                  $method  One of \PM\Main\Http\Enum\ParameterType
      * @param array                                 $data    Array with parameters as method, name and value
      *
-     * @return \PF\Main\Http\Request\AbstractRequest
+     * @return \PM\Main\Http\Request\AbstractRequest
      */
     private function _addMethodParameters(Request\AbstractRequest $request, $method, $data) {
         switch ($method) {
@@ -151,10 +151,10 @@ class Client {
     /**
      * Method for send all request in stack.
      *
-     * @return \PF\Main\Http\Client
+     * @return \PM\Main\Http\Client
      */
     public function send() {
-        foreach ($this->_requests as $request) { /* @var $request \PF\Main\Http\Request\AbstractRequest */
+        foreach ($this->_requests as $request) { /* @var $request \PM\Main\Http\Request\AbstractRequest */
             $request->send();
         }
 

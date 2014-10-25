@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main\Web\View;
+namespace PM\Main\Web\View;
 
-use PF\Main\Web\Component\Template\AbstractTemplate;
-use PF\Main\Web\Component\Request;
+use PM\Main\Web\Component\Template\AbstractTemplate;
+use PM\Main\Web\Component\Request;
 
 /**
  * Abstract class for view.
@@ -24,24 +24,24 @@ abstract class AbstractView {
     /**
      * Template instance
      *
-     * @var \PF\Main\Web\Component\Template\AbstractTemplate
+     * @var \PM\Main\Web\Component\Template\AbstractTemplate
      */
     private $_template = null;
 
     /**
      * Request instance.
      *
-     * @var \PF\Main\Web\Component\Request
+     * @var \PM\Main\Web\Component\Request
      */
     private $_request = null;
 
     /**
      * Contruct method.
      *
-     * @param \PF\Main\Web\Component\Request $requesst Request instance
+     * @param \PM\Main\Web\Component\Request $request Request instance
      */
-    public function __construct(Request $requesst) {
-        $this->_request = $requesst;
+    public function __construct(Request $request) {
+        $this->_request = $request;
     }
 
     /**
@@ -49,7 +49,7 @@ abstract class AbstractView {
      *
      * @param mixed $data Data for template
      *
-     * @return \PF\Main\Web\View\AbstractView
+     * @return \PM\Main\Web\View\AbstractView
      */
     final public function setData($data) {
         $this->_data = $data;
@@ -69,9 +69,9 @@ abstract class AbstractView {
     /**
      * Sets template instance.
      *
-     * @param \PF\Main\Web\Component\Template\AbstractTemplate $template Template instance
+     * @param \PM\Main\Web\Component\Template\AbstractTemplate $template Template instance
      *
-     * @return \PF\Main\Web\View\AbstractView
+     * @return \PM\Main\Web\View\AbstractView
      */
     final public function setTemplate(AbstractTemplate $template) {
         $this->_template = $template;
@@ -82,7 +82,7 @@ abstract class AbstractView {
     /**
      * Returns request instance.
      *
-     * @return \PF\Main\Web\Component\Request
+     * @return \PM\Main\Web\Component\Request
      */
     protected function getRequest() {
         return $this->_request;
@@ -105,7 +105,7 @@ abstract class AbstractView {
     /**
      * Returns template instance.
      *
-     * @return \PF\Main\Web\Component\Template\AbstractTemplate
+     * @return \PM\Main\Web\Component\Template\AbstractTemplate
      */
     protected function getTemplate() {
         return $this->_template;

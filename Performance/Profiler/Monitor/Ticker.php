@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Profiler\Monitor;
+namespace PM\Profiler\Monitor;
 
-use PF\Profiler\Entity;
-use PF\Profiler\Monitor\Filter\Enum;
+use PM\Profiler\Entity;
+use PM\Profiler\Monitor\Filter\Enum;
 
 /**
  * This script defines class for monitor ticker. This class catch each call and process it.
@@ -17,14 +17,14 @@ class Ticker implements Interfaces\Ticker {
     /**
      * Monitor storage instance.
      *
-     * @var \PF\Profiler\Monitor\Interfaces\Storage
+     * @var \PM\Profiler\Monitor\Interfaces\Storage
      */
     private $_storage;
 
     /**
      * List of filters.
      *
-     * @var \PF\Profiler\Monitor\Interfaces\Filter[]
+     * @var \PM\Profiler\Monitor\Interfaces\Filter[]
      */
     private $_filters = array();
 
@@ -45,7 +45,7 @@ class Ticker implements Interfaces\Ticker {
     /**
      * Construct method.
      *
-     * @param \PF\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
+     * @param \PM\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
      *
      * @return void
      */
@@ -58,9 +58,9 @@ class Ticker implements Interfaces\Ticker {
     /**
      * Adds filter to stack for filtering calls backtrace.
      *
-     * @param \PF\Profiler\Monitor\Interfaces\Filter $filter Filter instance
+     * @param \PM\Profiler\Monitor\Interfaces\Filter $filter Filter instance
      *
-     * @return \PF\Profiler\Monitor\Ticker
+     * @return \PM\Profiler\Monitor\Ticker
      */
     public function addFilter(Interfaces\Filter $filter) {
         $this->_filters[] = $filter;
@@ -71,7 +71,7 @@ class Ticker implements Interfaces\Ticker {
     /**
      * Starts tick function.
      *
-     * @return \PF\Profiler\Monitor\Ticker
+     * @return \PM\Profiler\Monitor\Ticker
      */
     public function start() {
         if ($this->_isRunning === false) {
@@ -87,7 +87,7 @@ class Ticker implements Interfaces\Ticker {
     /**
      * Stops tick function.
      *
-     * @return \PF\Profiler\Monitor\Ticker
+     * @return \PM\Profiler\Monitor\Ticker
      */
     public function stop() {
         if ($this->_isRunning === true) {
@@ -115,7 +115,7 @@ class Ticker implements Interfaces\Ticker {
      */
     public function tick() {
         $endTime   = $this->_getMicrotime();
-        $backtrace = debug_backtrace();
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
         if ($this->_isAllowedBacktrace($backtrace)) {
             $call = $this->_storage->getCallInstance()->createCall($backtrace, $this->_startTime, $endTime);
@@ -137,7 +137,7 @@ class Ticker implements Interfaces\Ticker {
         reset($this->_filters);
 
         do {
-            $filter  = current($this->_filters);
+            $filter  = current($this->_filters); /* @var $filter Filter */
             $isAllow = $filter->isAllowedBacktrace($backtrace);
         } while($isAllow && next($this->_filters));
 
@@ -156,7 +156,7 @@ class Ticker implements Interfaces\Ticker {
     /**
      * Register tick function and init default attributes.
      *
-     * @return \PF\Profiler\Monitor\Ticker
+     * @return \PM\Profiler\Monitor\Ticker
      */
     private function _registerTick() {
         if (is_callable('debug_backtrace') === false) {
@@ -171,7 +171,7 @@ class Ticker implements Interfaces\Ticker {
     /**
      * Unregister tick function and finish process default attributes.
      *
-     * @return \PF\Profiler\Monitor\Ticker
+     * @return \PM\Profiler\Monitor\Ticker
      */
     private function _unregisterTick() {
         unregister_tick_function(array(&$this, 'tick'));
@@ -180,9 +180,9 @@ class Ticker implements Interfaces\Ticker {
     }
 
     /**
-     * Loads default filter. It is for avoid catch calls in PF.
+     * Loads default filter. It is for avoid catch calls in PM.
      *
-     * @return \PF\Profiler\Monitor\Filter
+     * @return \PM\Profiler\Monitor\Filter
      */
     private function _getDefaultFilter() {
         // TODO move to another place

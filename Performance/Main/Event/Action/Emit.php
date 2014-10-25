@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Event\Action;
+namespace PM\Main\Event\Action;
 
 /**
  * This script defines class for emit event action.

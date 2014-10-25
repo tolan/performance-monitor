@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Profiler\Monitor\Display;
+namespace PM\Profiler\Monitor\Display;
 
 /**
  * This script defines class for display measure in cache.

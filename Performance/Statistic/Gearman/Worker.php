@@ -1,10 +1,10 @@
 <?php
 
-namespace PF\Statistic\Gearman;
+namespace PM\Statistic\Gearman;
 
-use PF\Main\Exception;
-use PF\Statistic\Engine\State;
-use PF\Statistic\Entity;
+use PM\Main\Exception;
+use PM\Statistic\Engine\State;
+use PM\Statistic\Entity;
 
 /**
  * This script defines statistic gearman worker.
@@ -13,7 +13,7 @@ use PF\Statistic\Entity;
  * @category   Performance
  * @package    Statistic
  */
-class Worker extends \PF\Main\Abstracts\Gearman\Worker {
+class Worker extends \PM\Main\Abstracts\Gearman\Worker {
 
     /**
      * Process method which generates statistic data and saves it.
@@ -28,15 +28,15 @@ class Worker extends \PF\Main\Abstracts\Gearman\Worker {
 
         $templates = $this->_getTemplates($set->getTemplates());
 
-        $generator  = $this->getProvider()->get('PF\Statistic\Engine\Generator'); /* @var $generator \PF\Statistic\Engine\Generator */
-        $service    = $this->getProvider()->get('PF\Statistic\Service\Statistic'); /* @var $service \PF\Statistic\Service\Statistic */
-        $runService = $this->getProvider()->get('PF\Statistic\Service\Run'); /* @var $runService \PF\Statistic\Service\Run */
-        $repository = $this->getProvider()->get('PF\Statistic\Repository\Run'); /* @var $repository \PF\Statistic\Repository\Run */
+        $generator  = $this->getProvider()->get('PM\Statistic\Engine\Generator'); /* @var $generator \PM\Statistic\Engine\Generator */
+        $service    = $this->getProvider()->get('PM\Statistic\Service\Statistic'); /* @var $service \PM\Statistic\Service\Statistic */
+        $runService = $this->getProvider()->get('PM\Statistic\Service\Run'); /* @var $runService \PM\Statistic\Service\Run */
+        $repository = $this->getProvider()->get('PM\Statistic\Repository\Run'); /* @var $repository \PM\Statistic\Repository\Run */
 
-        $stateObserver = $this->getProvider()->get('PF\Statistic\Engine\Helper\State'); /* @var $stateObserver \PF\Statistic\Engine\Helper\State */
+        $stateObserver = $this->getProvider()->get('PM\Statistic\Engine\Helper\State'); /* @var $stateObserver \PM\Statistic\Engine\Helper\State */
         $stateObserver->setRun($run);
 
-        $state = $this->getProvider()->prototype('PF\Statistic\Engine\State'); /* @var $state \PF\Statistic\Engine\State */
+        $state = $this->getProvider()->prototype('PM\Statistic\Engine\State'); /* @var $state \PM\Statistic\Engine\State */
         $state->setState(State::STATE_IDLE);
         $state->attach($stateObserver);
 
@@ -69,9 +69,9 @@ class Worker extends \PF\Main\Abstracts\Gearman\Worker {
      * @return Entity\Run
      */
     private function _getRun($id) {
-        $templateService = $this->getProvider()->get('PF\Statistic\Service\Template'); /* @var $templateService \PF\Statistic\Service\Template */
-        $runService      = $this->getProvider()->get('PF\Statistic\Service\Run'); /* @var $runService \PF\Statistic\Service\Run */
-        $runRepository   = $this->getProvider()->get('PF\Statistic\Repository\Run'); /* @var $runRepository \PF\Statistic\Repository\Run */;
+        $templateService = $this->getProvider()->get('PM\Statistic\Service\Template'); /* @var $templateService \PM\Statistic\Service\Template */
+        $runService      = $this->getProvider()->get('PM\Statistic\Service\Run'); /* @var $runService \PM\Statistic\Service\Run */
+        $runRepository   = $this->getProvider()->get('PM\Statistic\Repository\Run'); /* @var $runRepository \PM\Statistic\Repository\Run */;
 
         return $runService->getRun($id, $runRepository, $templateService, false, false);
     }
@@ -84,9 +84,9 @@ class Worker extends \PF\Main\Abstracts\Gearman\Worker {
      * @return Entity\Set
      */
     private function _getSet($id) {
-        $setService    = $this->getProvider()->get('PF\Statistic\Service\Set'); /* @var $setService \PF\Statistic\Service\Set */
-        $setRepository = $this->getProvider()->get('PF\Statistic\Repository\Set'); /* @var $setRepository \PF\Statistic\Repository\Set */;
-        $runService    = $this->getProvider()->get('PF\Statistic\Service\Run'); /* @var $runService \PF\Statistic\Service\Run */
+        $setService    = $this->getProvider()->get('PM\Statistic\Service\Set'); /* @var $setService \PM\Statistic\Service\Set */
+        $setRepository = $this->getProvider()->get('PM\Statistic\Repository\Set'); /* @var $setRepository \PM\Statistic\Repository\Set */;
+        $runService    = $this->getProvider()->get('PM\Statistic\Service\Run'); /* @var $runService \PM\Statistic\Service\Run */
 
         return $setService->getSet($id, $setRepository, $runService, false);
     }
@@ -99,10 +99,10 @@ class Worker extends \PF\Main\Abstracts\Gearman\Worker {
      * @return array
      */
     private function _getTemplates(array $ids) {
-        $templateService    = $this->getProvider()->get('PF\Statistic\Service\Template'); /* @var $templateService \PF\Statistic\Service\Template */
-        $templateRepository = $this->getProvider()->get('PF\Statistic\Repository\Template'); /* @var $templateRepository \PF\Statistic\Repository\Template */;
-        $viewService        = $this->getProvider()->get('PF\Statistic\Service\View'); /* @var $viewService \PF\Statistic\Service\View */
-        $searchService      = $this->getProvider()->get('PF\Search\Service\Template'); /* @var $searchService \PF\Search\Service\Template */
+        $templateService    = $this->getProvider()->get('PM\Statistic\Service\Template'); /* @var $templateService \PM\Statistic\Service\Template */
+        $templateRepository = $this->getProvider()->get('PM\Statistic\Repository\Template'); /* @var $templateRepository \PM\Statistic\Repository\Template */;
+        $viewService        = $this->getProvider()->get('PM\Statistic\Service\View'); /* @var $viewService \PM\Statistic\Service\View */
+        $searchService      = $this->getProvider()->get('PM\Search\Service\Template'); /* @var $searchService \PM\Search\Service\Template */
 
         $templates = array();
 

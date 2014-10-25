@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main\Web\Controller\Abstracts;
+namespace PM\Main\Web\Controller\Abstracts;
 
-use PF\Main\Provider;
-use PF\Main\Commander;
+use PM\Main\Provider;
+use PM\Main\Commander;
 
 /**
  * Abstract class for all controllers.
@@ -17,14 +17,14 @@ abstract class Controller {
     /**
      * Provider instance
      *
-     * @var \PF\Main\Provider
+     * @var \PM\Main\Provider
      */
     private $_provider = null;
 
     /**
      * Commander instance.
      *
-     * @var \PF\Main\Commander
+     * @var \PM\Main\Commander
      */
     private $_commander = null;
 
@@ -52,8 +52,8 @@ abstract class Controller {
     /**
      * Construct method.
      *
-     * @param \PF\Main\Provider  $provider  Provider instnace
-     * @param \PF\Main\Commander $commander Commander instnace
+     * @param \PM\Main\Provider  $provider  Provider instnace
+     * @param \PM\Main\Commander $commander Commander instnace
      *
      * @return void
      */
@@ -75,7 +75,7 @@ abstract class Controller {
      *
      * @param string $action Action name
      *
-     * @return \PF\Main\Web\Controller\Abstracts\Controller
+     * @return \PM\Main\Web\Controller\Abstracts\Controller
      */
     final public function setAction($action = null) {
         $this->_action = $action;
@@ -97,7 +97,7 @@ abstract class Controller {
      *
      * @param array $params Array with parameters
      *
-     * @return \PF\Main\Web\Controller\Abstracts\Controller
+     * @return \PM\Main\Web\Controller\Abstracts\Controller
      */
     final public function setParams($params = null) {
         $this->_params = $params;
@@ -108,7 +108,7 @@ abstract class Controller {
     /**
      * Run action on controller. It call action, set data to view and set view into response.
      *
-     * @return \PF\Main\Web\Controller\Abstracts\Controller
+     * @return \PM\Main\Web\Controller\Abstracts\Controller
      */
     final public function run() {
         $this->getExecutor()->getResult()
@@ -151,7 +151,7 @@ abstract class Controller {
      *
      * @param mixed $data Data for view
      *
-     * @return \PF\Main\Web\Controller\Abstracts\Controller
+     * @return \PM\Main\Web\Controller\Abstracts\Controller
      */
     final protected function setData($data) {
         $this->_data = $data;
@@ -162,7 +162,7 @@ abstract class Controller {
     /**
      * Gets provider instance.
      *
-     * @return \PF\Main\Provider
+     * @return \PM\Main\Provider
      */
     final protected function getProvider() {
         return $this->_provider;
@@ -171,7 +171,7 @@ abstract class Controller {
     /**
      * Gets request instance.
      *
-     * @return \PF\Main\Web\Component\Request
+     * @return \PM\Main\Web\Component\Request
      */
     final protected function getRequest() {
         return $this->_provider->get('request');
@@ -180,7 +180,7 @@ abstract class Controller {
     /**
      * Returns executor instance for sharing result and using common scope.
      *
-     * @return \PF\Main\Commander\Executor
+     * @return \PM\Main\Commander\Executor
      */
     final protected function getExecutor() {
         return $this->_commander->getExecutor($this->getAction());
@@ -189,14 +189,14 @@ abstract class Controller {
     /**
      * Abstract method for returns response instance.
      *
-     * @return \PF\Main\Web\Component\Response
+     * @return \PM\Main\Web\Component\Response
      */
     abstract public function getResponse();
 
     /**
      * Abstract method for returns view instance.
      *
-     * @return \PF\Main\Web\View\AbstractView
+     * @return \PM\Main\Web\View\AbstractView
      */
     abstract protected function getView();
 }

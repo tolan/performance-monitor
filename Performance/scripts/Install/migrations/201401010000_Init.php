@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\scripts\Install\migrations;
+namespace PM\scripts\Install\migrations;
 
-use PF\scripts\Install\AbstractMigration;
-use PF\Main\Database\Connection;
+use PM\scripts\Install\AbstractMigration;
+use PM\Main\Database\Connection;
 
 /**
  * This script defines migration class for initialize datbase.

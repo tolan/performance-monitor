@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Tests\Unit\Main\Web\Controller;
+namespace PM\Tests\Unit\Main\Web\Controller;
 
-use PF\Main\Abstracts\Unit\TestCase;
+use PM\Main\Abstracts\Unit\TestCase;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Web\Controller\Menu.
+ * This script defines class for php unit test case of class \PM\Main\Web\Controller\Menu.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -16,7 +16,7 @@ class MenuTest extends TestCase {
     /**
      * App instance.
      *
-     * @var \PF\Main\Web\Controller\Menu
+     * @var \PM\Main\Web\Controller\Menu
      */
     private $_controller;
 
@@ -28,7 +28,7 @@ class MenuTest extends TestCase {
     protected function setUp() {
         parent::setUp();
 
-        $this->_controller = $this->getProvider()->get('PF\Main\Web\Controller\Menu');
+        $this->_controller = $this->getProvider()->get('PM\Main\Web\Controller\Menu');
     }
 
     /**

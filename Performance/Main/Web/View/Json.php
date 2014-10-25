@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Web\View;
+namespace PM\Main\Web\View;
 
-use PF\Main\Abstracts\Entity;
+use PM\Main\Abstracts\Entity;
 
 /**
  * Abstract class for each JSON view.
@@ -47,7 +47,7 @@ class Json extends AbstractView {
     /**
      * Returns JSON template.
      *
-     * @return \PF\Main\Web\Component\Template\Json
+     * @return \PM\Main\Web\Component\Template\Json
      */
     final protected function getTemplate() {
         return parent::getTemplate();

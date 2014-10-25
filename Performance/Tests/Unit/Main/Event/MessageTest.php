@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Tests\Unit\Main\Event;
+namespace PM\Tests\Unit\Main\Event;
 
-use PF\Main\Abstracts\Unit\TestCase;
+use PM\Main\Abstracts\Unit\TestCase;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Event\Message.
+ * This script defines class for php unit test case of class \PM\Main\Event\Message.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -16,7 +16,7 @@ class MessageTest extends TestCase {
     /**
      * Message instance.
      *
-     * @var \PF\Main\Event\Message
+     * @var \PM\Main\Event\Message
      */
     private $_message;
 
@@ -26,7 +26,7 @@ class MessageTest extends TestCase {
      * @return void
      */
     protected function setUp() {
-        $this->_message = $this->getProvider()->prototype('PF\Main\Event\Message');
+        $this->_message = $this->getProvider()->prototype('PM\Main\Event\Message');
 
         parent::setUp();
     }
@@ -39,7 +39,7 @@ class MessageTest extends TestCase {
     public function testSetData() {
         $message = $this->_message->setData(array());
 
-        $this->assertInstanceOf('PF\Main\Event\Message', $message);
+        $this->assertInstanceOf('PM\Main\Event\Message', $message);
         $this->assertEquals(array(), $message->getData());
     }
 

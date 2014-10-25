@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Profiler\Monitor;
+namespace PM\Profiler\Monitor;
 
 /**
  * This script defines class for monitor call fly weight.

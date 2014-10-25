@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Tree;
+namespace PM\Main\Tree;
 
 /**
  * This script defines class for settings configuration of tree structure.
@@ -53,7 +53,7 @@ class Config {
      *
      * @param string $identificator Parameter identifier
      *
-     * @return \PF\Main\Tree\Config
+     * @return \PM\Main\Tree\Config
      */
     public function setIdentificator($identificator) {
         $this->_id = $identificator;
@@ -75,7 +75,7 @@ class Config {
      *
      * @param string $identificator Parameter identifier for parent identifier.
      *
-     * @return \PF\Main\Tree\Config
+     * @return \PM\Main\Tree\Config
      */
     public function setParentIdentificator($identificator) {
         $this->_parentId = $identificator;
@@ -97,7 +97,7 @@ class Config {
      *
      * @param string $identificator Paremeter identifier for define order in structure.
      *
-     * @return \PF\Main\Tree\Config
+     * @return \PM\Main\Tree\Config
      */
     public function setOrderIdentificator($identificator) {
         $this->_order = $identificator;
@@ -119,7 +119,7 @@ class Config {
      *
      * @param string $identificator Parameter identifier which is used for children in tree structure.
      *
-     * @return \PF\Main\Tree\Config
+     * @return \PM\Main\Tree\Config
      */
     public function setChildrenIdentificator($identificator) {
         $this->_children = $identificator;
@@ -130,7 +130,7 @@ class Config {
     /**
      * It checks that configuration is valid.
      *
-     * @return \PF\Main\Tree\Config
+     * @return \PM\Main\Tree\Config
      *
      * @throws Exception Throws when configuration is not valid (at least one parameter is empty).
      */

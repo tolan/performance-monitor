@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Web\Component\Template;
+namespace PM\Main\Web\Component\Template;
 
 /**
  * This script defines template for error state of view.
@@ -17,7 +17,7 @@ class Error extends AbstractTemplate {
      * @return string
      */
     protected function generatePayload() {
-        $exception = $this->getData(); /* @var $exception \PF\Main\Exception */
+        $exception = $this->getData(); /* @var $exception \PM\Main\Exception */
         $code      = 500;
 
         if ($exception->getCode() !== 0) {

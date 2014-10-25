@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main\Tree;
+namespace PM\Main\Tree;
 
-use PF\Main\Abstracts;
-use PF\Main\CommonEntity;
+use PM\Main\Abstracts;
+use PM\Main\CommonEntity;
 
 /**
  * This script defines class for convertor of tree structure.

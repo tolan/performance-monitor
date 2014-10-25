@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main;
+namespace PM\Main;
 
 /**
  * Class definition for performance provider. This class is responsible for creating classes and store their instances to the store.
@@ -43,7 +43,7 @@ class Provider {
     /**
      * Self singleton instance
      *
-     * @var \PF\Main\Provider
+     * @var Provider
      */
     private static $_selfInstance = null;
 
@@ -71,6 +71,13 @@ class Provider {
     );
 
     /**
+     * Cache instance.
+     *
+     * @var Cache
+     */
+    private $_cache = null;
+
+    /**
      * Construct method which initialize instance and prepare autoloder.
      *
      * @var $config Config instance
@@ -78,7 +85,9 @@ class Provider {
      * @return void
      */
     public function __construct(Config $config = null) {
-        $services = array();
+        $services       = array();
+        $providerConfig = null;
+
         if ($config !== null) {
             $this->set($config);
             $providerConfig       = $config->hasOwnProperty('provider') ? $config->get('provider') : array();
@@ -95,6 +104,7 @@ class Provider {
         }
 
         $this->set($this);
+        $this->_initCache($config);
 
         foreach ($services as $name => $service) {
             $instance = $this->get($service);
@@ -107,7 +117,7 @@ class Provider {
      *
      * @var $config Config instance
      *
-     * @return \PF\Main\Provider
+     * @return \PM\Main\Provider
      */
     public static function getInstance(Config $config = null) {
         if (self::$_selfInstance === null) {
@@ -123,9 +133,9 @@ class Provider {
      * @param object $instance Some instance
      * @param string $name     Optional name for instance
      *
-     * @return \PF\Main\Provider
+     * @return \PM\Main\Provider
      *
-     * @throws \PF\Main\Exception Throws when instance is not object
+     * @throws \PM\Main\Exception Throws when instance is not object
      */
     public function set($instance, $name=null) {
         if (is_object($instance) === false) {
@@ -153,7 +163,7 @@ class Provider {
      *
      * @param string $name Name of class
      *
-     * @return \PF\Main\Provider
+     * @return \PM\Main\Provider
      */
     public function reset($name=null) {
         if ($name === null) {
@@ -162,14 +172,12 @@ class Provider {
             foreach ($this->_instances as $key => $instance) {
                 if ($instance['name'] === $name) {
                     unset($this->_instances[$key]);
-                    return $this;
+                    break;
                 }
-            }
 
-            foreach ($this->_instances as $key => $instance) {
                 if ($instance['classname'] === $name) {
                     unset($this->_instances[$key]);
-                    return $this;
+                    break;
                 }
             }
         }
@@ -183,10 +191,14 @@ class Provider {
      * @return void
      */
     public function __destruct() {
+        if ($this->_cache) {
+            $this->_cache->save(__CLASS__, $this->_dependencies);
+        }
+
         $list    = $this->getListInstances();
         $root    = $this->get('config')->get('root');
-        $memory  = $this->get('PF\Main\System\Memory'); /* @var $memory \PF\Main\System\Memory */
-        $process = $this->get('PF\Main\System\Process'); /* @var $process \PF\Main\System\Process */
+        $memory  = $this->get('PM\Main\System\Memory'); /* @var $memory \PM\Main\System\Memory */
+        $process = $this->get('PM\Main\System\Process'); /* @var $process \PM\Main\System\Process */
 
         foreach ($list as $instance) {
             $this->reset($instance['name']);
@@ -195,7 +207,7 @@ class Provider {
         if ($this->_allowKillApp && $memory->getRelativeUsage() > 0.2) {
             $pid    = $process->getPid();
             $script = 'php '.$root.'/scripts/memoryLeakCleaner.php '.$pid;
-            $this->get('PF\Main\Log')->warning('Application was killed with PID: '.$pid);
+            $this->get('PM\Main\Log')->warning('Application was killed with PID: '.$pid);
             $process->exec($script);
         }
     }
@@ -238,12 +250,12 @@ class Provider {
         foreach ($this->_instances as $instance) {
             if ($name === $instance['name']) {
                 $has = true;
+                break;
             }
-        }
 
-        foreach ($this->_instances as $instance) {
             if ($name === $instance['classname']) {
                 $has = true;
+                break;
             }
         }
 
@@ -315,7 +327,7 @@ class Provider {
      *
      * @param strin $name Class name of constants
      *
-     * @return \PF\Main\Provider
+     * @return \PM\Main\Provider
      */
     public function loadEnum($name) {
         $this->_autoloader($name);
@@ -331,22 +343,25 @@ class Provider {
      * @return object {$name}
      */
     private function _getInstance($name) {
-        foreach ($this->_instances as $instance) {
-            if ($name === $instance['name']) {
-                return $instance['instance'];
+        $intance = null;
+        foreach ($this->_instances as $item) {
+            if ($name === $item['name']) {
+                $intance = $item['instance'];
+                break;
+            }
+
+            if ($name === $item['classname']) {
+                $intance = $item['instance'];
+                break;
             }
         }
 
-        foreach ($this->_instances as $instance) {
-            if ($name === $instance['classname']) {
-                return $instance['instance'];
-            }
+        if (!$intance) {
+            $intance = $this->_createInstance($name);
+            $this->set($intance, $name);
         }
 
-        $instance = $this->_createInstance($name);
-        $this->set($instance, $name);
-
-        return $instance;
+        return $intance;
     }
 
     /**
@@ -356,7 +371,7 @@ class Provider {
      *
      * @return object {$name}
      *
-     * @throws \PF\Main\Exception Throws when dependecies are cycling or instance was not created.
+     * @throws \PM\Main\Exception Throws when dependecies are cycling or instance was not created.
      */
     private function _createInstance($name) {
         $this->_loadClass($name);
@@ -414,18 +429,18 @@ class Provider {
      * Gets dependencies for create new class. It finds dependecies for standard constructor or singleton method
      * with name getInstance.
      *
-     * @param string $name Name of class
+     * @param string $class Name of class
      *
      * @return array Array with all dependencies.
      *
-     * @throws \PF\Main\Exception Throws when class doesn't exists.
+     * @throws \PM\Main\Exception Throws when class doesn't exists.
      */
-    private function _getDependencies($name) {
-        if (!isset($this->_dependencies[$name])) {
-            if (class_exists($name)) {
-                $reflClass = new \ReflectionClass($name);
+    private function _getDependencies($class) {
+        if (!isset($this->_dependencies[$class])) {
+            if (class_exists($class)) {
+                $reflClass = new \ReflectionClass($class);
             } else {
-                throw new Exception('Object doesn\'t exists: '.$name);
+                throw new Exception('Object doesn\'t exists: '.$class);
             }
 
             $methods      = $reflClass->getMethods();
@@ -449,8 +464,8 @@ class Provider {
             }
 
             if ($searched === false) {
-                $this->_dependencies[$name] = array();
-                return $this->_dependencies[$name];
+                $this->_dependencies[$class] = array();
+                return $this->_dependencies[$class];
             }
 
             $params = $method->getParameters();
@@ -470,13 +485,16 @@ class Provider {
                 }
             }
 
-            $this->_dependencies[$name] = array(
+            $path = $this->_getFileNameForClass($class);
+
+            $this->_dependencies[$class] = array(
                 'method'       => $method->getName(),
-                'dependencies' => $dependencies
+                'dependencies' => $dependencies,
+                'time'         => $path ? filemtime($path) : false
             );
         }
 
-        return $this->_dependencies[$name];
+        return $this->_dependencies[$class];
     }
 
     /**
@@ -487,19 +505,35 @@ class Provider {
      * @return void
      */
     private function _autoloader($class) {
+        $path   = $this->_getFileNameForClass($class);
+        $loaded = false;
+
+        if ($path) {
+            include_once $path;
+            $loaded = true;
+        }
+
+        return $loaded;
+    }
+
+    /**
+     * Construct path to file with class.
+     *
+     * @param string $class Name of class
+     *
+     * @return string|false
+     */
+    private function _getFileNameForClass($class) {
         $root            = dirname(__DIR__);
         $translatedClass = strtr($class, array('_' => '/', '\\' => '/'));
         $classPath       = strstr($translatedClass, '/');
 
         $path = $root.$classPath.'.php';
-
-        if (file_exists($path)) {
-            include_once $path;
-
-            return true;
+        if (file_exists($path) === false) {
+            $path = false;
         }
 
-        return false;
+        return $path;
     }
 
     /**
@@ -507,14 +541,14 @@ class Provider {
      *
      * @param string $class Name of class
      *
-     * @return \PF\Main\Provider
+     * @return \PM\Main\Provider
      *
-     * @throws \PF\Main\Exception Throws when you try load class from non Performance pool
+     * @throws \PM\Main\Exception Throws when you try load class from non Performance pool
      */
     private function _loadClass($class = null) {
         $class = $class === null ? get_class() : $class;
         if (class_exists($class) === false && $this->_useAutoloader === false) {
-            if (preg_match('/^Performance.*|^PF.*/', $class)) {
+            if (preg_match('/^Performance.*|^PM.*/', $class)) {
                 $tmp    = substr($class, strpos($class, '\\') + 1);
                 $module = substr($tmp, 0, strpos($tmp, '\\'));
                 $path   = dirname(__DIR__).'/'.$module.'/';
@@ -526,7 +560,7 @@ class Provider {
 
                 spl_autoload_unregister(array($this, '_autoloader'));
             } else {
-                throw new Exception('Provider loading only classes from Performance (PF namespace).');
+                throw new Exception('Provider loading only classes from Performance (PM namespace).');
             }
         }
 
@@ -559,5 +593,32 @@ class Provider {
         }
 
         return $result;
+    }
+
+    /**
+     * Initialize cache by config.
+     *
+     * @param Config $config Config instance or null
+     *
+     * @return Provider
+     */
+    private function _initCache($config) {
+        $providerConfig = $config->get('provider', array());
+
+        if ($config !== null && isset($providerConfig['cache']) && $providerConfig['cache']) {
+            $this->_cache        = $this->get($providerConfig['cache']);
+            if ($this->_cache->has(__CLASS__)) {
+                $cached = $this->_cache->load(__CLASS__);
+                foreach ($cached as $class => $dependencies) {
+                    $path = $this->_getFileNameForClass($class);
+
+                    if ($path && !empty($dependencies) && filemtime($path) === $dependencies['time']) {
+                        $this->_dependencies[$class] = $dependencies;
+                    }
+                }
+            }
+        }
+
+        return $this;
     }
 }

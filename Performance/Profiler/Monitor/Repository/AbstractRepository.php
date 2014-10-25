@@ -1,10 +1,10 @@
 <?php
 
-namespace PF\Profiler\Monitor\Repository;
+namespace PM\Profiler\Monitor\Repository;
 
-use PF\Main\Abstracts\Repository;
-use PF\Profiler\Monitor;
-use PF\Profiler\Repository\Filter as RepositoryFilter;
+use PM\Main\Abstracts\Repository;
+use PM\Profiler\Monitor;
+use PM\Profiler\Repository\Filter as RepositoryFilter;
 
 /**
  * This script defines abstract class for monitor repository.
@@ -25,10 +25,10 @@ abstract class AbstractRepository extends Repository implements Monitor\Interfac
     /**
      * Sets monitor filter repository.
      *
-     * @param \PF\Profiler\Repository\Filter $repository Monitor filter repository instance
+     * @param \PM\Profiler\Repository\Filter $repository Monitor filter repository instance
      * @param int                            $requestId  Request ID
      *
-     * @return \PF\Profiler\Monitor\Repository\AbstractRepository
+     * @return \PM\Profiler\Monitor\Repository\AbstractRepository
      */
     public function setFilterRepository(RepositoryFilter $repository, $requestId = null) {
         if ($requestId !== null) {

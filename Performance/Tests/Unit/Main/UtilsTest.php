@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Tests\Unit\Main;
+namespace PM\Tests\Unit\Main;
 
-use PF\Main\Abstracts\Unit\TestCase;
+use PM\Main\Abstracts\Unit\TestCase;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Utils.
+ * This script defines class for php unit test case of class \PM\Main\Utils.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -15,7 +15,7 @@ class UtilsTest extends TestCase {
 
     /**
      *
-     * @var \PF\Main\Utils
+     * @var \PM\Main\Utils
      */
     private $_utils;
 
@@ -27,7 +27,7 @@ class UtilsTest extends TestCase {
     protected function setUp() {
         parent::setUp();
 
-        $this->_utils = $this->getProvider()->get('PF\Main\Utils');
+        $this->_utils = $this->getProvider()->get('PM\Main\Utils');
     }
 
     /**

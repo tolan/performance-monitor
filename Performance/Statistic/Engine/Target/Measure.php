@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Statistic\Engine\Target;
+namespace PM\Statistic\Engine\Target;
 
-use PF\Main\Database\Select;
-use PF\Statistic\Enum\Source\Target;
+use PM\Main\Database\Select;
+use PM\Statistic\Enum\Source\Target;
 
 /**
  * This script defines class for define measure entity to statistic select.

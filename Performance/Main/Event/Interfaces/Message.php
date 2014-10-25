@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Event\Interfaces;
+namespace PM\Main\Event\Interfaces;
 
 /**
  * This script defines interface for message class.

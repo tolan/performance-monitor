@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Profiler\Service;
+namespace PM\Profiler\Service;
 
-use PF\Main\Abstracts\Service;
-use PF\Main\Database;
-use PF\Profiler\Repository\Factory;
-use PF\Profiler\Entity;
+use PM\Main\Abstracts\Service;
+use PM\Main\Database;
+use PM\Profiler\Repository\Factory;
+use PM\Profiler\Entity;
 
 /**
  * This script defines class for request service.
@@ -21,17 +21,17 @@ class Request extends Service {
      *
      * @param array                           $requestData   Array with data of request
      * @param int                             $scenarioId    ID of scenario
-     * @param \PF\Profiler\Repository\Factory $factory       Repository factory instance
-     * @param \PF\Main\Database               $database      Database instance
-     * @param \PF\Profiler\Service\Filter     $filterService Filter service instance
+     * @param \PM\Profiler\Repository\Factory $factory       Repository factory instance
+     * @param \PM\Main\Database               $database      Database instance
+     * @param \PM\Profiler\Service\Filter     $filterService Filter service instance
      *
-     * @return \PF\Profiler\Entity\Request
+     * @return \PM\Profiler\Entity\Request
      *
-     * @throws \PF\Profiler\Service\Exception
+     * @throws \PM\Profiler\Service\Exception
      */
     public function createRequest($requestData, $scenarioId, Factory $factory, Database $database, Filter $filterService) {
         $transaction = $database->getTransaction()->begin('request');
-        $repository  = $factory->getRequest(); /* @var $repository \PF\Profiler\Repository\Request */
+        $repository  = $factory->getRequest(); /* @var $repository \PM\Profiler\Repository\Request */
 
         try {
             $request = new Entity\Request($requestData);
@@ -71,13 +71,13 @@ class Request extends Service {
      * Updates existed request with new request data.
      *
      * @param array                           $requestData   Array with request data to update
-     * @param \PF\Profiler\Repository\Factory $factory       Repository factory instance
-     * @param \PF\Main\Database               $database      Database instance
-     * @param \PF\Profiler\Service\Filter     $filterService Filter service instance
+     * @param \PM\Profiler\Repository\Factory $factory       Repository factory instance
+     * @param \PM\Main\Database               $database      Database instance
+     * @param \PM\Profiler\Service\Filter     $filterService Filter service instance
      *
-     * @return \PF\Profiler\Entity\Request
+     * @return \PM\Profiler\Entity\Request
      *
-     * @throws \PF\Profiler\Service\Exception
+     * @throws \PM\Profiler\Service\Exception
      */
     public function updateRequest($requestData, Factory $factory, Database $database, Filter $filterService) {
         $updateRequest = new Entity\Request($requestData);
@@ -102,14 +102,14 @@ class Request extends Service {
     /**
      * Updates parameters for request.
      *
-     * @param \PF\Profiler\Entity\Request     $updateRequest Request entity instance to update
-     * @param \PF\Profiler\Entity\Request     $request       Existed request entity instance
-     * @param \PF\Profiler\Repository\Factory $factory       Repository factory instance
-     * @param \PF\Main\Database               $database      Database instance
+     * @param \PM\Profiler\Entity\Request     $updateRequest Request entity instance to update
+     * @param \PM\Profiler\Entity\Request     $request       Existed request entity instance
+     * @param \PM\Profiler\Repository\Factory $factory       Repository factory instance
+     * @param \PM\Main\Database               $database      Database instance
      *
-     * @return \PF\Profiler\Service\Request
+     * @return \PM\Profiler\Service\Request
      *
-     * @throws \PF\Profiler\Service\Exception
+     * @throws \PM\Profiler\Service\Exception
      */
     private function _updateParams(Entity\Request $updateRequest, Entity\Request $request, Factory $factory, Database $database) {
         $repository    = $factory->getRequest();
@@ -161,14 +161,14 @@ class Request extends Service {
     /**
      * Updates filters for request.
      *
-     * @param \PF\Profiler\Entity\Request $updateRequest Request entity instance to update
-     * @param \PF\Profiler\Entity\Request $request       Existed request entity instance
-     * @param \PF\Main\Database           $database      Database instance
-     * @param \PF\Profiler\Service\Filter $filterService Filter service instance
+     * @param \PM\Profiler\Entity\Request $updateRequest Request entity instance to update
+     * @param \PM\Profiler\Entity\Request $request       Existed request entity instance
+     * @param \PM\Main\Database           $database      Database instance
+     * @param \PM\Profiler\Service\Filter $filterService Filter service instance
      *
-     * @return \PF\Profiler\Service\Request
+     * @return \PM\Profiler\Service\Request
      *
-     * @throws \PF\Profiler\Service\Exception
+     * @throws \PM\Profiler\Service\Exception
      */
     private function _updateFilters(Entity\Request $updateRequest, Entity\Request $request, Database $database, Filter $filterService) {
         $updateFilters  = $updateRequest->get('filters', array());
@@ -224,12 +224,12 @@ class Request extends Service {
      * Deletes request in database.
      *
      * @param int                             $id       ID of request
-     * @param \PF\Profiler\Repository\Factory $factory  Repository factory instance
-     * @param \PF\Main\Database               $database Database instance
+     * @param \PM\Profiler\Repository\Factory $factory  Repository factory instance
+     * @param \PM\Main\Database               $database Database instance
      *
      * @return boolean
      *
-     * @throws \PF\Profiler\Service\Exception
+     * @throws \PM\Profiler\Service\Exception
      */
     public function deleteRequest($id, Factory $factory, Database $database) {
         $transaction = $database->getTransaction()->begin(__FUNCTION__);
@@ -251,16 +251,16 @@ class Request extends Service {
      *
      * @param array                           $parameterData Array with data for new parameter
      * @param int                             $requestId     ID of request
-     * @param \PF\Profiler\Repository\Factory $factory       Repository factory instance
-     * @param \PF\Main\Database               $database      Database instance
+     * @param \PM\Profiler\Repository\Factory $factory       Repository factory instance
+     * @param \PM\Main\Database               $database      Database instance
      *
-     * @return \PF\Profiler\Entity\Parameter
+     * @return \PM\Profiler\Entity\Parameter
      *
-     * @throws \PF\Profiler\Service\Exception
+     * @throws \PM\Profiler\Service\Exception
      */
     public function createParameter($parameterData, $requestId, Factory $factory, Database $database) {
         $transaction = $database->getTransaction()->begin('parameter');
-        $repository  = $factory->getRequest(); /* @var $repository \PF\Profiler\Repository\Request */
+        $repository  = $factory->getRequest(); /* @var $repository \PM\Profiler\Repository\Request */
 
         try {
             $parameter = new Entity\Parameter($parameterData);
@@ -281,12 +281,12 @@ class Request extends Service {
      * Returns request with additional data.
      *
      * @param int                             $id             ID of request
-     * @param \PF\Profiler\Repository\Factory $factory        Repository factory instance
+     * @param \PM\Profiler\Repository\Factory $factory        Repository factory instance
      * @param boolean                         $includeParams  Include assigned parameters
      * @param boolean                         $includeFilters Include assigned filters
-     * @param \PF\Profiler\Service\Filter     $filterService  Filter service instance
+     * @param \PM\Profiler\Service\Filter     $filterService  Filter service instance
      *
-     * @return \PF\Profiler\Entity\Request
+     * @return \PM\Profiler\Entity\Request
      */
     public function getRequest($id, Factory $factory, $includeParams = false, $includeFilters = false, Filter $filterService = null) {
         $repository = $factory->getRequest();
@@ -311,10 +311,10 @@ class Request extends Service {
      * Returns list of requests for scenario.
      *
      * @param int                             $scenarioId     ID of scenario
-     * @param \PF\Profiler\Repository\Factory $factory        Repository factory instance
+     * @param \PM\Profiler\Repository\Factory $factory        Repository factory instance
      * @param boolean                         $includeParams  Include assigned parameters
      * @param boolean                         $includeFilters Include assigned filters
-     * @param \PF\Profiler\Service\Filter     $filterService  Filter service instance
+     * @param \PM\Profiler\Service\Filter     $filterService  Filter service instance
      *
      * @return type
      */
@@ -325,7 +325,7 @@ class Request extends Service {
         if ($includeParams === true && !empty($requests)) {
             $params = $repository->getParamsForRequests(array_keys($requests));
             foreach($params as $param) {
-                $request     = $requests[$param->get('requestId')]; /* @var $request \PF\Profiler\Entity\Request */
+                $request     = $requests[$param->get('requestId')]; /* @var $request \PM\Profiler\Entity\Request */
                 $reqParams   = $request->get('parameters', array());
                 $reqParams[] = $param;
                 $request->set('parameters', $reqParams);
@@ -338,7 +338,7 @@ class Request extends Service {
             $filters = $executor->add('getFiltersForRequests', $filterService)->execute()->getData();
 
             foreach($filters as $filter) {
-                $request      = $requests[$filter->get('requestId')]; /* @var $request \PF\Profiler\Entity\Request */
+                $request      = $requests[$filter->get('requestId')]; /* @var $request \PM\Profiler\Entity\Request */
                 $reqFilters   = $request->get('filters', array());
                 $reqFilters[] = $filter;
                 $request->set('filters', $reqFilters);

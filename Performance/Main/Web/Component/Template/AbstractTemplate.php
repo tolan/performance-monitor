@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Web\Component\Template;
+namespace PM\Main\Web\Component\Template;
 
-use PF\Main\Web\View\AbstractView;
+use PM\Main\Web\View\AbstractView;
 
 /**
  * Abstract class for response template.
@@ -23,7 +23,7 @@ abstract class AbstractTemplate {
     /**
      * View instance
      *
-     * @var \PF\Main\Web\View\AbstractView
+     * @var \PM\Main\Web\View\AbstractView
      */
     private $_view = null;
 
@@ -41,7 +41,7 @@ abstract class AbstractTemplate {
      *
      * @param mixed $data Data for display
      *
-     * @return \PF\Main\Web\Component\Template\AbstractTemplate
+     * @return \PM\Main\Web\Component\Template\AbstractTemplate
      */
     final public function setData($data) {
         $this->_data = $data;
@@ -61,9 +61,9 @@ abstract class AbstractTemplate {
     /**
      * Sets view for template.
      *
-     * @param \PF\Main\Web\View\AbstractView $view View instance
+     * @param \PM\Main\Web\View\AbstractView $view View instance
      *
-     * @return \PF\Main\Web\Component\Template\AbstractTemplate
+     * @return \PM\Main\Web\Component\Template\AbstractTemplate
      */
     final public function setView(AbstractView $view) {
         $this->_view = $view;
@@ -74,7 +74,7 @@ abstract class AbstractTemplate {
     /**
      * Gets view instance.
      *
-     * @return \PF\Main\Web\View\AbstractView
+     * @return \PM\Main\Web\View\AbstractView
      */
     final public function getView() {
         return $this->_view;

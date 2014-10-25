@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Profiler;
+namespace PM\Profiler;
 
 /**
  * This script defines exception class for profiler.
@@ -9,5 +9,5 @@ namespace PF\Profiler;
  * @category   Performance
  * @package    Profiler
  */
-class Exception extends \PF\Main\Exception {
+class Exception extends \PM\Main\Exception {
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Database;
+namespace PM\Main\Database;
 
 /**
  * This script defines class for WHERE part of MySQL statement.
@@ -43,7 +43,7 @@ class Where extends Query {
      *
      * @param string $part Name of part
      *
-     * @return \PF\Main\Database\Where
+     * @return \PM\Main\Database\Where
      */
     public function resetPart($part = null) {
         if ($part === self::PART_WHERE) {
@@ -61,7 +61,7 @@ class Where extends Query {
      * @param string $condition Codition with binding
      * @param mixed  $bind      Bind data
      *
-     * @return \PF\Main\Database\Where
+     * @return \PM\Main\Database\Where
      */
     public function where($condition, $bind=null) {
         return $this->_whereCondition($condition, $bind, 'AND');
@@ -73,7 +73,7 @@ class Where extends Query {
      * @param string $condition Codition with binding
      * @param mixed  $bind      Bind data
      *
-     * @return \PF\Main\Database\Where
+     * @return \PM\Main\Database\Where
      */
     public function orWhere($condition, $bind=null) {
         return $this->_whereCondition($condition, $bind, 'OR');
@@ -119,7 +119,7 @@ class Where extends Query {
      * @param mixed  $bind      Bind data
      * @param string $type      Type of operator (AND or OR)
      *
-     * @return \PF\Main\Database\Where
+     * @return \PM\Main\Database\Where
      */
     private function _whereCondition($condition, $bind=null, $type = 'AND') {
         $this->_where[] = array(

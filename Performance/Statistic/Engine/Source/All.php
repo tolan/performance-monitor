@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Statistic\Engine\Source;
+namespace PM\Statistic\Engine\Source;
 
 /**
  * This script defines class for creation source select for all items.

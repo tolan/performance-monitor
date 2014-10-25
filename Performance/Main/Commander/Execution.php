@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Commander;
+namespace PM\Main\Commander;
 
-use PF\Main\Provider;
+use PM\Main\Provider;
 
 /**
  * This script defines class for execution of executor (set of commands).
@@ -44,10 +44,10 @@ class Execution implements Interfaces\Execution {
     /**
      * This method triggers the input command (in scope).
      *
-     * @param \PF\Main\Commander\Result $result   Entity for saving data from command
-     * @param \PF\Main\Provider         $provider Provider instance
+     * @param \PM\Main\Commander\Result $result   Entity for saving data from command
+     * @param \PM\Main\Provider         $provider Provider instance
      *
-     * @return \PF\Main\Commander\Execution
+     * @return \PM\Main\Commander\Execution
      */
     public function execute(Result $result, Provider $provider) {
         $command = $this->_command;
@@ -71,7 +71,7 @@ class Execution implements Interfaces\Execution {
      *
      * @return array
      *
-     * @throws \PF\Main\Commander\Exception Throws when combination of command and scope is not supported.
+     * @throws \PM\Main\Commander\Exception Throws when combination of command and scope is not supported.
      */
     private function _getCommandAttributes($command, $scope = null) {
         $attributes = array();
@@ -121,7 +121,7 @@ class Execution implements Interfaces\Execution {
      *
      * @return mixed
      *
-     * @throws \PF\Main\Commander\Exception Throws when combination of command and scope is not supported.
+     * @throws \PM\Main\Commander\Exception Throws when combination of command and scope is not supported.
      */
     private function _execute($command, $scope = null, $arguments = array()) {
         $result = array();
@@ -140,9 +140,9 @@ class Execution implements Interfaces\Execution {
      * It saves answer of execution into result instance. If answer is not array then it save answer to data property.
      *
      * @param mixed                     $answer Answer from execute of command
-     * @param \PF\Main\Commander\Result $result Result instance
+     * @param \PM\Main\Commander\Result $result Result instance
      *
-     * @return \PF\Main\Commander\Execution
+     * @return \PM\Main\Commander\Execution
      */
     private function _saveAnswer($answer, Result $result) {
         // code: array_keys... means checking for non-associative array

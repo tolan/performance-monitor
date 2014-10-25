@@ -1,12 +1,12 @@
 <?php
 
-namespace PF\Main\Logic\Evaluate;
+namespace PM\Main\Logic\Evaluate;
 
-use PF\Main\Logic\Evaluator;
-use PF\Main\Logic\Analyze\AbstractElement;
-use PF\Main\Logic\Analyze\Element;
-use PF\Main\Logic\Exception;
-use PF\Main\Logic\Analyze\Enum\Operator;
+use PM\Main\Logic\Evaluator;
+use PM\Main\Logic\Analyze\AbstractElement;
+use PM\Main\Logic\Analyze\Element;
+use PM\Main\Logic\Exception;
+use PM\Main\Logic\Analyze\Enum\Operator;
 
 /**
  * This script defines class for performer for evaluate expression and data.
@@ -20,21 +20,21 @@ abstract class AbstractPerformer {
     /**
      * Extractor instance.
      *
-     * @var \PF\Main\Logic\Evaluate\AbstractExtractor
+     * @var \PM\Main\Logic\Evaluate\AbstractExtractor
      */
     private $_extractor = null;
 
     /**
      * Composer instance.
      *
-     * @var \PF\Main\Logic\Evaluate\AbstractComposer
+     * @var \PM\Main\Logic\Evaluate\AbstractComposer
      */
     private $_composer = null;
 
     /**
      * Returns extractor for performer.
      *
-     * @return \PF\Main\Logic\Evaluate\AbstractExtractor
+     * @return \PM\Main\Logic\Evaluate\AbstractExtractor
      */
     final public function getExtractor() {
         if ($this->_extractor === null) {
@@ -47,9 +47,9 @@ abstract class AbstractPerformer {
     /**
      * Sets extractor for performer.
      *
-     * @param \PF\Main\Logic\Evaluate\AbstractExtractor $extractor Extractor instance
+     * @param \PM\Main\Logic\Evaluate\AbstractExtractor $extractor Extractor instance
      *
-     * @return \PF\Main\Logic\Evaluate\AbstractPerformer
+     * @return \PM\Main\Logic\Evaluate\AbstractPerformer
      */
     final public function setExtractor(AbstractExtractor $extractor) {
         $this->_extractor = $extractor;
@@ -60,7 +60,7 @@ abstract class AbstractPerformer {
     /**
      * Returns composer for performer.
      *
-     * @return \PF\Main\Logic\Evaluate\AbstractComposer
+     * @return \PM\Main\Logic\Evaluate\AbstractComposer
      */
     final public function getComposer() {
         if ($this->_composer === null) {
@@ -73,9 +73,9 @@ abstract class AbstractPerformer {
     /**
      * Sets composer for performer.
      *
-     * @param \PF\Main\Logic\Evaluate\AbstractComposer $composer Composer instance
+     * @param \PM\Main\Logic\Evaluate\AbstractComposer $composer Composer instance
      *
-     * @return \PF\Main\Logic\Evaluate\AbstractPerformer
+     * @return \PM\Main\Logic\Evaluate\AbstractPerformer
      */
     final public function setComposer(AbstractComposer $composer) {
         $this->_composer = $composer;
@@ -86,7 +86,7 @@ abstract class AbstractPerformer {
     /**
      * This method perform evaluate of expression and data. Returns evaluated data with information about aplied operands.
      *
-     * @param \PF\Main\Logic\Evaluator $evaluator Evaluator instance
+     * @param \PM\Main\Logic\Evaluator $evaluator Evaluator instance
      *
      * @return mixed
      */
@@ -109,11 +109,11 @@ abstract class AbstractPerformer {
     /**
      * This method provide evaluate of logic and data.
      *
-     * @param \PF\Main\Logic\Analyze\AbstractElement $logic Analyzed logic tree
+     * @param \PM\Main\Logic\Analyze\AbstractElement $logic Analyzed logic tree
      *
      * @return mixed
      *
-     * @throws \PF\Main\Logic\Exception Throws when operator is not supported
+     * @throws \PM\Main\Logic\Exception Throws when operator is not supported
      */
     final private function _evaluate(AbstractElement $logic) {
         $result = null;

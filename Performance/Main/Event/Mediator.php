@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Event;
+namespace PM\Main\Event;
 
-use PF\Main\Provider;
+use PM\Main\Provider;
 
 /**
  * This script defines class for main mediator.
@@ -30,15 +30,15 @@ class Mediator implements Interfaces\Mediator, Interfaces\Reciever {
     /**
      * Repository instance.
      *
-     * @var \PF\Main\Event\Repository
+     * @var \PM\Main\Event\Repository
      */
     private $_repository = null;
 
     /**
      * Construct method. Register default recivevers.
      *
-     * @param \PF\Main\Provider         $provider   Provider instance
-     * @param \PF\Main\Event\Repository $repository Repository instance
+     * @param \PM\Main\Provider         $provider   Provider instance
+     * @param \PM\Main\Event\Repository $repository Repository instance
      *
      * @return void
      */
@@ -53,9 +53,9 @@ class Mediator implements Interfaces\Mediator, Interfaces\Reciever {
     /**
      * Register reciever for send message. Message is sent to the recipient by message type that receives its parameter (include children in object model).
      *
-     * @param \PF\Main\Event\Interfaces\Reciever $reciever Reciever instance
+     * @param \PM\Main\Event\Interfaces\Reciever $reciever Reciever instance
      *
-     * @return \PF\Main\Event\Mediator
+     * @return \PM\Main\Event\Mediator
      */
     public function register(Interfaces\Reciever $reciever) {
         $messageClass = $this->_getMessageClass($reciever);
@@ -76,9 +76,9 @@ class Mediator implements Interfaces\Mediator, Interfaces\Reciever {
     /**
      * This method provides the deregistration of the mediator.
      *
-     * @param \PF\Main\Event\Interfaces\Reciever $reciever Reciever instance
+     * @param \PM\Main\Event\Interfaces\Reciever $reciever Reciever instance
      *
-     * @return \PF\Main\Event\Mediator
+     * @return \PM\Main\Event\Mediator
      */
     public function unregister(Interfaces\Reciever $reciever) {
         $messageClass = $this->_getMessageClass($reciever);
@@ -99,10 +99,10 @@ class Mediator implements Interfaces\Mediator, Interfaces\Reciever {
     /**
      * This method sends message to all recievers which has concrete message class in its parameter.
      *
-     * @param \PF\Main\Event\Interface\Message $message Message instance
-     * @param \PF\Main\Event\Interface\Sender  $sender  Sender instance
+     * @param \PM\Main\Event\Interface\Message $message Message instance
+     * @param \PM\Main\Event\Interface\Sender  $sender  Sender instance
      *
-     * @return \PF\Main\Event\Mediator
+     * @return \PM\Main\Event\Mediator
      */
     public function send(Interfaces\Message $message, Interfaces\Sender $sender) {
         foreach ($this->_recievers as $messageClass => $recievers) {
@@ -122,10 +122,10 @@ class Mediator implements Interfaces\Mediator, Interfaces\Reciever {
     /**
      * This is proxy method for send method.
      *
-     * @param \PF\Main\Event\Interface\Message $message Message instance
-     * @param \PF\Main\Event\Interface\Sender  $sender  Sender instance
+     * @param \PM\Main\Event\Interface\Message $message Message instance
+     * @param \PM\Main\Event\Interface\Sender  $sender  Sender instance
      *
-     * @return \PF\Main\Event\Mediator
+     * @return \PM\Main\Event\Mediator
      */
     public function recieve(Interfaces\Message $message, Interfaces\Sender $sender) {
         $this->send($message, $sender);
@@ -136,7 +136,7 @@ class Mediator implements Interfaces\Mediator, Interfaces\Reciever {
     /**
      * Returns exact class name of message which reciever has as parameter in recieve method.
      *
-     * @param \PF\Main\Event\Interface\Reciever $reciever Reciever instance
+     * @param \PM\Main\Event\Interface\Reciever $reciever Reciever instance
      *
      * @return string Message class name in parameter method recieve
      */

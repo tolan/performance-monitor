@@ -1,12 +1,12 @@
 <?php
 
-namespace PF\Profiler\Monitor\Factory;
+namespace PM\Profiler\Monitor\Factory;
 
-use PF\Profiler\Monitor\Enum\Type;
-use PF\Profiler\Monitor\Enum\HttpKeys;
-use PF\Profiler\Monitor\Exception;
-use PF\Main\Cache;
-use PF\Main\Filesystem;
+use PM\Profiler\Monitor\Enum\Type;
+use PM\Profiler\Monitor\Enum\HttpKeys;
+use PM\Profiler\Monitor\Exception;
+use PM\Main\Cache;
+use PM\Main\Filesystem;
 
 /**
  * This script defines factory class for monitor repository.
@@ -25,10 +25,10 @@ class Repository extends AbstractFactory {
     /**
      * Returns instance of monitor repository.
      *
-     * @param enum  $type   One of enum \PF\Profiler\Monitor\Enum\Type
+     * @param enum  $type   One of enum \PM\Profiler\Monitor\Enum\Type
      * @param array $params Request parameters
      *
-     * @return \PF\Profiler\Monitor\Repository\AbstractRepository
+     * @return \PM\Profiler\Monitor\Repository\AbstractRepository
      *
      * @throws Exception Throws when repository is not defined
      */
@@ -50,10 +50,10 @@ class Repository extends AbstractFactory {
             default:
                 throw new Exception('Repository doesn\'t exist for "'.$this->getType().'".');
         }
-        /* @var $repository \PF\Profiler\Monitor\Interfaces\Repository */
+        /* @var $repository \PM\Profiler\Monitor\Interfaces\Repository */
 
         if (isset($params[HttpKeys::REQUEST_ID])) {
-            $filterRepos = $this->getProvider()->get('PF\Profiler\Repository\Filter');
+            $filterRepos = $this->getProvider()->get('PM\Profiler\Repository\Filter');
             $repository->setFilterRepository($filterRepos, $params[HttpKeys::REQUEST_ID]);
         }
 
@@ -65,15 +65,15 @@ class Repository extends AbstractFactory {
      *
      * @param array $params Request parameters
      *
-     * @return \PF\Profiler\Monitor\Repository\MySQL
+     * @return \PM\Profiler\Monitor\Repository\MySQL
      */
     private function _getMySQLRepository($params = null) {
-        $repository = $this->getProvider()->get('PF\Profiler\Monitor\Repository\MySQL');
-        /* @var $repository \PF\Profiler\Monitor\Repository\MySQL */
+        $repository = $this->getProvider()->get('PM\Profiler\Monitor\Repository\MySQL');
+        /* @var $repository \PM\Profiler\Monitor\Repository\MySQL */
         $repository->setMeasureId($params[HttpKeys::MEASURE_ID]);
 
-        $helper = $this->getProvider()->get('PF\Profiler\Monitor\Helper\State');
-        /* @var $helper \PF\Profiler\Monitor\Helper\State */
+        $helper = $this->getProvider()->get('PM\Profiler\Monitor\Helper\State');
+        /* @var $helper \PM\Profiler\Monitor\Helper\State */
         $repository->attach($helper);
 
         return $repository;
@@ -84,20 +84,20 @@ class Repository extends AbstractFactory {
      *
      * @param array $params Request parameters
      *
-     * @return \PF\Profiler\Monitor\Repository\Cache
+     * @return \PM\Profiler\Monitor\Repository\Cache
      */
     private function _getFileRepository($params = null) {
         $filepath    = $this->getProvider()->get('config')->getRoot().'/tmp/Profiler';
         // TODO extract file path to better place
         $file        = new Filesystem\File($filepath, $params[HttpKeys::MEASURE_ID], false, false);
-        $cacheDriver = new Cache\File($file);
-        $cache       = $this->getProvider()->prototype('cache'); /* @var $cache \PF\Main\Cache */
+        $cacheDriver = new Cache\File(Cache\File::DEFAULT_NAMESPACE, $this->getProvider()->get('config'), $file);
+        $cache       = $this->getProvider()->prototype('cache', true); /* @var $cache \PM\Main\Cache */
         $cache->setDriver($cacheDriver);
 
         /* Cache and cache driver has function adapter for communication between repository and concrete file. */
 
-        $repository = $this->getProvider()->get('PF\Profiler\Monitor\Repository\Cache');
-        /* @var $repository \PF\Profiler\Monitor\Repository\Cache */
+        $repository = $this->getProvider()->get('PM\Profiler\Monitor\Repository\Cache');
+        /* @var $repository \PM\Profiler\Monitor\Repository\Cache */
         $repository->setCache($cache);
 
         return $repository;
@@ -108,12 +108,12 @@ class Repository extends AbstractFactory {
      *
      * @param array $params Request parameters
      *
-     * @return \PF\Profiler\Monitor\Repository\Cache
+     * @return \PM\Profiler\Monitor\Repository\Cache
      */
     private function _getSessionRepository() {
-        $cache      = $this->getProvider()->prototype('cache'); /* @var $cache \PF\Main\Cache */
-        $repository = $this->getProvider()->get('PF\Profiler\Monitor\Repository\Cache');
-        /* @var $repository \PF\Profiler\Monitor\Repository\Cache */
+        $cache      = $this->getProvider()->prototype('cache'); /* @var $cache \PM\Main\Cache */
+        $repository = $this->getProvider()->get('PM\Profiler\Monitor\Repository\Cache');
+        /* @var $repository \PM\Profiler\Monitor\Repository\Cache */
         $repository->setCache($cache);
 
         return $repository;

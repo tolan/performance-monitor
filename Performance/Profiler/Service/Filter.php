@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Profiler\Service;
+namespace PM\Profiler\Service;
 
-use PF\Main\Abstracts\Service;
-use PF\Main\Database;
-use PF\Profiler\Repository\Factory;
-use PF\Profiler\Entity;
+use PM\Main\Abstracts\Service;
+use PM\Main\Database;
+use PM\Profiler\Repository\Factory;
+use PM\Profiler\Entity;
 
 /**
  * This script defines class for filter service.
@@ -20,14 +20,14 @@ class Filter extends Service {
      * Create new filter for request.
      *
      * @param array                           $filterData Array with filter data
-     * @param \PF\Profiler\Repository\Factory $factory    Repository factory instance
-     * @param \PF\Main\Database               $database   Database instance
+     * @param \PM\Profiler\Repository\Factory $factory    Repository factory instance
+     * @param \PM\Main\Database               $database   Database instance
      * @param int                             $requestId  ID of request
      * @param int                             $setId      ID of set of filters
      *
-     * @return \PF\Profiler\Entity\Filter
+     * @return \PM\Profiler\Entity\Filter
      *
-     * @throws \PF\Profiler\Service\Exception
+     * @throws \PM\Profiler\Service\Exception
      */
     public function createFilter($filterData, Factory $factory, Database $database, $requestId = null, $setId = null) {
         $repository  = $factory->getFilter();
@@ -57,12 +57,12 @@ class Filter extends Service {
      * Updates existed request filter.
      *
      * @param array                           $filterData Filter data to update
-     * @param \PF\Profiler\Repository\Factory $factory    Repository factory instance
-     * @param \PF\Main\Database               $database   Database instance
+     * @param \PM\Profiler\Repository\Factory $factory    Repository factory instance
+     * @param \PM\Main\Database               $database   Database instance
      *
-     * @return \PF\Profiler\Entity\Filter
+     * @return \PM\Profiler\Entity\Filter
      *
-     * @throws \PF\Profiler\Service\Exception
+     * @throws \PM\Profiler\Service\Exception
      */
     public function updateFilter($filterData, Factory $factory, Database $database) {
         $repository  = $factory->getFilter();
@@ -84,12 +84,12 @@ class Filter extends Service {
      * Deletes filter by given ID.
      *
      * @param int                             $id       ID of filter
-     * @param \PF\Profiler\Repository\Factory $factory  Repository factory instance
-     * @param \PF\Main\Database               $database Database instance
+     * @param \PM\Profiler\Repository\Factory $factory  Repository factory instance
+     * @param \PM\Main\Database               $database Database instance
      *
      * @return boolean
      *
-     * @throws \PF\Profiler\Service\Exception
+     * @throws \PM\Profiler\Service\Exception
      */
     public function deleteFilter($id, Factory $factory, Database $database) {
         $repository  = $factory->getFilter();
@@ -110,7 +110,7 @@ class Filter extends Service {
      * Returns filter entities for requests.
      *
      * @param array                           $requestsIds IDs of requests
-     * @param \PF\Profiler\Repository\Factory $factory     Repository factory instance
+     * @param \PM\Profiler\Repository\Factory $factory     Repository factory instance
      *
      * @return array
      */

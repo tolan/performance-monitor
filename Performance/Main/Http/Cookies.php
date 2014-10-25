@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Http;
+namespace PM\Main\Http;
 
 require_once 'HTTP/Request2/CookieJar.php';
 

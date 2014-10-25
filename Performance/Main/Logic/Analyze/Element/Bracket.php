@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main\Logic\Analyze\Element;
+namespace PM\Main\Logic\Analyze\Element;
 
-use PF\Main\Logic\Analyze\AbstractElement;
-use PF\Main\Logic\Exception;
+use PM\Main\Logic\Analyze\AbstractElement;
+use PM\Main\Logic\Exception;
 
 /**
  * This script defines class for logic bracket element.
@@ -40,9 +40,9 @@ class Bracket extends AbstractElement {
      *
      * @param AbstractElement|null $value
      *
-     * @return \PF\Main\Logic\Analyze\Element\Bracket
+     * @return \PM\Main\Logic\Analyze\Element\Bracket
      *
-     * @throws \PF\Main\Logic\Exception Throws when input value has bad format or bracket is full.
+     * @throws \PM\Main\Logic\Exception Throws when input value has bad format or bracket is full.
      */
     public function setValue($value) {
         if ($this->_value === null) {
@@ -95,7 +95,7 @@ class Bracket extends AbstractElement {
      *
      * @param string $leftBracket Character of left bracket
      *
-     * @return \PF\Main\Logic\Analyze\Element\Bracket
+     * @return \PM\Main\Logic\Analyze\Element\Bracket
      */
     public function setLeftBracket($leftBracket) {
         $this->_leftBracket = $leftBracket;
@@ -108,7 +108,7 @@ class Bracket extends AbstractElement {
      *
      * @param string $rightBracket Character of right bracket
      *
-     * @return \PF\Main\Logic\Analyze\Element\Bracket
+     * @return \PM\Main\Logic\Analyze\Element\Bracket
      */
     public function setRightBracket($rightBracket) {
         $this->_rightBracket = $rightBracket;

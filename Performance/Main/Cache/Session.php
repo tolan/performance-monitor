@@ -1,6 +1,8 @@
 <?php
 
-namespace PF\Main\Cache;
+namespace PM\Main\Cache;
+
+use PM\Main\Config;
 
 /**
  * This script defines driver class for cache which save data to SESSION.
@@ -27,7 +29,15 @@ class Session extends AbstractDriver implements Interfaces\Driver {
      *
      * @return void
      */
-    public function __construct($namespace = self::DEFAULT_NAMESPACE) {
+    public function __construct($namespace = self::DEFAULT_NAMESPACE, Config $config = null) {
+        if ($namespace === self::DEFAULT_NAMESPACE && $config->hasOwnProperty('cache')) {
+            $cacheConfig = $config->get('cache', array());
+
+            if (array_key_exists('namespace', $cacheConfig)) {
+                $namespace = $cacheConfig['namespace'];
+            }
+        }
+
         $this->_namespace = $namespace;
     }
 
@@ -38,7 +48,7 @@ class Session extends AbstractDriver implements Interfaces\Driver {
      *
      * @return mixed
      *
-     * @throws \PF\Main\Cache\Exception Throws when variable is not defined
+     * @throws \PM\Main\Cache\Exception Throws when variable is not defined
      */
     public function load($name = null) {
         $this->_loadSessionData();
@@ -60,6 +70,20 @@ class Session extends AbstractDriver implements Interfaces\Driver {
     }
 
     /**
+     * Sets value to variable by name.
+     *
+     * @param string $name  Name of variable
+     * @param mixed  $value Value for save
+     *
+     * @return Session
+     */
+    public function save($name, $value) {
+        $this->_loadSessionData();
+
+        return parent::save($name, $value);
+    }
+
+    /**
      * Destruct method. It save data to SESSION.
      *
      * @return void
@@ -75,7 +99,7 @@ class Session extends AbstractDriver implements Interfaces\Driver {
     /**
      * Loads data from session.
      *
-     * @return \PF\Main\Cache\Session
+     * @return \PM\Main\Cache\Session
      */
     private function _loadSessionData() {
         if ($this->_loaded === false) {

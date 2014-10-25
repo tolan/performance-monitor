@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main\Logic\Evaluate\Databases;
+namespace PM\Main\Logic\Evaluate\Databases;
 
-use PF\Main\Logic\Evaluate\AbstractPerformer;
-use PF\Main\Database;
+use PM\Main\Logic\Evaluate\AbstractPerformer;
+use PM\Main\Database;
 
 /**
  * This script defines class for database statement performer for evaluate expression and data.
@@ -17,14 +17,14 @@ class Performer extends AbstractPerformer {
     /**
      * Database instance
      *
-     * @var \PF\Main\Database
+     * @var \PM\Main\Database
      */
     private $_database;
 
     /**
      * Extractor instance
      *
-     * @var \PF\Main\Logic\Evaluate\Databases\Extractor
+     * @var \PM\Main\Logic\Evaluate\Databases\Extractor
      */
     private $_extractor;
 
@@ -44,7 +44,7 @@ class Performer extends AbstractPerformer {
     /**
      * Returns relevant extractor.
      *
-     * @return \PF\Main\Logic\Evaluate\Databases\Extractor
+     * @return \PM\Main\Logic\Evaluate\Databases\Extractor
      */
     protected function createExtractor() {
         return $this->_extractor;
@@ -53,7 +53,7 @@ class Performer extends AbstractPerformer {
     /**
      * Returns relevant composer.
      *
-     * @return \PF\Main\Logic\Evaluate\Databases\Composer
+     * @return \PM\Main\Logic\Evaluate\Databases\Composer
      */
     protected function createComposer() {
         return new Composer();
@@ -62,14 +62,14 @@ class Performer extends AbstractPerformer {
     /**
      * This method evaluate operator AND.
      *
-     * @param \PF\Main\Database\Select $first  First select
-     * @param \PF\Main\Database\Select $second Second select
+     * @param \PM\Main\Database\Select $first  First select
+     * @param \PM\Main\Database\Select $second Second select
      *
-     * @return \PF\Main\Database\Select
+     * @return \PM\Main\Database\Select
      */
     protected function perform_and($first, $second) {
         $identifier = $this->_extractor->getIdentifier();
-        $select     = clone $this->_extractor->getScope(); /* @var $select \PF\Main\Database\Select */
+        $select     = clone $this->_extractor->getScope(); /* @var $select \PM\Main\Database\Select */
 
         $select->where($identifier.' IN (?)', $first);
         $select->where($identifier.' IN (?)', $second);
@@ -80,14 +80,14 @@ class Performer extends AbstractPerformer {
     /**
      * This method evaluate operator OR.
      *
-     * @param \PF\Main\Database\Select $first  First select
-     * @param \PF\Main\Database\Select $second Second select
+     * @param \PM\Main\Database\Select $first  First select
+     * @param \PM\Main\Database\Select $second Second select
      *
-     * @return \PF\Main\Database\Select
+     * @return \PM\Main\Database\Select
      */
     protected function perform_or($first, $second) {
         $identifier = $this->_extractor->getIdentifier();
-        $select     = clone $this->_extractor->getScope(); /* @var $select \PF\Main\Database\Select */
+        $select     = clone $this->_extractor->getScope(); /* @var $select \PM\Main\Database\Select */
 
         $select->where($identifier.' IN (?)', $first);
         $select->orWhere($identifier.' IN (?)', $second);
@@ -98,14 +98,14 @@ class Performer extends AbstractPerformer {
     /**
      * This method evaluate operator NAND.
      *
-     * @param \PF\Main\Database\Select $first  First select
-     * @param \PF\Main\Database\Select $second Second select
+     * @param \PM\Main\Database\Select $first  First select
+     * @param \PM\Main\Database\Select $second Second select
      *
-     * @return \PF\Main\Database\Select
+     * @return \PM\Main\Database\Select
      */
     protected function perform_nand($first, $second) {
         $identifier = $this->_extractor->getIdentifier();
-        $select     = clone $this->_extractor->getScope(); /* @var $select \PF\Main\Database\Select */
+        $select     = clone $this->_extractor->getScope(); /* @var $select \PM\Main\Database\Select */
 
         $select->where($identifier.' NOT IN (?)', $first);
         $select->orWhere($identifier.' NOT IN (?)', $second);
@@ -116,14 +116,14 @@ class Performer extends AbstractPerformer {
     /**
      * This method evaluate operator NOR.
      *
-     * @param \PF\Main\Database\Select $first  First select
-     * @param \PF\Main\Database\Select $second Second select
+     * @param \PM\Main\Database\Select $first  First select
+     * @param \PM\Main\Database\Select $second Second select
      *
-     * @return \PF\Main\Database\Select
+     * @return \PM\Main\Database\Select
      */
     protected function perform_nor($first, $second) {
         $identifier = $this->_extractor->getIdentifier();
-        $select     = clone $this->_extractor->getScope(); /* @var $select \PF\Main\Database\Select */
+        $select     = clone $this->_extractor->getScope(); /* @var $select \PM\Main\Database\Select */
 
         $select->where($identifier.' NOT IN (?)', $first);
         $select->where($identifier.' NOT IN (?)', $second);
@@ -134,14 +134,14 @@ class Performer extends AbstractPerformer {
     /**
      * This method evaluate operator XOR.
      *
-     * @param \PF\Main\Database\Select $first  First select
-     * @param \PF\Main\Database\Select $second Second select
+     * @param \PM\Main\Database\Select $first  First select
+     * @param \PM\Main\Database\Select $second Second select
      *
-     * @return \PF\Main\Database\Select
+     * @return \PM\Main\Database\Select
      */
     protected function perform_xor($first, $second) {
         $identifier = $this->_extractor->getIdentifier();
-        $select     = clone $this->_extractor->getScope(); /* @var $select \PF\Main\Database\Select */
+        $select     = clone $this->_extractor->getScope(); /* @var $select \PM\Main\Database\Select */
 
         $where = $select->createWhere();
         $where->where($identifier.' NOT IN (?)', $first);
@@ -160,14 +160,14 @@ class Performer extends AbstractPerformer {
     /**
      * This method evaluate operator XNOR.
      *
-     * @param \PF\Main\Database\Select $first  First select
-     * @param \PF\Main\Database\Select $second Second select
+     * @param \PM\Main\Database\Select $first  First select
+     * @param \PM\Main\Database\Select $second Second select
      *
-     * @return \PF\Main\Database\Select
+     * @return \PM\Main\Database\Select
      */
     protected function perform_xnor($first, $second) {
         $identifier = $this->_extractor->getIdentifier();
-        $select     = clone $this->_extractor->getScope(); /* @var $select \PF\Main\Database\Select */
+        $select     = clone $this->_extractor->getScope(); /* @var $select \PM\Main\Database\Select */
 
         $where = $select->createWhere();
         $where->where($identifier.' IN (?)', $first);

@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Commander;
+namespace PM\Main\Commander;
 
-use PF\Main\Abstracts\Entity;
+use PM\Main\Abstracts\Entity;
 
 /**
  * This script defines class for result of executions.

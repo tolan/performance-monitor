@@ -3,27 +3,27 @@
         <div ng-show="template.id || template.target" class="well well-sm">
             <div ng-show="template.name">
                 <h4 class="inline-block width-10 width-min-80 zero-margin">
-                    <span class="label label-primary inline-block width-100">[[_.('search.template.name')]]</span>
+                    <span class="label label-primary inline-block width-100">[[_('search.template.name')]]</span>
                 </h4>
                 <span>[[template.name]]</span>
             </div>
             <div ng-show="template.description">
                 <h5 class="inline-block width-10 width-min-80 zero-margin">
-                    <span class="label label-info inline-block width-100">[[_.('search.template.description')]]</span>
+                    <span class="label label-info inline-block width-100">[[_('search.template.description')]]</span>
                 </h5>
                 <span>[[template.description]]</span>
             </div>
             <div ng-show="template.target">
                 <h5 class="inline-block width-10 width-min-80 zero-margin">
-                    <span class="label label-info inline-block width-100">[[_.('search.template.target')]]</span>
+                    <span class="label label-info inline-block width-100">[[_('search.template.target')]]</span>
                 </h5>
-                <span>[[_.('search.filter.target.' + template.target)]]</span>
+                <span>[[_('search.filter.target.' + template.target)]]</span>
             </div>
         </div>
-        <button class="btn btn-primary" ng-click="addGroup()">[[_.('search.filter.group.add')]]</button>
+        <button class="btn btn-primary" ng-click="addGroup()">[[_('search.filter.group.add')]]</button>
     </div>
     <div class="alert alert-danger" ng-show="template.isValid === false">
-        [[_.('search.template.search.groups.empty')]]
+        [[_('search.template.search.groups.empty')]]
     </div>
     <div ng-repeat="group in template.groups" class="panel" ng-class="group.isValid === false ? 'panel-warning' : 'panel-primary'">
         <div class="panel-heading">
@@ -35,12 +35,12 @@
             <div ng-repeat="filter in group.filters" class="col-lg-4 col-sm-6 col-xs-12 zero-padding">
                 <div class="panel panel-default zero-padding search-filters-item width-min-320">
                     <div class="panel-heading">
-                        <span class="panel-title">[[_.(filter.name)]]</span>
+                        <span class="panel-title">[[_(filter.name)]]</span>
                         <button class="pull-right close" ng-click="dropFilter(filter, group)">&times;</button>
                     </div>
                     <div class="panel-body zero-padding height-100">
                         <div ng-show="filter.isValid === false" class="alert alert-danger zero-margin height-20">
-                            [[_.('search.filter.invalid')]]
+                            [[_('search.filter.invalid')]]
                         </div>
                         <div ng-include="templates[filter.type]" ng-class="filter.isValid === false ? 'height-80' : 'height-100'"></div>
                     </div>
@@ -50,17 +50,17 @@
     </div>
     <div class="search-filters-menu form-horizontal" ng-show="showLogic && isAllowedLogic">
         <div class="form-group">
-            <label class="col-xs-4 col-sm-3 col-lg-2 control-label">[[_.('search.template.logic')]]</label>
+            <label class="col-xs-4 col-sm-3 col-lg-2 control-label">[[_('search.template.logic')]]</label>
             <div class="col-xs-8 col-sm-9 col-lg-10">
-                <input type="text" class="form-control" ng-model="template.logic" ng-change="send()" placeholder="[[_.('search.template.logic')]]">
+                <input type="text" class="form-control" ng-model="template.logic" ng-change="send()" placeholder="[[_('search.template.logic')]]">
             </div>
         </div>
     </div>
     <div class="search-filters-menu well-sm">
-        <button class="btn btn-default" ng-show="isAllowedLogic" ng-click="showLogic = !showLogic">[[_.('search.template.logic.show')]]</button>
-        <button class="btn btn-default" ng-click="openTemplateDialog()">[[_.('search.template.manage')]]</button>
+        <button class="btn btn-default" ng-show="isAllowedLogic" ng-click="showLogic = !showLogic">[[_('search.template.logic.show')]]</button>
+        <button class="btn btn-default" ng-click="openTemplateDialog()">[[_('search.template.manage')]]</button>
         <button class="btn btn-primary" ng-show="__.values(template.groups).length" ng-click="sendAll()">
-            [[_.('search.filter.button.show')]] &nbsp; <span ng-if="resultTotal >= 0" class="badge">[[resultTotal]]</span>
+            [[_('search.filter.button.show')]] &nbsp; <span ng-if="resultTotal >= 0" class="badge">[[resultTotal]]</span>
         </button>
     </div>
 </div>
@@ -71,19 +71,19 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" ng-click="hideSaveAs()">&times;</button>
-                    <h3 id="myModalLabel">[[_.('search.template.modal.save')]]</h3>
+                    <h3 id="myModalLabel">[[_('search.template.modal.save')]]</h3>
                 </div>
                 <div class="modal-body">
-                    [[_.('search.template.name')]]
+                    [[_('search.template.name')]]
                     <input type="text" ng-model="template.name" class="form-control search-query">
                 </div>
                 <div class="modal-body">
-                    [[_.('search.template.description')]]
+                    [[_('search.template.description')]]
                     <textarea class="form-control" ng-model="template.description" rows="4"></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" ng-click="_send(template); hideSaveAs()">[[_.('main.save')]]</button>
-                    <button type="button" class="btn btn-default" ng-click="hideSaveAs()">[[_.('main.cancel')]]</button>
+                    <button type="button" class="btn btn-primary" ng-click="_send(template); hideSaveAs()">[[_('main.save')]]</button>
+                    <button type="button" class="btn btn-default" ng-click="hideSaveAs()">[[_('main.cancel')]]</button>
                 </div>
             </div>
         </div>
@@ -96,14 +96,14 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" ng-click="hideDelete()">&times;</button>
-                    <h3 id="myModalLabel">[[_.('search.template.list.delete')]]</h3>
+                    <h3 id="myModalLabel">[[_('search.template.list.delete')]]</h3>
                 </div>
                 <div class="modal-body">
-                    [[_.('search.template.list.delete.text')]]
+                    [[_('search.template.list.delete.text')]]
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" ng-click="deleteTemplate(); hideDelete()">[[_.('main.yes')]]</button>
-                    <button type="button" class="btn btn-default" ng-click="hideDelete()">[[_.('main.no')]]</button>
+                    <button type="button" class="btn btn-primary" ng-click="deleteTemplate(); hideDelete()">[[_('main.yes')]]</button>
+                    <button type="button" class="btn btn-default" ng-click="hideDelete()">[[_('main.no')]]</button>
                 </div>
             </div>
         </div>
@@ -116,13 +116,13 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" ng-click="hideSuccess()">&times;</button>
-                    <h3 id="myModalLabel">[[_.('search.template.list.success')]]</h3>
+                    <h3 id="myModalLabel">[[_('search.template.list.success')]]</h3>
                 </div>
                 <div class="modal-body">
-                    [[_.('search.template.list.success.text')]]
+                    [[_('search.template.list.success.text')]]
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" ng-click="hideSuccess()">[[_.('main.ok')]]</button>
+                    <button type="button" class="btn btn-default" ng-click="hideSuccess()">[[_('main.ok')]]</button>
                 </div>
             </div>
         </div>

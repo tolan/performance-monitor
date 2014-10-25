@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main\Event\Action;
+namespace PM\Main\Event\Action;
 
-use PF\Main\Event\Exception;
-use PF\Main\Event\Interfaces\Event;
+use PM\Main\Event\Exception;
+use PM\Main\Event\Interfaces\Event;
 
 /**
  * This script defines abstract class for event action.
@@ -40,7 +40,7 @@ abstract class AbstractAction implements Event {
      *
      * @return string
      *
-     * @throws \PF\Main\Event\Exception Throws when name is not set
+     * @throws \PM\Main\Event\Exception Throws when name is not set
      */
     public function getName() {
         if ($this->_name === null) {
@@ -55,7 +55,7 @@ abstract class AbstractAction implements Event {
      *
      * @param string $name Event name
      *
-     * @return \PF\Main\Event\Action\AbstractAction
+     * @return \PM\Main\Event\Action\AbstractAction
      */
     public function setName($name) {
         $this->_name = $name;
@@ -77,7 +77,7 @@ abstract class AbstractAction implements Event {
      *
      * @param mixed $data Data of event
      *
-     * @return \PF\Main\Event\Action\AbstractAction
+     * @return \PM\Main\Event\Action\AbstractAction
      */
     public function setData($data) {
         $this->_data = $data;
@@ -99,7 +99,7 @@ abstract class AbstractAction implements Event {
      *
      * @param string $module Name of module
      *
-     * @return \PF\Main\Event\Action\AbstractAction
+     * @return \PM\Main\Event\Action\AbstractAction
      */
     public function setModule($module) {
         $this->_module = $module;

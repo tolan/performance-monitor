@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Tree;
+namespace PM\Main\Tree;
 
-use PF\Main\Abstracts;
+use PM\Main\Abstracts;
 
 /**
  * This script defines class for entity tree of structure.

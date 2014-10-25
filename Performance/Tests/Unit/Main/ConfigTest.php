@@ -1,12 +1,12 @@
 <?php
 
-namespace PF\Tests\Unit\Main;
+namespace PM\Tests\Unit\Main;
 
-use PF\Main\Abstracts\Unit\TestCase;
-use PF\Main\Config;
+use PM\Main\Abstracts\Unit\TestCase;
+use PM\Main\Config;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Config.
+ * This script defines class for php unit test case of class \PM\Main\Config.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -16,7 +16,7 @@ class ConfigTest extends TestCase {
 
     /**
      *
-     * @var \PF\Main\Config
+     * @var \PM\Main\Config
      */
     private $_config;
 
@@ -28,7 +28,7 @@ class ConfigTest extends TestCase {
     protected function setUp() {
         parent::setUp();
 
-        $this->_config = $this->getProvider()->prototype('PF\Main\Config');
+        $this->_config = $this->getProvider()->prototype('PM\Main\Config');
     }
 
     /**

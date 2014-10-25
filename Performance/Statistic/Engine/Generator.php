@@ -1,12 +1,12 @@
 <?php
 
-namespace PF\Statistic\Engine;
+namespace PM\Statistic\Engine;
 
-use PF\Main\Provider;
-use PF\Main\Database\Select;
-use PF\Statistic\Entity;
-use PF\Statistic\Enum\View\Base;
-use PF\Search;
+use PM\Main\Provider;
+use PM\Main\Database\Select;
+use PM\Statistic\Entity;
+use PM\Statistic\Enum\View\Base;
+use PM\Search;
 
 /**
  * This script defines class for generate statistics about entities.
@@ -20,7 +20,7 @@ class Generator {
     /**
      * Provider instance.
      *
-     * @var \PF\Main\Provider
+     * @var \PM\Main\Provider
      */
     private $_provider;
 
@@ -61,11 +61,11 @@ class Generator {
      *
      * @param Entity\Template $template Statistic template instance
      *
-     * @return \PF\Main\Database\Select
+     * @return \PM\Main\Database\Select
      */
     private function _getSourceSelect(Entity\Template $template) {
-        $source = $this->_provider->prototype('PF\Statistic\Engine\Source\\'.ucfirst($template->getSource()['type']));
-        /* @var $source \PF\Statistic\Engine\Source\AbstractSource */
+        $source = $this->_provider->prototype('PM\Statistic\Engine\Source\\'.ucfirst($template->getSource()['type']));
+        /* @var $source \PM\Statistic\Engine\Source\AbstractSource */
 
         return $source->getSelect($template);
     }
@@ -80,14 +80,14 @@ class Generator {
      * @return Select
      */
     private function _getSelectForView(Entity\View $view, Select $sourceSelect, Search\Entity\Template $template) {
-        $container = $this->_provider->prototype('PF\Statistic\Engine\Container'); /* @var $container \PF\Statistic\Engine\Container */
+        $container = $this->_provider->prototype('PM\Statistic\Engine\Container'); /* @var $container \PM\Statistic\Engine\Container */
         $container
             ->setSource($template->getTarget(), $sourceSelect)
-            ->setTarget($view->getTarget(), $this->_provider->singleton('PF\Statistic\Engine\Target\\'.ucfirst($view->getTarget())));
+            ->setTarget($view->getTarget(), $this->_provider->singleton('PM\Statistic\Engine\Target\\'.ucfirst($view->getTarget())));
 
         $dataBase = $view->getType();
-        $wrapper  = $this->_provider->prototype('PF\Statistic\Engine\Wrapper\\'.ucfirst($dataBase));
-        $viewData = $this->_provider->prototype('PF\Statistic\Engine\Data\\'.ucfirst($view->getTarget()));
+        $wrapper  = $this->_provider->prototype('PM\Statistic\Engine\Wrapper\\'.ucfirst($dataBase));
+        $viewData = $this->_provider->prototype('PM\Statistic\Engine\Data\\'.ucfirst($view->getTarget()));
         /* @var $wrapper Wrapper\AbstractWrapper */
         /* @var $viewData Data\AbstractData */
 
@@ -95,7 +95,7 @@ class Generator {
             $lineMethod = $line->getType();
             $alias      = $this->_getLineAlias($line);
 
-            $function = $this->_provider->prototype('PF\Statistic\Engine\Functions\\'. ucfirst($line->getFunction()));
+            $function = $this->_provider->prototype('PM\Statistic\Engine\Functions\\'. ucfirst($line->getFunction()));
             /* @var $function Functions\AbstractFunction */
             $function->setTable($view->getTarget())
                 ->setAlias($alias)

@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Search\Filter;
+namespace PM\Search\Filter;
 
-use PF\Search;
+use PM\Search;
 
 /**
  * This script defines exception class for search filters.

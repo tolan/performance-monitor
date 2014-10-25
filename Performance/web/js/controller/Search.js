@@ -1,4 +1,16 @@
+angular.module('PM')
+    .controller('SearchMainCtrl', SearchMainCtrl)
+    .controller('SearchResultCtrl', SearchResultCtrl)
+    .controller('SearchFiltersCtrl', SearchFiltersCtrl)
+    .controller('SearchTemplateCtrl', SearchTemplateCtrl);
 
+/**
+ * Controller for manage connection between filters and result.
+ *
+ * @param $scope Scope
+ *
+ * @returns void
+ */
 function SearchMainCtrl($scope) {
     $scope.errorMessage = null;
 
@@ -28,6 +40,13 @@ function SearchMainCtrl($scope) {
     });
 }
 
+/**
+ * Controller for show list of entities from filters.
+ *
+ * @param $scope Scope
+ *
+ * @returns void
+ */
 function SearchResultCtrl($scope) {
     $scope.initList('id');
     $scope.templatePrefix = '/js/template/Search/Result/';
@@ -54,8 +73,20 @@ function SearchResultCtrl($scope) {
     });
 }
 
-function SearchFiltersCtrl($scope, $http, $timeout, $modal) {
-    $scope.cachePrefix    = arguments.callee.name;
+/**
+ * Controller for manage search filters and finding entities.
+ *
+ * @param $scope   Scope
+ * @param $http    Http provider
+ * @param $timeout Timeout provider
+ * @param $modal   Modal component
+ * @param $attrs   Attributes provider
+ *
+ * @returns void
+ */
+function SearchFiltersCtrl($scope, $http, $timeout, $modal, $attrs) {
+    $scope.usage          = ($attrs.usage || 'search' );
+    $scope.cachePrefix    = arguments.callee.name + $scope.usage;
     $scope.templatePrefix = '/js/template/Search/Filters/';
     $scope.templateSearch = $scope.templatePrefix + 'main.html';
     $scope.templates      = {
@@ -70,12 +101,11 @@ function SearchFiltersCtrl($scope, $http, $timeout, $modal) {
     $scope.filterCache    = {};
     $scope.menu           = [];
     $scope.originalMenu   = {};
-    $scope.usage          = 'search';
     $scope.timerInterval  = 800;
     $scope.timer;
     $scope.resultTotal;
 
-    $scope.template;
+    $scope.template = {};
 
     var initFunction = function() {
         $scope.resultTotal = undefined;
@@ -83,26 +113,33 @@ function SearchFiltersCtrl($scope, $http, $timeout, $modal) {
     };
 
     var reset = function() {
-        $scope.template = {
-            groups : {},
-            logic  : '',
-            target : undefined
-        };
+        var index ;
+        for (index in $scope.template) {
+            if ($scope.template.hasOwnProperty(index)) {
+                delete($scope.template[index]);
+            }
+        }
+
+        $scope.template.groups = {};
+        $scope.template.logic  = '';
+        $scope.template.target = undefined;
 
         $scope.menu           = $scope.originalMenu;
         $scope.showLogic      = false;
         $scope.isAllowedLogic = false;
     };
-    reset();
-    $scope.cacheObject('template');
-    $scope.cacheObject('originalMenu');
-    $scope.cacheObject('filterCache');
 
-    $scope.$on('search-group-add', initFunction);
-    $scope.$on('search-group-drop', initFunction);
-    $scope.$on('search-template-reset', reset);
-    $scope.$on('search-template-select', function(event, template) {
-        $scope.template        = angular.copy(template);
+    var selectTemplate = function(template) {
+        var index;
+        template = angular.copy(template);
+
+        reset();
+        for (index in template) {
+            if (template.hasOwnProperty(index)) {
+                $scope.template[index] = template[index];
+            }
+        }
+
         $scope.template.groups = {};
 
         _.each(template.groups, function(group) {
@@ -121,7 +158,17 @@ function SearchFiltersCtrl($scope, $http, $timeout, $modal) {
         }
 
         $scope.template.logic = template.logic;
-    });
+        $timeout(function() {
+            $scope._sendTemplate(true);
+        }, $scope.timerInterval);
+    };
+
+    reset();
+    $scope.$on('search-group-add', initFunction);
+    $scope.$on('search-group-drop', initFunction);
+    $scope.$on('search-template-reset', reset);
+    $scope.$on('search-template-select', function(event, template) {selectTemplate(template);});
+    $scope.$on($scope.cachePrefix + '.template:loaded', function(event, template) {selectTemplate(template);});
 
     $scope.addGroup = function(key) {
         var group = {
@@ -133,7 +180,6 @@ function SearchFiltersCtrl($scope, $http, $timeout, $modal) {
         }
 
         $scope.template.groups[key] = group;
-
         $scope.$emit('search-group-add', $scope.template);
 
         return group;
@@ -172,7 +218,7 @@ function SearchFiltersCtrl($scope, $http, $timeout, $modal) {
             if ($scope.filterCache.hasOwnProperty(item.target) && $scope.filterCache[item.target].hasOwnProperty(item.filter)) {
                 $scope._createFilter(group, angular.copy($scope.filterCache[item.target][item.filter]), item);
             } else {
-                $http.get('search/filter/' + item.target + '/' + item.filter).success(function(filter) {
+                $http.get('search/filter/options/' + item.target + '/' + item.filter).success(function(filter) {
                     if ($scope.filterCache.hasOwnProperty(item.target) === false) {
                         $scope.filterCache[item.target] = {};
                     }
@@ -202,9 +248,9 @@ function SearchFiltersCtrl($scope, $http, $timeout, $modal) {
     };
 
     $scope.dropFilter = function(filter, group) {
-        group.filters = _.without(group.filters, filter);
-
         var countFilters = 0;
+
+        group.filters = _.without(group.filters, filter);
 
         _.each($scope.template.groups, function(group) {
             countFilters += group.filters.length;
@@ -250,7 +296,7 @@ function SearchFiltersCtrl($scope, $http, $timeout, $modal) {
 
         if ($scope.isValidTemplate()) {
             $timeout.cancel($scope.timer);
-            $http.post('search/find', request).success(function(response) {
+            $http.post('search/find/entity/' + $scope.template.target, request).success(function(response) {
                 $scope.resultTotal = response.result.result.length;
 
                 if (show) {
@@ -381,8 +427,13 @@ function SearchFiltersCtrl($scope, $http, $timeout, $modal) {
 
     $scope.$on('menu-selected-item', $scope.selectFilter);
 
+    $scope.cacheObject('menu');
+    $scope.cacheObject('originalMenu');
+    $scope.cacheObject('filterCache');
+    $scope.cacheObject('template');
+
     if (_.isEmpty($scope.originalMenu)) {
-        $http.get('search/filters/menu').success(function(menu) {
+        $http.get('search/filter/menu').success(function(menu) {
             _.each(menu, function(item, key) {
                 $scope.originalMenu[key] = item;
             });
@@ -413,10 +464,19 @@ function SearchFiltersCtrl($scope, $http, $timeout, $modal) {
     }
 }
 
+/**
+ * Controller for manage search templates.
+ *
+ * @param $scope   Scope
+ * @param $http    Http provider
+ * @param $modal   Modal component
+ *
+ * @returns void
+ */
 function SearchTemplateCtrl($scope, $http, $modal) {
-    $scope.cachePrefix = arguments.callee.name;
     $scope.initList('id');
-    $scope.templates = [];
+    $scope.cachePrefix = arguments.callee.name;
+    $scope.templates   = [];
 
     $scope.cacheObject('templates');
 
@@ -426,7 +486,7 @@ function SearchTemplateCtrl($scope, $http, $modal) {
     };
 
     var loadTemplates = function() {
-        $http.get('search/templates/' + $scope.usage).success(function(templates) {
+        $http.get('search/template/find/' + $scope.usage).success(function(templates) {
             $scope.templates.splice(0, $scope.templates.length);
 
             _.each(templates, function(template) {
@@ -485,12 +545,12 @@ function SearchTemplateCtrl($scope, $http, $modal) {
     $scope._send = function(template) {
         if (template !== false) {
             if (template.hasOwnProperty('id')) {
-                $http.put('/search/template/' + template.id, template).success(function() {
+                $http.put('/search/template/update/' + template.id, template).success(function() {
                     $scope._openSuccessMessage();
                     $scope.cleanCache('templates');
                 }).error(emitError);
             } else {
-                $http.post('/search/template', template).success(function() {
+                $http.post('/search/template/create', template).success(function() {
                     $scope._openSuccessMessage();
                     $scope.cleanCache('templates');
                 }).error(emitError);
@@ -521,7 +581,7 @@ function SearchTemplateCtrl($scope, $http, $modal) {
         };
 
         $scope.deleteTemplate = function() {
-            $http.delete('/search/template/' + template.id, template).success(function() {
+            $http.delete('/search/template/delete/' + template.id, template).success(function() {
                 $scope._openSuccessMessage();
                 $scope.cleanCache('templates');
             }).error(emitError);
@@ -546,7 +606,7 @@ function SearchTemplateCtrl($scope, $http, $modal) {
     };
 
     $scope.select = function(template) {
-        $http.get('search/template/' + template.id).success(function(template) {
+        $http.get('search/template/get/' + template.id).success(function(template) {
             $scope.$emit('search-template-select', template);
             $scope.$hide();
         }).error(emitError);

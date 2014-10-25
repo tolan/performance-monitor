@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Statistic\Entity;
+namespace PM\Statistic\Entity;
 
-use PF\Main\Abstracts\Entity;
+use PM\Main\Abstracts\Entity;
 
 /**
  * This script defines data entity for statistics.

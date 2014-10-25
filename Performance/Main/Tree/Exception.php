@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Tree;
+namespace PM\Main\Tree;
 
 /**
  * This script defines exception class for tree.
@@ -9,5 +9,5 @@ namespace PF\Main\Tree;
  * @category   Performance
  * @package    Main
  */
-class Exception extends PF\Main\Exception {
+class Exception extends \PM\Main\Exception {
 }

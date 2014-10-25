@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Tests\Unit\Main\Web\Component;
+namespace PM\Tests\Unit\Main\Web\Component;
 
-use PF\Main\Abstracts\Unit\TestCase;
+use PM\Main\Abstracts\Unit\TestCase;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Web\Component\Request.
+ * This script defines class for php unit test case of class \PM\Main\Web\Component\Request.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -16,7 +16,7 @@ class RequestTest extends TestCase {
     /**
      * request instance.
      *
-     * @var \PF\Main\Web\Component\Request
+     * @var \PM\Main\Web\Component\Request
      */
     private $_request;
 
@@ -28,7 +28,7 @@ class RequestTest extends TestCase {
     protected function setUp() {
         parent::setUp();
 
-        $this->_request = $this->getProvider()->get('PF\Main\Web\Component\Request');
+        $this->_request = $this->getProvider()->get('PM\Main\Web\Component\Request');
     }
 
     /**
@@ -39,7 +39,7 @@ class RequestTest extends TestCase {
     public function testGetCookie() {
         $cookie = $this->_request->getCookie();
 
-        $this->assertInstanceOf('PF\Main\Web\Component\Http\Cookie', $cookie);
+        $this->assertInstanceOf('PM\Main\Web\Component\Http\Cookie', $cookie);
         $this->assertEmpty($cookie->toArray());
     }
 
@@ -51,7 +51,7 @@ class RequestTest extends TestCase {
     public function testGetEnv() {
         $env = $this->_request->getEnv();
 
-        $this->assertInstanceOf('PF\Main\Web\Component\Http\Env', $env);
+        $this->assertInstanceOf('PM\Main\Web\Component\Http\Env', $env);
         $this->assertEmpty($env->toArray());
     }
 
@@ -63,7 +63,7 @@ class RequestTest extends TestCase {
     public function testGetFiles() {
         $files = $this->_request->getFiles();
 
-        $this->assertInstanceOf('PF\Main\Web\Component\Http\Files', $files);
+        $this->assertInstanceOf('PM\Main\Web\Component\Http\Files', $files);
         $this->assertEmpty($files->toArray());
     }
 
@@ -75,7 +75,7 @@ class RequestTest extends TestCase {
     public function testGetGet() {
         $get = $this->_request->getGet();
 
-        $this->assertInstanceOf('PF\Main\Web\Component\Http\Get', $get);
+        $this->assertInstanceOf('PM\Main\Web\Component\Http\Get', $get);
         $this->assertEmpty($get->toArray());
     }
 
@@ -98,7 +98,7 @@ class RequestTest extends TestCase {
     public function testGetPost() {
         $post = $this->_request->getPost();
 
-        $this->assertInstanceOf('PF\Main\Web\Component\Http\Post', $post);
+        $this->assertInstanceOf('PM\Main\Web\Component\Http\Post', $post);
         $this->assertEmpty($post->toArray());
     }
 
@@ -110,7 +110,7 @@ class RequestTest extends TestCase {
     public function testGetRequest() {
         $request = $this->_request->getRequest();
 
-        $this->assertInstanceOf('PF\Main\Web\Component\Http\Request', $request);
+        $this->assertInstanceOf('PM\Main\Web\Component\Http\Request', $request);
         $this->assertEmpty($request->toArray());
     }
 
@@ -122,6 +122,6 @@ class RequestTest extends TestCase {
     public function testGetServer() {
         $server = $this->_request->getServer();
 
-        $this->assertInstanceOf('PF\Main\Web\Component\Http\Server', $server);
+        $this->assertInstanceOf('PM\Main\Web\Component\Http\Server', $server);
     }
 }

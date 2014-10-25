@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Tree;
+namespace PM\Main\Tree;
 
 /**
  * This script defines class for container for elements of tree structure.

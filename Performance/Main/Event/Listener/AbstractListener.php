@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main\Event\Listener;
+namespace PM\Main\Event\Listener;
 
-use PF\Main\Event\Exception;
-use PF\Main\Event\Interfaces\Listener;
+use PM\Main\Event\Exception;
+use PM\Main\Event\Interfaces\Listener;
 
 /**
  * This script defines abstract class for event listener.
@@ -40,7 +40,7 @@ abstract class AbstractListener implements Listener {
      *
      * @return string
      *
-     * @throws \PF\Main\Event\Exception Throws when name is not set.
+     * @throws \PM\Main\Event\Exception Throws when name is not set.
      */
     public function getName() {
         if ($this->_name === null) {
@@ -55,7 +55,7 @@ abstract class AbstractListener implements Listener {
      *
      * @param string $name Name of event
      *
-     * @return \PF\Main\Event\Listener\AbstractListener
+     * @return \PM\Main\Event\Listener\AbstractListener
      */
     public function setName($name) {
         $this->_name = $name;
@@ -68,7 +68,7 @@ abstract class AbstractListener implements Listener {
      *
      * @return \Closure
      *
-     * @throws \PF\Main\Event\Exception Throws when closure is not set
+     * @throws \PM\Main\Event\Exception Throws when closure is not set
      */
     public function getClosure() {
         if ($this->_closure === null) {
@@ -83,7 +83,7 @@ abstract class AbstractListener implements Listener {
      *
      * @param \Closure $closure Closure function
      *
-     * @return \PF\Main\Event\Listener\AbstractListener
+     * @return \PM\Main\Event\Listener\AbstractListener
      */
     public function setClosure(\Closure $closure) {
         $this->_closure = $closure;
@@ -105,7 +105,7 @@ abstract class AbstractListener implements Listener {
      *
      * @param string $module Name of module
      *
-     * @return \PF\Main\Event\Listener\AbstractListener
+     * @return \PM\Main\Event\Listener\AbstractListener
      */
     public function setModule($module) {
         $this->_module = $module;

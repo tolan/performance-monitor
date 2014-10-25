@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Statistic\Engine;
+namespace PM\Statistic\Engine;
 
-use PF\Main\Database;
+use PM\Main\Database;
 
 /**
  * This script defines class for building statistic select with special methods.
@@ -16,7 +16,7 @@ class Select extends Database\Select {
     /**
      * Returns that actual select has junction to entity (over from or join).
      *
-     * @param string $entity One of enum \PF\Statistic\Enum\Source\Target
+     * @param string $entity One of enum \PM\Statistic\Enum\Source\Target
      *
      * @return boolean
      */

@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Statistic\Repository;
+namespace PM\Statistic\Repository;
 
-use PF\Main\Abstracts\Repository;
-use PF\Statistic\Entity;
+use PM\Main\Abstracts\Repository;
+use PM\Statistic\Entity;
 
 /**
  * This script defines class for view repository.
@@ -28,7 +28,7 @@ class View extends Repository {
      *
      * @param int $templateId ID of template
      *
-     * @return \PF\Statistic\Entity\View[]
+     * @return \PM\Statistic\Entity\View[]
      */
     public function getViewsForTemplate($templateId) {
         $select = $this->getDatabase()->select()
@@ -51,9 +51,9 @@ class View extends Repository {
     /**
      * Creates new view entity into database.
      *
-     * @param \PF\Statistic\Entity\View $view View entity instance
+     * @param \PM\Statistic\Entity\View $view View entity instance
      *
-     * @return \PF\Statistic\Entity\View
+     * @return \PM\Statistic\Entity\View
      */
     public function createView(Entity\View $view) {
         $data = array(
@@ -70,7 +70,7 @@ class View extends Repository {
     /**
      * Updates view entity in database.
      *
-     * @param \PF\Statistic\Entity\View $view View entity instance
+     * @param \PM\Statistic\Entity\View $view View entity instance
      *
      * @return int
      */

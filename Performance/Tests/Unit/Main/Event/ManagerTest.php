@@ -1,12 +1,12 @@
 <?php
 
-namespace PF\Tests\Unit\Main\Event;
+namespace PM\Tests\Unit\Main\Event;
 
-use PF\Main\Abstracts\Unit\TestCase;
-use PF\Main\Event;
+use PM\Main\Abstracts\Unit\TestCase;
+use PM\Main\Event;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Event\Manager.
+ * This script defines class for php unit test case of class \PM\Main\Event\Manager.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -17,7 +17,7 @@ class ManagerTest extends TestCase {
     /**
      * Manager instance.
      *
-     * @var \PF\Main\Event\Manager
+     * @var \PM\Main\Event\Manager
      */
     private $_manager;
 
@@ -27,7 +27,7 @@ class ManagerTest extends TestCase {
      * @return void
      */
     protected function setUp() {
-        $this->_manager = $this->getProvider()->get('PF\Main\Event\Manager');
+        $this->_manager = $this->getProvider()->get('PM\Main\Event\Manager');
         $this->_manager->clean();
 
         parent::setUp();
@@ -43,7 +43,7 @@ class ManagerTest extends TestCase {
         $listeners = $manager->getListeners();
 
         $this->assertCount(1, $listeners);
-        $this->assertInstanceOf('PF\Main\Event\Listener\On', current($listeners));
+        $this->assertInstanceOf('PM\Main\Event\Listener\On', current($listeners));
 
         $manager   = $this->_manager->once('test', function() {});
         $listeners = $manager->getListeners();
@@ -61,7 +61,7 @@ class ManagerTest extends TestCase {
         $events  = $manager->getEvents();
 
         $this->assertCount(1, $events);
-        $this->assertInstanceOf('PF\Main\Event\Action\Emit', current($events));
+        $this->assertInstanceOf('PM\Main\Event\Action\Emit', current($events));
 
         $manager->emit('event');
         $events = $manager->getEvents();
@@ -288,7 +288,7 @@ class ManagerTest extends TestCase {
      *
      * @param mixed $content Content for message
      *
-     * @return \PF\Main\Event\Message
+     * @return \PM\Main\Event\Message
      */
     private function _createMessage($content = null) {
         $message = new Event\Message();

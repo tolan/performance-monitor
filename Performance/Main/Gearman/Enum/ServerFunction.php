@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Gearman\Enum;
+namespace PM\Main\Gearman\Enum;
 
-use PF\Main\Abstracts\Enum;
+use PM\Main\Abstracts\Enum;
 
 /**
  * This class defines name of gearman worker on gearmand application.

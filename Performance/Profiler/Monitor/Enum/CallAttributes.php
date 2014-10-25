@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Profiler\Monitor\Enum;
+namespace PM\Profiler\Monitor\Enum;
 
-use PF\Main\Abstracts;
+use PM\Main\Abstracts;
 
 /**
  * This script defines enum with all possible attributes for call.

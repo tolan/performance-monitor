@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Profiler\Repository\Interfaces;
+namespace PM\Profiler\Repository\Interfaces;
 
-use PF\Profiler\Entity;
+use PM\Profiler\Entity;
 
 /**
  * Interface for measure repository.
@@ -16,7 +16,7 @@ interface Measure {
     /**
      * Creates new measure in repository with basic data.
      *
-     * @param \PF\Profiler\Entity\Measure $measure Measure entity instance
+     * @param \PM\Profiler\Entity\Measure $measure Measure entity instance
      */
     public function createMeasure(Entity\Measure $measure);
 

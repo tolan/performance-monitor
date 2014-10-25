@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Profiler\Gearman;
+namespace PM\Profiler\Gearman;
 
 /**
  * This script defines profiler gearman message.
@@ -9,7 +9,7 @@ namespace PF\Profiler\Gearman;
  * @category   Performance
  * @package    Profiler
  */
-class Message extends \PF\Main\Abstracts\Gearman\Message {
+class Message extends \PM\Main\Abstracts\Gearman\Message {
 
     /**
      * Returns name of target worker.
@@ -17,6 +17,6 @@ class Message extends \PF\Main\Abstracts\Gearman\Message {
      * @return string
      */
     public function getTarget() {
-        return 'PF\Profiler\Gearman\Worker';
+        return 'PM\Profiler\Gearman\Worker';
     }
 }

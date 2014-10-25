@@ -1,13 +1,13 @@
 <?php
 
-namespace PF\Profiler\Service;
+namespace PM\Profiler\Service;
 
-use PF\Main\Abstracts\Service;
-use PF\Main\Database;
-use PF\Profiler\Repository;
-use PF\Profiler\Enum\TestState;
-use PF\Profiler\Monitor\Storage\State;
-use PF\Profiler\Entity;
+use PM\Main\Abstracts\Service;
+use PM\Main\Database;
+use PM\Profiler\Repository;
+use PM\Profiler\Enum\TestState;
+use PM\Profiler\Monitor\Storage\State;
+use PM\Profiler\Entity;
 
 /**
  * This script defines class for test service.
@@ -22,7 +22,7 @@ class Test extends Service {
      * Returns tests for scenario.
      *
      * @param int                          $scenarioId ID of scenario
-     * @param \PF\Profiler\Repository\Test $repository Repository test instance
+     * @param \PM\Profiler\Repository\Test $repository Repository test instance
      *
      * @return array
      */
@@ -34,9 +34,9 @@ class Test extends Service {
      * Returns test entity instance.
      *
      * @param int                          $testId     ID of test
-     * @param \PF\Profiler\Repository\Test $repository Repository test instance
+     * @param \PM\Profiler\Repository\Test $repository Repository test instance
      *
-     * @return \PF\Profiler\Entity\Test
+     * @return \PM\Profiler\Entity\Test
      */
     public function getTest($testId, Repository\Test $repository) {
         return $repository->getTest($testId);
@@ -46,12 +46,12 @@ class Test extends Service {
      * Deletes test by given ID.
      *
      * @param int                          $testId     ID of test
-     * @param \PF\Profiler\Repository\Test $repository Repository test instance
-     * @param \PF\Main\Database            $database   Database instance
+     * @param \PM\Profiler\Repository\Test $repository Repository test instance
+     * @param \PM\Main\Database            $database   Database instance
      *
      * @return boolean
      *
-     * @throws \PF\Profiler\Service\Exception
+     * @throws \PM\Profiler\Service\Exception
      */
     public function deleteTest($testId, Repository\Test $repository, Database $database) {
         $transaction = $database->getTransaction()->begin(__FUNCTION__);
@@ -71,12 +71,12 @@ class Test extends Service {
      * Creates new test with scenario ID.
      *
      * @param int                          $scenarioId ID of scenario
-     * @param \PF\Profiler\Repository\Test $repository Repository test instance
-     * @param \PF\Main\Database            $database   Database instance
+     * @param \PM\Profiler\Repository\Test $repository Repository test instance
+     * @param \PM\Main\Database            $database   Database instance
      *
-     * @return \PF\Profiler\Entity\Test
+     * @return \PM\Profiler\Entity\Test
      *
-     * @throws \PF\Profiler\Service\Exception
+     * @throws \PM\Profiler\Service\Exception
      */
     public function createTest($scenarioId, Repository\Test $repository, Database $database) {
         $transaction = $database->getTransaction()->begin(__FUNCTION__);
@@ -96,13 +96,13 @@ class Test extends Service {
      * Updates state for test by actual states of assigned requests.
      *
      * @param int                          $testId         ID of test
-     * @param \PF\Profiler\Repository\Test $repository     Repository test instance
-     * @param \PF\Main\Database            $database       Database instance
-     * @param \PF\Profiler\Service\Measure $measureService Measure service instance
+     * @param \PM\Profiler\Repository\Test $repository     Repository test instance
+     * @param \PM\Main\Database            $database       Database instance
+     * @param \PM\Profiler\Service\Measure $measureService Measure service instance
      *
      * @return boolean
      * 
-     * @throws \PF\Profiler\Service\Exception
+     * @throws \PM\Profiler\Service\Exception
      */
     public function updateTestState($testId, Repository\Test $repository, Database $database, Measure $measureService) {
         $transaction = $database->getTransaction()->begin(__FUNCTION__);

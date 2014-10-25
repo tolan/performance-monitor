@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Commander;
+namespace PM\Main\Commander;
 
 /**
  * This script defines exception class for commander components.
@@ -9,5 +9,5 @@ namespace PF\Main\Commander;
  * @category   Performance
  * @package    Main
  */
-class Exception extends \PF\Main\Exception {
+class Exception extends \PM\Main\Exception {
 }

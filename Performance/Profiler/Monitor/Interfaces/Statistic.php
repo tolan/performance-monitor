@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Profiler\Monitor\Interfaces;
+namespace PM\Profiler\Monitor\Interfaces;
 
 /**
  * Interface for monitor statistic.
@@ -14,7 +14,7 @@ interface Statistic {
     /**
      * Construct method.
      *
-     * @param \PF\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
+     * @param \PM\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
      */
     public function __construct(Storage $storage);
 

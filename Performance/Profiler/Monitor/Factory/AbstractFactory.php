@@ -1,16 +1,16 @@
 <?php
 
-namespace PF\Profiler\Monitor\Factory;
+namespace PM\Profiler\Monitor\Factory;
 
-use PF\Profiler\Monitor\Enum\Type;
-use PF\Profiler\Monitor\Enum\HttpKeys;
-use PF\Profiler\Monitor\Exception;
-use PF\Main\Provider;
-use PF\Main\Config;
-use PF\Main\Web\Component\Request;
+use PM\Profiler\Monitor\Enum\Type;
+use PM\Profiler\Monitor\Enum\HttpKeys;
+use PM\Profiler\Monitor\Exception;
+use PM\Main\Provider;
+use PM\Main\Config;
+use PM\Main\Web\Component\Request;
 
 /**
- * This script defines abstract factory class for other factories in PF\Monitor\Factory.
+ * This script defines abstract factory class for other factories in PM\Monitor\Factory.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -21,30 +21,30 @@ abstract class AbstractFactory {
     /**
      * Request instance.
      *
-     * @var \PF\Main\Web\Component\Request
+     * @var \PM\Main\Web\Component\Request
      */
     private $_request = null;
 
     /**
      * Config instance.
      *
-     * @var \PF\Main\Config
+     * @var \PM\Main\Config
      */
     private $_config = null;
 
     /**
      * Provider instance.
      *
-     * @var \PF\Main\Provider
+     * @var \PM\Main\Provider
      */
     private $_provider = null;
 
     /**
      * Construct method.
      *
-     * @param \PF\Main\Web\Component\Request $request  Web request instance
-     * @param \PF\Main\Config                $config   Config instance
-     * @param \PF\Main\Provider              $provider Provider instance
+     * @param \PM\Main\Web\Component\Request $request  Web request instance
+     * @param \PM\Main\Config                $config   Config instance
+     * @param \PM\Main\Provider              $provider Provider instance
      *
      * @return void
      */
@@ -57,7 +57,7 @@ abstract class AbstractFactory {
     /**
      * Returns config instance.
      *
-     * @return \PF\Main\Config
+     * @return \PM\Main\Config
      */
     protected function getConfig() {
         return $this->_config;
@@ -66,7 +66,7 @@ abstract class AbstractFactory {
     /**
      * Returns provider instance.
      *
-     * @return \PF\Main\Provider
+     * @return \PM\Main\Provider
      */
     protected function getProvider() {
         return $this->_provider;
@@ -75,7 +75,7 @@ abstract class AbstractFactory {
     /**
      * Returns web request instance.
      *
-     * @return \PF\Main\Web\Component\Request
+     * @return \PM\Main\Web\Component\Request
      */
     protected function getRequest() {
         return $this->_request;
@@ -102,7 +102,7 @@ abstract class AbstractFactory {
     /**
      * Returns type of measure storage.
      *
-     * @return enum One of enum \PF\Profiler\Monitor\Enum\Type
+     * @return enum One of enum \PM\Profiler\Monitor\Enum\Type
      *
      * @throws Exception Throws when type is MySQL and measure ID is not set.
      */

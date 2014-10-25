@@ -1,10 +1,10 @@
 <?php
 
-namespace PF\Statistic\Service;
+namespace PM\Statistic\Service;
 
-use PF\Statistic\Repository;
-use PF\Statistic\Entity;
-use PF\Main\Abstracts\Service;
+use PM\Statistic\Repository;
+use PM\Statistic\Entity;
+use PM\Main\Abstracts\Service;
 
 /**
  * This script defines class for set service of statistic data.
@@ -18,9 +18,9 @@ class Set extends Service {
     /**
      * Returns list of sets entities.
      *
-     * @param \PF\Statistic\Repository\Set $repository Set repository instance
+     * @param \PM\Statistic\Repository\Set $repository Set repository instance
      *
-     * @return \PF\Statistic\Entity\Set[]
+     * @return \PM\Statistic\Entity\Set[]
      */
     public function findSets(Repository\Set $repository) {
         $data = $repository->findSets();

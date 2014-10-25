@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Statistic\Repository;
+namespace PM\Statistic\Repository;
 
-use PF\Main\Abstracts\Repository;
-use PF\Statistic\Entity;
+use PM\Main\Abstracts\Repository;
+use PM\Statistic\Entity;
 
 /**
  * This script defines class for set repository.
@@ -28,7 +28,7 @@ class Set extends Repository {
     /**
      * Returns list of statistic set entities.
      *
-     * @return \PF\Statistic\Entity\Set[]
+     * @return \PM\Statistic\Entity\Set[]
      */
     public function findSets() {
         $select = $this->getDatabase()

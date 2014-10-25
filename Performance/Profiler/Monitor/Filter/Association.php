@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Profiler\Monitor\Filter;
+namespace PM\Profiler\Monitor\Filter;
 
-use PF\Profiler\Monitor\Filter\Enum\Operator;
-use PF\Profiler\Monitor\Filter\Enum\Parameter;
+use PM\Profiler\Monitor\Filter\Enum\Operator;
+use PM\Profiler\Monitor\Filter\Enum\Parameter;
 
 /**
  * This script defines association class between search parameter and operator.

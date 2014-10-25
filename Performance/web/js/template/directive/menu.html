@@ -1,5 +1,5 @@
 <div class="dropdown">
-    <a data-toggle="dropdown" class="btn btn-primary" ng-class="class">{{_.(title)}} <b class="caret"></b></a>
+    <a data-toggle="dropdown" class="btn btn-primary" ng-class="class">{{_(title)}} <b class="caret"></b></a>
     <ul class="dropdown-menu multi-level" role="menu">
         <li role="presentation" ng-repeat="item in data" ng-class="item.submenu ? 'dropdown-submenu' : ''" ng-include="'menu-directive-item.html'">
         </li>
@@ -7,7 +7,7 @@
 </div>
 
 <script type="text/ng-template" id="menu-directive-item.html">
-    <a ng-href="{{item.href}}" ng-click="onClick(item)">{{_.(item.text)}}</a>
+    <a ng-href="{{item.href}}" ng-click="onClick(item)">{{_(item.text)}}</a>
     <ul ng-if="item.submenu" class="dropdown-menu">
         <li ng-repeat='item in item.submenu' ng-class="item.submenu ? 'dropdown-submenu' : ''" ng-include="'menu-directive-item.html'">
         </li>

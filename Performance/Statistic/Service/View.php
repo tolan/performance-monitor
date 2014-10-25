@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Statistic\Service;
+namespace PM\Statistic\Service;
 
-use PF\Main\Abstracts\Service;
-use PF\Statistic\Repository;
-use PF\Statistic\Entity;
-use PF\Main\CommonEntity;
+use PM\Main\Abstracts\Service;
+use PM\Statistic\Repository;
+use PM\Statistic\Entity;
+use PM\Main\CommonEntity;
 
 /**
  * This script defines class for view service of statistic template.
@@ -20,10 +20,10 @@ class View extends Service {
      * Returns view entities for statistic template by given template ID.
      *
      * @param int                           $templateId  ID of statistic template entity
-     * @param \PF\Statistic\Repository\View $repository  View repository instance
-     * @param \PF\Statistic\Service\Line    $lineService Line service instance
+     * @param \PM\Statistic\Repository\View $repository  View repository instance
+     * @param \PM\Statistic\Service\Line    $lineService Line service instance
      *
-     * @return \PF\Statistic\Entity\View[]
+     * @return \PM\Statistic\Entity\View[]
      */
     public function getViewsForTemplate($templateId, Repository\View $repository, Line $lineService) {
         $views = $repository->getViewsForTemplate($templateId);
@@ -55,10 +55,10 @@ class View extends Service {
      * Creates new view entity.
      *
      * @param array                         $viewData    Data of view for create
-     * @param \PF\Statistic\Repository\View $repository  View repository instance
-     * @param \PF\Statistic\Service\Line    $lineService Line service instance
+     * @param \PM\Statistic\Repository\View $repository  View repository instance
+     * @param \PM\Statistic\Service\Line    $lineService Line service instance
      *
-     * @return \PF\Statistic\Entity\View
+     * @return \PM\Statistic\Entity\View
      */
     public function createView($viewData, Repository\View $repository, Line $lineService) {
         $view = new Entity\View($viewData);
@@ -83,11 +83,11 @@ class View extends Service {
      * Updates existed view entity.
      *
      * @param array                         $viewData    Data of view entity
-     * @param \PF\Statistic\Repository\View $repository  View repository instance
-     * @param \PF\Statistic\Service\Line    $lineService Line service instance
-     * @param \PF\Statistic\Entity\View     $oldView     Existed view entity (optional)
+     * @param \PM\Statistic\Repository\View $repository  View repository instance
+     * @param \PM\Statistic\Service\Line    $lineService Line service instance
+     * @param \PM\Statistic\Entity\View     $oldView     Existed view entity (optional)
      *
-     * @return \PF\Statistic\Entity\View
+     * @return \PM\Statistic\Entity\View
      */
     public function updateView($viewData, Repository\View $repository, Line $lineService, Entity\View $oldView = null) {
         $view = new Entity\View($viewData);
@@ -119,7 +119,7 @@ class View extends Service {
      * Deletes view entity by given ID.
      *
      * @param int                           $id         ID of view entity
-     * @param \PF\Statistic\Repository\View $repository View repository instance
+     * @param \PM\Statistic\Repository\View $repository View repository instance
      *
      * @return int
      */

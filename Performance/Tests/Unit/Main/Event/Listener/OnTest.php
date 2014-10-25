@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Tests\Unit\Main\Event\Listener;
+namespace PM\Tests\Unit\Main\Event\Listener;
 
-use PF\Main\Abstracts\Unit\TestCase;
+use PM\Main\Abstracts\Unit\TestCase;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Event\Listener\On.
+ * This script defines class for php unit test case of class \PM\Main\Event\Listener\On.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -16,7 +16,7 @@ class OnTest extends TestCase {
     /**
      * Listener instance.
      *
-     * @var \PF\Main\Event\Listener\On
+     * @var \PM\Main\Event\Listener\On
      */
     private $_listener;
 
@@ -26,7 +26,7 @@ class OnTest extends TestCase {
      * @return void
      */
     protected function setUp() {
-        $this->_listener = $this->getProvider()->prototype('PF\Main\Event\Listener\On');
+        $this->_listener = $this->getProvider()->prototype('PM\Main\Event\Listener\On');
 
         parent::setUp();
     }
@@ -47,7 +47,7 @@ class OnTest extends TestCase {
     /**
      * Fail test for get closure.
      *
-     * @expectedException \PF\Main\Event\Exception
+     * @expectedException \PM\Main\Event\Exception
      *
      * @return void
      */
@@ -62,7 +62,7 @@ class OnTest extends TestCase {
      */
     public function testSetClosure() {
         $closure  = function () {};
-        $this->assertInstanceOf('PF\Main\Event\Listener\On', $this->_listener->setClosure($closure));
+        $this->assertInstanceOf('PM\Main\Event\Listener\On', $this->_listener->setClosure($closure));
         $this->assertEquals($closure, $this->_listener->getClosure());
     }
 
@@ -86,7 +86,7 @@ class OnTest extends TestCase {
      * @return void
      */
     public function testSetModule() {
-        $this->assertInstanceOf('PF\Main\Event\Listener\On', $this->_listener->setModule('Module'));
+        $this->assertInstanceOf('PM\Main\Event\Listener\On', $this->_listener->setModule('Module'));
         $this->assertEquals('Module', $this->_listener->getModule());
     }
 
@@ -103,7 +103,7 @@ class OnTest extends TestCase {
     /**
      * Fail test for get name.
      *
-     * @expectedException PF\Main\Event\Exception
+     * @expectedException PM\Main\Event\Exception
      *
      * @return void
      */
@@ -117,7 +117,7 @@ class OnTest extends TestCase {
      * @return void
      */
     public function testSetName() {
-        $this->assertInstanceOf('PF\Main\Event\Listener\On', $this->_listener->setName('test'));
+        $this->assertInstanceOf('PM\Main\Event\Listener\On', $this->_listener->setName('test'));
         $this->assertEquals('test', $this->_listener->getName());
     }
 }

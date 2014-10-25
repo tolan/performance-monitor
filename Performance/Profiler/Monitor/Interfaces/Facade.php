@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Profiler\Monitor\Interfaces;
+namespace PM\Profiler\Monitor\Interfaces;
 
 /**
  * Interface for facade of monitor component.
@@ -14,11 +14,11 @@ interface Facade {
     /**
      * Construct method.
      *
-     * @param \PF\Profiler\Monitor\Interfaces\Storage    $storage    Monitor storage instance
-     * @param \PF\Profiler\Monitor\Interfaces\Ticker     $ticker     Monitor ticker instance
-     * @param \PF\Profiler\Monitor\Interfaces\Analyzator $analyzator Monitor analyzator instance
-     * @param \PF\Profiler\Monitor\Interfaces\Statistic  $statistic  Monitor statistic instance
-     * @param \PF\Profiler\Monitor\Interfaces\Display    $display    Monitor display instance
+     * @param \PM\Profiler\Monitor\Interfaces\Storage    $storage    Monitor storage instance
+     * @param \PM\Profiler\Monitor\Interfaces\Ticker     $ticker     Monitor ticker instance
+     * @param \PM\Profiler\Monitor\Interfaces\Analyzator $analyzator Monitor analyzator instance
+     * @param \PM\Profiler\Monitor\Interfaces\Statistic  $statistic  Monitor statistic instance
+     * @param \PM\Profiler\Monitor\Interfaces\Display    $display    Monitor display instance
      */
     public function __construct(Storage $storage, Ticker $ticker, Analyzator $analyzator, Statistic $statistic, Display $display);
 

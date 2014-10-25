@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Tests\Unit\Main;
+namespace PM\Tests\Unit\Main;
 
-use PF\Main\Abstracts\Unit\TestCase;
+use PM\Main\Abstracts\Unit\TestCase;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Database.
+ * This script defines class for php unit test case of class \PM\Main\Database.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -16,7 +16,7 @@ class DatabaseTest extends TestCase {
     /**
      * Access instance.
      *
-     * @var \PF\Main\Database
+     * @var \PM\Main\Database
      */
     private $_instance;
 
@@ -26,7 +26,7 @@ class DatabaseTest extends TestCase {
      * @return void
      */
     protected function setUp() {
-        $this->_instance = $this->getProvider()->get('PF\Main\Database');
+        $this->_instance = $this->getProvider()->get('PM\Main\Database');
 
         parent::setUp();
     }
@@ -37,7 +37,7 @@ class DatabaseTest extends TestCase {
      * @return void
      */
     public function testDeleteInstance() {
-        $this->assertInstanceOf('\PF\Main\Database\Delete', $this->_instance->delete());
+        $this->assertInstanceOf('\PM\Main\Database\Delete', $this->_instance->delete());
     }
 
     /**
@@ -46,7 +46,7 @@ class DatabaseTest extends TestCase {
      * @return void
      */
     public function testInsertInstance() {
-        $this->assertInstanceOf('\PF\Main\Database\Insert', $this->_instance->insert());
+        $this->assertInstanceOf('\PM\Main\Database\Insert', $this->_instance->insert());
     }
 
     /**
@@ -55,7 +55,7 @@ class DatabaseTest extends TestCase {
      * @return void
      */
     public function testUpdateInstance() {
-        $this->assertInstanceOf('\PF\Main\Database\Update', $this->_instance->update());
+        $this->assertInstanceOf('\PM\Main\Database\Update', $this->_instance->update());
     }
 
     /**
@@ -64,7 +64,7 @@ class DatabaseTest extends TestCase {
      * @return void
      */
     public function testSelectInstance() {
-        $this->assertInstanceOf('\PF\Main\Database\Select', $this->_instance->select());
+        $this->assertInstanceOf('\PM\Main\Database\Select', $this->_instance->select());
     }
 
     /**
@@ -73,7 +73,7 @@ class DatabaseTest extends TestCase {
      * @return void
      */
     public function testQueryInstance() {
-        $this->assertInstanceOf('\PF\Main\Database\Query', $this->_instance->query());
+        $this->assertInstanceOf('\PM\Main\Database\Query', $this->_instance->query());
     }
 
     /**
@@ -82,6 +82,6 @@ class DatabaseTest extends TestCase {
      * @return void
      */
     public function testGetConnectionInstance() {
-        $this->assertInstanceOf('\PF\Main\Database\Connection', $this->_instance->getConnection());
+        $this->assertInstanceOf('\PM\Main\Database\Connection', $this->_instance->getConnection());
     }
 }

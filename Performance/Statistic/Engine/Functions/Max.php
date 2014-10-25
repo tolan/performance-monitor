@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Statistic\Engine\Functions;
+namespace PM\Statistic\Engine\Functions;
 
-use PF\Statistic\Engine\Select;
+use PM\Statistic\Engine\Select;
 
 /**
  * This script defines class for create condition of maximum value for data in statistic select.

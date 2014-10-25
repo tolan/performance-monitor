@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Database;
+namespace PM\Main\Database;
 
 /**
  * This script defines class for insert statement of MySQL.
@@ -44,7 +44,7 @@ class Insert extends Query {
      *
      * @param string $table Name of table
      *
-     * @return \PF\Main\Database\Insert
+     * @return \PM\Main\Database\Insert
      */
     public function setTable($table) {
         $this->_table = is_array($table) ? current($table) : $table;
@@ -57,7 +57,7 @@ class Insert extends Query {
      *
      * @param array $data Data to insert
      *
-     * @return \PF\Main\Database\Insert
+     * @return \PM\Main\Database\Insert
      */
     public function setInsertData(array $data) {
         $this->_data = $data;
@@ -70,7 +70,7 @@ class Insert extends Query {
      *
      * @param array $data Data for mass insert (multiple rows)
      *
-     * @return \PF\Main\Database\Insert
+     * @return \PM\Main\Database\Insert
      */
     public function massInsert(array $data) {
         $this->_massData = $data;
@@ -100,7 +100,7 @@ class Insert extends Query {
      *
      * @return int Last insert ID
      *
-     * @throws \PF\Main\Database\Exception Throws when insert ID is not available.
+     * @throws \PM\Main\Database\Exception Throws when insert ID is not available.
      */
     public function getId() {
         if ($this->_insertId === null) {
@@ -113,9 +113,9 @@ class Insert extends Query {
     /**
      * This create SQL statement from input data.
      *
-     * @return \PF\Main\Database\Insert
+     * @return \PM\Main\Database\Insert
      *
-     * @throws \PF\Main\Database\Exception Throws when table or data are not set.
+     * @throws \PM\Main\Database\Exception Throws when table or data are not set.
      */
     protected function compile() {
         if ($this->_table === null) {

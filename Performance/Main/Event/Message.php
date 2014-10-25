@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Event;
+namespace PM\Main\Event;
 
 /**
  * This script defines class for message mediator.
@@ -32,7 +32,7 @@ class Message implements Interfaces\Message {
      *
      * @param mixed $data Data of message
      *
-     * @return \PF\Main\Event\Message
+     * @return \PM\Main\Event\Message
      */
     public function setData($data) {
         $this->_data = $data;

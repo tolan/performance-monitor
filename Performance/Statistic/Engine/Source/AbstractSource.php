@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Statistic\Engine\Source;
+namespace PM\Statistic\Engine\Source;
 
-use PF\Main\Provider;
-use PF\Statistic\Entity\Template;
+use PM\Main\Provider;
+use PM\Statistic\Entity\Template;
 
 /**
  * This script defines abstract class for creation source select.
@@ -37,7 +37,7 @@ abstract class AbstractSource {
      *
      * @param Template $template Statistic template entity instance
      *
-     * @return \PF\Main\Database\Select
+     * @return \PM\Main\Database\Select
      */
     abstract public function getSelect(Template $template);
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Profiler\Monitor\Factory;
+namespace PM\Profiler\Monitor\Factory;
 
-use PF\Profiler\Monitor;
+use PM\Profiler\Monitor;
 
 /**
  * This script defines factory class for create facade for performance profiler components.
@@ -16,29 +16,29 @@ class Facade {
     /**
      * Facade instance.
      *
-     * @var \PF\Monitor\Facade
+     * @var \PM\Monitor\Facade
      */
     private static $_facade = null;
 
     /**
      * Repository factory instance.
      *
-     * @var \PF\Monitor\Factory\Repository
+     * @var \PM\Monitor\Factory\Repository
      */
     private $_repositoryFactory = null;
 
     /**
      * Display factory instance.
      *
-     * @var \PF\Monitor\Factory\Display
+     * @var \PM\Monitor\Factory\Display
      */
     private $_displayFactory = null;
 
     /**
      * Construct method.
      *
-     * @param \PF\Profiler\Monitor\Factory\Repository $repositoryFactory Repository factory instance
-     * @param \PF\Profiler\Monitor\Factory\Display    $displayFactory    Display factory instance
+     * @param \PM\Profiler\Monitor\Factory\Repository $repositoryFactory Repository factory instance
+     * @param \PM\Profiler\Monitor\Factory\Display    $displayFactory    Display factory instance
      *
      * @return void
      */
@@ -50,7 +50,7 @@ class Facade {
     /**
      * Returns instance of facade for performance profiler components
      *
-     * @return \PF\Monitor\Facade
+     * @return \PM\Monitor\Facade
      */
     public function getFacade() {
         if (self::$_facade === null) {
@@ -73,10 +73,10 @@ class Facade {
     /**
      * Returns ticker instance.
      *
-     * @param \PF\Profiler\Monitor\Interfaces\Storage    $storage    Storage instance
-     * @param \PF\Profiler\Monitor\Interfaces\Repository $repository Repository instance
+     * @param \PM\Profiler\Monitor\Interfaces\Storage    $storage    Storage instance
+     * @param \PM\Profiler\Monitor\Interfaces\Repository $repository Repository instance
      *
-     * @return \PF\Profiler\Monitor\Ticker
+     * @return \PM\Profiler\Monitor\Ticker
      */
     private function _getTicker(Monitor\Interfaces\Storage $storage, Monitor\Interfaces\Repository $repository) {
         $ticker  = new Monitor\Ticker($storage);

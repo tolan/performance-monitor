@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Statistic\Engine\Data;
+namespace PM\Statistic\Engine\Data;
 
 /**
  * This script defines exception class for statistic data.
@@ -9,5 +9,5 @@ namespace PF\Statistic\Engine\Data;
  * @category   Performance
  * @package    Statistic
  */
-class Exception extends \PF\Main\Exception {
+class Exception extends \PM\Main\Exception {
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Log\Enum;
+namespace PM\Main\Log\Enum;
 
-use PF\Main\Abstracts\Enum;
+use PM\Main\Abstracts\Enum;
 
 /**
  * This script defines enum class for log level.

@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Logic\Evaluate\Databases;
+namespace PM\Main\Logic\Evaluate\Databases;
 
-use PF\Main\Logic\Evaluate\AbstractExtractor;
+use PM\Main\Logic\Evaluate\AbstractExtractor;
 
 /**
  * This script defines class for database statement extractor for extracting input data for performer.
@@ -23,7 +23,7 @@ class Extractor extends AbstractExtractor {
     /**
      * Return extracted scope data.
      *
-     * @return \PF\Main\Database\Query
+     * @return \PM\Main\Database\Query
      */
     public function getScope() {
         $scope = $this->getEvaluator()->getScope();
@@ -45,7 +45,7 @@ class Extractor extends AbstractExtractor {
      *
      * @param string $name Identificator of data
      *
-     * @return \PF\Main\Database\Query
+     * @return \PM\Main\Database\Query
      */
     public function getData($name) {
         $data = $this->getEvaluator()->getData($name);
@@ -67,7 +67,7 @@ class Extractor extends AbstractExtractor {
      *
      * @param mixed $identifier Parameter identifier od data
      *
-     * @return \PF\Main\Logic\Evaluate\Databases\Extractor
+     * @return \PM\Main\Logic\Evaluate\Databases\Extractor
      */
     public function setIdentifier($identifier = 'id') {
         $this->_identifier = $identifier;

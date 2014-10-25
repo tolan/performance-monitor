@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Search\Filter\Target;
+namespace PM\Search\Filter\Target;
 
-use PF\Search\Filter\Select;
-use PF\Search\Enum\Format;
+use PM\Search\Filter\Select;
+use PM\Search\Enum\Format;
 
 /**
  * This script defines class for target test entity.
@@ -29,7 +29,7 @@ class Test extends AbstractTarget {
     /**
      * It sets table into select for test entity.
      *
-     * @param \PF\Search\Filter\Select $select Select instnace
+     * @param \PM\Search\Filter\Select $select Select instnace
      *
      * @return void
      */

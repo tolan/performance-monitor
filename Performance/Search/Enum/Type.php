@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Search\Enum;
+namespace PM\Search\Enum;
 
-use PF\Main\Abstracts\Enum;
+use PM\Main\Abstracts\Enum;
 
 /**
  * This script defines enum with all posible filter types.

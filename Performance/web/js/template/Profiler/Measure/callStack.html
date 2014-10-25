@@ -1,26 +1,26 @@
 <div ng-controller="ProfilerCallStackCtrl">
     <div class="form-horizontal well-sm clearfix">
         <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-            <span class="control-label col-sm-12 col-xs-12">[[_.('profiler.scenario.test.measure.callStack.filter')]]</span>
+            <span class="control-label col-sm-12 col-xs-12">[[_('profiler.scenario.test.measure.callStack.filter')]]</span>
         </div>
         <div class="col-lg-2 col-md-3 col-sm-3 col-xs-4">
             <select ng-model="filter.type" class="form-control" ng-change="filter.operator = __.indexOf(['timeSubStack', 'line'], filter.type) != -1 ? 'higherThan' : 'regExp'">
-                <option value="timeSubStack">[[_.('profiler.scenario.test.measure.callStack.time')]]</option>
-                <option value="line">[[_.('profiler.scenario.test.measure.callStack.line')]]</option>
-                <option value="content">[[_.('profiler.scenario.test.measure.callStack.content')]]</option>
-                <option value="file">[[_.('profiler.scenario.test.measure.callStack.file')]]</option>
+                <option value="timeSubStack">[[_('profiler.scenario.test.measure.callStack.time')]]</option>
+                <option value="line">[[_('profiler.scenario.test.measure.callStack.line')]]</option>
+                <option value="content">[[_('profiler.scenario.test.measure.callStack.content')]]</option>
+                <option value="file">[[_('profiler.scenario.test.measure.callStack.file')]]</option>
             </select>
         </div>
         <div class="col-lg-2 col-md-3 col-sm-3 col-xs-4">
             <select ng-model="filter.operator" class="form-control">
                 <option ng-show="__.indexOf(['timeSubStack', 'line'], filter.type) != -1" value="higherThan">
-                    [[_.('profiler.scenario.request.filter.parameter.operator.higherThan')]]
+                    [[_('profiler.scenario.request.filter.parameter.operator.higherThan')]]
                 </option>
                 <option ng-show="__.indexOf(['timeSubStack', 'line'], filter.type) != -1" value="lowerThan">
-                    [[_.('profiler.scenario.request.filter.parameter.operator.lowerThan')]]
+                    [[_('profiler.scenario.request.filter.parameter.operator.lowerThan')]]
                 </option>
                 <option ng-show="__.indexOf(['content', 'file'], filter.type) != -1" value="regExp">
-                    [[_.('profiler.scenario.request.filter.parameter.operator.regExp')]]
+                    [[_('profiler.scenario.request.filter.parameter.operator.regExp')]]
                 </option>
             </select>
         </div>
@@ -37,7 +37,7 @@
 
 <script type="text/ng-template"  id="callStack.html">
     <div>
-        <span>[[_.('profiler.scenario.test.measure.callStack.subStack')]]:</span>
+        <span>[[_('profiler.scenario.test.measure.callStack.subStack')]]:</span>
         <div>
             <accordion close-others="false">
                 <accordion-group ng-hide="filterCall(call)" ng-repeat="call in call.calls" ng-click="showCall(call)" heading="[[call.timeSubStack]] ms - [[call.content | limitTo : 200]]">
@@ -50,18 +50,18 @@
 <script type="text/ng-template"  id="call.html">
     <table>
         <tr>
-            <td>[[_.('profiler.scenario.test.measure.callStack.file')]]:</td>
+            <td>[[_('profiler.scenario.test.measure.callStack.file')]]:</td>
             <td>[[call.file]]</td>
         </tr>
         <tr>
-            <td>[[_.('profiler.scenario.test.measure.callStack.line')]]:</td>
+            <td>[[_('profiler.scenario.test.measure.callStack.line')]]:</td>
             <td>[[call.line]]</td>
         </tr>
         <tr>
-            <td>[[_.('profiler.scenario.test.measure.callStack.time')]]:</td>
+            <td>[[_('profiler.scenario.test.measure.callStack.time')]]:</td>
             <td>[[call.timeSubStack]]</td>
         </tr>
     </table>
-    <div ng-if="call.calls" ng-include="'callStack.html'"></div>
+    <div ng-if="call.calls.length > 0" ng-include="'callStack.html'"></div>
 </script>
 

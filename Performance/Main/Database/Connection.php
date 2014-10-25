@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Database;
+namespace PM\Main\Database;
 
 /**
  * This script defines class for connection to MySQL over PDO.

@@ -1,10 +1,10 @@
 <?php
 
-namespace PF\Profiler\Gearman;
+namespace PM\Profiler\Gearman;
 
-use PF\Main\Http\Enum\ParameterType;
-use PF\Profiler\Monitor\Enum\HttpKeys;
-use PF\Profiler\Monitor\Enum\Type;
+use PM\Main\Http\Enum\ParameterType;
+use PM\Profiler\Monitor\Enum\HttpKeys;
+use PM\Profiler\Monitor\Enum\Type;
 
 /**
  * This script defines profiler gearman worker.
@@ -13,7 +13,7 @@ use PF\Profiler\Monitor\Enum\Type;
  * @category   Performance
  * @package    Profiler
  */
-class Worker extends \PF\Main\Abstracts\Gearman\Worker implements \PF\Main\Event\Interfaces\Sender {
+class Worker extends \PM\Main\Abstracts\Gearman\Worker implements \PM\Main\Event\Interfaces\Sender {
 
     /**
      * Test ID of MySQL scenario
@@ -49,12 +49,12 @@ class Worker extends \PF\Main\Abstracts\Gearman\Worker implements \PF\Main\Event
      * @return void
      */
     private function _processTest() {
-        $testService     = $this->getProvider()->get('PF\Profiler\Service\Test'); /* @var $testService \PF\Profiler\Service\Test */
-        $scenarioService = $this->getProvider()->get('PF\Profiler\Service\Scenario'); /* @var $commander \PF\Main\Commander\Executor */
-        $commander       = $this->getProvider()->get('PF\Main\Commander\Executor')
+        $testService     = $this->getProvider()->get('PM\Profiler\Service\Test'); /* @var $testService \PM\Profiler\Service\Test */
+        $scenarioService = $this->getProvider()->get('PM\Profiler\Service\Scenario'); /* @var $commander \PM\Main\Commander\Executor */
+        $commander       = $this->getProvider()->get('PM\Main\Commander\Executor')
             ->clean()
             ->add('getTest', $testService)
-            ->add(function(\PF\Main\Commander\Result $result) {
+            ->add(function(\PM\Main\Commander\Result $result) {
                 $test = $result->getData();
                 $result->setTest($test)
                     ->setId($test->getScenarioId())
@@ -84,12 +84,12 @@ class Worker extends \PF\Main\Abstracts\Gearman\Worker implements \PF\Main\Event
      * @return void
      */
     private function _sendTest($test, $scenario) {
-        $client         = $this->getProvider()->prototype('PF\Main\Http\Client', true); /* @var $client \PF\Main\Http\Client */
-        $measureService = $this->getProvider()->get('PF\Profiler\Service\Measure'); /* @var $measureService \PF\Profiler\Service\Measure */
-        $commander      = $this->getProvider()->get('PF\Main\Commander\Executor')
+        $client         = $this->getProvider()->prototype('PM\Main\Http\Client', true); /* @var $client \PM\Main\Http\Client */
+        $measureService = $this->getProvider()->get('PM\Profiler\Service\Measure'); /* @var $measureService \PM\Profiler\Service\Measure */
+        $commander      = $this->getProvider()->get('PM\Main\Commander\Executor')
             ->clean()
             ->add('createMySQLMeasure', $measureService);
-        /* @var $commander \PF\Main\Commander\Executor */
+        /* @var $commander \PM\Main\Commander\Executor */
 
         foreach ($scenario->getRequests() as $request) {
             $parameters = $request->get('parameters', array());
@@ -163,12 +163,12 @@ class Worker extends \PF\Main\Abstracts\Gearman\Worker implements \PF\Main\Event
      *
      * @param mixed $messageData Message data
      *
-     * @return \PF\Profiler\Gearman\Worker
+     * @return \PM\Profiler\Gearman\Worker
      */
     public function send($messageData) {
-        $message = $this->getProvider()->prototype('PF\Profiler\Gearman\EventMessage');
+        $message = $this->getProvider()->prototype('PM\Profiler\Gearman\EventMessage');
         $message->setData($messageData);
-        $this->getProvider()->get('PF\Profiler\Event\Mediator')->send($message, $this);
+        $this->getProvider()->get('PM\Profiler\Event\Mediator')->send($message, $this);
 
         return $this;
     }

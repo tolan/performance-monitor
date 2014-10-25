@@ -1,6 +1,6 @@
-# Performance Framework
-Welcome to the project, which aims to create PHP Performance framework.
-The purpose of the framework is the analysis, optimization, control and evaluate the performance of code in PHP project.
+# Performance Monitor
+Welcome to the project, which aims to create PHP Performance monitor.
+The purpose of the monitor is the analysis, optimization, control and evaluate the performance of code in PHP project.
 
 ## Requirements
 * Apache:        2.2
@@ -22,12 +22,12 @@ The purpose of the framework is the analysis, optimization, control and evaluate
 - include this code to your project (see to example.php):
 <pre>
   include 'Performance/Profiler/Monitor.php';
-  \PF\Profiler\Monitor::getInstance()->enable();
+  \PM\Profiler\Monitor::getInstance()->enable();
   declare(ticks=1);
 
   /** Your code **/
 
-  \PF\Profiler\Monitor::getInstance()->disable()->display(); // This line is optional. If you remove it then it is called in destruct.
+  \PM\Profiler\Monitor::getInstance()->disable()->display(); // This line is optional. If you remove it then it is called in destruct.
 </pre>
 - next go to page http://__your-domain__/Performance/web/
 

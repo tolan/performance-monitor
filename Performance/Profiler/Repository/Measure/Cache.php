@@ -1,12 +1,12 @@
 <?php
 
-namespace PF\Profiler\Repository\Measure;
+namespace PM\Profiler\Repository\Measure;
 
-use PF\Main\Cache as MainCache;
-use PF\Main\Filesystem;
-use PF\Profiler\Monitor\Repository\Cache as RepositoryCache;
-use PF\Profiler\Repository\Interfaces;
-use PF\Profiler\Monitor\Enum\CallAttributes;
+use PM\Main\Cache as MainCache;
+use PM\Main\Filesystem;
+use PM\Profiler\Monitor\Repository\Cache as RepositoryCache;
+use PM\Profiler\Repository\Interfaces;
+use PM\Profiler\Monitor\Enum\CallAttributes;
 
 /**
  * This script defines class for measure repository working with cache.
@@ -30,23 +30,23 @@ class Cache implements Interfaces\Measure {
     /**
      * Cache instance.
      *
-     * @var \PF\Main\Cache
+     * @var \PM\Main\Cache
      */
     private $_cache;
 
     /**
      * Filesystem directory instance.
      *
-     * @var \PF\Main\Filesystem\Directory
+     * @var \PM\Main\Filesystem\Directory
      */
     private $_dir = null;
 
     /**
      * Sets cache instance.
      *
-     * @param \PF\Main\Cache $cache Cache instance
+     * @param \PM\Main\Cache $cache Cache instance
      *
-     * @return \PF\Profiler\Repository\Measure\Cache
+     * @return \PM\Profiler\Repository\Measure\Cache
      */
     public function setCache(MainCache $cache) {
         $this->_cache = $cache;
@@ -57,9 +57,9 @@ class Cache implements Interfaces\Measure {
     /**
      * Sets filesystem directory instance for find all measures in filesystem.
      *
-     * @param \PF\Main\Filesystem\Directory $dir Filesystem directory instance
+     * @param \PM\Main\Filesystem\Directory $dir Filesystem directory instance
      *
-     * @return \PF\Profiler\Repository\Measure\Cache
+     * @return \PM\Profiler\Repository\Measure\Cache
      */
     public function setDir(Filesystem\Directory $dir) {
         $this->_dir = $dir;
@@ -70,9 +70,9 @@ class Cache implements Interfaces\Measure {
     /**
      * Creates new measure in repository with basic data. FAKE
      *
-     * @param \PF\Profiler\Entity\Measure $measure Measure entity instance
+     * @param \PM\Profiler\Entity\Measure $measure Measure entity instance
      */
-    public function createMeasure(\PF\Profiler\Entity\Measure $measure) {
+    public function createMeasure(\PM\Profiler\Entity\Measure $measure) {
         // TODO
     }
 
@@ -226,17 +226,17 @@ class Cache implements Interfaces\Measure {
      *
      * @return array
      *
-     * @throws \PF\Profiler\Exception Throws when dir is not set.
+     * @throws \PM\Profiler\Exception Throws when dir is not set.
      */
     public function findAll() {
         if ($this->_dir === null) {
-            throw new \PF\Profiler\Exception('Dir is not set.');
+            throw new \PM\Profiler\Exception('Dir is not set.');
         }
 
         $files  = $this->_dir->getAll();
         $result = array();
         foreach ($files as $file) {
-            /* @var $file \PF\Main\Filesystem\File */
+            /* @var $file \PM\Main\Filesystem\File */
             $result[] = array(
                 'id'     => $file->getName(),
                 'edited' => $file->getModificationDate() * 1000,
@@ -257,7 +257,7 @@ class Cache implements Interfaces\Measure {
      */
     public function getMeasureCallStack($measureId, $parentId = 0) {
         $calls         = $this->_cache->load();
-        $callFlyWeight = $calls[self::CACHE_FLYWEIGHT_CALL_KEY]; /* @var $callFlyWeight \PF\Profiler\Monitor\Interfaces\Call */
+        $callFlyWeight = $calls[self::CACHE_FLYWEIGHT_CALL_KEY]; /* @var $callFlyWeight \PM\Profiler\Monitor\Interfaces\Call */
         $result        = array();
         $parentId      = (string)$parentId;
 

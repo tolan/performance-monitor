@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Profiler\Repository;
+namespace PM\Profiler\Repository;
 
-use PF\Main\Abstracts\Repository;
-use PF\Profiler\Entity;
+use PM\Main\Abstracts\Repository;
+use PM\Profiler\Entity;
 
 /**
  * This script defines class for filter repository.
@@ -26,9 +26,9 @@ class Filter extends Repository {
     /**
      * Creates new filter in database.
      *
-     * @param \PF\Profiler\Entity\Filter $filter Filter entity instance
+     * @param \PM\Profiler\Entity\Filter $filter Filter entity instance
      *
-     * @return \PF\Profiler\Entity\Filter Filter with new ID
+     * @return \PM\Profiler\Entity\Filter Filter with new ID
      */
     public function create(Entity\Filter $filter) {
         $data = array(
@@ -46,7 +46,7 @@ class Filter extends Repository {
     /**
      * Updates filter in database.
      *
-     * @param \PF\Profiler\Entity\Filter $filter Filter entity instance
+     * @param \PM\Profiler\Entity\Filter $filter Filter entity instance
      *
      * @return boolean
      */
@@ -77,11 +77,11 @@ class Filter extends Repository {
     /**
      * Assign filter to request by given request ID, set ID and filter.
      *
-     * @param \PF\Profiler\Entity\Filter $filter    Filter entity instance
+     * @param \PM\Profiler\Entity\Filter $filter    Filter entity instance
      * @param int                        $requestId ID of request
      * @param int                        $setId     ID of set of filters
      *
-     * @return \PF\Profiler\Entity\Filter
+     * @return \PM\Profiler\Entity\Filter
      */
     public function assign(Entity\Filter $filter, $requestId, $setId) {
         $data = array(
@@ -100,7 +100,7 @@ class Filter extends Repository {
      *
      * @param array $requestsIds Array with requests IDs
      *
-     * @return \PF\Profiler\Entity\Filter[]
+     * @return \PM\Profiler\Entity\Filter[]
      */
     public function getFiltersForRequests($requestsIds) {
         $select = $this->getDatabase()->select()

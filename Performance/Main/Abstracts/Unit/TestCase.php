@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Abstracts\Unit;
+namespace PM\Main\Abstracts\Unit;
 
-use PF\Main\Provider;
+use PM\Main\Provider;
 
 /**
  * Abstract class for php unit test case.
@@ -18,7 +18,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase {
     /**
      * Provider instance.
      *
-     * @var \PF\Main\Provider
+     * @var \PM\Main\Provider
      */
     private $_provider;
 
@@ -75,7 +75,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase {
     /**
      * Returns provider instance.
      *
-     * @return \PF\Main\Provider
+     * @return \PM\Main\Provider
      */
     protected function getProvider() {
         return $this->_provider;
@@ -84,7 +84,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase {
     /**
      * It loads data from fixtures files to database.
      *
-     * @return \PF\Main\Abstracts\Unit\TestCase
+     * @return \PM\Main\Abstracts\Unit\TestCase
      */
     private function _loadFixtures() {
         $root      = $this->_provider->get('config')->get('root');
@@ -143,10 +143,10 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase {
      *
      * @param array $data Data for load. Array('table name' => rows)
      *
-     * @return \PF\Main\Abstracts\Unit\TestCase
+     * @return \PM\Main\Abstracts\Unit\TestCase
      */
     private function _insertFixturesData($data) {
-        $database = $this->getProvider()->get('database'); /* @var $database \PF\Main\Database */
+        $database = $this->getProvider()->get('database'); /* @var $database \PM\Main\Database */
 
         foreach ($data as $table => $rows) {
             $database->delete()->setTable($table)->run();

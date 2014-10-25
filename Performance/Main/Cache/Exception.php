@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Cache;
+namespace PM\Main\Cache;
 
 /**
  * This script defines exception class for cache.
@@ -9,5 +9,5 @@ namespace PF\Main\Cache;
  * @category   Performance
  * @package    Main
  */
-class Exception extends \PF\Main\Exception {
+class Exception extends \PM\Main\Exception {
 }

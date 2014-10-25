@@ -1,14 +1,14 @@
 <div class="width-100 height-40 search-filters-item-operator">
     <div>
-        <select class="form-control" ng-model="filter.operator" ng-change="send(filter)">
+        <select class="form-control" ng-model="filter.operator" ng-change="send()">
             <option ng-repeat="operator in filter.operators" value="[[operator.value]]" ng-selected="filter.operator === operator.value">
-                [[_.(operator.text)]]
+                [[_(operator.text)]]
             </option>
         </select>
     </div>
 </div>
 <div class="width-100 height-60 search-filters-item-operand zero-padding">
     <div class="center width-min-320">
-        <datetimepicker class="inline-block" ng-model="filter.value" ng-change="send(filter)"></datetimepicker>
+        <datetimepicker class="inline-block" ng-model="filter.value" ng-change="send()"></datetimepicker>
     </div>
 </div>

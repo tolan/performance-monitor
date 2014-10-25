@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main\Abstracts\Gearman;
+namespace PM\Main\Abstracts\Gearman;
 
-use PF\Main\Provider;
-use PF\Main\Gearman\Enum\ServerFunction;
+use PM\Main\Provider;
+use PM\Main\Gearman\Enum\ServerFunction;
 
 /**
  * Abstract class for gearman client.
@@ -24,7 +24,7 @@ abstract class Client {
     /**
      * Performance provider instance
      *
-     * @var \PF\Main\Provider
+     * @var \PM\Main\Provider
      */
     private $_provider = null;
 
@@ -32,7 +32,7 @@ abstract class Client {
      * Construct method.
      *
      * @param \GearmanClient    $client   Instance of \GearmanClient
-     * @param \PF\Main\Provider $provider Instance of \PF\Main\Provider
+     * @param \PM\Main\Provider $provider Instance of \PM\Main\Provider
      */
     final public function __construct(\GearmanClient $client, Provider $provider) {
         $client->addServer();
@@ -51,14 +51,14 @@ abstract class Client {
     /**
      * Return instance of geraman message.
      *
-     * @return \PF\Main\Abstracts\Gearman\Message
+     * @return \PM\Main\Abstracts\Gearman\Message
      */
     abstract protected function getMessage();
 
     /**
      * Return provider instance
      *
-     * @return \PF\Main\Provider
+     * @return \PM\Main\Provider
      */
     final protected function getProvider() {
         return $this->_provider;
@@ -78,7 +78,7 @@ abstract class Client {
      *
      * @param mixed $data Some data
      *
-     * @return \PF\Main\Abstracts\Gearman\Client
+     * @return \PM\Main\Abstracts\Gearman\Client
      */
     final public function setData($data) {
         $this->getMessage()->setData($data);
@@ -89,7 +89,7 @@ abstract class Client {
     /**
      * Run synchronous process in gearman.
      *
-     * @return \PF\Main\Abstracts\Gearman\Client
+     * @return \PM\Main\Abstracts\Gearman\Client
      */
     final public function doSynchronize() {
         $data = $this->_getWorkerData();
@@ -102,7 +102,7 @@ abstract class Client {
     /**
      * Run parallel asynchronous process in gearman.
      *
-     * @return \PF\Main\Abstracts\Gearman\Client
+     * @return \PM\Main\Abstracts\Gearman\Client
      */
     final public function doAsynchronize() {
         $data = $this->_getWorkerData();

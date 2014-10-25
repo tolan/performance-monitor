@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Profiler\Monitor\Interfaces;
+namespace PM\Profiler\Monitor\Interfaces;
 
 /**
  * Interface for monitor ticker.
@@ -14,14 +14,14 @@ interface Ticker {
     /**
      * Construct method.
      *
-     * @param \PF\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
+     * @param \PM\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
      */
     public function __construct (Storage $storage);
 
     /**
      * Adds filter to filtering rules.
      *
-     * @param \PF\Profiler\Monitor\Interfaces\Filter $filter Monitor filter instance
+     * @param \PM\Profiler\Monitor\Interfaces\Filter $filter Monitor filter instance
      */
     public function addFilter (Filter $filter);
 

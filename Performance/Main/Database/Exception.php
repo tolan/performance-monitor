@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Database;
+namespace PM\Main\Database;
 
 /**
  * This script defines exception class for database.
@@ -9,5 +9,5 @@ namespace PF\Main\Database;
  * @category   Performance
  * @package    Main
  */
-class Exception extends \PF\Main\Exception {
+class Exception extends \PM\Main\Exception {
 }

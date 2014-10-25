@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main\Gearman;
+namespace PM\Main\Gearman;
 
-use PF\Main\Provider;
-use PF\Main\Abstracts\Gearman\Message;
+use PM\Main\Provider;
+use PM\Main\Abstracts\Gearman\Message;
 
 /**
  * This script defines class for gearman which manage all gearman workers.
@@ -17,14 +17,14 @@ class Server {
     /**
      * Message with data
      *
-     * @var \PF\Main\Abstracts\Gearman\Message
+     * @var \PM\Main\Abstracts\Gearman\Message
      */
     private $_message = null;
 
     /**
      * Provider instance
      *
-     * @var \PF\Main\Provider
+     * @var \PM\Main\Provider
      */
     private $_provider = null;
 
@@ -38,7 +38,7 @@ class Server {
     /**
      * Construct method
      *
-     * @param \PF\Main\Provider $provider
+     * @param \PM\Main\Provider $provider
      */
     public function __construct(Provider $provider) {
         $this->_provider = $provider;
@@ -47,9 +47,9 @@ class Server {
     /**
      * Sets message for worker.
      *
-     * @param \PF\Main\Abstracts\Gearman\Message $message Message instance
+     * @param \PM\Main\Abstracts\Gearman\Message $message Message instance
      *
-     * @return \PF\Main\Gearman\Server
+     * @return \PM\Main\Gearman\Server
      */
     public function setMessage(Message $message) {
         $this->_message = $message;
@@ -60,7 +60,7 @@ class Server {
     /**
      * This manage whole process. It takes target worker from message, then creates worker and sets message and then runs process on worker and sets result.
      *
-     * @return \PF\Main\Gearman\Server
+     * @return \PM\Main\Gearman\Server
      */
     public function run() {
         $target = $this->_message->getTarget();

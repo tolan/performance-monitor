@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Statistic\Engine\Data;
+namespace PM\Statistic\Engine\Data;
 
-use PF\Statistic\Engine;
-use PF\Statistic\Enum\Source\Target;
+use PM\Statistic\Engine;
+use PM\Statistic\Enum\Source\Target;
 
 /**
  * This script defines class for assign data condition to statistic select for scenario entity.

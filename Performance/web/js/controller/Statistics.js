@@ -1,4 +1,22 @@
+angular.module('PM')
+    .controller('StatisticTemplateList', StatisticTemplateList)
+    .controller('StatisticTemplateCreate', StatisticTemplateCreate)
+    .controller('StatisticTemplateSource', StatisticTemplateSource)
+    .controller('StatisticTemplateViews', StatisticTemplateViews)
+    .controller('StatisticSetList', StatisticSetList)
+    .controller('StatisticSetCreate', StatisticSetCreate)
+    .controller('StatisticSetDetail', StatisticSetDetail)
+    .controller('StatisticRunDetail', StatisticRunDetail);
 
+/**
+ * Controller for show list of statistic templates.
+ *
+ * @param $scope           Scope
+ * @param $modal           Modal component
+ * @param StatisticService Statistic service
+ *
+ * @returns void
+ */
 function StatisticTemplateList($scope, $modal, StatisticService) {
     $scope.initList('name');
     $scope.templates = [];
@@ -30,6 +48,15 @@ function StatisticTemplateList($scope, $modal, StatisticService) {
     };
 }
 
+/**
+ * Controller for create/edit statistic template.
+ *
+ * @param $scope           Scope
+ * @param StatisticService Statistic service
+ * @param $routeParams     Router params
+ *
+ * @returns void
+ */
 function StatisticTemplateCreate($scope, StatisticService, $routeParams) {
     $scope.cachePrefix        = arguments.callee.name;
     $scope.searchErrorMessage = null;
@@ -101,6 +128,13 @@ function StatisticTemplateCreate($scope, StatisticService, $routeParams) {
     };
 }
 
+/**
+ * Controller for manage source of statistic template.
+ *
+ * @param $scope Scope
+ *
+ * @returns void
+ */
 function StatisticTemplateSource($scope) {
     $scope.initList('id');
     $scope.htmlTemplate         = '/js/template/Statistics/Template/create/source.html';
@@ -229,6 +263,14 @@ function StatisticTemplateSource($scope) {
     $scope.$parent.isValidSource = $scope.isValidSource;
 }
 
+/**
+ * Controller for manage views of statistic template.
+ *
+ * @param $scope           Scope
+ * @param StatisticService Statistic service
+ *
+ * @returns void
+ */
 function StatisticTemplateViews($scope, StatisticService) {
     $scope.htmlTemplate        = '/js/template/Statistics/Template/create/views.html';
     $scope.lineTemplatesPrefix = '/js/template/Statistics/Template/create/line/';
@@ -408,6 +450,15 @@ function StatisticTemplateViews($scope, StatisticService) {
     $scope.$parent.isValidViews = $scope.isValidViews;
 }
 
+/**
+ * Controller for show list of statistic sets.
+ *
+ * @param $scope           Scope
+ * @param StatisticService Statistic service
+ * @param $modal           Modal component
+ *
+ * @returns void
+ */
 function StatisticSetList($scope, StatisticService, $modal) {
     $scope.initList('name');
     $scope.sets = [];
@@ -439,6 +490,16 @@ function StatisticSetList($scope, StatisticService, $modal) {
     };
 }
 
+/**
+ * Controller for create/edit statistic set.
+ *
+ * @param $scope           Scope
+ * @param StatisticService Statistic service
+ * @param $routeParams     Router params
+ * @param $modal           Modal component
+ *
+ * @returns void
+ */
 function StatisticSetCreate($scope, StatisticService, $routeParams, $modal) {
     $scope.initList('name');
     $scope.validation = {};
@@ -513,6 +574,17 @@ function StatisticSetCreate($scope, StatisticService, $routeParams, $modal) {
     };
 }
 
+/**
+ * Controller for show detail of statistic set and generate new charts data.
+ *
+ * @param $scope           Scope
+ * @param StatisticService Statistic service
+ * @param $routeParams     Router params
+ * @param $modal           Modal component
+ * @param $timeout         Timeout provider
+ *
+ * @returns void
+ */
 function StatisticSetDetail($scope, StatisticService, $routeParams, $modal, $timeout) {
     $scope.initList('name');
     $scope.deleteRunId;
@@ -650,6 +722,15 @@ function StatisticSetDetail($scope, StatisticService, $routeParams, $modal, $tim
     $scope.getSet();
 }
 
+/**
+ * Controller for show charts of statistic set.
+ *
+ * @param $scope           Scope
+ * @param StatisticService Statistic service
+ * @param $routeParams     Router params
+ *
+ * @returns void
+ */
 function StatisticRunDetail($scope, StatisticService, $routeParams) {
     $scope.runId     = $routeParams.id;
     $scope.run       = {

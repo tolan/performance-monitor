@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Statistic;
+namespace PM\Statistic;
 
-use PF\Statistic\Enum\View;
-use PF\Statistic\Enum\Source;
+use PM\Statistic\Enum\View;
+use PM\Statistic\Enum\Source;
 
 /**
  * This script defines class for association between all enums in statistic template.
@@ -102,7 +102,7 @@ class Association {
      * @var array
      */
     private static $_enumMap = array(
-        View\Data::METHOD => '\PF\Main\Http\Enum\Method'
+        View\Data::METHOD => '\PM\Main\Http\Enum\Method'
     );
 
     /**
@@ -186,7 +186,7 @@ class Association {
         $result = array();
 
         foreach ($map as $type => $enum) {
-            /* @var $enum \PF\Main\Abstracts\Enum */
+            /* @var $enum \PM\Main\Abstracts\Enum */
             $result[$type] = $enum::getSelection('statistic.view.line.'.$type.'.');
         }
 

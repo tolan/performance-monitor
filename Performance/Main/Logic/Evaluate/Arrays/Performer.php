@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Logic\Evaluate\Arrays;
+namespace PM\Main\Logic\Evaluate\Arrays;
 
-use PF\Main\Logic\Evaluate\AbstractPerformer;
+use PM\Main\Logic\Evaluate\AbstractPerformer;
 
 /**
  * This script defines class for array performer for evaluate expression and data.
@@ -16,7 +16,7 @@ class Performer extends AbstractPerformer {
     /**
      * Returns relevant extractor.
      *
-     * @return \PF\Main\Logic\Evaluate\Arrays\Extractor
+     * @return \PM\Main\Logic\Evaluate\Arrays\Extractor
      */
     protected function createExtractor() {
         return new Extractor();
@@ -25,7 +25,7 @@ class Performer extends AbstractPerformer {
     /**
      * Returns relevant composer.
      *
-     * @return \PF\Main\Logic\Evaluate\Arrays\Composer
+     * @return \PM\Main\Logic\Evaluate\Arrays\Composer
      */
     protected function createComposer() {
         return new Composer();

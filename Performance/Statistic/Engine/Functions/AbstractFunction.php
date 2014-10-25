@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Statistic\Engine\Functions;
+namespace PM\Statistic\Engine\Functions;
 
-use PF\Statistic\Engine\Select;
+use PM\Statistic\Engine\Select;
 
 /**
  * This script defines abstract class for create condition for data in statistic select.
@@ -39,7 +39,7 @@ abstract class AbstractFunction {
      *
      * @param string $table Name of table
      *
-     * @return \PF\Statistic\Engine\Functions\AbstractFunction
+     * @return \PM\Statistic\Engine\Functions\AbstractFunction
      */
     public function setTable($table) {
         $this->_table = $table;
@@ -52,7 +52,7 @@ abstract class AbstractFunction {
      *
      * @param string $alias Alias of column
      *
-     * @return \PF\Statistic\Engine\Functions\AbstractFunction
+     * @return \PM\Statistic\Engine\Functions\AbstractFunction
      */
     public function setAlias($alias) {
         $this->_alias = $alias;
@@ -65,7 +65,7 @@ abstract class AbstractFunction {
      *
      * @param mixed $value Value of condition
      *
-     * @return \PF\Statistic\Engine\Functions\AbstractFunction
+     * @return \PM\Statistic\Engine\Functions\AbstractFunction
      */
     public function setValue($value) {
         $this->_value = $value;

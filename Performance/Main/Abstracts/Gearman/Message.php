@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Abstracts\Gearman;
+namespace PM\Main\Abstracts\Gearman;
 
 /**
  * Abstract class for gearman message.
@@ -30,7 +30,7 @@ abstract class Message {
      *
      * @param mixed $data Data for sending
      *
-     * @return \PF\Main\Abstracts\Gearman\Message
+     * @return \PM\Main\Abstracts\Gearman\Message
      */
     final public function setData($data) {
         $this->data = $data;

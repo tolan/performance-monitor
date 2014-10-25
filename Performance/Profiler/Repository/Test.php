@@ -1,10 +1,10 @@
 <?php
 
-namespace PF\Profiler\Repository;
+namespace PM\Profiler\Repository;
 
-use PF\Main\Abstracts\Repository;
-use PF\Profiler\Entity;
-use PF\Profiler\Enum;
+use PM\Main\Abstracts\Repository;
+use PM\Profiler\Entity;
+use PM\Profiler\Enum;
 
 /**
  * This script defines class for test repository.
@@ -29,7 +29,7 @@ class Test extends Repository {
      *
      * @param int $scenarioId ID of scenario
      *
-     * @return \PF\Profiler\Entity\Test
+     * @return \PM\Profiler\Entity\Test
      */
     public function getTestsForScenario($scenarioId) {
         $select = $this->getDatabase()->select()
@@ -55,7 +55,7 @@ class Test extends Repository {
      *
      * @param int $id ID of test
      *
-     * @return \PF\Profiler\Entity\Test
+     * @return \PM\Profiler\Entity\Test
      */
     public function getTest($id) {
         $select = $this->getDatabase()->select()
@@ -75,7 +75,7 @@ class Test extends Repository {
      *
      * @param int $scenarioId ID of new scenario
      *
-     * @return \PF\Profiler\Entity\Test
+     * @return \PM\Profiler\Entity\Test
      */
     public function create($scenarioId) {
         $data = array(
@@ -93,7 +93,7 @@ class Test extends Repository {
      * Updates scenario entity.
      *
      * @param int                      $id   ID of test
-     * @param \PF\Profiler\Entity\Test $test Test entity
+     * @param \PM\Profiler\Entity\Test $test Test entity
      *
      * @return boolean
      */

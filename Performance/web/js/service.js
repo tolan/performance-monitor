@@ -1,4 +1,5 @@
-perfModule.service(
+angular.module('PM')
+.service(
     'validator',
     function() {
         this._selected   = {};
@@ -85,9 +86,8 @@ perfModule.service(
             return result;
         };
     }
-);
-
-perfModule.service(
+)
+.service(
     'translate',
     function($rootScope, $http) {
         var self = this;
@@ -174,13 +174,11 @@ perfModule.service(
 
         this.loadModule('main');
     }
-);
-
-perfModule.factory('myCache', function ($cacheFactory) {
+)
+.factory('myCache', function ($cacheFactory) {
     return $cacheFactory('myCache');
-});
-
-perfModule.service('AbstractService', function($rootScope) {
+})
+.service('AbstractService', function($rootScope) {
     this._assignFunctions = function(request, success, error) {
         if (_.isUndefined(success) === false) {
             request.success(success);

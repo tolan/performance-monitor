@@ -1,10 +1,10 @@
 <?php
 
-namespace PF\Search\Filter\Target;
+namespace PM\Search\Filter\Target;
 
-use PF\Main\Utils;
-use PF\Search\Filter\Select;
-use PF\Search\Enum\Format;
+use PM\Main\Utils;
+use PM\Search\Filter\Select;
+use PM\Search\Enum\Format;
 
 /**
  * This script defines abstract class for target entity.
@@ -34,7 +34,7 @@ abstract class AbstractTarget {
     /**
      * Utils instance
      *
-     * @var \PF\Main\Utils
+     * @var \PM\Main\Utils
      */
     private $_utils = null;
 
@@ -45,7 +45,7 @@ abstract class AbstractTarget {
     /**
      * Abstract method for define and set target table for entity.
      *
-     * @param PF\Search\Filter\Select $select Select instance
+     * @param PM\Search\Filter\Select $select Select instance
      */
     abstract public function setTarget(Select $select);
 

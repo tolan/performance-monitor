@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Statistic\Enum\Source;
+namespace PM\Statistic\Enum\Source;
 
-use PF\Search\Enum;
+use PM\Search\Enum;
 
 /**
  * This script defines enum with all posible target entities.

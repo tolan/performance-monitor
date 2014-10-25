@@ -1,12 +1,12 @@
 <?php
 
-namespace PF\Tests\Unit\Main;
+namespace PM\Tests\Unit\Main;
 
-use PF\Main\Abstracts\Unit\TestCase;
-use PF\Main\Access;
+use PM\Main\Abstracts\Unit\TestCase;
+use PM\Main\Access;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Access.
+ * This script defines class for php unit test case of class \PM\Main\Access.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -17,20 +17,20 @@ class AccessTest extends TestCase {
     /**
      * Access instance.
      *
-     * @var \PF\Main\Access
+     * @var \PM\Main\Access
      */
     private $_instance;
 
     /**
      * Server global varibale instance
      *
-     * @var \PF\Main\Web\Component\Http\Server
+     * @var \PM\Main\Web\Component\Http\Server
      */
     private $_server;
 
     /**
      *
-     * @var \PF\Main\Config
+     * @var \PM\Main\Config
      */
     private $_config;
 
@@ -42,9 +42,9 @@ class AccessTest extends TestCase {
     protected function setUp() {
         parent::setUp();
 
-        $this->_instance = $this->getProvider()->get('PF\Main\Access');
-        $this->_server   = $this->getProvider()->get('PF\Main\Web\Component\Request')->getServer();
-        $this->_config   = $this->getProvider()->get('PF\Main\Config');
+        $this->_instance = $this->getProvider()->get('PM\Main\Access');
+        $this->_server   = $this->getProvider()->get('PM\Main\Web\Component\Request')->getServer();
+        $this->_config   = $this->getProvider()->get('PM\Main\Config');
     }
 
     /**
@@ -150,7 +150,7 @@ class AccessTest extends TestCase {
         ));
 
         $this->_server->set('REMOTE_ADDR', '10.64.128.1');
-        $this->setExpectedException('\PF\Main\Access\Exception');
+        $this->setExpectedException('\PM\Main\Access\Exception');
         $this->_instance->checkAccess();
     }
 
@@ -170,7 +170,7 @@ class AccessTest extends TestCase {
         ));
 
         $this->_server->set('REMOTE_ADDR', '10.64.128.1');
-        $this->setExpectedException('\PF\Main\Access\Exception');
+        $this->setExpectedException('\PM\Main\Access\Exception');
         $this->_instance->checkAccess();
     }
 
@@ -190,7 +190,7 @@ class AccessTest extends TestCase {
         ));
 
         $this->_server->set('REMOTE_ADDR', '10.64.127.1');
-        $this->setExpectedException('\PF\Main\Access\Exception');
+        $this->setExpectedException('\PM\Main\Access\Exception');
         $this->_instance->checkAccess();
     }
 
@@ -242,7 +242,7 @@ class AccessTest extends TestCase {
         ));
 
         $this->_server->set('REMOTE_ADDR', '10.1.17.5');
-        $this->setExpectedException('\PF\Main\Access\Exception');
+        $this->setExpectedException('\PM\Main\Access\Exception');
         $this->_instance->checkAccess();
     }
 
@@ -264,7 +264,7 @@ class AccessTest extends TestCase {
         ));
 
         $this->_server->set('REMOTE_ADDR', '10.1.132.6');
-        $this->setExpectedException('\PF\Main\Access\Exception');
+        $this->setExpectedException('\PM\Main\Access\Exception');
         $this->_instance->checkAccess();
     }
 }

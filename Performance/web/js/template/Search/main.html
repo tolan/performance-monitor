@@ -1,5 +1,5 @@
 <div class="search width-90 center-block width-min-480 width-max-1200">
-    <div class="alert alert-danger" ng-show="errorMessage">[[errorMessage && _.(errorMessage)]]</div>
-    <div class="search-filters center-block" ng-controller="SearchFiltersCtrl" ng-include="templateSearch"></div>
+    <div class="alert alert-danger" ng-show="errorMessage">[[errorMessage && _(errorMessage)]]</div>
+    <div class="search-filters center-block" ng-controller="SearchFiltersCtrl" ng-include="templateSearch" data-usage='search'></div>
     <div class="search-result" ng-controller="SearchResultCtrl" ng-include="template"></div>
 </div>

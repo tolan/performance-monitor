@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Http\Enum;
+namespace PM\Main\Http\Enum;
 
-use PF\Main\Abstracts\Enum;
+use PM\Main\Abstracts\Enum;
 
 /**
  * This class defines methods of http request.

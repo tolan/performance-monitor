@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Logic\Evaluate;
+namespace PM\Main\Logic\Evaluate;
 
-use PF\Main\Logic\Evaluator;
+use PM\Main\Logic\Evaluator;
 
 /**
  * This script defines abstarct class for composing result of performer and extraction of extractor.
@@ -16,16 +16,16 @@ abstract class AbstractComposer {
     /**
      * Evaluator instance
      *
-     * @var \PF\Main\Logic\Evaluator
+     * @var \PM\Main\Logic\Evaluator
      */
     private $_evaluator;
 
     /**
      * Sets evaluator instance.
      *
-     * @param \PF\Main\Logic\Evaluator $evaluator Evaluator instance
+     * @param \PM\Main\Logic\Evaluator $evaluator Evaluator instance
      *
-     * @return \PF\Main\Logic\Evaluate\AbstractComposer
+     * @return \PM\Main\Logic\Evaluate\AbstractComposer
      */
     public function setEvaluator(Evaluator $evaluator) {
         $this->_evaluator = $evaluator;
@@ -36,7 +36,7 @@ abstract class AbstractComposer {
     /**
      * Returns evaluator instance.
      *
-     * @return \PF\Main\Logic\Evaluator
+     * @return \PM\Main\Logic\Evaluator
      */
     final protected function getEvaluator() {
         return $this->_evaluator;

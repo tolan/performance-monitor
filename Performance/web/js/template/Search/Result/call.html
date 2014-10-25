@@ -1,42 +1,42 @@
 <td class="search-result-item-name">
     <a href="#/profiler/mysql/scenario/test/measure/[[item.measureId]]">
-        <span class="label label-default">[[_.('search.filter.target.' + target)]] ([[item.id]])</span>
+        <span class="label label-default">[[_('search.filter.target.' + target)]] ([[item.id]])</span>
     </a>
     <span ng-repeat="filter in item.applied_filters" class="badge">[[filter]]</span>
 </td>
 <td class="search-result-item-attributes">
     <div ng-show="item.measureId">
-        <span class="search-result-item-attributes-name">[[_.('search.filter.call.measure')]]:</span>
+        <span class="search-result-item-attributes-name">[[_('search.filter.call.measure')]]:</span>
         <span class="search-result-item-attributes-value">
             <a href="#/profiler/mysql/scenario/test/measure/[[item.measureId]]">[[item.measureId]]</a>
         </span>
     </div>
     <div ng-show="item.file">
-        <span class="search-result-item-attributes-name">[[_.('search.filter.call.file')]]:</span>
+        <span class="search-result-item-attributes-name">[[_('search.filter.call.file')]]:</span>
         <span class="search-result-item-attributes-value">[[item.file]]</span>
     </div>
     <div ng-show="item.line">
-        <span class="search-result-item-attributes-name">[[_.('search.filter.call.line')]]:</span>
+        <span class="search-result-item-attributes-name">[[_('search.filter.call.line')]]:</span>
         <span class="search-result-item-attributes-value">[[item.line]]</span>
     </div>
     <div ng-show="item.content">
-        <span class="search-result-item-attributes-name">[[_.('search.filter.call.content')]]:</span>
+        <span class="search-result-item-attributes-name">[[_('search.filter.call.content')]]:</span>
         <span class="search-result-item-attributes-value">[[item.content]]</span>
     </div>
     <div ng-show="item.lines">
-        <span class="search-result-item-attributes-name">[[_.('search.filter.call.lines')]]:</span>
+        <span class="search-result-item-attributes-name">[[_('search.filter.call.lines')]]:</span>
         <span class="search-result-item-attributes-value">[[item.lines]]</span>
     </div>
     <div ng-show="item.time">
-        <span class="search-result-item-attributes-name">[[_.('search.filter.call.time')]]:</span>
+        <span class="search-result-item-attributes-name">[[_('search.filter.call.time')]]:</span>
         <span class="search-result-item-attributes-value">[[item.time]]</span>
     </div>
     <div ng-show="item.timeSubStack">
-        <span class="search-result-item-attributes-name">[[_.('search.filter.call.timeSubStack')]]:</span>
+        <span class="search-result-item-attributes-name">[[_('search.filter.call.timeSubStack')]]:</span>
         <span class="search-result-item-attributes-value">[[item.timeSubStack]] ms</span>
     </div>
     <div ng-show="item.immersion">
-        <span class="search-result-item-attributes-name">[[_.('search.filter.call.immersion')]]:</span>
+        <span class="search-result-item-attributes-name">[[_('search.filter.call.immersion')]]:</span>
         <span class="search-result-item-attributes-value">[[item.immersion]]</span>
     </div>
 </td>

@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Tests\Unit\Main\Web\Controller;
+namespace PM\Tests\Unit\Main\Web\Controller;
 
-use PF\Main\Abstracts\Unit\TestCase;
+use PM\Main\Abstracts\Unit\TestCase;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Web\Controller\Profiler.
+ * This script defines class for php unit test case of class \PM\Main\Web\Controller\Profiler.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -16,7 +16,7 @@ class ProfilerTest extends TestCase {
     /**
      * App instance.
      *
-     * @var \PF\Main\Web\Controller\Profiler
+     * @var \PM\Main\Web\Controller\Profiler
      */
     private $_controller;
 
@@ -28,7 +28,7 @@ class ProfilerTest extends TestCase {
     protected function setUp() {
         parent::setUp();
 
-        $this->_controller = $this->getProvider()->get('PF\Main\Web\Controller\Profiler');
+        $this->_controller = $this->getProvider()->get('PM\Main\Web\Controller\Profiler');
     }
 
     /**
@@ -118,12 +118,12 @@ class ProfilerTest extends TestCase {
             'description' => NULL
         );
 
-        $response = $this->getMock('PF\Main\Web\Component\Request', array('getInput'));
+        $response = $this->getMock('PM\Main\Web\Component\Request', array('getInput'));
         $response->expects($this->once())
             ->method('getInput')
             ->will($this->returnValue($new));
 
-        $this->getProvider()->set($response, 'PF\Main\Web\Component\Request');
+        $this->getProvider()->set($response, 'PM\Main\Web\Component\Request');
 
         $id      = $this->_controller->setAction('create')->run()->getData();
         $measure = $this->_controller->setParams(array('id' => $id))->setAction('measure')->run()->getData();
@@ -145,12 +145,12 @@ class ProfilerTest extends TestCase {
             'name' => 'new name'
         );
 
-        $response = $this->getMock('PF\Main\Web\Component\Request', array('getInput'));
+        $response = $this->getMock('PM\Main\Web\Component\Request', array('getInput'));
         $response->expects($this->once())
             ->method('getInput')
             ->will($this->returnValue($update));
 
-        $this->getProvider()->set($response, 'PF\Main\Web\Component\Request');
+        $this->getProvider()->set($response, 'PM\Main\Web\Component\Request');
 
         $updated = $this->_controller->setAction('update')->setParams($update)->run()->getData();
         $this->assertTrue($updated);
@@ -374,7 +374,7 @@ class ProfilerTest extends TestCase {
         $this->assertArrayHasKey('requests', $payload);
         $this->assertArrayHasKey('params', $payload);
 
-        $paramKeys = \PF\Main\Http\Enum\Method::getConstants();
+        $paramKeys = \PM\Main\Http\Enum\Method::getConstants();
 
         $this->assertEquals(sort(array_values($paramKeys)), sort(array_keys($payload['params'])));
     }

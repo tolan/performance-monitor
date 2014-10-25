@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Tests\Unit\Main\Web\Component\Http;
+namespace PM\Tests\Unit\Main\Web\Component\Http;
 
-use PF\Main\Abstracts\Unit\TestCase;
+use PM\Main\Abstracts\Unit\TestCase;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Web\Component\Http\Get.
+ * This script defines class for php unit test case of class \PM\Main\Web\Component\Http\Get.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -16,7 +16,7 @@ class GetTest extends TestCase {
     /**
      * App instance.
      *
-     * @var \PF\Main\Web\Component\Http\Get
+     * @var \PM\Main\Web\Component\Http\Get
      */
     private $_entity;
 
@@ -28,7 +28,7 @@ class GetTest extends TestCase {
     protected function setUp() {
         parent::setUp();
 
-        $this->_entity = $this->getProvider()->get('PF\Main\Web\Component\Http\Get');
+        $this->_entity = $this->getProvider()->get('PM\Main\Web\Component\Http\Get');
     }
 
     /**
@@ -37,6 +37,6 @@ class GetTest extends TestCase {
      * @return void
      */
     public function testInstance() {
-        $this->assertInstanceOf('PF\Main\Web\Component\Http\Get', $this->_entity);
+        $this->assertInstanceOf('PM\Main\Web\Component\Http\Get', $this->_entity);
     }
 }

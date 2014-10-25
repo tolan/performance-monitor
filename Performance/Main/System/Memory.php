@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\System;
+namespace PM\Main\System;
 
-use PF\Main\Utils;
+use PM\Main\Utils;
 
 /**
  * This script defines class for manage system memory.
@@ -16,14 +16,14 @@ class Memory {
     /**
      * Utils instance.
      *
-     * @var \PF\Main\Utils
+     * @var \PM\Main\Utils
      */
     private $_utils;
 
     /**
      * Construct method.
      *
-     * @param \PF\Main\Utils $utils Utils instance
+     * @param \PM\Main\Utils $utils Utils instance
      *
      * @return void
      */

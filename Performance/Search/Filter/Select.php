@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Search\Filter;
+namespace PM\Search\Filter;
 
-use PF\Main\Database;
+use PM\Main\Database;
 
 /**
  * This script defines class for statement which extends standard database select.

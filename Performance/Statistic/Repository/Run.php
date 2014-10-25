@@ -1,10 +1,10 @@
 <?php
 
-namespace PF\Statistic\Repository;
+namespace PM\Statistic\Repository;
 
-use PF\Main\Abstracts\Repository;
-use PF\Statistic\Entity;
-use PF\Statistic\Enum\Run\State;
+use PM\Main\Abstracts\Repository;
+use PM\Statistic\Entity;
+use PM\Statistic\Enum\Run\State;
 
 /**
  * This script defines class for run repository.

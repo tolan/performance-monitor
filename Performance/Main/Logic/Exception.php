@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Logic;
+namespace PM\Main\Logic;
 
 /**
  * This script defines exception class for logic.
@@ -9,5 +9,5 @@ namespace PF\Main\Logic;
  * @category   Performance
  * @package    Main
  */
-class Exception extends \PF\Main\Exception {
+class Exception extends \PM\Main\Exception {
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Web;
+namespace PM\Main\Web;
 
 /**
  * This script defines exception class for web aplication.
@@ -9,5 +9,5 @@ namespace PF\Main\Web;
  * @category   Performance
  * @package    Main
  */
-class Exception extends \PF\Main\Exception {
+class Exception extends \PM\Main\Exception {
 }

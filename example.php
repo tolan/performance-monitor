@@ -1,6 +1,6 @@
 <?php
 include 'Performance/Profiler/Monitor.php';
-\PF\Profiler\Monitor::getInstance()->enable();
+\PM\Profiler\Monitor::getInstance()->enable();
 declare(ticks=1);
 
     $ans = simple(10);
@@ -12,7 +12,7 @@ declare(ticks=1);
     test_if(false);
 
     sleep(3);
-\PF\Profiler\Monitor::getInstance()->disable()->display();
+\PM\Profiler\Monitor::getInstance()->disable()->display();
 
 function simple ($input) {
     for($i = 0; $i < 2; $i++) {

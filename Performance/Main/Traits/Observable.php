@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Traits;
+namespace PM\Main\Traits;
 
-use PF\Main\Interfaces\Observer;
+use PM\Main\Interfaces\Observer;
 
 /**
  * This script defines trait for observable objects.
@@ -23,7 +23,7 @@ trait Observable {
     /**
      * Attach observer to list of observers.
      *
-     * @param \PF\Main\Interfaces\Observer $observer Observer instance
+     * @param \PM\Main\Interfaces\Observer $observer Observer instance
      */
     public function attach (Observer $observer) {
         $this->_observers[] = $observer;
@@ -34,7 +34,7 @@ trait Observable {
     /**
      * Detach observer from list of observers.
      *
-     * @param \PF\Main\Interfaces\Observer $observer Observer instance
+     * @param \PM\Main\Interfaces\Observer $observer Observer instance
      */
     public function detach (Observer $observer) {
         $this->_observers = array_diff($this->_observers, array($observer));

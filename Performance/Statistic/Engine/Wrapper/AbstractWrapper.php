@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Statistic\Engine\Wrapper;
+namespace PM\Statistic\Engine\Wrapper;
 
-use PF\Main\Database;
-use PF\Statistic\Engine\Select;
+use PM\Main\Database;
+use PM\Statistic\Engine\Select;
 
 /**
  * This script defines abstract class for wrapping statistic select with grouping select.

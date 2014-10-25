@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Search\Repository;
+namespace PM\Search\Repository;
 
-use PF\Main\Abstracts\Repository;
-use PF\Search\Entity;
+use PM\Main\Abstracts\Repository;
+use PM\Search\Entity;
 
 /**
  * This script defines class for filter repository.
@@ -28,7 +28,7 @@ class Filter extends Repository {
      *
      * @param array $groupIds List of group IDs
      *
-     * @return \PF\Search\Entity\Filter[]
+     * @return \PM\Search\Entity\Filter[]
      */
     public function getFiltersForGroups($groupIds) {
         $select = $this->getDatabase()
@@ -52,9 +52,9 @@ class Filter extends Repository {
     /**
      * Creates new filter entity to database.
      *
-     * @param \PF\Search\Entity\Filter $filter Filter instance
+     * @param \PM\Search\Entity\Filter $filter Filter instance
      *
-     * @return \PF\Search\Entity\Filter
+     * @return \PM\Search\Entity\Filter
      */
     public function createFilter(Entity\Filter $filter) {
         $data = array(
@@ -72,7 +72,7 @@ class Filter extends Repository {
     /**
      * Updates filter entity in database.
      *
-     * @param \PF\Search\Entity\Filter $filter Filter instance
+     * @param \PM\Search\Entity\Filter $filter Filter instance
      *
      * @return int
      */

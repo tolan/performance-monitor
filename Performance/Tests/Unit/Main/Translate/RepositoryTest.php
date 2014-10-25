@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Tests\Unit\Main\Translate;
+namespace PM\Tests\Unit\Main\Translate;
 
-use PF\Main\Abstracts\Unit\TestCase;
+use PM\Main\Abstracts\Unit\TestCase;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Translate\Repository.
+ * This script defines class for php unit test case of class \PM\Main\Translate\Repository.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -16,7 +16,7 @@ class RepositoryTest extends TestCase {
     /**
      * Repository instance.
      *
-     * @var \PF\Main\Translate\Repository
+     * @var \PM\Main\Translate\Repository
      */
     private $_repository;
 
@@ -26,7 +26,7 @@ class RepositoryTest extends TestCase {
      * @return void
      */
     protected function setUp() {
-        $this->_repository = $this->getProvider()->get('PF\Main\Translate\Repository');
+        $this->_repository = $this->getProvider()->get('PM\Main\Translate\Repository');
 
         parent::setUp();
     }

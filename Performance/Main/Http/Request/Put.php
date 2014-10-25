@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Http\Request;
+namespace PM\Main\Http\Request;
 
-use PF\Main\Http\Enum\Method;
+use PM\Main\Http\Enum\Method;
 
 /**
  * This script defines class for PUT http request.

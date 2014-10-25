@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Tests\Unit\Main\Web\Component\Template;
+namespace PM\Tests\Unit\Main\Web\Component\Template;
 
-use PF\Main\Abstracts\Unit\TestCase;
+use PM\Main\Abstracts\Unit\TestCase;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Web\Component\Template\Html.
+ * This script defines class for php unit test case of class \PM\Main\Web\Component\Template\Html.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -16,7 +16,7 @@ class HtmlTest extends TestCase {
     /**
      * Template instance.
      *
-     * @var \PF\Main\Web\Component\Template\Html
+     * @var \PM\Main\Web\Component\Template\Html
      */
     private $_template;
 
@@ -28,8 +28,8 @@ class HtmlTest extends TestCase {
     protected function setUp() {
         parent::setUp();
 
-        $this->_template =  $this->getProvider()->get('PF\Main\Web\Component\Template\Html');
-        $view = $this->getMock('PF\Main\Web\View\AbstractView');
+        $this->_template =  $this->getProvider()->get('PM\Main\Web\Component\Template\Html');
+        $view = $this->getMock('PM\Main\Web\View\AbstractView');
         $view->expects($this->any())
             ->method('getPayload')
             ->will($this->returnValue($view));
@@ -87,7 +87,7 @@ class HtmlTest extends TestCase {
      * @return void
      */
     public function testGetView() {
-        $this->assertInstanceOf('PF\Main\Web\View\AbstractView', $this->_template->getView());
+        $this->assertInstanceOf('PM\Main\Web\View\AbstractView', $this->_template->getView());
     }
 
     /**

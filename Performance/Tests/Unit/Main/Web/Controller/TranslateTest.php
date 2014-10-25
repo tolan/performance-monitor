@@ -1,13 +1,13 @@
 <?php
 
-namespace PF\Tests\Unit\Main\Web\Controller;
+namespace PM\Tests\Unit\Main\Web\Controller;
 
-use PF\Main\Abstracts\Unit\TestCase;
-use PF\Main\Translate\Enum\Module;
-use PF\Main\Translate\Enum\Lang;
+use PM\Main\Abstracts\Unit\TestCase;
+use PM\Main\Translate\Enum\Module;
+use PM\Main\Translate\Enum\Lang;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Web\Controller\Translate.
+ * This script defines class for php unit test case of class \PM\Main\Web\Controller\Translate.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -18,7 +18,7 @@ class TranslateTest extends TestCase {
     /**
      * App instance.
      *
-     * @var \PF\Main\Web\Controller\Translate
+     * @var \PM\Main\Web\Controller\Translate
      */
     private $_controller;
 
@@ -31,7 +31,7 @@ class TranslateTest extends TestCase {
         parent::setUp();
 
         // mock instead of cahce instance
-        $cache = $this->getMock('PF\Main\Abstracts\Entity', array('load', 'save'));
+        $cache = $this->getMock('PM\Main\Abstracts\Entity', array('load', 'save'));
         $cache->expects($this->any())
             ->method('load')
             ->will($this->returnValue(array()));
@@ -40,9 +40,9 @@ class TranslateTest extends TestCase {
             ->method('save')
             ->will($this->returnValue(array()));
 
-        $this->getProvider()->set($cache, 'PF\Main\Cache');
+        $this->getProvider()->set($cache, 'PM\Main\Cache');
 
-        $this->_controller = $this->getProvider()->get('PF\Main\Web\Controller\Translate');
+        $this->_controller = $this->getProvider()->get('PM\Main\Web\Controller\Translate');
     }
 
     /**

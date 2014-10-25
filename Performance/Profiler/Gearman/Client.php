@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Profiler\Gearman;
+namespace PM\Profiler\Gearman;
 
 /**
  * This script defines profiler gearman client.
@@ -9,14 +9,14 @@ namespace PF\Profiler\Gearman;
  * @category   Performance
  * @package    Profiler
  */
-class Client extends \PF\Main\Abstracts\Gearman\Client {
+class Client extends \PM\Main\Abstracts\Gearman\Client {
 
     /**
      * Returns gearman message instance.
      *
-     * @return \PF\Profiler\Gearman\Message
+     * @return \PM\Profiler\Gearman\Message
      */
     protected function getMessage() {
-        return $this->getProvider()->get('PF\Profiler\Gearman\Message');
+        return $this->getProvider()->get('PM\Profiler\Gearman\Message');
     }
 }

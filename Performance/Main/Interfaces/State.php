@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Interfaces;
+namespace PM\Main\Interfaces;
 
 /**
  * Interface for state objects.

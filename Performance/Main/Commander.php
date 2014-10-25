@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main;
+namespace PM\Main;
 
 /**
  * This script defines class for create and store set of commands under defined name.
@@ -15,21 +15,21 @@ class Commander implements Commander\Interfaces\Commander {
     /**
      * Provider instance.
      *
-     * @var \PF\Main\Provider
+     * @var \PM\Main\Provider
      */
     private $_provider;
 
     /**
      * List of executors with name.
      *
-     * @var \PF\Main\Commander\Executor[]
+     * @var \PM\Main\Commander\Executor[]
      */
     private $_executors = array();
 
     /**
      * Construct method.
      *
-     * @param \PF\Main\Provider $provider Provider instance
+     * @param \PM\Main\Provider $provider Provider instance
      *
      * @return void
      */
@@ -42,7 +42,7 @@ class Commander implements Commander\Interfaces\Commander {
      *
      * @param string $name Name of command set
      *
-     * @return \PF\Main\Commander\Executor
+     * @return \PM\Main\Commander\Executor
      */
     public function getExecutor($name) {
         $this->_validateName($name);
@@ -59,9 +59,9 @@ class Commander implements Commander\Interfaces\Commander {
      *
      * @param string $name Name of command set
      *
-     * @return \PF\Main\Commander
+     * @return \PM\Main\Commander
      *
-     * @throws \PF\Main\Exception Throws when executor doesn't exist.
+     * @throws \PM\Main\Exception Throws when executor doesn't exist.
      */
     public function destroyExecutor($name) {
         $this->_validateName($name);
@@ -80,13 +80,13 @@ class Commander implements Commander\Interfaces\Commander {
      *
      * @param string $name Name of command set
      *
-     * @return \PF\Main\Commander
+     * @return \PM\Main\Commander
      *
-     * @throws \PF\Main\Exception Throws when executor doesn't exist.
+     * @throws \PM\Main\Exception Throws when executor doesn't exist.
      */
     public function cleanExecutor($name = null) {
         if ($name === null) {
-            foreach (array_keys($this->_executors) as $name) { /* @var $executor \PF\Main\Commander\Executor */
+            foreach (array_keys($this->_executors) as $name) { /* @var $executor \PM\Main\Commander\Executor */
                 $this->cleanExecutor($name);
             }
         } elseif(!$this->hasExecutor($name)) {
@@ -116,9 +116,9 @@ class Commander implements Commander\Interfaces\Commander {
      *
      * @param string $name Name of command set
      *
-     * @throws \PF\Main\Exception Throws when executor name is not string.
+     * @throws \PM\Main\Exception Throws when executor name is not string.
      *
-     * @return \PF\Main\Commander
+     * @return \PM\Main\Commander
      */
     private function _validateName($name) {
         if (!is_string($name)) {
@@ -133,10 +133,10 @@ class Commander implements Commander\Interfaces\Commander {
      *
      * @param string $name Name of command set
      *
-     * @return \PF\Main\Commander
+     * @return \PM\Main\Commander
      */
     private function _createExecutor($name) {
-        $this->_executors[$name] = $this->_provider->prototype('PF\Main\Commander\Executor', true);
+        $this->_executors[$name] = $this->_provider->prototype('PM\Main\Commander\Executor', true);
 
         return $this;
     }

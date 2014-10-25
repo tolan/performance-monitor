@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Web\Controller;
+namespace PM\Main\Web\Controller;
 
 /**
  * This scripts defines class for homepage controller.

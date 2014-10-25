@@ -1,10 +1,10 @@
 <?php
 
-namespace PF\Main\Web;
+namespace PM\Main\Web;
 
-use PF\Main\Provider;
-use PF\Main\Access\Exception as AccessException;
-use PF\Main\Exception as MainException;
+use PM\Main\Provider;
+use PM\Main\Access\Exception as AccessException;
+use PM\Main\Exception as MainException;
 
 /**
  * This script defines main class for run application.
@@ -18,28 +18,28 @@ class App {
     /**
      * Provider instance
      *
-     * @var \PF\Main\Provider
+     * @var \PM\Main\Provider
      */
     private $_provider = null;
 
     /**
      * Response Template
      *
-     * @var \PF\Main\Web\Component\Response
+     * @var \PM\Main\Web\Component\Response
      */
     private $_response = null;
 
     /**
      * Router instance
      *
-     * @var \PF\Main\Web\Component\Router
+     * @var \PM\Main\Web\Component\Router
      */
     private $_router = null;
 
     /**
      * Construct method.
      *
-     * @param \PF\Main\Provider $provider Provider instance
+     * @param \PM\Main\Provider $provider Provider instance
      *
      * @return void
      */
@@ -51,7 +51,7 @@ class App {
     /**
      * This method run application stack.
      *
-     * @return \PF\Main\Web\App
+     * @return \PM\Main\Web\App
      */
     final public function run() {
         $this->init();
@@ -65,7 +65,7 @@ class App {
     /**
      * Init function for resolve routing.
      *
-     * @return \PF\Main\Web\App
+     * @return \PM\Main\Web\App
      */
     protected function init() {
         set_error_handler(array($this, 'errorHandler'));
@@ -106,10 +106,10 @@ class App {
     /**
      * Method which is called before render function.
      *
-     * @return \PF\Main\Web\App
+     * @return \PM\Main\Web\App
      */
     protected function beforeRender() {
-        $eveMan = $this->_provider->get('PF\Main\Event\Manager'); /* @var $eveMan \PF\Main\Event\Manager */
+        $eveMan = $this->_provider->get('PM\Main\Event\Manager'); /* @var $eveMan \PM\Main\Event\Manager */
         $eveMan->broadcast('app:'.__FUNCTION__);
         $eveMan->flush();
 
@@ -119,7 +119,7 @@ class App {
     /**
      * Render function which call flush on response instance.
      *
-     * @return \PF\Main\Web\App
+     * @return \PM\Main\Web\App
      */
     protected function render() {
         if ($this->_response !== null) {
@@ -132,10 +132,10 @@ class App {
     /**
      * Method which is called after render function.
      *
-     * @return \PF\Main\Web\App
+     * @return \PM\Main\Web\App
      */
     protected function afterRender() {
-        $eveMan = $this->_provider->get('PF\Main\Event\Manager'); /* @var $eveMan \PF\Main\Event\Manager */
+        $eveMan = $this->_provider->get('PM\Main\Event\Manager'); /* @var $eveMan \PM\Main\Event\Manager */
         $eveMan->broadcast('app:'.__FUNCTION__);
         $eveMan->flush();
 
@@ -145,9 +145,9 @@ class App {
     /**
      * Forward to access denied page.
      *
-     * @param \PF\Main\Access\Exception $exc Exception
+     * @param \PM\Main\Access\Exception $exc Exception
      *
-     * @return \PF\Main\Web\App
+     * @return \PM\Main\Web\App
      */
     private function _showAccessDenied(AccessException $exc) {
         $this->_returnApplicationError($exc); // TODO
@@ -158,9 +158,9 @@ class App {
     /**
      * Forward to router error page.
      *
-     * @param \PF\Main\Web\Exception $exc Exception
+     * @param \PM\Main\Web\Exception $exc Exception
      *
-     * @return \PF\Main\Web\App
+     * @return \PM\Main\Web\App
      */
     private function _showRoutingError(Exception $exc) {
         $this->_returnApplicationError($exc); // TODO
@@ -171,18 +171,18 @@ class App {
     /**
      * Forward to application error.
      *
-     * @param \PF\Main\Web\Exception $exc Exception
+     * @param \PM\Main\Web\Exception $exc Exception
      *
-     * @return \PF\Main\Web\App
+     * @return \PM\Main\Web\App
      */
-    private function _returnApplicationError(MainException $exc) {
-        $eveMan = $this->_provider->get('PF\Main\Event\Manager'); /* @var $eveMan \PF\Main\Event\Manager */
+    private function _returnApplicationError(\Exception $exc) {
+        $eveMan = $this->_provider->get('PM\Main\Event\Manager'); /* @var $eveMan \PM\Main\Event\Manager */
         $eveMan->broadcast('app:'.__FUNCTION__);
         $eveMan->flush();
 
-        $template = $this->_provider->get('PF\Main\Web\Component\Template\Error'); /* @var $template \PF\Main\Web\Component\Template\Error */
+        $template = $this->_provider->get('PM\Main\Web\Component\Template\Error'); /* @var $template \PM\Main\Web\Component\Template\Error */
         $template->setData($exc);
-        $response = $this->_provider->get('response'); /* @var $response \PF\Main\Web\Component\Response */
+        $response = $this->_provider->get('response'); /* @var $response \PM\Main\Web\Component\Response */
         $response->setTemplate($template)->flush();
 
         $this->_provider->get('log')->error($exc);
@@ -198,10 +198,10 @@ class App {
      */
     public function errorHandler($errno, $errstr) {
         if ($errno > E_STRICT) {
-            $template  = $this->_provider->get('PF\Main\Web\Component\Template\Error'); /* @var $template \PF\Main\Web\Component\Template\Error */
+            $template  = $this->_provider->get('PM\Main\Web\Component\Template\Error'); /* @var $template \PM\Main\Web\Component\Template\Error */
             $exception = new MainException($errstr);
             $template->setData($exception);
-            $response = $this->_provider->get('response'); /* @var $response \PF\Main\Web\Component\Response */
+            $response = $this->_provider->get('response'); /* @var $response \PM\Main\Web\Component\Response */
             $response->setTemplate($template)->flush();
 
             $this->_provider->get('log')->error($exception);

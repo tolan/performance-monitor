@@ -1,13 +1,13 @@
 <?php
 
-namespace PF\Tests\Unit\Main\Commander;
+namespace PM\Tests\Unit\Main\Commander;
 
-use PF\Main\Abstracts\Unit\TestCase;
-use PF\Main\Commander\Result;
-use PF\Main\Commander\Execution;
+use PM\Main\Abstracts\Unit\TestCase;
+use PM\Main\Commander\Result;
+use PM\Main\Commander\Execution;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Commander\Execution.
+ * This script defines class for php unit test case of class \PM\Main\Commander\Execution.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -33,7 +33,7 @@ class ExecutionTest  extends TestCase {
             'data'   => 100
         );
 
-        $this->assertInstanceOf('PF\Main\Commander\Result', $result);
+        $this->assertInstanceOf('PM\Main\Commander\Result', $result);
         $this->assertEquals($expected, $result->toArray());
     }
 
@@ -53,7 +53,7 @@ class ExecutionTest  extends TestCase {
             'const' => 100
         );
 
-        $this->assertInstanceOf('PF\Main\Commander\Result', $result);
+        $this->assertInstanceOf('PM\Main\Commander\Result', $result);
         $this->assertEquals($expected, $result->toArray());
     }
 }

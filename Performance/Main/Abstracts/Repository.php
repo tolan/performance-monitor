@@ -1,10 +1,10 @@
 <?php
 
-namespace PF\Main\Abstracts;
+namespace PM\Main\Abstracts;
 
-use PF\Main\Database;
-use PF\Main\Database\Exception;
-use PF\Main\Utils;
+use PM\Main\Database;
+use PM\Main\Database\Exception;
+use PM\Main\Utils;
 
 /**
  * Abstract class for operation with database.
@@ -18,14 +18,14 @@ abstract class Repository {
     /**
      * Database instance
      *
-     * @var \PF\Main\Database
+     * @var \PM\Main\Database
      */
     private $_database;
 
     /**
      * Utils instance.
      *
-     * @var \PF\Main\Utils
+     * @var \PM\Main\Utils
      */
     private $_utils;
 
@@ -39,7 +39,7 @@ abstract class Repository {
     /**
      * Construct method.
      *
-     * @param \PF\Main\Database $database Database instance
+     * @param \PM\Main\Database $database Database instance
      */
     final public function __construct(Database $database, Utils $utils) {
         $this->_database = $database;
@@ -52,7 +52,7 @@ abstract class Repository {
      *
      * @param string $table Name of table
      *
-     * @return \PF\Main\Abstracts\Repository
+     * @return \PM\Main\Abstracts\Repository
      */
     protected function init($table = null) {
         $this->_tableName = $table;
@@ -63,7 +63,7 @@ abstract class Repository {
     /**
      * Returns database instance.
      *
-     * @return \PF\Main\Database
+     * @return \PM\Main\Database
      */
     protected function getDatabase() {
         return $this->_database;
@@ -72,7 +72,7 @@ abstract class Repository {
     /**
      * Returns utils instance.
      *
-     * @return \PF\Main\Utils
+     * @return \PM\Main\Utils
      */
     protected function getUtils() {
         return $this->_utils;
@@ -152,9 +152,9 @@ abstract class Repository {
     /**
      * Checks that table name is set.
      *
-     * @return \PF\Main\Abstracts\Repository
+     * @return \PM\Main\Abstracts\Repository
      *
-     * @throws \PF\Main\Database\Exception Throws when name is not set.
+     * @throws \PM\Main\Database\Exception Throws when name is not set.
      */
     private function _checkSetTable() {
         if (!$this->_tableName) {

@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Statistic\Enum\Source;
+namespace PM\Statistic\Enum\Source;
 
-use PF\Main\Abstracts\Enum;
+use PM\Main\Abstracts\Enum;
 
 /**
  * This script defines enum with types of template source.

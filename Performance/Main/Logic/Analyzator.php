@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Logic;
+namespace PM\Main\Logic;
 
 /**
  * This script defines class for logic analyzator.
@@ -21,7 +21,7 @@ class Analyzator {
     /**
      * Analyzed expression.
      *
-     * @var \PF\Main\Logic\Analyze\AbstractElement|null
+     * @var \PM\Main\Logic\Analyze\AbstractElement|null
      */
     private $_logic = null;
 
@@ -51,7 +51,7 @@ class Analyzator {
      *
      * @param strin $expression Logic expression
      *
-     * @return \PF\Main\Logic\Analyzator
+     * @return \PM\Main\Logic\Analyzator
      */
     public function setExpression($expression) {
         $this->_expression = $expression;
@@ -63,7 +63,7 @@ class Analyzator {
     /**
      * Returns analyzed logic tree structure.
      *
-     * @return \PF\Main\Logic\Analyze\AbstractElement|null
+     * @return \PM\Main\Logic\Analyze\AbstractElement|null
      */
     public function getLogic() {
         if ($this->_logic === null) {
@@ -87,7 +87,7 @@ class Analyzator {
      *
      * @param array $algebra Definition of algebra.
      *
-     * @return \PF\Main\Logic\Analyzator
+     * @return \PM\Main\Logic\Analyzator
      */
     public function setAlgebra($algebra) {
         // TODO validation
@@ -99,7 +99,7 @@ class Analyzator {
     /**
      * This analyze expression with algebra.
      *
-     * @return \PF\Main\Logic\Analyze\AbstractElement|null
+     * @return \PM\Main\Logic\Analyze\AbstractElement|null
      */
     private function _analyze() {
         $expression = new Analyze\Parser($this->_expression, $this->_algebra);

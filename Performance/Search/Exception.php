@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Search;
+namespace PM\Search;
 
 /**
  * This script defines exception class for search module.
@@ -9,5 +9,5 @@ namespace PF\Search;
  * @category   Performance
  * @package    Search
  */
-class Exception extends \PF\Main\Exception {
+class Exception extends \PM\Main\Exception {
 }

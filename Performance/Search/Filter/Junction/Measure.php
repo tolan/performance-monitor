@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Search\Filter\Junction;
+namespace PM\Search\Filter\Junction;
 
-use PF\Search\Filter\Select;
-use PF\Search\Filter\Condition\AbstractCondition;
+use PM\Search\Filter\Select;
+use PM\Search\Filter\Condition\AbstractCondition;
 
 /**
  * This script defines class for junction between measure and condition of filter.
@@ -17,9 +17,9 @@ class Measure extends AbstractJunction {
     /**
      * This method is called after is junction created. It sets group function.
      *
-     * @param enum                                          $filterName One of PF\Search\Enum\Filter
-     * @param \PF\Search\Filter\Select                      $select     Select instance
-     * @param \PF\Search\Filter\Condition\AbstractCondition $condition  Condition instance
+     * @param enum                                          $filterName One of PM\Search\Enum\Filter
+     * @param \PM\Search\Filter\Select                      $select     Select instance
+     * @param \PM\Search\Filter\Condition\AbstractCondition $condition  Condition instance
      *
      * @return void
      */
@@ -30,8 +30,8 @@ class Measure extends AbstractJunction {
     /**
      * This method provider fulltext search.
      *
-     * @param \PF\Search\Filter\Select                      $select    Select instance
-     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
+     * @param \PM\Search\Filter\Select                      $select    Select instance
+     * @param \PM\Search\Filter\Condition\AbstractCondition $condition Condition instance
      *
      * @return void
      */
@@ -50,8 +50,8 @@ class Measure extends AbstractJunction {
     /**
      * This method provider search by url.
      *
-     * @param \PF\Search\Filter\Select                      $select    Select instance
-     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
+     * @param \PM\Search\Filter\Select                      $select    Select instance
+     * @param \PM\Search\Filter\Condition\AbstractCondition $condition Condition instance
      *
      * @return void
      */
@@ -62,8 +62,8 @@ class Measure extends AbstractJunction {
     /**
      * This method provider search by state.
      *
-     * @param \PF\Search\Filter\Select                      $select    Select instance
-     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
+     * @param \PM\Search\Filter\Select                      $select    Select instance
+     * @param \PM\Search\Filter\Condition\AbstractCondition $condition Condition instance
      *
      * @return void
      */
@@ -74,8 +74,8 @@ class Measure extends AbstractJunction {
     /**
      * This method provider search by started.
      *
-     * @param \PF\Search\Filter\Select                      $select    Select instance
-     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
+     * @param \PM\Search\Filter\Select                      $select    Select instance
+     * @param \PM\Search\Filter\Condition\AbstractCondition $condition Condition instance
      *
      * @return void
      */
@@ -86,8 +86,8 @@ class Measure extends AbstractJunction {
     /**
      * This method provider search by method.
      *
-     * @param \PF\Search\Filter\Select                      $select    Select instance
-     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
+     * @param \PM\Search\Filter\Select                      $select    Select instance
+     * @param \PM\Search\Filter\Condition\AbstractCondition $condition Condition instance
      *
      * @return void
      */
@@ -98,8 +98,8 @@ class Measure extends AbstractJunction {
     /**
      * This method provider search by time.
      *
-     * @param \PF\Search\Filter\Select                      $select    Select instance
-     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
+     * @param \PM\Search\Filter\Select                      $select    Select instance
+     * @param \PM\Search\Filter\Condition\AbstractCondition $condition Condition instance
      *
      * @return void
      */
@@ -110,8 +110,8 @@ class Measure extends AbstractJunction {
     /**
      * This method provider search by calls.
      *
-     * @param \PF\Search\Filter\Select                      $select    Select instance
-     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
+     * @param \PM\Search\Filter\Select                      $select    Select instance
+     * @param \PM\Search\Filter\Condition\AbstractCondition $condition Condition instance
      *
      * @return void
      */
@@ -122,8 +122,8 @@ class Measure extends AbstractJunction {
     /**
      * This method provider search by file.
      *
-     * @param \PF\Search\Filter\Select                      $select    Select instance
-     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
+     * @param \PM\Search\Filter\Select                      $select    Select instance
+     * @param \PM\Search\Filter\Condition\AbstractCondition $condition Condition instance
      *
      * @return void
      */
@@ -136,8 +136,8 @@ class Measure extends AbstractJunction {
     /**
      * This method provider search by line.
      *
-     * @param \PF\Search\Filter\Select                      $select    Select instance
-     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
+     * @param \PM\Search\Filter\Select                      $select    Select instance
+     * @param \PM\Search\Filter\Condition\AbstractCondition $condition Condition instance
      *
      * @return void
      */
@@ -150,8 +150,8 @@ class Measure extends AbstractJunction {
     /**
      * This method provider search by content.
      *
-     * @param \PF\Search\Filter\Select                      $select    Select instance
-     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
+     * @param \PM\Search\Filter\Select                      $select    Select instance
+     * @param \PM\Search\Filter\Condition\AbstractCondition $condition Condition instance
      *
      * @return void
      */
@@ -164,8 +164,8 @@ class Measure extends AbstractJunction {
     /**
      * This method provider search by immersion.
      *
-     * @param \PF\Search\Filter\Select                      $select    Select instance
-     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
+     * @param \PM\Search\Filter\Select                      $select    Select instance
+     * @param \PM\Search\Filter\Condition\AbstractCondition $condition Condition instance
      *
      * @return void
      */

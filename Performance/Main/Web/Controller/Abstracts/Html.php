@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Web\Controller\Abstracts;
+namespace PM\Main\Web\Controller\Abstracts;
 
 /**
  * Abstract class for HTML controller.
@@ -14,10 +14,10 @@ class Html extends Controller {
     /**
      * Return response instance
      *
-     * @return \PF\Main\Web\Component\Response
+     * @return \PM\Main\Web\Component\Response
      */
     final public function getResponse() {
-        $template = $this->getProvider()->get('PF\Main\Web\Component\Template\Html');
+        $template = $this->getProvider()->get('PM\Main\Web\Component\Template\Html');
         $response = $this->getProvider()->get('response')->setTemplate($template);
         return $response;
     }
@@ -25,7 +25,7 @@ class Html extends Controller {
     /**
      * Return view instance.
      *
-     * @return \PF\Main\Web\View\Html
+     * @return \PM\Main\Web\View\Html
      */
     protected function getView() {
         $viewName = strtr(get_class($this), array('Controller' => 'View')).'\\'.$this->getAction();

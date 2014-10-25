@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Search\Filter\Condition;
+namespace PM\Search\Filter\Condition;
 
-use PF\Search\Filter\Select;
+use PM\Search\Filter\Select;
 
 /**
  * This script defines class for filter condition with query type. It is very special condition because override method addFilter where is special function.
@@ -18,11 +18,11 @@ class Query extends AbstractCondition {
     /**
      * It adds filter to select with table name and column. It take input query string and find each words.
      *
-     * @param \PF\Search\Filter\Select $select Select instance
+     * @param \PM\Search\Filter\Select $select Select instance
      * @param string                   $table  Table name where is column
      * @param string                   $column Column name where will be value
      *
-     * @return \PF\Search\Filter\Condition\AbstractCondition
+     * @return \PM\Search\Filter\Condition\AbstractCondition
      */
     public function addFilter(Select $select, $table, $column) {
         $values = $this->_extractStrings($this->getValue());
@@ -68,9 +68,9 @@ class Query extends AbstractCondition {
     /**
      * Special method for fulltext. It takes all stored where conditions and inject it to original select.
      *
-     * @param \PF\Search\Filter\Select $select Select instance
+     * @param \PM\Search\Filter\Select $select Select instance
      *
-     * @return \PF\Search\Filter\Condition\Query
+     * @return \PM\Search\Filter\Condition\Query
      */
     public function fulltext(Select $select) {
         if ($this->_where !== null) {

@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Search\Filter\Junction;
+namespace PM\Search\Filter\Junction;
 
-use PF\Search\Filter\Select;
-use PF\Search\Filter\Condition\AbstractCondition;
+use PM\Search\Filter\Select;
+use PM\Search\Filter\Condition\AbstractCondition;
 
 /**
  * This script defines abstract class for junction between target entity and condition.
@@ -17,11 +17,11 @@ abstract class AbstractJunction {
     /**
      * It prepare junction filter and construct select to database.
      *
-     * @param enum                                          $filterName One of PF\Search\Enum\Filter
-     * @param \PF\Search\Filter\Select                      $select     Select instance
-     * @param \PF\Search\Filter\Condition\AbstractCondition $condition  Condition instance
+     * @param enum                                          $filterName One of PM\Search\Enum\Filter
+     * @param \PM\Search\Filter\Select                      $select     Select instance
+     * @param \PM\Search\Filter\Condition\AbstractCondition $condition  Condition instance
      *
-     * @return \PF\Search\Filter\Junction\AbstractJunction
+     * @return \PM\Search\Filter\Junction\AbstractJunction
      */
     public function prepareJunction($filterName, Select $select, AbstractCondition $condition = null) {
         $this->beforeFilter($filterName, $select, $condition);
@@ -34,9 +34,9 @@ abstract class AbstractJunction {
     /**
      * This method is called before junction is created.
      *
-     * @param enum                                          $filterName One of PF\Search\Enum\Filter
-     * @param \PF\Search\Filter\Select                      $select     Select instance
-     * @param \PF\Search\Filter\Condition\AbstractCondition $condition  Condition instance
+     * @param enum                                          $filterName One of PM\Search\Enum\Filter
+     * @param \PM\Search\Filter\Select                      $select     Select instance
+     * @param \PM\Search\Filter\Condition\AbstractCondition $condition  Condition instance
      *
      * @return void
      */
@@ -46,9 +46,9 @@ abstract class AbstractJunction {
     /**
      * This method is called after junction was created.
      *
-     * @param enum                                          $filterName One of PF\Search\Enum\Filter
-     * @param \PF\Search\Filter\Select                      $select     Select instance
-     * @param \PF\Search\Filter\Condition\AbstractCondition $condition  Condition instance
+     * @param enum                                          $filterName One of PM\Search\Enum\Filter
+     * @param \PM\Search\Filter\Select                      $select     Select instance
+     * @param \PM\Search\Filter\Condition\AbstractCondition $condition  Condition instance
      *
      * @return void
      */

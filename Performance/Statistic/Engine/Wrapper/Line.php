@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Statistic\Engine\Wrapper;
+namespace PM\Statistic\Engine\Wrapper;
 
 /**
  * This script defines class for wrapping statistic select with line base.

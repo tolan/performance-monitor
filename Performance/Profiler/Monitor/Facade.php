@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Profiler\Monitor;
+namespace PM\Profiler\Monitor;
 
 /**
  * This script defines class for monitor facade. It provides simple API for manipulation of monitor component.
@@ -14,46 +14,46 @@ class Facade implements Interfaces\Facade {
     /**
      * Storage instance.
      *
-     * @var \PF\Profiler\Monitor\Interfaces\Storage
+     * @var \PM\Profiler\Monitor\Interfaces\Storage
      */
     private $_storage;
 
     /**
      * Ticker instance.
      *
-     * @var \PF\Profiler\Monitor\Interfaces\Ticker
+     * @var \PM\Profiler\Monitor\Interfaces\Ticker
      */
     private $_ticker;
 
     /**
      * Analyzator instance.
      *
-     * @var \PF\Profiler\Monitor\Interfaces\Analyzator
+     * @var \PM\Profiler\Monitor\Interfaces\Analyzator
      */
     private $_analyzator;
 
     /**
      * Statistic generator instance.
      *
-     * @var \PF\Profiler\Monitor\Interfaces\Statistic
+     * @var \PM\Profiler\Monitor\Interfaces\Statistic
      */
     private $_statistic;
 
     /**
      * Display instance.
      *
-     * @var \PF\Profiler\Monitor\Interfaces\Display
+     * @var \PM\Profiler\Monitor\Interfaces\Display
      */
     private $_display;
 
     /**
      * Construct method.
      *
-     * @param \PF\Profiler\Monitor\Interfaces\Storage    $storage    Storage instance
-     * @param \PF\Profiler\Monitor\Interfaces\Ticker     $ticker     Ticker instance
-     * @param \PF\Profiler\Monitor\Interfaces\Analyzator $analyzator Analyzator instance
-     * @param \PF\Profiler\Monitor\Interfaces\Statistic  $statistic  Statistic generator instance
-     * @param \PF\Profiler\Monitor\Interfaces\Display    $display    Display instance
+     * @param \PM\Profiler\Monitor\Interfaces\Storage    $storage    Storage instance
+     * @param \PM\Profiler\Monitor\Interfaces\Ticker     $ticker     Ticker instance
+     * @param \PM\Profiler\Monitor\Interfaces\Analyzator $analyzator Analyzator instance
+     * @param \PM\Profiler\Monitor\Interfaces\Statistic  $statistic  Statistic generator instance
+     * @param \PM\Profiler\Monitor\Interfaces\Display    $display    Display instance
      *
      * @return void
      */
@@ -74,7 +74,7 @@ class Facade implements Interfaces\Facade {
     /**
      * Start measure of request.
      *
-     * @return \PF\Profiler\Monitor\Facade
+     * @return \PM\Profiler\Monitor\Facade
      */
     public function start() {
         $this->_ticker->start();
@@ -85,7 +85,7 @@ class Facade implements Interfaces\Facade {
     /**
      * Stop measure of request.
      *
-     * @return \PF\Profiler\Monitor\Facade
+     * @return \PM\Profiler\Monitor\Facade
      */
     public function stop() {
         $this->_ticker->stop();
@@ -96,7 +96,7 @@ class Facade implements Interfaces\Facade {
     /**
      * Reset all stored data.
      *
-     * @return \PF\Profiler\Monitor\Facade
+     * @return \PM\Profiler\Monitor\Facade
      */
     public function reset() {
         $this->_storage->reset();
@@ -135,7 +135,7 @@ class Facade implements Interfaces\Facade {
      * Analyze list of calls to call stack tree.
      * Attention: storage must be in right state.
      *
-     * @return \PF\Profiler\Monitor\Facade
+     * @return \PM\Profiler\Monitor\Facade
      */
     public function analyzeCallStack() {
         $this->_analyzator->analyze();
@@ -147,7 +147,7 @@ class Facade implements Interfaces\Facade {
      * Generate statistics for call stack tree.
      * Attention: storage must be in right state.
      *
-     * @return \PF\Profiler\Monitor\Facade
+     * @return \PM\Profiler\Monitor\Facade
      */
     public function generateStatistics() {
         $this->_statistic->generate();
@@ -159,7 +159,7 @@ class Facade implements Interfaces\Facade {
      * Save statistics into repository system.
      * Attention: storage must be in right state.
      *
-     * @return \PF\Profiler\Monitor\Facade
+     * @return \PM\Profiler\Monitor\Facade
      */
     public function saveStatistics() {
         $this->_storage->saveStatistics();
@@ -179,7 +179,7 @@ class Facade implements Interfaces\Facade {
     /**
      * This process display function for inform user about measure.
      *
-     * @return \PF\Profiler\Monitor\Facade
+     * @return \PM\Profiler\Monitor\Facade
      */
     public function display() {
         $this->_display->show();

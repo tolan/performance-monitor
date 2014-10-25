@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Statistic\Enum\View;
+namespace PM\Statistic\Enum\View;
 
-use PF\Main\Abstracts\Enum;
+use PM\Main\Abstracts\Enum;
 
 /**
  * This script defines enum with types of view base.

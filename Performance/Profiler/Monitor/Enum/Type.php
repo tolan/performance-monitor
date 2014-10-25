@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Profiler\Monitor\Enum;
+namespace PM\Profiler\Monitor\Enum;
 
-use PF\Main\Abstracts\Enum;
+use PM\Main\Abstracts\Enum;
 
 /**
  * This script defines enum of repository and display types.

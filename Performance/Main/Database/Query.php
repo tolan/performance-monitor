@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Database;
+namespace PM\Main\Database;
 
-use PF\Main\Log;
+use PM\Main\Log;
 
 /**
  * This script defines class for universal query statement of MySQL.
@@ -37,21 +37,21 @@ class Query {
     /**
      * Connection resource to database
      *
-     * @var \PF\Main\Database\Connection
+     * @var \PM\Main\Database\Connection
      */
     protected $_connection;
 
     /**
      * Logger instance.
      *
-     * @var \PF\Main\Log
+     * @var \PM\Main\Log
      */
     private $_logger;
 
     /**
      * Construct method
      *
-     * @param \PF\Main\Database\Connection $connection Connection to database
+     * @param \PM\Main\Database\Connection $connection Connection to database
      */
     final public function __construct(Connection $connection, Log $logger) {
         $this->_connection = $connection;
@@ -93,7 +93,7 @@ class Query {
      *
      * @return \PDOStatement
      *
-     * @throws \PF\Main\Database\Exception
+     * @throws \PM\Main\Database\Exception
      */
     public function execute($statement, $bind = array()) {
         $answer = $this->_connection->prepare($statement);
@@ -111,9 +111,9 @@ class Query {
      *
      * @param string $sql SQL statement
      *
-     * @return \PF\Main\Database\Query
+     * @return \PM\Main\Database\Query
      *
-     * @throws \PF\Main\Database\Exception Throws when input SQL is not statement.
+     * @throws \PM\Main\Database\Exception Throws when input SQL is not statement.
      */
     public function setSQL($sql) {
         if (!is_string($sql)) {
@@ -194,7 +194,7 @@ class Query {
      *
      * @param string $statement SQL statement
      *
-     * @return \PF\Main\Database\Query
+     * @return \PM\Main\Database\Query
      */
     protected function setStatement($statement) {
         $this->_statement = $statement;
@@ -207,7 +207,7 @@ class Query {
      *
      * @param array $bind Bind data
      *
-     * @return \PF\Main\Database\Query
+     * @return \PM\Main\Database\Query
      */
     protected function setBind($bind) {
         $this->_bind = array_merge($this->_bind, $bind);
@@ -244,7 +244,7 @@ class Query {
      *
      * @param string $part Name of part
      *
-     * @return \PF\Main\Database\Query
+     * @return \PM\Main\Database\Query
      */
     function resetPart($part = null) {
         throw new Exception('Query doesn\'t have defined part.');
@@ -266,7 +266,7 @@ class Query {
     /**
      * Gets connection to database.
      *
-     * @return \PF\Main\Database\Connection
+     * @return \PM\Main\Database\Connection
      */
     protected function getConnection() {
         return $this->_connection;
@@ -275,7 +275,7 @@ class Query {
     /**
      * Compile method of SQL statement. There is nothig because this query is compiled in input.
      *
-     * @return \PF\Main\Database\Query
+     * @return \PM\Main\Database\Query
      */
     protected function compile() {
         return $this;
@@ -284,9 +284,9 @@ class Query {
     /**
      * Method which could be called before fetch method and it call compile method for create SQL statement.
      *
-     * @return \PF\Main\Database\Query
+     * @return \PM\Main\Database\Query
      *
-     * @throws \PF\Main\Database\Exception Throws when SQL query is not created.
+     * @throws \PM\Main\Database\Exception Throws when SQL query is not created.
      */
     protected function preFetch() {
         if (get_called_class() !== __CLASS__) {
@@ -337,7 +337,7 @@ class Query {
     /**
      * Returns instance of logger.
      *
-     * @return \PF\Main\Log
+     * @return \PM\Main\Log
      */
     protected function getLogger() {
         return $this->_logger;

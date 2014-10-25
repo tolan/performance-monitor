@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Event\Enum;
+namespace PM\Main\Event\Enum;
 
-use PF\Main\Abstracts\Enum;
+use PM\Main\Abstracts\Enum;
 
 /**
  * This class defines types of events.

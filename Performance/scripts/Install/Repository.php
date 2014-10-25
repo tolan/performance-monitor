@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\scripts\Install;
+namespace PM\scripts\Install;
 
-use PF\Main\Abstracts;
+use PM\Main\Abstracts;
 
 /**
  * This script defines repository class for migrations version system.

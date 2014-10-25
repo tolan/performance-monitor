@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Logic\Analyze;
+namespace PM\Main\Logic\Analyze;
 
 /**
  * This script defines abstract class for logic element.

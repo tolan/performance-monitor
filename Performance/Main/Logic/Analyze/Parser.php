@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Logic\Analyze;
+namespace PM\Main\Logic\Analyze;
 
-use PF\Main\Logic\Exception;
+use PM\Main\Logic\Exception;
 
 /**
  * This script defines class for logic expression parser.
@@ -67,7 +67,7 @@ class Parser {
      *
      * @return AbstractElement|null
      *
-     * @throws \PF\Main\Logic\Exception Throws when logic has unexpected character.
+     * @throws \PM\Main\Logic\Exception Throws when logic has unexpected character.
      */
     private function _getTree() {
         $expression = ltrim($this->_expression);
@@ -125,9 +125,9 @@ class Parser {
      * Method is called when parser detect operator.
      *
      * @param string                                 $operator Operator character set
-     * @param \PF\Main\Logic\Analyze\AbstractElement $tree     Analyzed tree structure
+     * @param \PM\Main\Logic\Analyze\AbstractElement $tree     Analyzed tree structure
      *
-     * @return \PF\Main\Logic\Analyze\Element\Operator
+     * @return \PM\Main\Logic\Analyze\Element\Operator
      */
     private function _detectOperator($operator, AbstractElement $tree=null) {
         $operator = new Element\Operator($operator);
@@ -148,9 +148,9 @@ class Parser {
      *
      * @param string                                 $bracket    Left bracket character
      * @param string                                 $expression Actual remaining logic expression
-     * @param \PF\Main\Logic\Analyze\AbstractElement $tree       Analyzed tree structure
+     * @param \PM\Main\Logic\Analyze\AbstractElement $tree       Analyzed tree structure
      *
-     * @return \PF\Main\Logic\Analyze\Element\Bracket
+     * @return \PM\Main\Logic\Analyze\Element\Bracket
      */
     private function _detectLeftBracket($bracket, &$expression, AbstractElement $tree=null) {
         $content = $this->_findBracketContent($expression, $bracket);
@@ -178,11 +178,11 @@ class Parser {
      * Method is called when parser detect operand.
      *
      * @param string                                 $operand Operand character set
-     * @param \PF\Main\Logic\Analyze\AbstractElement $tree    Analyzed tree structure
+     * @param \PM\Main\Logic\Analyze\AbstractElement $tree    Analyzed tree structure
      *
-     * @return \PF\Main\Logic\Analyze\Element\Bracket
+     * @return \PM\Main\Logic\Analyze\Element\Bracket
      *
-     * @throws \PF\Main\Logic\Exception Throws when in logic expression missing operator between two operands
+     * @throws \PM\Main\Logic\Exception Throws when in logic expression missing operator between two operands
      */
     private function _detectOperand($operand, AbstractElement $tree=null) {
         $operand = (new Element\Operand($operand))->setValue($operand);
@@ -206,7 +206,7 @@ class Parser {
      *
      * @return string
      *
-     * @throws \PF\Main\Logic\Exception Throws when missing left or right bracket in expression
+     * @throws \PM\Main\Logic\Exception Throws when missing left or right bracket in expression
      */
     private function _findBracketContent($expression, $leftbracket) {
         $counter      = 0;
@@ -264,9 +264,9 @@ class Parser {
      *
      * @param string $expression Logic expression
      *
-     * @return \PF\Main\Logic\Analyze\Parser
+     * @return \PM\Main\Logic\Analyze\Parser
      *
-     * @throws \PF\Main\Logic\Exception Throws when count of left and right brackets is not same.
+     * @throws \PM\Main\Logic\Exception Throws when count of left and right brackets is not same.
      */
     private function _checkBracketsPairs($expression) {
         $leftCount  = 0;

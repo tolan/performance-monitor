@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Profiler\Monitor\Interfaces;
+namespace PM\Profiler\Monitor\Interfaces;
 
 /**
  * Interface for monitor display.

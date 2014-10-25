@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Statistic\Engine\Target;
+namespace PM\Statistic\Engine\Target;
 
-use PF\Main\Database\Select;
+use PM\Main\Database\Select;
 
 /**
  * This script defines abstract class for define target entity to statistic select.

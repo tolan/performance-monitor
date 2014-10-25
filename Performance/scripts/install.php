@@ -6,4 +6,4 @@
 
 include __DIR__.'/../boot.php';
 
-\PF\scripts\Install\Manager::run(\PF\Main\Provider::getInstance());
+\PM\scripts\Install\Manager::run(\PM\Main\Provider::getInstance());

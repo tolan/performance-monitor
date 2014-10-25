@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main\Http\Enum;
+namespace PM\Main\Http\Enum;
 
-use PF\Main\Abstracts\Enum;
-use PF\Main\Http\Exception;
+use PM\Main\Abstracts\Enum;
+use PM\Main\Http\Exception;
 
 /**
  * This class defines methods of parameters on http requests.
@@ -43,11 +43,11 @@ class ParameterType extends Enum {
     /**
      * Returns allowed parameter types by given method type of request.
      *
-     * @param enum $method One of \PF\Main\Http\Enum\Method
+     * @param enum $method One of \PM\Main\Http\Enum\Method
      *
      * @return array
      *
-     * @throws \PF\Main\Http\Exception
+     * @throws \PM\Main\Http\Exception
      */
     public static function getAllowedParams($method = null) {
         if ($method === null) {

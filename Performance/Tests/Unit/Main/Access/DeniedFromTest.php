@@ -1,12 +1,12 @@
 <?php
 
-namespace PF\Tests\Unit\Main\Access;
+namespace PM\Tests\Unit\Main\Access;
 
-use PF\Main\Abstracts\Unit\TestCase;
-use PF\Main\Access;
+use PM\Main\Abstracts\Unit\TestCase;
+use PM\Main\Access;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Access\DeniedFrom.
+ * This script defines class for php unit test case of class \PM\Main\Access\DeniedFrom.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -17,20 +17,20 @@ class DeniedFromTest extends TestCase {
     /**
      * Access instance.
      *
-     * @var \PF\Main\Access\DeniedFrom
+     * @var \PM\Main\Access\DeniedFrom
      */
     private $_instance;
 
     /**
      * Server global varibale instance
      *
-     * @var \PF\Main\Web\Component\Http\Server
+     * @var \PM\Main\Web\Component\Http\Server
      */
     private $_server;
 
     /**
      *
-     * @var \PF\Main\Config
+     * @var \PM\Main\Config
      */
     private $_config;
 
@@ -42,9 +42,9 @@ class DeniedFromTest extends TestCase {
     protected function setUp() {
         parent::setUp();
 
-        $this->_instance = $this->getProvider()->get('PF\Main\Access\DeniedFrom');
-        $this->_server   = $this->getProvider()->get('PF\Main\Web\Component\Request')->getServer();
-        $this->_config   = $this->getProvider()->get('PF\Main\Config');
+        $this->_instance = $this->getProvider()->get('PM\Main\Access\DeniedFrom');
+        $this->_server   = $this->getProvider()->get('PM\Main\Web\Component\Request')->getServer();
+        $this->_config   = $this->getProvider()->get('PM\Main\Config');
         $this->_config->set('access', array(
             Access\DeniedFrom::CONFIG_KEY => array(
                 '10.64.0.0/17',
@@ -86,7 +86,7 @@ class DeniedFromTest extends TestCase {
      */
     public function testCheckAccessFail() {
         $this->_server->set('REMOTE_ADDR', '192.168.1.1');
-        $this->setExpectedException('\PF\Main\Access\Exception');
+        $this->setExpectedException('\PM\Main\Access\Exception');
         $this->_instance->checkAccess();
     }
 }

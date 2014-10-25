@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Web\Controller;
+namespace PM\Main\Web\Controller;
 
 /**
  * This scripts defines class for menu controller.
@@ -17,9 +17,9 @@ class Menu extends Abstracts\Json {
      * @return void
      */
     public function actionIndex() {
-        $repository = $this->getProvider()->get('PF\Main\Navigation\Repository'); /* @var $repository \PF\Main\Navigation\Repository */
-        $convertor  = $this->getProvider()->prototype('PF\Main\Tree\Convertor'); /* @var $convertor \PF\Main\Tree\Convertor */
-        $config     = $this->getProvider()->prototype('PF\Main\Tree\Config'); /* @var $config \PF\Main\Tree\Config */
+        $repository = $this->getProvider()->get('PM\Main\Navigation\Repository'); /* @var $repository \PM\Main\Navigation\Repository */
+        $convertor  = $this->getProvider()->prototype('PM\Main\Tree\Convertor'); /* @var $convertor \PM\Main\Tree\Convertor */
+        $config     = $this->getProvider()->prototype('PM\Main\Tree\Config'); /* @var $config \PM\Main\Tree\Config */
         $config->setChildrenIdentificator('submenu');
 
         $this->getExecutor()->add('getMenuItems', $repository)

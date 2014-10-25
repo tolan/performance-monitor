@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Interfaces;
+namespace PM\Main\Interfaces;
 
 /**
  * Interface for array access objects.
@@ -39,7 +39,7 @@ interface ArrayAccess extends \ArrayAccess {
      *
      * @param array $array Data for load into array
      *
-     * @return \PF\Main\Abstracts\ArrayAccessIterator
+     * @return \PM\Main\Abstracts\ArrayAccessIterator
      */
     public function fromArray(array $array);
 }

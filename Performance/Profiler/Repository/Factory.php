@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Profiler\Repository;
+namespace PM\Profiler\Repository;
 
-use PF\Main\Provider;
-use PF\Main\Filesystem;
-use PF\Main\Cache;
-use PF\Profiler\Monitor\Enum\Type;
+use PM\Main\Provider;
+use PM\Main\Filesystem;
+use PM\Main\Cache;
+use PM\Profiler\Monitor\Enum\Type;
 
 /**
  * This script defines factory class for repository.
@@ -19,14 +19,14 @@ class Factory {
     /**
      * Provider instance.
      *
-     * @var \PF\Main\Provider
+     * @var \PM\Main\Provider
      */
     private $_provider;
 
     /**
      * Construct method.
      *
-     * @param \PF\Main\Provider $provider Provider instance
+     * @param \PM\Main\Provider $provider Provider instance
      *
      * @return void
      */
@@ -37,10 +37,10 @@ class Factory {
     /**
      * Returns instance repository for filters.
      *
-     * @return \PF\Profiler\Repository\Filter
+     * @return \PM\Profiler\Repository\Filter
      */
     public function getFilter() {
-        return $this->_provider->get('PF\Profiler\Repository\Filter');
+        return $this->_provider->get('PM\Profiler\Repository\Filter');
     }
 
     /**
@@ -48,7 +48,7 @@ class Factory {
      *
      * @param string $type One of enum Type
      *
-     * @return \PF\Profiler\Monitor\Interfaces\Repository
+     * @return \PM\Profiler\Monitor\Interfaces\Repository
      *
      * @throws Exception
      */
@@ -56,19 +56,19 @@ class Factory {
         $repository = null;
         switch ($type) {
             case Type::MYSQL:
-                $repository = $this->_provider->get('PF\Profiler\Repository\Measure\MySQL');
+                $repository = $this->_provider->get('PM\Profiler\Repository\Measure\MySQL');
                 break;
             case Type::SESSION:
-                $driver = $this->_provider->get('PF\Main\Cache\Session'); /* @var $driver \PF\Main\Cache\Session */
-                $cache = $this->_provider->prototype('PF\Main\Cache'); /* @var $cache \PF\Main\Cache */
+                $driver = $this->_provider->get('PM\Main\Cache\Session'); /* @var $driver \PM\Main\Cache\Session */
+                $cache = $this->_provider->prototype('PM\Main\Cache'); /* @var $cache \PM\Main\Cache */
                 $cache->setDriver($driver);
-                $repository = $this->_provider->get('PF\Profiler\Repository\Measure\Cache');
-                /* @var $repository \PF\Profiler\Repository\Measure\Cache */
+                $repository = $this->_provider->get('PM\Profiler\Repository\Measure\Cache');
+                /* @var $repository \PM\Profiler\Repository\Measure\Cache */
                 $repository->setCache($cache);
                 break;
             case Type::FILE:
-                $repository = $this->_provider->get('PF\Profiler\Repository\Measure\Cache');
-                /* @var $repository \PF\Profiler\Repository\Measure\Cache */
+                $repository = $this->_provider->get('PM\Profiler\Repository\Measure\Cache');
+                /* @var $repository \PM\Profiler\Repository\Measure\Cache */
                 $filepath   = $this->_provider->get('config')->getRoot().'/tmp/Profiler';
                 $dir        = new Filesystem\Directory($filepath);
 
@@ -77,8 +77,8 @@ class Factory {
                     // TODO extract file path to better place
                     $file        = $dir->fileExists($measureId) ? $dir->getFile($measureId) : $dir->createFile($measureId);
                     $file->open();
-                    $cacheDriver = new Cache\File($file);
-                    $cache       = $this->_provider->prototype('cache'); /* @var $cache \PF\Main\Cache */
+                    $cacheDriver = new Cache\File(Cache\File::DEFAULT_NAMESPACE, $this->_provider->get('config'), $file);
+                    $cache       = $this->_provider->prototype('cache', true); /* @var $cache \PM\Main\Cache */
                     $cache->setDriver($cacheDriver);
                     $repository->setCache($cache);
                 }
@@ -93,27 +93,27 @@ class Factory {
     /**
      * Returns instance repository for scenarios.
      *
-     * @return \PF\Profiler\Repository\Request
+     * @return \PM\Profiler\Repository\Request
      */
     public function getRequest() {
-        return $this->_provider->get('PF\Profiler\Repository\Request');
+        return $this->_provider->get('PM\Profiler\Repository\Request');
     }
 
     /**
      * Returns instance repository for scenarios.
      *
-     * @return \PF\Profiler\Repository\Scenario
+     * @return \PM\Profiler\Repository\Scenario
      */
     public function getScenario() {
-        return $this->_provider->get('PF\Profiler\Repository\Scenario');
+        return $this->_provider->get('PM\Profiler\Repository\Scenario');
     }
 
     /**
      * Returns instance repository for tests.
      *
-     * @return \PF\Profiler\Repository\Test
+     * @return \PM\Profiler\Repository\Test
      */
     public function getTest() {
-        return $this->_provider->get('PF\Profiler\Repository\Test');
+        return $this->_provider->get('PM\Profiler\Repository\Test');
     }
 }

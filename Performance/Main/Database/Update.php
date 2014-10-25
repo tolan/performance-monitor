@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Database;
+namespace PM\Main\Database;
 
 /**
  * This script defines class for update statement of MySQL.
@@ -9,9 +9,9 @@ namespace PF\Main\Database;
  * @category   Performance
  * @package    Main
  *
- * @method \PF\Main\Database\Update where(string $condition, array $bind=null)   It adds condition with AND operator.
- * @method \PF\Main\Database\Update orWhere(string $condition, array $bind=null) It adds condition with OR operator.
- * @method \PF\Main\Database\Update setSQL(string $sql)                          It sets SQL qeury.
+ * @method \PM\Main\Database\Update where(string $condition, array $bind=null)   It adds condition with AND operator.
+ * @method \PM\Main\Database\Update orWhere(string $condition, array $bind=null) It adds condition with OR operator.
+ * @method \PM\Main\Database\Update setSQL(string $sql)                          It sets SQL qeury.
  */
 class Update extends Where {
 
@@ -34,7 +34,7 @@ class Update extends Where {
      *
      * @param string $table Name of table
      *
-     * @return \PF\Main\Database\Update
+     * @return \PM\Main\Database\Update
      */
     public function setTable($table) {
         $alias = is_array($table) ? key($table) : $table;
@@ -53,7 +53,7 @@ class Update extends Where {
      *
      * @param array $data Data to update
      *
-     * @return \PF\Main\Database\Update
+     * @return \PM\Main\Database\Update
      */
     public function setUpdateData($data) {
         $this->_data = $data;
@@ -75,9 +75,9 @@ class Update extends Where {
     /**
      * This create SQL statement from input data.
      *
-     * @return \PF\Main\Database\Update
+     * @return \PM\Main\Database\Update
      *
-     * @throws \PF\Main\Database\Exception Throws when table or data are not set.
+     * @throws \PM\Main\Database\Exception Throws when table or data are not set.
      */
     protected function compile() {
         if ($this->_table === null) {

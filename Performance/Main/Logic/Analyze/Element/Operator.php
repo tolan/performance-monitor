@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main\Logic\Analyze\Element;
+namespace PM\Main\Logic\Analyze\Element;
 
-use PF\Main\Logic\Analyze\AbstractElement;
-use PF\Main\Logic\Exception;
+use PM\Main\Logic\Analyze\AbstractElement;
+use PM\Main\Logic\Exception;
 
 /**
  * This script defines class for logic operator element.
@@ -33,9 +33,9 @@ class Operator extends AbstractElement {
      *
      * @param AbstractElement|null $value Element of operator
      *
-     * @return \PF\Main\Logic\Analyze\Element\Operator
+     * @return \PM\Main\Logic\Analyze\Element\Operator
      *
-     * @throws \PF\Main\Logic\Exception Throws when operator is full.
+     * @throws \PM\Main\Logic\Exception Throws when operator is full.
      */
     public function setValue($value) {
         if ($this->_left === null) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Http\Request;
+namespace PM\Main\Http\Request;
 
 require_once 'HTTP/Request2.php';
 

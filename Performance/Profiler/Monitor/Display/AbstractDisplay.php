@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Profiler\Monitor\Display;
+namespace PM\Profiler\Monitor\Display;
 
-use PF\Profiler\Monitor\Interfaces;
+use PM\Profiler\Monitor\Interfaces;
 
 /**
  * This script defines abstract class for monitor display.

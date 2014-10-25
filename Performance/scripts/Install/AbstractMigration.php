@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\scripts\Install;
+namespace PM\scripts\Install;
 
-use PF\Main\Provider;
+use PM\Main\Provider;
 
 /**
  * Abstract class for migrations.
@@ -23,7 +23,7 @@ abstract class AbstractMigration {
     /**
      * Construct method.
      *
-     * @param \PF\Main\Provider $provider Provider instance
+     * @param \PM\Main\Provider $provider Provider instance
      *
      * @return void
      */
@@ -43,19 +43,19 @@ abstract class AbstractMigration {
     /**
      * Returns database instance.
      *
-     * @return \PF\Main\Database
+     * @return \PM\Main\Database
      */
     final protected function getDatabase() {
-        return $this->_provider->get('PF\Main\Database');
+        return $this->_provider->get('PM\Main\Database');
     }
 
     /**
      * Returns utils instance.
      *
-     * @return \PF\Main\Utils
+     * @return \PM\Main\Utils
      */
     final protected function getUtils() {
-        return $this->_provider->get('PF\Main\Utils');
+        return $this->_provider->get('PM\Main\Utils');
     }
 
     /**
@@ -66,7 +66,7 @@ abstract class AbstractMigration {
      * @return mixed
      */
     final protected function getConfig($module) {
-        return $this->_provider->get('PF\Main\Config')->get($module, array());
+        return $this->_provider->get('PM\Main\Config')->get($module, array());
     }
 
     /**

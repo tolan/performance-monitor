@@ -1,10 +1,10 @@
 <?php
 
-namespace PF\Statistic\Engine;
+namespace PM\Statistic\Engine;
 
-use PF\Main\Database;
-use PF\Main\Log;
-use PF\Search;
+use PM\Main\Database;
+use PM\Main\Log;
+use PM\Search;
 
 /**
  * This script defines class for storing statistic view lines, source and target selects for building into one SQL statement.
@@ -88,7 +88,7 @@ class Container {
     /**
      * Sets source entity and source select.
      *
-     * @param string          $entity       One of enum \PF\Statistic\Enum\Source\Target
+     * @param string          $entity       One of enum \PM\Statistic\Enum\Source\Target
      * @param Database\Select $sourceSelect Source select instance
      *
      * @return Container
@@ -104,7 +104,7 @@ class Container {
     /**
      * Sets target entity and target setter.
      *
-     * @param string                $entity One of enum \PF\Statistic\Enum\Source\Target
+     * @param string                $entity One of enum \PM\Statistic\Enum\Source\Target
      * @param Target\AbstractTarget $target Target setter instance
      *
      * @return Container
@@ -121,8 +121,8 @@ class Container {
      * It adds data condition and condition function.
      *
      * @param Data\AbstractData          $data     Data condition intance
-     * @param Functions\AbstractFunction $function Condition function instance \PF\Statistic\Enum
-     * @param string                     $method   One of enum \PF\Statistic\Enum\View\Data
+     * @param Functions\AbstractFunction $function Condition function instance \PM\Statistic\Enum
+     * @param string                     $method   One of enum \PM\Statistic\Enum\View\Data
      *
      * @return Container
      */

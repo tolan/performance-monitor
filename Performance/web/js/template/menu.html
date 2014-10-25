@@ -1,21 +1,21 @@
 <div class="navbar navbar-default center-block" role="navigation" bs-navbar>
     <div class="navbar-header">
-        <a class="navbar-brand" href="#"><i>PF</i></a>
+        <a class="navbar-brand" href="#" title="[[_('main.performance.monitor')]]"><i>PM</i></a>
     </div>
     <ul class="nav navbar-nav" ng-include="'menu-items.html'">
     </ul>
 
     <form class="navbar-form navbar-right" role="search" ng-controller="LangCtrl">
         <select ng-model="lang" ng-change="setLang(lang)" class="form-control">
-            <option ng-repeat="language in langs" value="[[language.value]]" ng-selected="language.value === lang">[[_.(language.name)]]</option>
+            <option ng-repeat="language in langs" value="[[language.value]]" ng-selected="language.value === lang">[[_(language.name)]]</option>
         </select>
     </form>
 </div>
 
 <script type="text/ng-template" id="menu-items.html">
     <li ng-repeat='item in item.submenu'>
-        <a ng-if="!item.submenu" ng-href="[[item.href]]">[[_.(item.text)]]</a>
-        <a ng-if="item.submenu" data-toggle="dropdown" ng-href="[[item.href]]" >[[_.(item.text)]]&nbsp;<b class="caret"></b></a>
+        <a ng-if="!item.submenu" ng-href="[[item.href]]">[[_(item.text)]]</a>
+        <a ng-if="item.submenu" data-toggle="dropdown" ng-href="[[item.href]]" >[[_(item.text)]]&nbsp;<b class="caret"></b></a>
         <ul ng-if="item.submenu" class="dropdown-menu" ng-include="'menu-items.html'">
         </ul>
     </li>

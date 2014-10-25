@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main;
+namespace PM\Main;
 
 /**
  * This script defines class for some helper tools.

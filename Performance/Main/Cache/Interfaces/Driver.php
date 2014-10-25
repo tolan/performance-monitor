@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Cache\Interfaces;
+namespace PM\Main\Cache\Interfaces;
 
 /**
  * Interface for cache driver.
@@ -21,7 +21,7 @@ interface Driver {
      *
      * @return mixed
      *
-     * @throws \PF\Main\Cache\Exception Throws when variable is not defined
+     * @throws \PM\Main\Cache\Exception Throws when variable is not defined
      */
     public function load($name = null);
 
@@ -31,7 +31,7 @@ interface Driver {
      * @param string $name  Name of variable
      * @param mixed  $value Value for save
      *
-     * @return \PF\Main\Cache\Interfaces\Driver
+     * @return \PM\Main\Cache\Interfaces\Driver
      */
     public function save($name, $value);
 
@@ -49,16 +49,16 @@ interface Driver {
      *
      * @param string $name Name of variable
      *
-     * @return \PF\Main\Cache\Interfaces\Driver
+     * @return \PM\Main\Cache\Interfaces\Driver
      *
-     * @throws \PF\Main\Cache\Exception Throws when variable is not set.
+     * @throws \PM\Main\Cache\Exception Throws when variable is not set.
      */
     public function clean($name=null);
 
     /**
      * Flush unsaved data to storage.
      *
-     * @return \PF\Main\Cache\Interfaces\Driver
+     * @return \PM\Main\Cache\Interfaces\Driver
      */
     public function commit();
 }

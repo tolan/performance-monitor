@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main\Commander\Interfaces;
+namespace PM\Main\Commander\Interfaces;
 
-use PF\Main\Commander\Result;
-use PF\Main\Provider;
+use PM\Main\Commander\Result;
+use PM\Main\Provider;
 
 /**
  * This script defines interface for execution of executor (set of commands).
@@ -25,8 +25,8 @@ interface Execution {
     /**
      * This method triggers the input command (in scope).
      *
-     * @param \PF\Main\Commander\Result $result   Entity for saving data from command
-     * @param \PF\Main\Provider         $provider Provider instance
+     * @param \PM\Main\Commander\Result $result   Entity for saving data from command
+     * @param \PM\Main\Provider         $provider Provider instance
      */
     public function execute(Result $result, Provider $provider);
 }

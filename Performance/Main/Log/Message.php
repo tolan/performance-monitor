@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Log;
+namespace PM\Main\Log;
 
 /**
  * This script defines class for log message.
@@ -21,7 +21,7 @@ class Message {
     /**
      * Log level.
      *
-     * @var enum \PF\Main\Log\Enum\Level
+     * @var enum \PM\Main\Log\Enum\Level
      */
     private $_level = Enum\Level::OFF;
 
@@ -49,7 +49,7 @@ class Message {
     /**
      * Construct method.
      *
-     * @param enum  $level     One of \PF\Main\Log\Enum\Level
+     * @param enum  $level     One of \PM\Main\Log\Enum\Level
      * @param array $arguments Arguments of message
      * @param file  $file      File where is log called
      * @param int   $line      Line where is log called
@@ -66,7 +66,7 @@ class Message {
      *
      * @param string $file Path to the file
      *
-     * @return \PF\Main\Log\Message
+     * @return \PM\Main\Log\Message
      */
     public function write($file) {
         if (!file_exists($file)) {

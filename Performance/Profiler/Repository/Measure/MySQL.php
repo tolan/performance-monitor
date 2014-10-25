@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Profiler\Repository\Measure;
+namespace PM\Profiler\Repository\Measure;
 
-use PF\Main\Abstracts\Repository;
-use PF\Profiler\Repository\Interfaces;
-use PF\Profiler\Monitor\Storage\State;
-use PF\Profiler\Entity;
+use PM\Main\Abstracts\Repository;
+use PM\Profiler\Repository\Interfaces;
+use PM\Profiler\Monitor\Storage\State;
+use PM\Profiler\Entity;
 
 /**
  * This script defines class for measure repository working with MySQL.
@@ -30,7 +30,7 @@ class MySQL extends Repository implements Interfaces\Measure {
     /**
      * Creates new measure in repository with basic data.
      *
-     * @param \PF\Profiler\Entity\Measure $measure Measure entity instance
+     * @param \PM\Profiler\Entity\Measure $measure Measure entity instance
      *
      * @return type
      */
@@ -53,7 +53,7 @@ class MySQL extends Repository implements Interfaces\Measure {
      *
      * @param int $measureId Id of measure
      * 
-     * @return \PF\Profiler\Entity\Measure
+     * @return \PM\Profiler\Entity\Measure
      */
     public function getMeasure($measureId) {
         $select = $this->getDatabase()
@@ -79,7 +79,7 @@ class MySQL extends Repository implements Interfaces\Measure {
      *
      * @param int $testId ID of test
      *
-     * @return \PF\Profiler\Entity\Measure[]
+     * @return \PM\Profiler\Entity\Measure[]
      */
     public function findMeasuresForTest($testId) {
         $select = $this->getDatabase()

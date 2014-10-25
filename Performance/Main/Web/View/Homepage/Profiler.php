@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Web\View\Homepage;
+namespace PM\Main\Web\View\Homepage;
 
-use PF\Main\Web\View\Html;
+use PM\Main\Web\View\Html;
 
 /**
  * This script defines class for homepage profiler view.
@@ -16,7 +16,7 @@ class Profiler extends Html {
     /**
      * Generates payload. Sets headers and body in template.
      *
-     * @return \PF\Main\Web\View\Homepage\Index
+     * @return \PM\Main\Web\View\Homepage\Index
      */
     public function getPayload() {
         parent::getPayload();

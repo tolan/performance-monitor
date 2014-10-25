@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main;
+namespace PM\Main;
 
-use PF\Main\Log\Enum\Level;
-use PF\Main\Config;
+use PM\Main\Log\Enum\Level;
+use PM\Main\Config;
 
 /**
  * This script defines class for logging messages to file.
@@ -12,19 +12,19 @@ use PF\Main\Config;
  * @category   Performance
  * @package    Main
  *
- * @method \PF\Main\Log trace(mixed $message)   It provides logging into file with trace level.
- * @method \PF\Main\Log debug(mixed $message)   It provides logging into file with debug level.
- * @method \PF\Main\Log info(mixed $message)    It provides logging into file with info level.
- * @method \PF\Main\Log warning(mixed $message) It provides logging into file with warning level.
- * @method \PF\Main\Log error(mixed $message)   It provides logging into file with error level.
- * @method \PF\Main\Log fatal(mixed $message)   It provides logging into file with fatal level.
+ * @method \PM\Main\Log trace(mixed $message)   It provides logging into file with trace level.
+ * @method \PM\Main\Log debug(mixed $message)   It provides logging into file with debug level.
+ * @method \PM\Main\Log info(mixed $message)    It provides logging into file with info level.
+ * @method \PM\Main\Log warning(mixed $message) It provides logging into file with warning level.
+ * @method \PM\Main\Log error(mixed $message)   It provides logging into file with error level.
+ * @method \PM\Main\Log fatal(mixed $message)   It provides logging into file with fatal level.
  */
 class Log {
 
     /**
-     * Singleton instance of \PF\Main\Log.
+     * Singleton instance of \PM\Main\Log.
      *
-     * @var \PF\Main\Log
+     * @var \PM\Main\Log
      */
     private static $_instance = false;
 
@@ -38,7 +38,7 @@ class Log {
     /**
      * Log level.
      *
-     * @var enum \PF\Main\Log\Enum\Level
+     * @var enum \PM\Main\Log\Enum\Level
      */
     private $_level = Level::OFF;
 
@@ -59,7 +59,7 @@ class Log {
     /**
      * Construct method.
      *
-     * @param \PF\Main\Config $config Config instance
+     * @param \PM\Main\Config $config Config instance
      *
      * @return void
      */
@@ -75,9 +75,9 @@ class Log {
     /**
      * Returns singleton instance.
      *
-     * @param \PF\Main\Config $config Config instance
+     * @param \PM\Main\Config $config Config instance
      *
-     * @return \PF\Main\Log
+     * @return \PM\Main\Log
      */
     public static function getInstance(Config $config = null) {
         if (self::$_instance === false) {
@@ -93,9 +93,9 @@ class Log {
      * @param string $name      Logging level
      * @param array  $arguments Arguments of log
      *
-     * @return \PF\Main\Log
+     * @return \PM\Main\Log
      *
-     * @throws \PF\Main\Log\Exception Throws when called method is not defined in level enum
+     * @throws \PM\Main\Log\Exception Throws when called method is not defined in level enum
      */
     public function __call($name, $arguments) {
         $level     = strtoupper($name);
@@ -122,7 +122,7 @@ class Log {
      *
      * @return string
      *
-     * @throws \PF\Main\Log\Exception Throws when path is undefined
+     * @throws \PM\Main\Log\Exception Throws when path is undefined
      */
     private function _resolveFile($path = null, $root = null) {
         if ($path === null) {
@@ -138,9 +138,9 @@ class Log {
     /**
      * This method handle message for caching or writing.
      *
-     * @param \PF\Main\Log\Message $message Message instance
+     * @param \PM\Main\Log\Message $message Message instance
      *
-     * @return \PF\Main\Log
+     * @return \PM\Main\Log
      */
     private function _addMessage(Log\Message $message) {
         if ($this->_caching === true) {
@@ -155,11 +155,11 @@ class Log {
     /**
      * Write message. This ensure right setting for message.
      *
-     * @param \PF\Main\Log\Message $message Message instnace
+     * @param \PM\Main\Log\Message $message Message instnace
      *
-     * @return \PF\Main\Log
+     * @return \PM\Main\Log
      *
-     * @throws \PF\Main\Log\Exception Throws when is not set filename for log.
+     * @throws \PM\Main\Log\Exception Throws when is not set filename for log.
      */
     private function _writeMessage(Log\Message $message) {
         if ($this->_file === null) {

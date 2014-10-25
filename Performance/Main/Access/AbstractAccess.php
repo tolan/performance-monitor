@@ -1,9 +1,11 @@
 <?php
 
-namespace PF\Main\Access;
+namespace PM\Main\Access;
 
-use PF\Main\Config;
-use PF\Main\Web\Component\Request;
+use PM\Main\Config;
+use PM\Main\Cache;
+use PM\Main\Web\Component\Request;
+use PM\Main\Web\Component\Http\Server;
 
 /**
  * Abstract class for access control by ip address.
@@ -17,26 +19,37 @@ abstract class AbstractAccess {
     /**
      * Request instance
      *
-     * @var \PF\Main\Web\Component\Request
+     * @var Request
      */
     private $_request;
 
     /**
      * Config instance
      *
-     * @var \PF\Main\Config
+     * @var Config
      */
     private $_config;
 
     /**
+     * Cache instance
+     *
+     * @var Cache
+     */
+    private $_cache;
+
+    /**
      * Construct method.
      *
-     * @param \PF\Main\Web\Component\Request $request Request instance
-     * @param \PF\Main\Config                $config  Config instance
+     * @param Request $request Web component request instance
+     * @param Config  $config  Config instance
+     * @param Cache   $cache   Cache instance
+     *
+     * @return void
      */
-    final public function __construct(Request $request, Config $config) {
+    final public function __construct(Request $request, Config $config, Cache $cache) {
         $this->_request = $request;
         $this->_config  = $config;
+        $this->_cache   = $cache;
     }
 
     /**
@@ -56,9 +69,27 @@ abstract class AbstractAccess {
     }
 
     /**
+     * Returns last time of configuration.
+     *
+     * @return int
+     */
+    final protected function getConfigTime() {
+        return $this->_config->getOptionTime('access');
+    }
+
+    /**
+     * Returns cache instance.
+     *
+     * @return Cache
+     */
+    final protected function getCache() {
+        return $this->_cache;
+    }
+
+    /**
      * Returns server variable instance.
      *
-     * @return \PF\Main\Web\Component\Http\Server
+     * @return Server
      */
     final protected function getServer() {
         return $this->_request->getServer();
@@ -73,6 +104,54 @@ abstract class AbstractAccess {
         $server = $this->_request->getServer();
 
         return $server->getREMOTE_ADDR();
+    }
+
+    /**
+     * Gets priority from cache for ip address and time.
+     *
+     * @param string $ipAddress IP address
+     * @param int    $time      Timestamp of cached IP address
+     *
+     * @return int|false
+     */
+    final protected function getFromCache($ipAddress, $time) {
+        $namespace = get_class($this);
+        $cache     = $this->getCache();
+        $priority  = false;
+
+        if ($cache->has($namespace)) {
+            $actual   = $cache->load($namespace);
+            $timeData = isset($actual[$time]) ? $actual[$time] : array();
+            $priority = isset($timeData[$ipAddress]) ? $timeData[$ipAddress] : false;
+        }
+
+        return $priority;
+    }
+
+    /**
+     * Sets priority of IP address in time into cache.
+     *
+     * @param string $ipAddress IP address
+     * @param int    $time      Time of IP address for save
+     * @param int    $priority  Priority of IP address
+     *
+     * @return AbstractAccess
+     */
+    final protected function saveToCache($ipAddress, $time, $priority) {
+        $namespace = get_class($this);
+        $cache     = $this->getCache();
+        $actual    = array();
+
+        if ($cache->has($namespace)) {
+            $actual = $cache->load($namespace);
+            $actual = isset($actual[$time]) ? $actual[$time] : array();
+        }
+
+        $actual[$time][$ipAddress] = $priority;
+
+        $cache->save($namespace, $actual);
+
+        return $this;
     }
 
     /**
@@ -125,7 +204,7 @@ abstract class AbstractAccess {
      *
      * @param string $pattern Matching pattern
      *
-     * @return \PF\Main\Access\AbstractAccess
+     * @return AbstractAccess
      */
     private function _validatePattern($pattern) {
         list($ip, $mask) = $this->_preparePattern($pattern);
@@ -142,7 +221,7 @@ abstract class AbstractAccess {
      *
      * @return array
      *
-     * @throws \PF\Main\Access\Exception Throws when patter has too much slashes
+     * @throws Exception Throws when patter has too much slashes
      */
     private function _preparePattern($pattern) {
         if (substr_count($pattern, '/') >= 2) {
@@ -150,6 +229,7 @@ abstract class AbstractAccess {
         }
 
         $pattern = strpos($pattern, '/') ? $pattern : $pattern.'/32';
+
         return explode('/', $pattern);
     }
 
@@ -160,7 +240,7 @@ abstract class AbstractAccess {
      *
      * @return string Ip address
      *
-     * @throws \PF\Main\Access\Exception Throws when ip address is not valid
+     * @throws Exception Throws when ip address is not valid
      */
     private function _validateIp($ip) {
         $ip = filter_var($ip, FILTER_VALIDATE_IP);
@@ -178,7 +258,7 @@ abstract class AbstractAccess {
      *
      * @return int
      *
-     * @throws \PF\Main\Access\Exception Throws when mask is invalid
+     * @throws Exception Throws when mask is invalid
      */
     private function _convertMaskToLength($mask) {
         if (filter_var($mask, FILTER_VALIDATE_IP)) {

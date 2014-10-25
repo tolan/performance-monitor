@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main;
+namespace PM\Main;
 
 /**
  * This script defines class for application configuration.
@@ -11,7 +11,7 @@ namespace PF\Main;
  */
 class Config {
 
-    const NAME_SPACE = 'PF';
+    const NAME_SPACE = 'PM';
 
     /**
      * Configuration data
@@ -21,9 +21,16 @@ class Config {
     private $_data = array();
 
     /**
+     * List of last modification times for each configuration option
+     *
+     * @var array
+     */
+    private $_configTimes = array();
+
+    /**
      * Config instance
      *
-     * @var \PF\Main\Config
+     * @var Config
      */
     private static $_instance = null;
 
@@ -38,7 +45,7 @@ class Config {
     /**
      * Returns singleton instance.
      *
-     * @return \PF\Main\Config
+     * @return Config
      */
     public static function getInstance() {
         if (self::$_instance === null) {
@@ -53,15 +60,23 @@ class Config {
      *
      * @param string $configFile Path to config file.
      *
-     * @return \PF\Main\Config
+     * @return Config
      *
-     * @throws \PF\Main\Exception Throws when config file doesn't exist.
+     * @throws Exception Throws when config file doesn't exist.
      */
     public function loadJson($configFile) {
         if (file_exists($configFile)) {
             $content = file_get_contents($configFile);
+            $config  = json_decode($content, JSON_OBJECT_AS_ARRAY);
 
-            $config = json_decode($content, JSON_OBJECT_AS_ARRAY);
+            $times = array();
+            $mtime = filemtime($configFile);
+            foreach (array_keys($config) as $key) {
+                $times[$key] = $mtime;
+            }
+
+            $this->_configTimes = array_merge($this->_configTimes, $times);
+
             $this->fromArray($config);
         } else {
             throw new Exception('Config file doesn\'t exist.');
@@ -71,12 +86,23 @@ class Config {
     }
 
     /**
+     * Returns last modification time of configuration option.
+     *
+     * @param string $key Key of option
+     *
+     * @return int
+     */
+    public function getOptionTime($key) {
+        return array_key_exists($key, $this->_configTimes) ? $this->_configTimes[$key] : -1;
+    }
+
+    /**
      * Magic method for basic function (set, get).
      *
      * @param string $name      Method name
      * @param array  $arguments Input data
      *
-     * @throws \PF\Main\Exception Throws when called function doesn't exists.
+     * @throws Exception Throws when called function doesn't exists.
      *
      * @return mixed
      */
@@ -99,7 +125,7 @@ class Config {
      *
      * @param array $array Configuration data
      *
-     * @return \PF\Main\Config
+     * @return Config
      */
     public function fromArray(array $array = null) {
         foreach ($array as $key => $item) {
@@ -124,10 +150,18 @@ class Config {
      * @param string $name Name of option
      * @param mixed  $data Configuration data
      *
-     * @return \PF\Main\Config
+     * @return Config
      */
     public function set($name, $data) {
-        $this->_data[lcfirst($name)] = $data;
+        $key = lcfirst($name);
+
+        if (array_key_exists($key, $this->_data) && is_array($this->_data[$key])) {
+            $this->_data[$key] = array_unique(
+                array_merge($this->_data[$key], $data)
+            );
+        } else {
+            $this->_data[lcfirst($name)] = $data;
+        }
 
         return $this;
     }
@@ -140,7 +174,7 @@ class Config {
      *
      * @return mixed Configuration data
      *
-     * @throws \PF\Main\Exception Throws when option is not defined.
+     * @throws Exception Throws when option is not defined.
      */
     public function get($name, $default=null) {
         return array_key_exists(lcfirst($name), $this->_data) ? $this->_data[lcfirst($name)] : $default;
@@ -151,9 +185,9 @@ class Config {
      *
      * @param string $name Name of configuration option
      *
-     * @return \PF\Main\Config
+     * @return Config
      *
-     * @throws \PF\Main\Exception Throws when option is not defined.
+     * @throws Exception Throws when option is not defined.
      */
     public function reset($name=null) {
         if($name === null) {

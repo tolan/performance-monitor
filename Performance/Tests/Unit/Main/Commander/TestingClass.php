@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Tests\Unit\Main\Commander;
+namespace PM\Tests\Unit\Main\Commander;
 
 /**
  * This script defines testing class for classes from Commander namespace. It is only for testing execution,

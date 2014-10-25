@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Statistic\Repository;
+namespace PM\Statistic\Repository;
 
-use PF\Main\Abstracts\Repository;
-use PF\Statistic\Entity;
+use PM\Main\Abstracts\Repository;
+use PM\Statistic\Entity;
 
 /**
  * This script defines class for line repository.
@@ -28,7 +28,7 @@ class Line extends Repository {
      *
      * @param array $viewIds List of view IDs
      *
-     * @return \PF\Statistic\Entity\Line[]
+     * @return \PM\Statistic\Entity\Line[]
      */
     public function getLinesForViews($viewIds) {
         $select = $this->getDatabase()->select()
@@ -52,9 +52,9 @@ class Line extends Repository {
     /**
      * Creates new line entity into database.
      *
-     * @param \PF\Statistic\Entity\Line $line Line entity instance
+     * @param \PM\Statistic\Entity\Line $line Line entity instance
      *
-     * @return \PF\Statistic\Entity\Line
+     * @return \PM\Statistic\Entity\Line
      */
     public function createLine(Entity\Line $line) {
         $value = json_encode($line->get('value'));
@@ -73,7 +73,7 @@ class Line extends Repository {
     /**
      * Updates line entity in database.
      *
-     * @param \PF\Statistic\Entity\Line $line Line entity instance
+     * @param \PM\Statistic\Entity\Line $line Line entity instance
      *
      * @return int
      */

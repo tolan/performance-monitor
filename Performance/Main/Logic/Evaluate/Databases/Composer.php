@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Logic\Evaluate\Databases;
+namespace PM\Main\Logic\Evaluate\Databases;
 
-use PF\Main\Logic\Evaluate\AbstractComposer;
+use PM\Main\Logic\Evaluate\AbstractComposer;
 
 /**
  * This script defines class for database statement composing result of performer and extraction of extractor.

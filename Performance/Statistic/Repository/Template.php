@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Statistic\Repository;
+namespace PM\Statistic\Repository;
 
-use PF\Main\Abstracts\Repository;
-use PF\Statistic\Entity;
+use PM\Main\Abstracts\Repository;
+use PM\Statistic\Entity;
 
 /**
  * This script defines class for template repository.
@@ -28,7 +28,7 @@ class Template extends Repository {
     /**
      * Returns list of statistic template entities.
      *
-     * @return \PF\Statistic\Entity\Template[]
+     * @return \PM\Statistic\Entity\Template[]
      */
     public function findTemplates() {
         $select = $this->getDatabase()
@@ -115,7 +115,7 @@ class Template extends Repository {
      *
      * @param int $id ID of statistic template
      *
-     * @return \PF\Statistic\Entity\Template
+     * @return \PM\Statistic\Entity\Template
      */
     public function getTemplate($id) {
         $select = $this->getDatabase()
@@ -135,9 +135,9 @@ class Template extends Repository {
     /**
      * Creates new statistic template entity in database.
      *
-     * @param \PF\Statistic\Entity\Template $template Statistic template entity instance
+     * @param \PM\Statistic\Entity\Template $template Statistic template entity instance
      *
-     * @return \PF\Statistic\Entity\Template
+     * @return \PM\Statistic\Entity\Template
      */
     public function createTemplate(Entity\Template $template) {
         $source         = $template->get('source');
@@ -158,7 +158,7 @@ class Template extends Repository {
     /**
      * Updates statistic template entity in database.
      *
-     * @param \PF\Statistic\Entity\Template $template Statistic template entity instance
+     * @param \PM\Statistic\Entity\Template $template Statistic template entity instance
      *
      * @return int
      */

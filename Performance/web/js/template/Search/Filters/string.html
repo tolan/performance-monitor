@@ -1,14 +1,14 @@
 <div class="col-lg-5 col-sm-6 col-xs-6 height-100 search-filters-item-operator">
     <div>
-        <select class="form-control" ng-model="filter.operator" ng-change="__.isEmpty(filter.value) === false && send(filter)">
+        <select class="form-control" ng-model="filter.operator" ng-change="__.isEmpty(filter.value) === false && send()">
             <option ng-repeat="operator in filter.operators" value="[[operator.value]]" ng-selected="filter.operator === operator.value">
-                [[_.(operator.text)]]
+                [[_(operator.text)]]
             </option>
         </select>
     </div>
 </div>
 <div class="col-lg-7 col-sm-6 col-xs-6 height-100 search-filters-item-operand">
     <div>
-        <input class="form-control" type="text" ng-model="filter.value" placeholder="[[_.('search.filter.' + filter.type + '.input.placeholder')]]" ng-change="send(filter)">
+        <input class="form-control" type="text" ng-model="filter.value" placeholder="[[_('search.filter.' + filter.type + '.input.placeholder')]]" ng-change="send()">
     </div>
 </div>

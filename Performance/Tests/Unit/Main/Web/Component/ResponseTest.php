@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Tests\Unit\Main\Web\Component;
+namespace PM\Tests\Unit\Main\Web\Component;
 
-use PF\Main\Abstracts\Unit\TestCase;
+use PM\Main\Abstracts\Unit\TestCase;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Web\Component\Response.
+ * This script defines class for php unit test case of class \PM\Main\Web\Component\Response.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -16,7 +16,7 @@ class ResponseTest extends TestCase {
     /**
      * request instance.
      *
-     * @var \PF\Main\Web\Component\Response
+     * @var \PM\Main\Web\Component\Response
      */
     private $_response;
 
@@ -28,7 +28,7 @@ class ResponseTest extends TestCase {
     protected function setUp() {
         parent::setUp();
 
-        $this->_response = $this->getProvider()->get('PF\Main\Web\Component\Response');
+        $this->_response = $this->getProvider()->get('PM\Main\Web\Component\Response');
     }
 
     /**
@@ -38,9 +38,9 @@ class ResponseTest extends TestCase {
      */
     public function testGetPayload() {
         $data = 'myTest';
-        $view = $this->getProvider()->get('PF\Main\Web\View\Json')->setData($data);
+        $view = $this->getProvider()->get('PM\Main\Web\View\Json')->setData($data);
 
-        $template = $this->getMock('PF\Main\Web\Component\Template\AbstractTemplate', array('generatePayload'));
+        $template = $this->getMock('PM\Main\Web\Component\Template\AbstractTemplate', array('generatePayload'));
         $template->setView($view);
         $template->expects($this->once())
             ->method('generatePayload')

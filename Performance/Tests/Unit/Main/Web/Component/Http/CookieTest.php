@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Tests\Unit\Main\Web\Component\Http;
+namespace PM\Tests\Unit\Main\Web\Component\Http;
 
-use PF\Main\Abstracts\Unit\TestCase;
+use PM\Main\Abstracts\Unit\TestCase;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Web\Component\Http\Cookie.
+ * This script defines class for php unit test case of class \PM\Main\Web\Component\Http\Cookie.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -16,7 +16,7 @@ class CookieTest extends TestCase {
     /**
      * App instance.
      *
-     * @var \PF\Main\Web\Component\Http\Cookie
+     * @var \PM\Main\Web\Component\Http\Cookie
      */
     private $_entity;
 
@@ -28,7 +28,7 @@ class CookieTest extends TestCase {
     protected function setUp() {
         parent::setUp();
 
-        $this->_entity = $this->getProvider()->get('PF\Main\Web\Component\Http\Cookie');
+        $this->_entity = $this->getProvider()->get('PM\Main\Web\Component\Http\Cookie');
     }
 
     /**
@@ -37,6 +37,6 @@ class CookieTest extends TestCase {
      * @return void
      */
     public function testInstance() {
-        $this->assertInstanceOf('PF\Main\Web\Component\Http\Cookie', $this->_entity);
+        $this->assertInstanceOf('PM\Main\Web\Component\Http\Cookie', $this->_entity);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Statistic\Gearman;
+namespace PM\Statistic\Gearman;
 
 /**
  * This script defines statistic gearman message.
@@ -9,7 +9,7 @@ namespace PF\Statistic\Gearman;
  * @category   Performance
  * @package    Statistic
  */
-class Message extends \PF\Main\Abstracts\Gearman\Message {
+class Message extends \PM\Main\Abstracts\Gearman\Message {
 
     /**
      * Returns name of target worker.
@@ -17,6 +17,6 @@ class Message extends \PF\Main\Abstracts\Gearman\Message {
      * @return string
      */
     public function getTarget() {
-        return 'PF\Statistic\Gearman\Worker';
+        return 'PM\Statistic\Gearman\Worker';
     }
 }

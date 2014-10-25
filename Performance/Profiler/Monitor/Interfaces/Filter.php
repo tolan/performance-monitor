@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Profiler\Monitor\Interfaces;
+namespace PM\Profiler\Monitor\Interfaces;
 
-use PF\Profiler\Entity;
+use PM\Profiler\Entity;
 
 /**
  * Interface for monitor request filter.
@@ -16,7 +16,7 @@ interface Filter {
     /**
      * Construct method.
      *
-     * @param \PF\Profiler\Entity\Filter $filter Filter entity instance
+     * @param \PM\Profiler\Entity\Filter $filter Filter entity instance
      */
     public function __construct(Entity\Filter $filter);
 

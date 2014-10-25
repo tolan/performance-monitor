@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Filesystem;
+namespace PM\Main\Filesystem;
 
 /**
  * This script defines class for manage directory in filesystem.
@@ -82,9 +82,9 @@ class Directory {
      *
      * @param string $name Name of file
      *
-     * @return \PF\Main\Filesystem\Directory
+     * @return \PM\Main\Filesystem\Directory
      *
-     * @throws \PF\Main\Filesystem\Exception Throws when file already exists.
+     * @throws \PM\Main\Filesystem\Exception Throws when file already exists.
      */
     public function createFile($name) {
         $this->_checkDir();
@@ -102,9 +102,9 @@ class Directory {
      *
      * @param string $name Name of file
      *
-     * @return \PF\Main\Filesystem\File
+     * @return \PM\Main\Filesystem\File
      *
-     * @throws \PF\Main\Filesystem\Exception Throws when file doesn't exist.
+     * @throws \PM\Main\Filesystem\Exception Throws when file doesn't exist.
      */
     public function getFile($name) {
         if ($this->fileExists($name) == false) {
@@ -123,9 +123,9 @@ class Directory {
      *
      * @param string $name Name of file
      *
-     * @return \PF\Main\Filesystem\Directory
+     * @return \PM\Main\Filesystem\Directory
      *
-     * @throws \PF\Main\Filesystem\Exception Throws when file doesn't exist.
+     * @throws \PM\Main\Filesystem\Exception Throws when file doesn't exist.
      */
     public function deleteFile($name) {
         if ($this->fileExists($name) === false) {
@@ -141,9 +141,9 @@ class Directory {
     /**
      * This method copy file into this directory from different directory.
      *
-     * @param \PF\Main\Filesystem\File $file File instance from different directory
+     * @param \PM\Main\Filesystem\File $file File instance from different directory
      *
-     * @throws \PF\Main\Filesystem\Exception Throws when file already exists or copy fails.
+     * @throws \PM\Main\Filesystem\Exception Throws when file already exists or copy fails.
      */
     public function copyTo(File $file) {
         if ($file->getPath() === $this->_path || $this->fileExists($file->getName()) === true) {
@@ -176,9 +176,9 @@ class Directory {
      *
      * @param string $name Name of file
      *
-     * @return \PF\Main\Filesystem\Directory
+     * @return \PM\Main\Filesystem\Directory
      *
-     * @throws \PF\Main\Filesystem\Exception Throws when file already exists.
+     * @throws \PM\Main\Filesystem\Exception Throws when file already exists.
      */
     private function _createFileToCache($name) {
         if ($this->_fileInCache($name) === true) {
@@ -204,9 +204,9 @@ class Directory {
     /**
      * Checks that dir exists.
      *
-     * @return \PF\Main\Filesystem\Directory
+     * @return \PM\Main\Filesystem\Directory
      *
-     * @throws \PF\Main\Filesystem\Exception Throws when given path is not a directory.
+     * @throws \PM\Main\Filesystem\Exception Throws when given path is not a directory.
      */
     private function _checkDir() {
         if(!is_dir($this->_path)) {

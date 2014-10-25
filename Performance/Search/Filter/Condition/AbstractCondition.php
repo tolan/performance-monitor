@@ -1,10 +1,10 @@
 <?php
 
-namespace PF\Search\Filter\Condition;
+namespace PM\Search\Filter\Condition;
 
-use PF\Main\Utils;
-use PF\Search\Filter\Select;
-use PF\Search\Filter\Exception;
+use PM\Main\Utils;
+use PM\Search\Filter\Select;
+use PM\Search\Filter\Exception;
 
 /**
  * This script defines abstract class for condition. Each condition is injected to junction where is set table name and column.
@@ -18,14 +18,14 @@ abstract class AbstractCondition {
     /**
      * Utils instance.
      *
-     * @var \PF\Main\Utils
+     * @var \PM\Main\Utils
      */
     private $_utils;
 
     /**
      * Operator type.
      *
-     * @var enum \PF\Search\Enum\Operator
+     * @var enum \PM\Search\Enum\Operator
      */
     private $_operator;
 
@@ -39,7 +39,7 @@ abstract class AbstractCondition {
     /**
      * Construct method.
      *
-     * @param \PF\Main\Utils $utils Utils instance
+     * @param \PM\Main\Utils $utils Utils instance
      */
     public function __construct(Utils $utils) {
         $this->_utils = $utils;
@@ -48,7 +48,7 @@ abstract class AbstractCondition {
     /**
      * Returns utils instance.
      *
-     * @return \PF\Main\Utils
+     * @return \PM\Main\Utils
      */
     protected function getUtils() {
         return $this->_utils;
@@ -66,10 +66,10 @@ abstract class AbstractCondition {
     /**
      * It prepare operator and value for filter condition.
      *
-     * @param enum  $operator One of \PF\Search\Enum\Operator
+     * @param enum  $operator One of \PM\Search\Enum\Operator
      * @param mixed $value    Value for filter condition
      *
-     * @return \PF\Search\Filter\Condition\AbstractCondition
+     * @return \PM\Search\Filter\Condition\AbstractCondition
      */
     public function prepareFilter($operator, $value) {
         $this->_operator = $operator;
@@ -81,11 +81,11 @@ abstract class AbstractCondition {
     /**
      * It adds filter to select with table name and column.
      *
-     * @param \PF\Search\Filter\Select $select Select instance
+     * @param \PM\Search\Filter\Select $select Select instance
      * @param string                   $table  Table name where is column
      * @param string                   $column Column name where will be value
      *
-     * @return \PF\Search\Filter\Condition\AbstractCondition
+     * @return \PM\Search\Filter\Condition\AbstractCondition
      */
     public function addFilter(Select $select, $table, $column) {
         $method = $this->_utils->toCamelCase($this->_operator);
@@ -98,7 +98,7 @@ abstract class AbstractCondition {
     /**
      * Prohibited method.
      *
-     * @param \PF\Search\Filter\Select $select Select instance
+     * @param \PM\Search\Filter\Select $select Select instance
      *
      * @throws Exception Throws always
      */

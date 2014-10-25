@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Profiler\Enum;
+namespace PM\Profiler\Enum;
 
-use PF\Main\Abstracts\Enum;
+use PM\Main\Abstracts\Enum;
 
 /**
  * This script defines enum with states of attempt.

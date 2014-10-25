@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Event;
+namespace PM\Main\Event;
 
 /**
  * This script defines exception class for events.
@@ -9,5 +9,5 @@ namespace PF\Main\Event;
  * @category   Performance
  * @package    Main
  */
-class Exception extends \PF\Main\Exception {
+class Exception extends \PM\Main\Exception {
 }

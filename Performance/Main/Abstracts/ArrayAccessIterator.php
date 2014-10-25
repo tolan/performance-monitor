@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Abstracts;
+namespace PM\Main\Abstracts;
 
-use PF\Main\Interfaces;
+use PM\Main\Interfaces;
 
 /**
  * Abstract class for array access iterator object.
@@ -151,7 +151,7 @@ abstract class ArrayAccessIterator implements Interfaces\ArrayAccess, Interfaces
      *
      * @param array $array Data for load into array
      *
-     * @return \PF\Main\Abstracts\ArrayAccessIterator
+     * @return \PM\Main\Abstracts\ArrayAccessIterator
      */
     public function fromArray(array $array) {
         $this->_data = $array;

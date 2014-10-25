@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Profiler\Repository;
+namespace PM\Profiler\Repository;
 
-use PF\Main\Abstracts\Repository;
-use PF\Profiler\Entity;
+use PM\Main\Abstracts\Repository;
+use PM\Profiler\Entity;
 
 /**
  * This script defines class for scenario repository.
@@ -49,9 +49,9 @@ class Scenario extends Repository {
     /**
      * Creates new scenario.
      *
-     * @param \PF\Profiler\Entity\Scenario $scenario Scenarion entity instance
+     * @param \PM\Profiler\Entity\Scenario $scenario Scenarion entity instance
      *
-     * @return \PF\Profiler\Entity\Scenario
+     * @return \PM\Profiler\Entity\Scenario
      */
     public function create(Entity\Scenario $scenario) {
         $data = array(
@@ -70,7 +70,7 @@ class Scenario extends Repository {
     /**
      * Updates scenario by given entity.
      *
-     * @param \PF\Profiler\Entity\Scenario $scenario Scenario entity instance
+     * @param \PM\Profiler\Entity\Scenario $scenario Scenario entity instance
      *
      * @return boolean
      */
@@ -104,7 +104,7 @@ class Scenario extends Repository {
      *
      * @param int $id ID of scenario
      * 
-     * @return \PF\Profiler\Entity\Scenario
+     * @return \PM\Profiler\Entity\Scenario
      */
     public function getScenario($id) {
         $select = $this->getDatabase()->select()

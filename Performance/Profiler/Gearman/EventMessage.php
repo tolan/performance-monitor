@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Profiler\Gearman;
+namespace PM\Profiler\Gearman;
 
 /**
  * This script defines class of mediator message for gearman worker.
@@ -9,5 +9,5 @@ namespace PF\Profiler\Gearman;
  * @category   Performance
  * @package    Profiler
  */
-class EventMessage extends \PF\Profiler\Event\Message {
+class EventMessage extends \PM\Profiler\Event\Message {
 }

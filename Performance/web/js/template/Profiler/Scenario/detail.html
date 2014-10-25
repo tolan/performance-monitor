@@ -1,86 +1,86 @@
 <div class="scenario width-90 width-max-1200 center-block width-min-480">
     <div class="scenario-detail col-sm-12 col-xs-12">
-        <a href="#/profiler/mysql/scenario/edit/[[scenario.id]]" class="close" title="[[_.('profiler.scenario.edit')]]">
+        <a href="#/profiler/mysql/scenario/edit/[[scenario.id]]" class="close" title="[[_('profiler.scenario.edit')]]">
             <i class="glyphicon glyphicon-pencil"></i>
         </a>
-        <button class="close" ng-click="back('/profiler/mysql/scenarios')" title="[[_.('main.back')]]">
+        <button class="close" ng-click="back('/profiler/mysql/scenarios')" title="[[_('main.back')]]">
             <i class="glyphicon glyphicon-chevron-left"></i>
         </button>
         <div class="well col-lg-4 col-md-5 col-sm-6 col-xs-10">
             <h4 class="col-sm-12 col-xs-12">
-                <span class="col-lg-3 col-md-4 col-sm-5 col-xs-5 label label-default">[[_.('profiler.scenario.name')]]</span>
+                <span class="col-lg-3 col-md-4 col-sm-5 col-xs-5 label label-default">[[_('profiler.scenario.name')]]</span>
                 <span class="col-lg-9 col-md-8 col-sm-7 col-xs-7">[[scenario.name]]</span>
             </h4>
             <div class="col-sm-12 col-xs-12">
-                <span class="col-lg-3 col-md-4 col-sm-5 col-xs-5 label label-default">[[_.('profiler.scenario.description')]]</span>
+                <span class="col-lg-3 col-md-4 col-sm-5 col-xs-5 label label-default">[[_('profiler.scenario.description')]]</span>
                 <span class="col-lg-9 col-md-8 col-sm-7 col-xs-7">[[scenario.description]]</span>
             </div>
             <div class="col-sm-12 col-xs-12">
-                <span class="col-lg-3 col-md-4 col-sm-5 col-xs-5 label label-default">[[_.('profiler.scenario.edited')]]</span>
+                <span class="col-lg-3 col-md-4 col-sm-5 col-xs-5 label label-default">[[_('profiler.scenario.edited')]]</span>
                 <span class="col-lg-9 col-md-8 col-sm-7 col-xs-7">[[scenario.edited | date:'d.M.yyyy H:mm:ss']]</span>
             </div>
         </div>
         <div class="col-sm-12 col-xs-12 zero-padding panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">[[_.('profiler.scenario.request.list')]]</h3>
+                <h3 class="panel-title">[[_('profiler.scenario.request.list')]]</h3>
             </div>
             <div class="panel-body">
                 <div ng-repeat="request in scenario.requests" class="well well-sm col-sm-12 col-xs-12">
                     <div class="col-sm-12 col-xs-12 well">
-                        <a class="close" ng-if="request.method === 'GET'" target="_blank" ng-href="[[getRequestLink(request)]]" title="[[_.('profiler.scenario.request.manual.start')]]">
+                        <a class="close" ng-if="request.method === 'GET'" target="_blank" ng-href="[[getRequestLink(request)]]" title="[[_('profiler.scenario.request.manual.start')]]">
                             <i class="glyphicon glyphicon-screenshot"></i>
                         </a>
                         <div class="col-sm-11 col-xs-9">
-                            <span class="col-md-1 col-sm-2 col-xs-5 label label-default">[[_.('profiler.scenario.request.url')]]</span>
+                            <span class="col-md-1 col-sm-2 col-xs-5 label label-default">[[_('profiler.scenario.request.url')]]</span>
                             <span class="col-md-11 col-sm-10 col-xs-7">[[request.url]]</span>
                         </div>
                         <div class="col-sm-11 col-xs-9">
-                            <span class="col-md-1 col-sm-2 col-xs-5 label label-default">[[_.('profiler.scenario.request.method')]]</span>
-                            <span class="col-md-11 col-sm-10 col-xs-7">[[_.('profiler.scenario.request.method.' + request.method)]]</span>
+                            <span class="col-md-1 col-sm-2 col-xs-5 label label-default">[[_('profiler.scenario.request.method')]]</span>
+                            <span class="col-md-11 col-sm-10 col-xs-7">[[_('profiler.scenario.request.method.' + request.method)]]</span>
                         </div>
                         <div class="col-sm-11 col-xs-9">
-                            <span class="col-md-1 col-sm-2 col-xs-5 label label-default">[[_.('profiler.scenario.request.toMeasure')]]</span>
+                            <span class="col-md-1 col-sm-2 col-xs-5 label label-default">[[_('profiler.scenario.request.toMeasure')]]</span>
                             <span class="col-md-11 col-sm-10 col-xs-7 glyphicon" ng-class="request.toMeasure ? 'glyphicon-check' : 'glyphicon-unchecked'"></span>
                         </div>
                     </div>
                     <div ng-show="request.parameters.length" class="col-sm-12 col-xs-12 panel panel-default zero-padding">
                         <div class="panel-heading">
-                            [[_.('profiler.scenario.request.parameters.list')]]
+                            [[_('profiler.scenario.request.parameters.list')]]
                         </div>
                         <div class="panel-body">
                             <div ng-repeat="parameter in request.parameters" class="well well-sm col-sm-4 col-md-3 col-xs-6 width-min-200">
                                 <div class="col-sm-12 col-xs-12">
-                                    <span class="col-lg-4 col-sm-5 col-xs-5 label label-default">[[_.('profiler.scenario.request.parameter.name')]]</span>
+                                    <span class="col-lg-4 col-sm-5 col-xs-5 label label-default">[[_('profiler.scenario.request.parameter.name')]]</span>
                                     <span class="col-lg-8 col-sm-7 col-xs-7">[[parameter.name]]</span>
                                 </div>
                                 <div class="col-sm-12">
-                                    <span class="col-lg-4 col-sm-5 col-xs-5 label label-default">[[_.('profiler.scenario.request.parameter.value')]]</span>
+                                    <span class="col-lg-4 col-sm-5 col-xs-5 label label-default">[[_('profiler.scenario.request.parameter.value')]]</span>
                                     <span class="col-lg-8 col-sm-7 col-xs-7">[[parameter.value]]</span>
                                 </div>
                                 <div class="col-sm-12">
-                                    <span class="col-lg-4 col-sm-5 col-xs-5 label label-default">[[_.('profiler.scenario.request.method')]]</span>
-                                    <span class="col-lg-8 col-sm-7 col-xs-7">[[_.('profiler.scenario.request.method.' + parameter.method)]]</span>
+                                    <span class="col-lg-4 col-sm-5 col-xs-5 label label-default">[[_('profiler.scenario.request.method')]]</span>
+                                    <span class="col-lg-8 col-sm-7 col-xs-7">[[_('profiler.scenario.request.method.' + parameter.method)]]</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div ng-show="request.filters.length" class="col-sm-12 col-xs-12 panel panel-default zero-padding">
                         <div class="panel-heading">
-                            [[_.('profiler.scenario.request.filter.list')]]
+                            [[_('profiler.scenario.request.filter.list')]]
                         </div>
                         <div class="panel-body">
                             <div ng-repeat="filter in request.filters" class="well well-sm col-md-4 col-sm-6 col-xs-12 width-min-320">
                                 <div class="col-sm-12 col-xs-12">
-                                    <span class="col-sm-6 col-xs-6">[[_.('profiler.scenario.request.filter.type')]]</span>
-                                    <span class="col-sm-6 col-xs-6">[[_.('profiler.scenario.request.filter.type.' + filter.type)]]</span>
+                                    <span class="col-sm-6 col-xs-6">[[_('profiler.scenario.request.filter.type')]]</span>
+                                    <span class="col-sm-6 col-xs-6">[[_('profiler.scenario.request.filter.type.' + filter.type)]]</span>
                                 </div>
                                 <div class="col-sm-12 col-xs-12">
                                     <table class="table zero-margin">
                                         <tr ng-repeat="parameter in filter.parameters">
-                                            <td>[[_.('profiler.scenario.request.filter.parameter.' + parameter.parameter)]]</td>
+                                            <td>[[_('profiler.scenario.request.filter.parameter.' + parameter.parameter)]]</td>
                                             <td>
                                                 <span ng-show="parameter.operator != 'boolean'">
-                                                    [[_.('profiler.scenario.request.filter.parameter.operator.' + parameter.operator)]]
+                                                    [[_('profiler.scenario.request.filter.parameter.operator.' + parameter.operator)]]
                                                 </span>
                                             </td>
                                             <td>[[parameter.value]]</td>
@@ -96,21 +96,21 @@
     </div>
 
     <div class="list list-80 width-max-800 center-block">
-        <input type="text" ng-model="search" class="form-control search-query" placeholder="[[_.('main.list.search')]]">
+        <input type="text" ng-model="search" class="form-control search-query" placeholder="[[_('main.list.search')]]">
         <select ng-model="pageSize" ng-options="size for size in pageSizes" class="form-control pageSize"></select>
         <table class="table table-striped table-bordered table-hover table-responsive">
             <thead>
                 <tr>
                     <th ng-click="predicate='id'; reverse=!reverse" class="pointer">#</th>
                     <th ng-click="predicate='state'; reverse=!reverse" class="pointer">
-                        <i ng-class="selectSortClass('state', predicate, reverse)"></i>&nbsp;[[_.('profiler.scenario.test.state')]]
+                        <i ng-class="selectSortClass('state', predicate, reverse)"></i>&nbsp;[[_('profiler.scenario.test.state')]]
                     </th>
                     <th ng-click="predicate='started'; reverse=!reverse" class="pointer">
-                        <i ng-class="selectSortClass('started', predicate, reverse)"></i>&nbsp;[[_.('profiler.scenario.test.started')]]
+                        <i ng-class="selectSortClass('started', predicate, reverse)"></i>&nbsp;[[_('profiler.scenario.test.started')]]
                     </th>
                     <th class="center actions">
                         <a ng-click="startTest()">
-                            <i class="glyphicon glyphicon-plus-sign"></i>&nbsp;[[_.('profiler.scenario.test.start')]]
+                            <i class="glyphicon glyphicon-plus-sign"></i>&nbsp;[[_('profiler.scenario.test.start')]]
                         </a>
                     </th>
                 </tr>
@@ -120,12 +120,12 @@
                     <td>[[indexOf(tests, test) + 1]]</td>
                     <td ng-switch on="test.state">
                         <a href="#/profiler/mysql/scenario/test/detail/[[test.id]]" ng-switch-when="done">
-                            [[_.('profiler.scenario.test.showTest')]]
+                            [[_('profiler.scenario.test.showTest')]]
                         </a>
                         <a href="#/profiler/mysql/scenario/test/detail/[[test.id]]" ng-switch-when="error">
-                            [[_.('profiler.scenario.test.state.' + test.state)]]
+                            [[_('profiler.scenario.test.state.' + test.state)]]
                         </a>
-                        <span ng-switch-default>[[_.('profiler.scenario.test.state.' + test.state)]]</span>
+                        <span ng-switch-default>[[_('profiler.scenario.test.state.' + test.state)]]</span>
                     </td>
                     <td>[[test.started | date:'d.M.yyyy H:mm:ss']]</td>
                     <td class="center zero-padding">

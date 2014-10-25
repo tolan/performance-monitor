@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Web\Component;
+namespace PM\Main\Web\Component;
 
 /**
  * This script defines class for input request.
@@ -41,7 +41,7 @@ class Request {
     /**
      * Return entity instance with COOKIE.
      *
-     * @return \PF\Main\Web\Component\Http\Cookie
+     * @return \PM\Main\Web\Component\Http\Cookie
      */
     public function getCookie() {
         return $this->_getInstance('Cookie');
@@ -50,7 +50,7 @@ class Request {
     /**
      * Return entity instance with ENV.
      *
-     * @return \PF\Main\Web\Component\Http\Env
+     * @return \PM\Main\Web\Component\Http\Env
      */
     public function getEnv() {
         return $this->_getInstance('Env');
@@ -59,7 +59,7 @@ class Request {
     /**
      * Return entity instance with FILES.
      *
-     * @return \PF\Main\Web\Component\Http\Files
+     * @return \PM\Main\Web\Component\Http\Files
      */
     public function getFiles() {
         return $this->_getInstance('Files');
@@ -68,7 +68,7 @@ class Request {
     /**
      * Return entity instance with GET.
      *
-     * @return \PF\Main\Web\Component\Http\Get
+     * @return \PM\Main\Web\Component\Http\Get
      */
     public function getGet() {
         return $this->_getInstance('Get');
@@ -77,7 +77,7 @@ class Request {
     /**
      * Return entity instance with POST.
      *
-     * @return \PF\Main\Web\Component\Http\Post
+     * @return \PM\Main\Web\Component\Http\Post
      */
     public function getPost() {
         return $this->_getInstance('Post');
@@ -86,7 +86,7 @@ class Request {
     /**
      * Return entity instance with REQUEST.
      *
-     * @return \PF\Main\Web\Component\Http\Request
+     * @return \PM\Main\Web\Component\Http\Request
      */
     public function getRequest() {
         return $this->_getInstance('Request');
@@ -95,7 +95,7 @@ class Request {
     /**
      * Return entity instance with SERVER.
      *
-     * @return \PF\Main\Web\Component\Http\Server
+     * @return \PM\Main\Web\Component\Http\Server
      */
     public function getServer() {
         return $this->_getInstance('Server');
@@ -104,7 +104,7 @@ class Request {
     /**
      * Return entity instance with SESSION.
      *
-     * @return \PF\Main\Web\Component\Http\Session
+     * @return \PM\Main\Web\Component\Http\Session
      */
     public function getSession() {
         return $this->_getInstance('Session');
@@ -135,7 +135,7 @@ class Request {
      *
      * @param string $name Class name of http component
      *
-     * @return \PF\Main\Web\Component\Http\AbstractHttp
+     * @return \PM\Main\Web\Component\Http\AbstractHttp
      */
     private function _getInstance($name) {
         if (!isset($this->_instances[$name])) {

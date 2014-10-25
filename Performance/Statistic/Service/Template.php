@@ -1,13 +1,13 @@
 <?php
 
-namespace PF\Statistic\Service;
+namespace PM\Statistic\Service;
 
-use PF\Statistic\Repository;
-use PF\Statistic\Entity;
-use PF\Statistic\Enum;
-use PF\Search;
-use PF\Main\Abstracts\Service;
-use PF\Main\CommonEntity;
+use PM\Statistic\Repository;
+use PM\Statistic\Entity;
+use PM\Statistic\Enum;
+use PM\Search;
+use PM\Main\Abstracts\Service;
+use PM\Main\CommonEntity;
 
 /**
  * This script defines class for template service of statistic template.
@@ -21,9 +21,9 @@ class Template extends Service {
     /**
      * Returns list of statistic template entities.
      *
-     * @param \PF\Statistic\Repository\Template $repository Template repository instance
+     * @param \PM\Statistic\Repository\Template $repository Template repository instance
      *
-     * @return \PF\Statistic\Entity\Template[]
+     * @return \PM\Statistic\Entity\Template[]
      */
     public function findTemplates(Repository\Template $repository) {
         $data = $repository->findTemplates();
@@ -40,11 +40,11 @@ class Template extends Service {
      * Returns statistic template entity with source and assigned views.
      *
      * @param int                               $id            ID of statistic template
-     * @param \PF\Statistic\Repository\Template $repository    Template repository instance
-     * @param \PF\Statistic\Service\View        $viewService   View service instance
-     * @param \PF\Search\Service\Template       $searchService Search service instance
+     * @param \PM\Statistic\Repository\Template $repository    Template repository instance
+     * @param \PM\Statistic\Service\View        $viewService   View service instance
+     * @param \PM\Search\Service\Template       $searchService Search service instance
      *
-     * @return \PF\Statistic\Entity\Template
+     * @return \PM\Statistic\Entity\Template
      */
     public function getTemplate($id, Repository\Template $repository, View $viewService, Search\Service\Template $searchService) {
         $template = $repository->getTemplate($id);
@@ -58,11 +58,11 @@ class Template extends Service {
     /**
      * Helper method to obtain and set source of statistic template entity.
      *
-     * @param \PF\Statistic\Entity\Template     $template      Statistic template entity instance
-     * @param \PF\Statistic\Repository\Template $repository    Template repository instance
-     * @param \PF\Search\Service\Template       $searchService Search service instance
+     * @param \PM\Statistic\Entity\Template     $template      Statistic template entity instance
+     * @param \PM\Statistic\Repository\Template $repository    Template repository instance
+     * @param \PM\Search\Service\Template       $searchService Search service instance
      *
-     * @return \PF\Statistic\Entity\Template
+     * @return \PM\Statistic\Entity\Template
      */
     private function _setSource(Entity\Template $template, Repository\Template $repository, Search\Service\Template $searchService) {
         $searchTemplateId = $template->get('sourceTemplateId');
@@ -89,8 +89,8 @@ class Template extends Service {
      * Helper method to get assigned items of statistic template entity.
      *
      * @param int                               $templateId ID of statistic template
-     * @param enum                              $sourceType One of enum \PF\Statistic\Enum\Source\Type
-     * @param \PF\Statistic\Repository\Template $repository Template repository instance
+     * @param enum                              $sourceType One of enum \PM\Statistic\Enum\Source\Type
+     * @param \PM\Statistic\Repository\Template $repository Template repository instance
      *
      * @return array
      */
@@ -106,10 +106,10 @@ class Template extends Service {
     /**
      * Helper method to obtain and set assigned views of statistic template entity.
      *
-     * @param \PF\Statistic\Entity\Template $template    Statistic template instance
-     * @param \PF\Statistic\Service\View    $viewService View service instance
+     * @param \PM\Statistic\Entity\Template $template    Statistic template instance
+     * @param \PM\Statistic\Service\View    $viewService View service instance
      *
-     * @return \PF\Statistic\Entity\Template
+     * @return \PM\Statistic\Entity\Template
      */
     private function _setViews(Entity\Template $template, View $viewService) {
         $executor = $this->getExecutor()->add('getViewsForTemplate', $viewService);
@@ -123,11 +123,11 @@ class Template extends Service {
      * Creates new statistic template entity.
      *
      * @param array                             $templateData  Data of statistic template for create
-     * @param \PF\Statistic\Repository\Template $repository    Template repository instance
-     * @param \PF\Statistic\Service\View        $viewService   View service instance
-     * @param \PF\Search\Service\Template       $searchService Search service instance
+     * @param \PM\Statistic\Repository\Template $repository    Template repository instance
+     * @param \PM\Statistic\Service\View        $viewService   View service instance
+     * @param \PM\Search\Service\Template       $searchService Search service instance
      *
-     * @return \PF\Statistic\Entity\Template
+     * @return \PM\Statistic\Entity\Template
      */
     public function createTemplate($templateData, Repository\Template $repository, View $viewService, Search\Service\Template $searchService) {
         $template = new Entity\Template($templateData);
@@ -171,11 +171,11 @@ class Template extends Service {
      * Updates existed statistic template entity.
      *
      * @param array                             $templateData  Data of statistic template
-     * @param \PF\Statistic\Repository\Template $repository    Template repository instance
-     * @param \PF\Statistic\Service\View        $viewService   View service instance
-     * @param \PF\Search\Service\Template       $searchService Search service instance
+     * @param \PM\Statistic\Repository\Template $repository    Template repository instance
+     * @param \PM\Statistic\Service\View        $viewService   View service instance
+     * @param \PM\Search\Service\Template       $searchService Search service instance
      *
-     * @return \PF\Statistic\Entity\Template
+     * @return \PM\Statistic\Entity\Template
      */
     public function updateTemplate($templateData, Repository\Template $repository, View $viewService, Search\Service\Template $searchService) {
         $template = new Entity\Template($templateData);
@@ -225,9 +225,9 @@ class Template extends Service {
      * Deletes statistic template entity by given ID.
      *
      * @param int                               $id            ID of statistic template entity
-     * @param \PF\Statistic\Repository\Template $repository    Template repository instance
-     * @param \PF\Statistic\Service\View        $viewService   View service instance
-     * @param \PF\Search\Service\Template       $searchService Search service instance (optional)
+     * @param \PM\Statistic\Repository\Template $repository    Template repository instance
+     * @param \PM\Statistic\Service\View        $viewService   View service instance
+     * @param \PM\Search\Service\Template       $searchService Search service instance (optional)
      *
      * @return int
      */

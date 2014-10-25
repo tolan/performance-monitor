@@ -1,13 +1,13 @@
 <?php
 
-namespace PF\Search\Filter;
+namespace PM\Search\Filter;
 
-use PF\Main\Database;
-use PF\Main\Log;
-use PF\Search\Filter\Select;
-use PF\Search\Filter\Target\AbstractTarget;
-use PF\Search\Filter\Junction\AbstractJunction;
-use PF\Search\Filter\Condition\AbstractCondition;
+use PM\Main\Database;
+use PM\Main\Log;
+use PM\Search\Filter\Select;
+use PM\Search\Filter\Target\AbstractTarget;
+use PM\Search\Filter\Junction\AbstractJunction;
+use PM\Search\Filter\Condition\AbstractCondition;
 
 /**
  * This script defines class for container of one target entity and set of filters.
@@ -24,7 +24,7 @@ class Container {
     /**
      * Select instance.
      *
-     * @var \PF\Search\Filter\Select
+     * @var \PM\Search\Filter\Select
      */
     private $_select;
 
@@ -52,8 +52,8 @@ class Container {
     /**
      * Construct method.
      *
-     * @param \PF\Main\Database $database Database instnace
-     * @param \PF\Main\Log      $log      Log instnace
+     * @param \PM\Main\Database $database Database instnace
+     * @param \PM\Main\Log      $log      Log instnace
      *
      * @return void
      */
@@ -68,9 +68,9 @@ class Container {
     /**
      * Sets one target for search entity by fiters.
      *
-     * @param \PF\Search\Filter\Target\AbstractTarget $target Target instnance
+     * @param \PM\Search\Filter\Target\AbstractTarget $target Target instnance
      *
-     * @return \PF\Search\Filter\Container
+     * @return \PM\Search\Filter\Container
      *
      * @throws Exception Throws when you try call this method second.
      */
@@ -92,10 +92,10 @@ class Container {
      * It adds filter by given filter parameters, junction instance and condition instnace.
      *
      * @param array                                         $filter    Filter parameters
-     * @param \PF\Search\Filter\Junction\AbstractJunction   $junction  Junction instance
-     * @param \PF\Search\Filter\Condition\AbstractCondition $condition Condition instance
+     * @param \PM\Search\Filter\Junction\AbstractJunction   $junction  Junction instance
+     * @param \PM\Search\Filter\Condition\AbstractCondition $condition Condition instance
      *
-     * @return \PF\Search\Filter\Container
+     * @return \PM\Search\Filter\Container
      */
     public function addFilter($filter, AbstractJunction $junction, AbstractCondition $condition) {
         if ($this->_compiled === true) {
@@ -127,7 +127,7 @@ class Container {
     /**
      * Returns compiled searching select.
      *
-     * @return \PF\Search\Filter\Select
+     * @return \PM\Search\Filter\Select
      */
     public function getSelect() {
         $this->_compile($this->_select, $this->_target, $this->_filters);
@@ -149,8 +149,8 @@ class Container {
     /**
      * It compile target and all filters to one statement for database select.
      *
-     * @param \PF\Search\Filter\Select                $select  Select instnace
-     * @param \PF\Search\Filter\Target\AbstractTarget $target  Target instnace
+     * @param \PM\Search\Filter\Select                $select  Select instnace
+     * @param \PM\Search\Filter\Target\AbstractTarget $target  Target instnace
      * @param array                                   $filters Sets of filters
      *
      * @return void

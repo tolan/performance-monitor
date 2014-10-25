@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Profiler\Entity;
+namespace PM\Profiler\Entity;
 
-use PF\Main\Abstracts\Entity;
+use PM\Main\Abstracts\Entity;
 
 /**
  * This script defines entity for scenario test.

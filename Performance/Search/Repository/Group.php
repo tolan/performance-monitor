@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Search\Repository;
+namespace PM\Search\Repository;
 
-use PF\Main\Abstracts\Repository;
-use PF\Search\Entity;
+use PM\Main\Abstracts\Repository;
+use PM\Search\Entity;
 
 /**
  * This script defines class for group repository.
@@ -28,7 +28,7 @@ class Group extends Repository {
      *
      * @param int $templateId ID of template
      *
-     * @return \PF\Search\Entity\Group[]
+     * @return \PM\Search\Entity\Group[]
      */
     public function getGroupsForTemplate($templateId) {
         $select = $this->getDatabase()
@@ -54,7 +54,7 @@ class Group extends Repository {
      *
      * @param int $id ID of group
      *
-     * @return \PF\Search\Entity\Group
+     * @return \PM\Search\Entity\Group
      */
     public function getGroup($id) {
         $select = $this->getDatabase()
@@ -73,9 +73,9 @@ class Group extends Repository {
     /**
      * Creates new group entity into database.
      *
-     * @param \PF\Search\Entity\Group $group Group instance
+     * @param \PM\Search\Entity\Group $group Group instance
      *
-     * @return \PF\Search\Entity\Group
+     * @return \PM\Search\Entity\Group
      */
     public function createGroup(Entity\Group $group) {
         $data = array(
@@ -91,7 +91,7 @@ class Group extends Repository {
     /**
      * Updates group entity in database.
      *
-     * @param \PF\Search\Entity\Group $group Group entity
+     * @param \PM\Search\Entity\Group $group Group entity
      *
      * @return int
      */

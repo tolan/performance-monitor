@@ -1,12 +1,12 @@
 <?php
 
-namespace PF\Profiler\Enum;
+namespace PM\Profiler\Enum;
 
-use PF\Main\Abstracts\Enum;
+use PM\Main\Abstracts\Enum;
 
 /**
  * This script defines enum with keys for http GET request.
- * TODO merge with PF\Profiler\Monitor\Enum\HttpKeys
+ * TODO merge with PM\Profiler\Monitor\Enum\HttpKeys
  *
  * @author     Martin Kovar
  * @category   Performance

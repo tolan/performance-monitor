@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Abstracts;
+namespace PM\Main\Abstracts;
 
-use PF\Main\Exception;
+use PM\Main\Exception;
 
 /**
  * Abstract class for entity object.
@@ -41,7 +41,7 @@ abstract class Entity extends Enum {
      *
      * @param array $array Array with values.
      *
-     * @return \PF\Main\Abstracts\Entity
+     * @return \PM\Main\Abstracts\Entity
      */
     public function fromArray($array) {
         if ($array instanceof Entity) {
@@ -96,7 +96,7 @@ abstract class Entity extends Enum {
      *
      * @return mixed Value of attribute
      *
-     * @throws \PF\Main\Exception Throws when parameter has not been set.
+     * @throws \PM\Main\Exception Throws when parameter has not been set.
      */
     final public function get($name, $default = null) {
         $name = lcfirst($name);
@@ -126,7 +126,7 @@ abstract class Entity extends Enum {
      * @param string $name  Name of attribute.
      * @param mixed  $value Vale of attribute.
      *
-     * @return \PF\Main\Abstracts\Entity
+     * @return \PM\Main\Abstracts\Entity
      */
     final public function set($name, $value) {
         $thisVars = get_class_vars(get_class($this));
@@ -148,9 +148,9 @@ abstract class Entity extends Enum {
      *
      * @param string $name Name of attribute.
      *
-     * @return \PF\Main\Abstracts\Entity
+     * @return \PM\Main\Abstracts\Entity
      *
-     * @throws \PF\Main\Exception Throws when parameter has not been set.
+     * @throws \PM\Main\Exception Throws when parameter has not been set.
      */
     final public function reset($name) {
         $name = lcfirst($name);
@@ -188,7 +188,7 @@ abstract class Entity extends Enum {
      *
      * @return boolean It is true when attribute is empty.
      *
-     * @throws \PF\Main\Exception Throws when parameter has not been defined.
+     * @throws \PM\Main\Exception Throws when parameter has not been defined.
      */
     final public function isEmpty($name) {
         $vars = get_class_vars(get_class($this));
@@ -212,7 +212,7 @@ abstract class Entity extends Enum {
      *
      * @return mixed
      *
-     * @throws \PF\Main\Exception
+     * @throws \PM\Main\Exception
      */
     final public function __get($name) {
         return $this->get($name);
@@ -224,7 +224,7 @@ abstract class Entity extends Enum {
      * @param string $name  Name of value
      * @param mixed  $value Value of item
      *
-     * @return \PF\Main\Abstracts\Entity
+     * @return \PM\Main\Abstracts\Entity
      */
     final public function __set($name, $value) {
         return $this->set($name, $value);
@@ -236,9 +236,9 @@ abstract class Entity extends Enum {
      * @param string $name      Name of attribute.
      * @param mixed  $arguments Arguments for methods.
      *
-     * @return \PF\Main\Abstracts\Entity | mixed | boolean
+     * @return \PM\Main\Abstracts\Entity | mixed | boolean
      *
-     * @throws \PF\Main\Exception Throws when method is not defined.
+     * @throws \PM\Main\Exception Throws when method is not defined.
      */
     final public function __call($name, $arguments) {
         $method   = strtolower(substr($name, 0, 3));
@@ -275,9 +275,9 @@ abstract class Entity extends Enum {
      *
      * @param string $name Name of varible.
      *
-     * @return \PF\Main\Abstracts\Entity
+     * @return \PM\Main\Abstracts\Entity
      *
-     * @throws \PF\Main\Exception Throw when attribute does not exist.
+     * @throws \PM\Main\Exception Throw when attribute does not exist.
      */
     final public function __unset($name) {
         return $this->reset($name);

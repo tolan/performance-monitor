@@ -1,18 +1,37 @@
+angular.module('PM')
+    .controller('ProfilerMySQLScenariosList', ProfilerMySQLScenariosList)
+    .controller('ProfilerMySQLScenarioCreate', ProfilerMySQLScenarioCreate)
+    .controller('ProfilerMySQLScenarioDetail', ProfilerMySQLScenarioDetail)
+    .controller('ProfilerMySQLTestListCtrl', ProfilerMySQLTestListCtrl)
+    .controller('ProfilerFileListCtrl', ProfilerFileListCtrl)
+    .controller('ProfilerMeasureDetailCtrl', ProfilerMeasureDetailCtrl)
+    .controller('ProfilerCallStackCtrl', ProfilerCallStackCtrl)
+    .controller('ProfilerFunctionStatCtrl', ProfilerFunctionStatCtrl);
 
+/**
+ * Controller for show list of scenarios.
+ *
+ * @param $scope Scope
+ * @param $http  Http provider
+ * @param $modal Modal component
+ *
+ * @returns void
+ */
 function ProfilerMySQLScenariosList($scope, $http, $modal) {
     $scope.initList('id');
     $scope.scenarios = [];
     $scope.deleteScenarioId;
 
-    $http.get('/profiler/mysql/scenarios').success(function(response) {
+    $http.get('/profiler/scenario/mysql/get').success(function(response) {
         $scope.scenarios  = response;
     });
 
     $scope.deleteScenario = function(id) {
-        $http.delete('/profiler/mysql/scenario/' + id).success(function(response) {
-            if (response === "true") {
-                var key = _.indexOf($scope.scenarios, _.findWhere($scope.scenarios, {id : id}));
-                $scope.scenarios.splice(key, 1);
+        $http.delete('/profiler/scenario/mysql/delete/' + id).success(function(response) {
+            if (response === true) {
+                $scope.scenarios = _.without($scope.scenarios, _.findWhere($scope.scenarios, {id : id}));
+            } else {
+                // TODO show error message
             }
         });
     };
@@ -28,6 +47,15 @@ function ProfilerMySQLScenariosList($scope, $http, $modal) {
     };
 }
 
+/**
+ * Controller for manage scenario.
+ *
+ * @param $scope       Scope
+ * @param $http        Http provider
+ * @param $routeParams Router params
+ *
+ * @returns void
+ */
 function ProfilerMySQLScenarioCreate($scope, $http, $routeParams) {
     $scope.name;
     $scope.description;
@@ -38,9 +66,20 @@ function ProfilerMySQLScenarioCreate($scope, $http, $routeParams) {
     $scope.filterTypes   = [];
     $scope.alerts        = [];
 
+    $http.get('/profiler/config/request/methods').success(function(methods) {
+        $scope.methods       = methods.requests;
+        $scope.methodsParams = methods.params;
+    });
+
+    $http.get('/profiler/config/filter/options').success(function(options) {
+        $scope.filterParams = options.params;
+        $scope.filterTypes  = options.types;
+        $scope.refreshFilters();
+    });
+
     // It means that it is edit UC.
     if ($routeParams.hasOwnProperty('id')) {
-        $http.get('/profiler/mysql/scenario/' + $routeParams.id).success(function(scenario) {
+        $http.get('/profiler/scenario/mysql/get/' + $routeParams.id).success(function(scenario) {
             $scope.name        = scenario.name;
             $scope.description = scenario.description;
             $scope.requests    = scenario.requests;
@@ -48,17 +87,6 @@ function ProfilerMySQLScenarioCreate($scope, $http, $routeParams) {
             $scope.refreshFilters();
         });
     }
-
-    $http.get('/profiler/request/methods').success(function(methods) {
-        $scope.methods       = methods.requests;
-        $scope.methodsParams = methods.params;
-    });
-
-    $http.get('/profiler/filter/options').success(function(options) {
-        $scope.filterParams = options.params;
-        $scope.filterTypes  = options.types;
-        $scope.refreshFilters();
-    });
 
     $scope.refreshFilters = function() {
         if ($scope.filterParams.length && $scope.requests.length) {
@@ -68,7 +96,8 @@ function ProfilerMySQLScenarioCreate($scope, $http, $routeParams) {
                         filter.options = _.clone($scope.filterParams);
                         angular.forEach(filter.parameters, function(parameter) {
                             var item = _.findWhere($scope.filterParams, {value: parameter.parameter});
-                            filter.options = _.without(filter.options, item);
+
+                            filter.options    = _.without(filter.options, item);
                             parameter.options = item;
                         });
                     });
@@ -105,6 +134,7 @@ function ProfilerMySQLScenarioCreate($scope, $http, $routeParams) {
     $scope.addFilterParameter = function(event, item, filter) {
         var value    = null,
             operator = _.first(item.operators).value;
+
         filter.options = _.without(filter.options, item);
 
         if (operator === 'boolean') {
@@ -123,21 +153,25 @@ function ProfilerMySQLScenarioCreate($scope, $http, $routeParams) {
     $scope.removeFilterParameter = function(filter, parameter) {
         filter.options.push(parameter.options);
         var index = _.indexOf(filter.parameters, parameter);
+
         filter.parameters.splice(index, 1);
     };
 
     $scope.removeRequest = function(request) {
         var index = _.indexOf($scope.requests, request);
+
         $scope.requests.splice(index, 1);
     };
 
     $scope.removeParameter = function(request, parameter) {
         var index = _.indexOf(request.parameters, parameter);
+
         request.parameters.splice(index, 1);
     };
 
     $scope.removeFilter = function(request, filter) {
         var index = _.indexOf(request.filters, filter);
+
         request.filters.splice(index, 1);
     };
 
@@ -153,11 +187,11 @@ function ProfilerMySQLScenarioCreate($scope, $http, $routeParams) {
 
             if ($routeParams.hasOwnProperty('id')) {
                 scenario.id = $routeParams.id;
-                $http.put('/profiler/mysql/scenario/' + $routeParams.id, scenario).success(function(response) {
+                $http.put('/profiler/scenario/mysql/update/' + $routeParams.id, scenario).success(function(response) {
                     $scope.back('/profiler/mysql/scenarios');
                 });
             } else {
-                $http.post('/profiler/mysql/scenario', scenario).success(function(response) {
+                $http.post('/profiler/scenario/mysql/create', scenario).success(function(response) {
                     $scope.back('/profiler/mysql/scenarios');
                 });
             }
@@ -270,28 +304,31 @@ function ProfilerMySQLScenarioCreate($scope, $http, $routeParams) {
     };
 }
 
+/**
+ * Controller for show detail of scenario.
+ *
+ * @param $scope       Scope
+ * @param $http        Http provider
+ * @param $routeParams Router params
+ * @param $timeout     Timeout provider
+ *
+ * @returns void
+ */
 function ProfilerMySQLScenarioDetail($scope, $http, $routeParams, $timeout) {
-    $scope.predicate  = 'started';
-    $scope.reverse    = false;
+    $scope.initList('id');
     $scope.scenarioId = $routeParams.id;
     $scope.scenario;
     $scope.tests     = [];
     $scope.testTimer = {};
     $scope.refreshInterval = 1000;
 
-    $scope.totalItems  = 0;
-    $scope.currentPage = 1;
-    $scope.maxSize     = 5;
-    $scope.pageSize    = 10;
-    $scope.pageSizes   = [10, 20, 50, 100];
-
-    $http.get('/profiler/mysql/scenario/' + $scope.scenarioId).success(function(response) {
+    $http.get('/profiler/scenario/mysql/get/' + $scope.scenarioId).success(function(response) {
         $scope.scenario = response;
     });
 
     $scope.loadTests = function(gotoLastPage) {
         $scope.tests = [];
-        $http.get('/profiler/mysql/scenario/' + $scope.scenarioId + '/tests').success(function(tests) {
+        $http.get('/profiler/scenario/mysql/' + $scope.scenarioId + '/test/get').success(function(tests) {
             angular.forEach(tests, function(test) {
                 $scope.unsetWatcher(test.id);
                 if (test.state !== 'done' && test.state !== 'error') {
@@ -308,18 +345,15 @@ function ProfilerMySQLScenarioDetail($scope, $http, $routeParams, $timeout) {
     };
 
     $scope.startTest = function() {
-        $http.post('/profiler/mysql/scenario/' + $scope.scenarioId + '/test/start').success(function(response) {
+        $http.post('/profiler/scenario/mysql/' + $scope.scenarioId + '/test/start').success(function(response) {
             $scope.loadTests(true);
         });
     };
 
     $scope.deleteTest = function(id) {
-        $http.delete('/profiler/mysql/scenario/test/' + id).success(function(response) {
+        $http.delete('/profiler/test/mysql/delete/' + id).success(function(response) {
             $scope.unsetWatcher(id);
-            if (response === "true") {
-                var key = _.indexOf($scope.tests, _.findWhere($scope.tests, {id : id}));;
-                $scope.tests.splice(key, 1);
-            }
+            $scope.tests = _.without($scope.tests, _.findWhere($scope.tests, {id : id}));
         });
     };
 
@@ -333,7 +367,7 @@ function ProfilerMySQLScenarioDetail($scope, $http, $routeParams, $timeout) {
     $scope.setWatcher = function(id) {
         $scope.unmask().blockLoad(true);
         $scope.testTimer[id] = $timeout(function() {
-            $http.get('/profiler/mysql/scenario/test/' + id).success(function(response) {
+            $http.get('/profiler/test/mysql/get/' + id).success(function(response) {
                 var key = _.indexOf($scope.tests, _.findWhere($scope.tests, {id : id}));
                 if (key !== -1) {
                     $scope.tests[key] = response;
@@ -345,12 +379,6 @@ function ProfilerMySQLScenarioDetail($scope, $http, $routeParams, $timeout) {
                 }
             });
         }, $scope.refreshInterval);
-    };
-
-    $scope.refresh = function(input) {
-        $scope.totalItems = input.length;
-
-        return input;
     };
 
     $scope.getRequestLink = function(request) {
@@ -370,7 +398,6 @@ function ProfilerMySQLScenarioDetail($scope, $http, $routeParams, $timeout) {
                     parameters.push(parameter.name + '=' + parameter.value);
                 }
             });
-
         }
 
         link = link + '?' + parameters.join('&');
@@ -391,40 +418,50 @@ function ProfilerMySQLScenarioDetail($scope, $http, $routeParams, $timeout) {
     $scope.loadTests();
 }
 
+/**
+ * Controller for show list of measure of the test.
+ *
+ * @param $scope       Scope
+ * @param $http        Http provider
+ * @param $routeParams Router params
+ *
+ * @returns void
+ */
 function ProfilerMySQLTestListCtrl($scope, $http, $routeParams) {
-    $scope.testId = $routeParams.id;
-    $scope.predicate = 'started';
-    $scope.reverse   = false;
-    $scope.measures  = [];
+    $scope.initList('started');
+    $scope.testId   = $routeParams.id;
+    $scope.measures = [];
 
-    $http.get('/profiler/mysql/scenario/test/' + $scope.testId + '/measures').success(function(response) {
+    $http.get('/profiler/test/mysql/' + $scope.testId + '/measure/get').success(function(response) {
         $scope.measures = response;
     });
 }
 
+/**
+ * Controller for show list of measured in files.
+ *
+ * @param $scope Scope
+ * @param $http  Http provider
+ * @param $modal Modal component
+ *
+ * @returns void
+ */
 function ProfilerFileListCtrl($scope, $http, $modal) {
-    $scope.predicate = 'id';
-    $scope.reverse   = false;
-    $scope.measures  = [];
-
-    $scope.totalItems  = 0;
-    $scope.currentPage = 1;
-    $scope.maxSize     = 5;
-    $scope.pageSize    = 10;
-    $scope.pageSizes   = [10, 20, 50, 100];
+    $scope.initList('id');
+    $scope.measures = [];
 
     $scope.setPage = function (pageNo) {
         $scope.currentPage = pageNo;
     };
 
-    $http.get('/profiler/file/measures').success(function(response) {
+    $http.get('/profiler/measure/file/get').success(function(response) {
         $scope.measures      = response;
         $scope.totalItems = response.length;
     });
 
     $scope.deleteMeasure = function (id){
-        $http.delete('/profiler/file/measure/' + id).success(function(response) {
-            if (response === "true") {
+        $http.delete('/profiler/measure/file/delete/' + id).success(function(response) {
+            if (response === true) {
                 var key = _.indexOf($scope.measures, _.findWhere($scope.measures, {id : id}));
                 $scope.measures.splice(key, 1);
             }
@@ -441,15 +478,17 @@ function ProfilerFileListCtrl($scope, $http, $modal) {
             scope    : $scope
         });
     };
-
-
-    $scope.refresh = function(input) {
-        $scope.totalItems = input.length;
-
-        return input;
-    };
 }
 
+/**
+ * Controller for show measure information (summary, call stack, statistics).
+ *
+ * @param $scope       Scope
+ * @param $http        Http provider
+ * @param $routeParams Router params
+ *
+ * @returns void
+ */
 function ProfilerMeasureDetailCtrl($scope, $http, $routeParams) {
     $scope.type = $routeParams.type || 'Session';
     $scope.id   = $routeParams.id;
@@ -473,7 +512,7 @@ function ProfilerMeasureDetailCtrl($scope, $http, $routeParams) {
 
     $scope.summary;
 
-    $http.get('/profiler/' + $scope.type + '/measure/' + $scope.id + '/summary').success(function(response) {
+    $http.get('/profiler/measure/' + $scope.type + '/' + $scope.id + '/summary').success(function(response) {
         $scope.summary = response;
     });
 
@@ -482,6 +521,15 @@ function ProfilerMeasureDetailCtrl($scope, $http, $routeParams) {
     };
 }
 
+/**
+ * Controller for show call stack of measure.
+ *
+ * @param $scope       Scope
+ * @param $http        Http provider
+ * @param $routeParams Router params
+ *
+ * @returns void
+ */
 function ProfilerCallStackCtrl($scope, $http, $routeParams) {
     $scope.type      = $routeParams.type || 'Session';
     $scope.measureId = $routeParams.id || 1;
@@ -494,9 +542,9 @@ function ProfilerCallStackCtrl($scope, $http, $routeParams) {
 
     $scope.showCall = function(call) {
         if (call.calls === undefined) {
-        $http.get('/profiler/' + $scope.type + '/measure/' + $scope.measureId + '/callStack/parent/' + call.id).success(function(response) {
-            call.calls = response;
-        });
+            $http.get('/profiler/measure/' + $scope.type + '/' + $scope.measureId + '/callStack/parent/' + call.id).success(function(response) {
+                call.calls = response;
+            });
         }
     };
 
@@ -515,6 +563,7 @@ function ProfilerCallStackCtrl($scope, $http, $routeParams) {
                     regexp = new RegExp($scope.filter.value);
                     filter = _.isEmpty(value.match(regexp));
                 }
+
                 break;
         }
 
@@ -523,26 +572,28 @@ function ProfilerCallStackCtrl($scope, $http, $routeParams) {
 
     $scope.$on('select', function(event, type) {
         if (type === $scope.tab.type && $scope.calls.length === 0) {
-            $http.get('/profiler/' + $scope.type + '/measure/' + $scope.measureId + '/callStack/parent/0').success(function(response) {
+            $http.get('/profiler/measure/' + $scope.type + '/' + $scope.measureId + '/callStack/parent/0').success(function(response) {
                 $scope.calls = response;
             });
         }
     });
 }
 
+/**
+ * Controller for show statistics about measure.
+ *
+ * @param $scope       Scope
+ * @param $http        Http provider
+ * @param $routeParams Router params
+ *
+ * @returns void
+ */
 function ProfilerFunctionStatCtrl($scope, $http, $routeParams) {
-    $scope.predicate = 'id';
-    $scope.reverse   = false;
+    $scope.initList('id');
     $scope.type      = $routeParams.type || 'Session';
     $scope.measureId = $routeParams.id || 1;
-    $scope.calls = [];
-    $scope.count = 0;
-
-    $scope.totalItems  = 0;
-    $scope.currentPage = 1;
-    $scope.maxSize     = 5;
-    $scope.pageSize    = 10;
-    $scope.pageSizes   = [10, 20, 50, 100];
+    $scope.calls     = [];
+    $scope.count     = 0;
 
     $scope.setPage = function (pageNo) {
         $scope.currentPage = pageNo;
@@ -550,7 +601,7 @@ function ProfilerFunctionStatCtrl($scope, $http, $routeParams) {
 
     $scope.$on('select', function(event, type) {
         if (type === $scope.tab.type && $scope.calls.length === 0) {
-            $http.get('/profiler/' + $scope.type + '/measure/' + $scope.measureId + '/statistic/function').success(function(response) {
+            $http.get('/profiler/measure/' + $scope.type + '/' + $scope.measureId + '/statistic/function').success(function(response) {
                 $scope.count = _.reduce(response, function(sum, el) {
                     return sum + el.count;
                 }, 0);
@@ -560,10 +611,4 @@ function ProfilerFunctionStatCtrl($scope, $http, $routeParams) {
             });
         }
     });
-
-    $scope.refresh = function(input) {
-        $scope.totalItems = input.length;
-
-        return input;
-    };
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Tests\Unit\Main;
+namespace PM\Tests\Unit\Main;
 
-use PF\Main\Abstracts\Unit\TestCase;
+use PM\Main\Abstracts\Unit\TestCase;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Commander.
+ * This script defines class for php unit test case of class \PM\Main\Commander.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -16,7 +16,7 @@ class CommanderTest extends TestCase {
     /**
      * Access instance.
      *
-     * @var \PF\Main\Commander
+     * @var \PM\Main\Commander
      */
     private $_instance;
 
@@ -28,7 +28,7 @@ class CommanderTest extends TestCase {
     protected function setUp() {
         parent::setUp();
 
-        $this->_instance = $this->getProvider()->get('PF\Main\Commander');
+        $this->_instance = $this->getProvider()->get('PM\Main\Commander');
     }
 
     /**
@@ -39,17 +39,17 @@ class CommanderTest extends TestCase {
     public function testGetExecutor() {
         $executorTest = $this->_instance->getExecutor('test');
 
-        $this->assertInstanceOf('PF\Main\Commander\Executor', $executorTest);
+        $this->assertInstanceOf('PM\Main\Commander\Executor', $executorTest);
 
         $executor = $this->_instance->getExecutor('executor');
 
-        $this->assertInstanceOf('PF\Main\Commander\Executor', $executor);
+        $this->assertInstanceOf('PM\Main\Commander\Executor', $executor);
     }
 
     /**
      * Fail test for method getExecutor. It fails because name must be string.
      *
-     * @expectedException PF\Main\Exception
+     * @expectedException PM\Main\Exception
      *
      * @return void
      */
@@ -64,16 +64,16 @@ class CommanderTest extends TestCase {
      */
     public function testDestroyExecutor() {
         $executor = $this->_instance->getExecutor('myTest');
-        $this->assertInstanceOf('PF\Main\Commander\Executor', $executor);
+        $this->assertInstanceOf('PM\Main\Commander\Executor', $executor);
 
         $answer = $this->_instance->destroyExecutor('myTest');
-        $this->assertInstanceOf('PF\Main\Commander', $answer);
+        $this->assertInstanceOf('PM\Main\Commander', $answer);
     }
 
     /**
      * Failt test for method destroy executor. It fails because executor must exist.
      *
-     * @expectedException PF\Main\Exception
+     * @expectedException PM\Main\Exception
      *
      * @return void
      */

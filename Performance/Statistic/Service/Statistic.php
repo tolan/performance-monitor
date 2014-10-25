@@ -1,10 +1,10 @@
 <?php
 
-namespace PF\Statistic\Service;
+namespace PM\Statistic\Service;
 
-use PF\Main\Abstracts\Service;
-use PF\Statistic\Entity;
-use PF\Statistic\Repository;
+use PM\Main\Abstracts\Service;
+use PM\Statistic\Entity;
+use PM\Statistic\Repository;
 
 /**
  * This script defines class for statistic service of statistic data.

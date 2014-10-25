@@ -1,17 +1,17 @@
 <div class="col-lg-5 col-sm-6 col-xs-6 height-100 search-filters-item-operator">
     <div>
-        <select class="form-control" ng-model="filter.operator" ng-change="send(filter)">
+        <select class="form-control" ng-model="filter.operator" ng-change="send()">
             <option ng-repeat="operator in filter.operators" value="[[operator.value]]" ng-selected="filter.operator === operator.value">
-                [[_.(operator.text)]]
+                [[_(operator.text)]]
             </option>
         </select>
     </div>
 </div>
 <div class="col-lg-7 col-sm-6 col-xs-6 height-100 search-filters-item-operand">
     <div>
-        <select ng-show="filter.operator !== 'set'" class="form-control" ng-model="filter.value" ng-change="send(filter)">
+        <select ng-show="filter.operator !== 'set'" class="form-control" ng-model="filter.value" ng-change="send()">
             <option ng-repeat="value in filter.values" value="[[value.value]]" ng-selected="filter.value === value.value">
-                [[_.(value.name)]]
+                [[_(value.name)]]
             </option>
         </select>
     </div>

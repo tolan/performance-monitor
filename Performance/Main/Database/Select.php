@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Database;
+namespace PM\Main\Database;
 
 /**
  * This script defines class for select statement of MySQL.
@@ -9,9 +9,9 @@ namespace PF\Main\Database;
  * @category   Performance
  * @package    Main
  *
- * @method \PF\Main\Database\Select where(string $condition, array $bind=null)   It adds condition with AND operator.
- * @method \PF\Main\Database\Select orWhere(string $condition, array $bind=null) It adds condition with OR operator.
- * @method \PF\Main\Database\Select setSQL(string $sql)                          It sets SQL query.
+ * @method \PM\Main\Database\Select where(string $condition, array $bind=null)   It adds condition with AND operator.
+ * @method \PM\Main\Database\Select orWhere(string $condition, array $bind=null) It adds condition with OR operator.
+ * @method \PM\Main\Database\Select setSQL(string $sql)                          It sets SQL query.
  */
 class Select extends Where {
 
@@ -79,7 +79,7 @@ class Select extends Where {
     /**
      * It adds DISTINCT to SQL statement.
      *
-     * @return \PF\Main\Database\Select
+     * @return \PM\Main\Database\Select
      */
     public function distinct() {
         $this->_distinct = ' DISTINCT';
@@ -90,7 +90,7 @@ class Select extends Where {
     /**
      * Returns new instance of where condition.
      *
-     * @return \PF\Main\Database\Where
+     * @return \PM\Main\Database\Where
      */
     public function createWhere() {
         return new parent($this->getConnection(), $this->getLogger());
@@ -140,7 +140,7 @@ class Select extends Where {
      *
      * @param string $part Name of part
      *
-     * @return \PF\Main\Database\Select
+     * @return \PM\Main\Database\Select
      */
     public function resetPart($part = null) {
         if ($part === null) {
@@ -176,7 +176,7 @@ class Select extends Where {
      *
      * @param array $columns Array with selected columns
      *
-     * @return \PF\Main\Database\Select
+     * @return \PM\Main\Database\Select
      */
     public function columns($columns) {
         if (isset($this->_columns[''])) {
@@ -194,7 +194,7 @@ class Select extends Where {
      * @param string|array $table   Name of table or alias => table array
      * @param array        $columns List of columns wich will be returned
      *
-     * @return \PF\Main\Database\Select
+     * @return \PM\Main\Database\Select
      */
     public function from($table, $columns = array('*')) {
         $alias = is_array($table) ? key($table) : $table;
@@ -217,7 +217,7 @@ class Select extends Where {
      * @param string       $on      ON condition to connection of tables
      * @param array        $columns List of columns wich will be returned
      *
-     * @return \PF\Main\Database\Select
+     * @return \PM\Main\Database\Select
      */
     public function joinInner($table, $on, $columns = array('*')) {
         return $this->_join($table, $on, $columns, 'INNER JOIN');
@@ -230,7 +230,7 @@ class Select extends Where {
      * @param string       $on      ON condition to connection of tables
      * @param array        $columns List of columns wich will be returned
      *
-     * @return \PF\Main\Database\Select
+     * @return \PM\Main\Database\Select
      */
     public function joinLeft($table, $on, $columns = array('*')) {
         return $this->_join($table, $on, $columns, 'LEFT JOIN');
@@ -241,7 +241,7 @@ class Select extends Where {
      *
      * @param array $columns List of columns for group function
      *
-     * @return \PF\Main\Database\Select
+     * @return \PM\Main\Database\Select
      */
     public function group($columns = null) {
         $this->_group = join((', '), (array)$columns);
@@ -252,9 +252,9 @@ class Select extends Where {
     /**
      * It adds HAVING function to SQL statement.
      *
-     * @param string|\PF\Main\Database\Where $condition HAVING condition
+     * @param string|\PM\Main\Database\Where $condition HAVING condition
      *
-     * @return \PF\Main\Database\Select
+     * @return \PM\Main\Database\Select
      */
     public function having($condition = null) {
         $this->_having = (string)$condition;
@@ -267,7 +267,7 @@ class Select extends Where {
      *
      * @param string|array $columns ORDER condition
      *
-     * @return \PF\Main\Database\Select
+     * @return \PM\Main\Database\Select
      */
     public function order($columns = array()) {
         if ($columns === null || $columns === false) {
@@ -291,7 +291,7 @@ class Select extends Where {
      *
      * @param string $limit LIMIT condition
      *
-     * @return \PF\Main\Database\Select
+     * @return \PM\Main\Database\Select
      */
     public function limit($limit='0') {
         if ($limit === '0' || $limit === 0 || $limit === false || $limit === null) {
@@ -306,9 +306,9 @@ class Select extends Where {
     /**
      * It creates SQL select statement.
      *
-     * @return \PF\Main\Database\Select
+     * @return \PM\Main\Database\Select
      *
-     * @throws \PF\Main\Database\Exception Throws when FROM table is not set.
+     * @throws \PM\Main\Database\Exception Throws when FROM table is not set.
      */
     protected function compile() {
         if ($this->_from === null) {
@@ -374,7 +374,7 @@ class Select extends Where {
      * @param array        $columns  List of columns wich will be returned
      * @param string       $joinType Define JOIN type (INNER or LEFT)
      *
-     * @return \PF\Main\Database\Select
+     * @return \PM\Main\Database\Select
      */
     private function _join($table, $on, $columns=array('*'), $joinType = 'INNER JOIN') {
         $alias = is_array($table) ? key($table) : $table;

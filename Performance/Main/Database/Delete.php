@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Database;
+namespace PM\Main\Database;
 
 /**
  * This script defines class for delete statement of MySQL.
@@ -10,9 +10,9 @@ namespace PF\Main\Database;
  * @category   Performance
  * @package    Main
  *
- * @method \PF\Main\Database\Delete where(string $condition, array $bind=null)   It adds condition with AND operator.
- * @method \PF\Main\Database\Delete orWhere(string $condition, array $bind=null) It adds condition with OR operator.
- * @method \PF\Main\Database\Delete setSQL(string $sql)                          It sets SQL qeury.
+ * @method \PM\Main\Database\Delete where(string $condition, array $bind=null)   It adds condition with AND operator.
+ * @method \PM\Main\Database\Delete orWhere(string $condition, array $bind=null) It adds condition with OR operator.
+ * @method \PM\Main\Database\Delete setSQL(string $sql)                          It sets SQL qeury.
  */
 class Delete extends Where {
 
@@ -28,7 +28,7 @@ class Delete extends Where {
      *
      * @param string $table Name of table
      *
-     * @return \PF\Main\Database\Delete
+     * @return \PM\Main\Database\Delete
      */
     public function setTable($table) {
         $this->_table = is_array($table) ? current($table) : $table;
@@ -51,9 +51,9 @@ class Delete extends Where {
     /**
      * This create SQL statement from input data.
      *
-     * @return \PF\Main\Database\Delete
+     * @return \PM\Main\Database\Delete
      *
-     * @throws \PF\Main\Database\Exception Throws when table is not set.
+     * @throws \PM\Main\Database\Exception Throws when table is not set.
      */
     protected function compile() {
         if ($this->_table === null) {

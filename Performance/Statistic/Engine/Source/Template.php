@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Statistic\Engine\Source;
+namespace PM\Statistic\Engine\Source;
 
-use PF\Statistic\Entity;
-use PF\Search;
+use PM\Statistic\Entity;
+use PM\Search;
 
 /**
  * This script defines class for creation source select with actual items from search engine.
@@ -19,12 +19,12 @@ class Template extends AbstractSource {
      *
      * @param Entity\Template $template Statistic template entity
      *
-     * @return \PF\Search\Filter\Select
+     * @return \PM\Search\Filter\Select
      */
     public function getSelect(Entity\Template $template) {
         $searchTemplate = new Search\Entity\Template($template->getSource()['template']);
 
-        $searchEngine   = $this->getProvider()->get('PF\Search\Engine'); /* @var $searchEngine \PF\Search\Engine */
+        $searchEngine   = $this->getProvider()->get('PM\Search\Engine'); /* @var $searchEngine \PM\Search\Engine */
         $searchSelects  = $searchEngine->createSearchSelect($searchTemplate);
 
         return $searchSelects['result'];

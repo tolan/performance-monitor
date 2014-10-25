@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Navigation;
+namespace PM\Main\Navigation;
 
-use PF\Main\Abstracts;
+use PM\Main\Abstracts;
 
 /**
  * This script defines repository class for navigation menu.

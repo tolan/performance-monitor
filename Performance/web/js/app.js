@@ -6,7 +6,7 @@ var countLoad = 0;
 var blockLoad = false;
 var timerLoad;
 var perfModule = angular.module(
-    'Perf',
+    'PM',
     ['ui.bootstrap', 'mgcrea.ngStrap', 'ngRoute', 'googlechart']
 ).config(
     function($interpolateProvider) {
@@ -77,7 +77,7 @@ perfModule.run(
             return translate._(key, placeholders);
         };
 
-        rootScope.cache = myCache;
+        rootScope.cache       = myCache;
         rootScope.cacheObject = function(name, object) {
             if (_.isObject(object) === false) {
                 if (this.hasOwnProperty(name) && _.isObject(this[name]) === true) {
@@ -91,11 +91,13 @@ perfModule.run(
 
             if (myCache.get(cacheName) !== undefined) {
                 this[name] = myCache.get(cacheName);
+                this.$emit(cacheName + ':loaded', this[name]);
             } else {
                 this[name] = object;
             }
 
             myCache.put(cacheName, this[name]);
+            this.$emit(cacheName + ':saved', this[name]);
         };
 
         rootScope.cleanCache = function(name) {
@@ -164,9 +166,7 @@ perfModule.run(
         };
 
         rootScope.back = function(url) {
-            if($window.history.length > 0) {
-                $window.history.back();
-            } else {
+            if(!$window.history.back()) {
                 location.path(url);
             }
 

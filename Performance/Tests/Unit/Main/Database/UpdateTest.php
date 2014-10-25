@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Tests\Unit\Main\Database;
+namespace PM\Tests\Unit\Main\Database;
 
-use PF\Main\Abstracts\Unit\TestCase;
+use PM\Main\Abstracts\Unit\TestCase;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Database\Update.
+ * This script defines class for php unit test case of class \PM\Main\Database\Update.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -16,7 +16,7 @@ class UpdateTest extends TestCase {
     /**
      * database instance.
      *
-     * @var \PF\Main\Database
+     * @var \PM\Main\Database
      */
     private $_database;
 
@@ -26,7 +26,7 @@ class UpdateTest extends TestCase {
      * @return void
      */
     protected function setUp() {
-        $this->_database = $this->getProvider()->get('PF\Main\Database');
+        $this->_database = $this->getProvider()->get('PM\Main\Database');
 
         parent::setUp();
     }

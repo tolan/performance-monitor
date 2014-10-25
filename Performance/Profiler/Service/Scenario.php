@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Profiler\Service;
+namespace PM\Profiler\Service;
 
-use PF\Main\Abstracts\Service;
-use PF\Main\Database;
-use PF\Profiler\Repository\Factory;
-use PF\Profiler\Entity;
+use PM\Main\Abstracts\Service;
+use PM\Main\Database;
+use PM\Profiler\Repository\Factory;
+use PM\Profiler\Entity;
 
 /**
  * This script defines class for scenario service.
@@ -19,7 +19,7 @@ class Scenario extends Service {
     /**
      * Returns list of all scenarios.
      *
-     * @param \PF\Profiler\Repository\Factory $factory Repository factory instance
+     * @param \PM\Profiler\Repository\Factory $factory Repository factory instance
      *
      * @return array
      */
@@ -31,17 +31,17 @@ class Scenario extends Service {
      * Creates new scenario with given data.
      *
      * @param array                           $scenarioData   Array with data for new scenario
-     * @param \PF\Profiler\Repository\Factory $factory        Repository factory instance
-     * @param \PF\Main\Database               $database       Database instance
-     * @param \PF\Profiler\Service\Request    $requestService Request service instance
+     * @param \PM\Profiler\Repository\Factory $factory        Repository factory instance
+     * @param \PM\Main\Database               $database       Database instance
+     * @param \PM\Profiler\Service\Request    $requestService Request service instance
      *
-     * @return \PF\Profiler\Entity\Scenario
+     * @return \PM\Profiler\Entity\Scenario
      *
-     * @throws \PF\Profiler\Service\Exception
+     * @throws \PM\Profiler\Service\Exception
      */
     public function createScenario($scenarioData, Factory $factory, Database $database, Request $requestService) {
         $transaction = $database->getTransaction()->begin('scenario');
-        $repository  = $factory->getScenario(); /* @var $repository \PF\Profiler\Repository\Scenario */
+        $repository  = $factory->getScenario(); /* @var $repository \PM\Profiler\Repository\Scenario */
         $scenario    = new Entity\Scenario($scenarioData);
 
         try {
@@ -71,13 +71,13 @@ class Scenario extends Service {
      * Updates existed scenario with new data.
      *
      * @param array                           $scenarioData   Array with data to update
-     * @param \PF\Profiler\Repository\Factory $factory        Repository facctory instance
-     * @param \PF\Main\Database               $database       Database instance
-     * @param \PF\Profiler\Service\Request    $requestService Request service instance
+     * @param \PM\Profiler\Repository\Factory $factory        Repository facctory instance
+     * @param \PM\Main\Database               $database       Database instance
+     * @param \PM\Profiler\Service\Request    $requestService Request service instance
      *
-     * @return \PF\Profiler\Entity\Scenario
+     * @return \PM\Profiler\Entity\Scenario
      *
-     * @throws \PF\Profiler\Service\Exception
+     * @throws \PM\Profiler\Service\Exception
      */
     public function updateScenario($scenarioData, Factory $factory, Database $database, Request $requestService) {
         $repository  = $factory->getScenario();
@@ -102,12 +102,12 @@ class Scenario extends Service {
      * Deletes existed scenario by given ID.
      *
      * @param int                             $id       ID of scenario
-     * @param \PF\Profiler\Repository\Factory $factory  Repository factory instance
-     * @param \PF\Main\Database               $database Database instance
+     * @param \PM\Profiler\Repository\Factory $factory  Repository factory instance
+     * @param \PM\Main\Database               $database Database instance
      *
      * @return boolean
      *
-     * @throws \PF\Profiler\Service\Exception
+     * @throws \PM\Profiler\Service\Exception
      */
     public function deleteScenario($id, Factory $factory, Database $database) {
         $repositroy  = $factory->getScenario();
@@ -128,11 +128,11 @@ class Scenario extends Service {
      * Returns scenario by given ID.
      *
      * @param int                             $id              ID of scenario
-     * @param \PF\Profiler\Repository\Factory $factory         Repository factory instance
+     * @param \PM\Profiler\Repository\Factory $factory         Repository factory instance
      * @param boolean                         $includeElements Include elements assigned to requests (filters, parameters, ...)
-     * @param \PF\Profiler\Service\Request    $requestService  Request service instance
+     * @param \PM\Profiler\Service\Request    $requestService  Request service instance
      *
-     * @return \PF\Profiler\Entity\Scenario
+     * @return \PM\Profiler\Entity\Scenario
      */
     public function getScenario($id, Factory $factory, $includeElements = false, Request $requestService = null) {
         $repository = $factory->getScenario();
@@ -153,14 +153,14 @@ class Scenario extends Service {
     /**
      * Updates requests assigned to scenario.
      *
-     * @param \PF\Profiler\Entity\Scenario $updateScenario Scenario entity instance with data to update
-     * @param \PF\Profiler\Entity\Scenario $scenario       Existed scenario entity instance
-     * @param \PF\Profiler\Service\Request $requestService Request service instance
-     * @param \PF\Main\Database            $database       Database instance
+     * @param \PM\Profiler\Entity\Scenario $updateScenario Scenario entity instance with data to update
+     * @param \PM\Profiler\Entity\Scenario $scenario       Existed scenario entity instance
+     * @param \PM\Profiler\Service\Request $requestService Request service instance
+     * @param \PM\Main\Database            $database       Database instance
      *
-     * @return \PF\Profiler\Service\Scenario
+     * @return \PM\Profiler\Service\Scenario
      * 
-     * @throws \PF\Profiler\Service\Exception
+     * @throws \PM\Profiler\Service\Exception
      */
     private function _updateRequests(Entity\Scenario $updateScenario, Entity\Scenario $scenario, Request $requestService, Database $database) {
         $updateRequests  = $updateScenario->get('requests', array());

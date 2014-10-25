@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Web\Component\Template;
+namespace PM\Main\Web\Component\Template;
 
 /**
  * This script defines template for JSON view.

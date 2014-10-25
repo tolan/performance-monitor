@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Statistic\Engine\Helper;
+namespace PM\Statistic\Engine\Helper;
 
-use PF\Main\Provider;
-use PF\Statistic\Engine;
-use PF\Main\Database;
-use PF\Statistic\Enum\Source;
+use PM\Main\Provider;
+use PM\Statistic\Engine;
+use PM\Main\Database;
+use PM\Statistic\Enum\Source;
 
 /**
  * This script defines helper class for create junctions between two entities.
@@ -79,8 +79,8 @@ class Junction {
         while (!$select->hasJunction($destination)) {
             $next = $this->_getJunctionEntity($source, $destination);
 
-            $junction = $this->_provider->get('PF\Statistic\Engine\Junction\\'.ucfirst($source));
-            /* @var $junction \PF\Statistic\Engine\Junction\AbstractJunction */
+            $junction = $this->_provider->get('PM\Statistic\Engine\Junction\\'.ucfirst($source));
+            /* @var $junction \PM\Statistic\Engine\Junction\AbstractJunction */
             $junction->createJunction($select, $next);
 
             $source = $next;
@@ -99,8 +99,8 @@ class Junction {
      * @return Engine\Select
      */
     public function assignSource(Engine\Select $select, Database\Select $sourceSelect, $source) {
-        $junction = $this->_provider->get('PF\Statistic\Engine\Junction\\'.ucfirst($source));
-        /* @var $junction \PF\Statistic\Engine\Junction\AbstractJunction */
+        $junction = $this->_provider->get('PM\Statistic\Engine\Junction\\'.ucfirst($source));
+        /* @var $junction \PM\Statistic\Engine\Junction\AbstractJunction */
         $junction->assignSource($select, $sourceSelect);
 
         return $select;

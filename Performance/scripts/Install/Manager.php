@@ -1,10 +1,10 @@
 <?php
 
-namespace PF\scripts\Install;
+namespace PM\scripts\Install;
 
-use PF\Main\Provider;
-use PF\Main\Filesystem\Directory;
-use PF\Main\Filesystem\File;
+use PM\Main\Provider;
+use PM\Main\Filesystem\Directory;
+use PM\Main\Filesystem\File;
 
 /**
  * This script defines a Manager class for run all the migrations that have not been started.
@@ -39,19 +39,19 @@ class Manager {
     /**
      * Construct method.
      *
-     * @param \PF\Main\Provider $provider Provider instance
+     * @param \PM\Main\Provider $provider Provider instance
      *
      * @return void
      */
     private function __construct(Provider $provider) {
         $this->_provider   = $provider;
-        $this->_repository = $provider->get('PF\scripts\Install\Repository');
+        $this->_repository = $provider->get('PM\scripts\Install\Repository');
     }
 
     /**
      * Runs all migration that have not been started.
      *
-     * @param \PF\Main\Provider $provider Provider instance.
+     * @param \PM\Main\Provider $provider Provider instance.
      *
      * @return boolean
      */
@@ -76,13 +76,13 @@ class Manager {
         $result = true;
 
         try {
-            foreach ($files as $item) { /* @var $item \PF\Main\Filesystem\File */
+            foreach ($files as $item) { /* @var $item \PM\Main\Filesystem\File */
                 if ($item instanceof File) {
                     $this->_doMigration($item);
                 }
             }
         } catch (\Exception $exc) {
-            $log = $this->_provider->get('PF\Main\Log'); /* @var $log \PF\Main\Log */
+            $log = $this->_provider->get('PM\Main\Log'); /* @var $log \PM\Main\Log */
             $log->fatal($exc);
             $result = false;
         }
@@ -93,7 +93,7 @@ class Manager {
     /**
      * It installs specific migration.
      *
-     * @param \PF\Main\Filesystem\File $file File instance of migration
+     * @param \PM\Main\Filesystem\File $file File instance of migration
      *
      * @return boolean
      */
@@ -109,7 +109,7 @@ class Manager {
             $className = $this->_getClassName($name);
             include_once 'migrations/'.$name;
 
-            $class = new $className($this->_provider); /* @var $class \PF\scripts\migrations\AbstractMigration */
+            $class = new $className($this->_provider); /* @var $class \PM\scripts\migrations\AbstractMigration */
             $class->run();
             $this->_repository->createVersion($name);
         }
@@ -129,6 +129,6 @@ class Manager {
 
         $postfix = rtrim(substr($fileName, strlen($prefix) + 1), '.php');
 
-        return 'PF\scripts\Install\migrations\\'.$postfix.'_'.$prefix;
+        return 'PM\scripts\Install\migrations\\'.$postfix.'_'.$prefix;
     }
 }

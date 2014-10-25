@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Profiler\Monitor;
+namespace PM\Profiler\Monitor;
 
 /**
  * This script defines class for monitor analyzator. The analyzator analyze list of calls and transfor, it into call stack tree.
@@ -14,7 +14,7 @@ class Analyzator implements Interfaces\Analyzator {
     /**
      * Monitor storage instance
      *
-     * @var \PF\Profiler\Monitor\Interfaces\Storage
+     * @var \PM\Profiler\Monitor\Interfaces\Storage
      */
     private $_storage;
 
@@ -28,7 +28,7 @@ class Analyzator implements Interfaces\Analyzator {
     /**
      * Construct method.
      *
-     * @param \PF\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
+     * @param \PM\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
      *
      * @return void
      */
@@ -39,7 +39,7 @@ class Analyzator implements Interfaces\Analyzator {
     /**
      * It provides analzing list of calls stored in storage. It take list of calls and transform it into call stack tree.
      *
-     * @return \PF\Profiler\Monitor\Analyzator
+     * @return \PM\Profiler\Monitor\Analyzator
      */
     public function analyze() {
         if ($this->_storage->getState() !== Storage\State::STATE_ANALYZED) {
@@ -60,7 +60,7 @@ class Analyzator implements Interfaces\Analyzator {
     /**
      * Process of analyze list of calls to call stack.
      *
-     * @param \PF\Profiler\Monitor\Storage $storage Monitor storage instance
+     * @param \PM\Profiler\Monitor\Storage $storage Monitor storage instance
      *
      * @return array
      */
@@ -141,7 +141,7 @@ class Analyzator implements Interfaces\Analyzator {
      * @param array $cycleCall Call with cycle
      * @param int   $key       Key of call in tree
      *
-     * @return \PF\Profiler\Monitor\Analyzator
+     * @return \PM\Profiler\Monitor\Analyzator
      */
     private function _handleStatementSubStack(&$tree, &$cycleCall, $key) {
         $startLine = $cycleCall[Enum\CallAttributes::LINE] - ($cycleCall[Enum\CallAttributes::LINES] - 1);

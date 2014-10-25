@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main\Web\Component\Http;
+namespace PM\Main\Web\Component\Http;
 
-use PF\Main\Abstracts\Entity;
-use PF\Main\Web\Exception;
+use PM\Main\Abstracts\Entity;
+use PM\Main\Web\Exception;
 
 /**
  * Abstract class for global variables.
@@ -17,7 +17,7 @@ abstract class AbstractHttp extends Entity {
     /**
      * Construct method
      *
-     * @throws \PF\Main\Web\Exception Throws when global variable doesn't exist.
+     * @throws \PM\Main\Web\Exception Throws when global variable doesn't exist.
      */
     public function __construct() {
         $class  = get_class($this);

@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Statistic\Engine\Junction;
+namespace PM\Statistic\Engine\Junction;
 
-use PF\Main\Database;
-use PF\Statistic\Engine\Select;
+use PM\Main\Database;
+use PM\Statistic\Engine\Select;
 
 /**
  * This script defines abstract class for assign junction to target entity in statistic select.
@@ -23,7 +23,7 @@ abstract class AbstractJunction {
      * Abstract method for create junction to target entity.
      *
      * @param Select $select Statistic select instance
-     * @param string $target One of enum \PF\Statistic\Enum\Source\Target
+     * @param string $target One of enum \PM\Statistic\Enum\Source\Target
      */
     abstract public function createJunction(Select $select, $target);
 

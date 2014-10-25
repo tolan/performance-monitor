@@ -1,14 +1,14 @@
 <?php
 
-namespace PF\Tests\Unit\Main\Web\Controller;
+namespace PM\Tests\Unit\Main\Web\Controller;
 
-use PF\Main\Abstracts\Unit\TestCase;
-use PF\Search\Enum\Target;
-use PF\Search\Enum\Filter;
-use PF\Search\Enum\Type;
+use PM\Main\Abstracts\Unit\TestCase;
+use PM\Search\Enum\Target;
+use PM\Search\Enum\Filter;
+use PM\Search\Enum\Type;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Web\Controller\Search.
+ * This script defines class for php unit test case of class \PM\Main\Web\Controller\Search.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -19,7 +19,7 @@ class SearchTest extends TestCase {
     /**
      * App instance.
      *
-     * @var \PF\Main\Web\Controller\Search
+     * @var \PM\Main\Web\Controller\Search
      */
     private $_controller;
 
@@ -31,7 +31,7 @@ class SearchTest extends TestCase {
     protected function setUp() {
         parent::setUp();
 
-        $this->_controller = $this->getProvider()->get('PF\Main\Web\Controller\Search');
+        $this->_controller = $this->getProvider()->get('PM\Main\Web\Controller\Search');
     }
 
     /**
@@ -328,11 +328,11 @@ class SearchTest extends TestCase {
             'target' => Target::ATTEMPT
         );
 
-        $response = $this->getMock('PF\Main\Web\Component\Request', array('getInput'));
+        $response = $this->getMock('PM\Main\Web\Component\Request', array('getInput'));
         $response->expects($this->once())
             ->method('getInput')
             ->will($this->returnValue($params));
-        $this->getProvider()->set($response, 'PF\Main\Web\Component\Request');
+        $this->getProvider()->set($response, 'PM\Main\Web\Component\Request');
 
         $payload  = $this->_controller->setParams($params)->setAction('find')->run()->getData();
         $expected = array(
@@ -373,11 +373,11 @@ class SearchTest extends TestCase {
             'target' => Target::MEASURE
         );
 
-        $response = $this->getMock('PF\Main\Web\Component\Request', array('getInput'));
+        $response = $this->getMock('PM\Main\Web\Component\Request', array('getInput'));
         $response->expects($this->once())
             ->method('getInput')
             ->will($this->returnValue($params));
-        $this->getProvider()->set($response, 'PF\Main\Web\Component\Request');
+        $this->getProvider()->set($response, 'PM\Main\Web\Component\Request');
 
         $payload  = $this->_controller->setParams($params)->setAction('find')->run()->getData();
         $expected = array(
@@ -414,11 +414,11 @@ class SearchTest extends TestCase {
             'target' => Target::TEST
         );
 
-        $response = $this->getMock('PF\Main\Web\Component\Request', array('getInput'));
+        $response = $this->getMock('PM\Main\Web\Component\Request', array('getInput'));
         $response->expects($this->once())
             ->method('getInput')
             ->will($this->returnValue($params));
-        $this->getProvider()->set($response, 'PF\Main\Web\Component\Request');
+        $this->getProvider()->set($response, 'PM\Main\Web\Component\Request');
 
         $payload  = $this->_controller->setParams($params)->setAction('find')->run()->getData();
         $expected = array(

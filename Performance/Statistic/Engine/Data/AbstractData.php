@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Statistic\Engine\Data;
+namespace PM\Statistic\Engine\Data;
 
-use PF\Statistic\Engine;
+use PM\Statistic\Engine;
 
 /**
  * This script defines abstract class for assign data condition to statistic select.
@@ -23,7 +23,7 @@ abstract class AbstractData {
     /**
      * Construct method.
      *
-     * @param \PF\Statistic\Engine\Helper\Junction $junctionHelper Junction helper instance
+     * @param \PM\Statistic\Engine\Helper\Junction $junctionHelper Junction helper instance
      *
      * @return void
      */
@@ -36,7 +36,7 @@ abstract class AbstractData {
      *
      * @param Engine\Select                     $select   Statistic select instance
      * @param Engine\Functions\AbstractFunction $function Statistic function instance
-     * @param string                            $method   One of enum \PF\Statistic\Enum\View\Data
+     * @param string                            $method   One of enum \PM\Statistic\Enum\View\Data
      *
      * @return Engine\Select
      *
@@ -63,7 +63,7 @@ abstract class AbstractData {
      * Helper method for create junction to destination entity.
      *
      * @param Engine\Select $select      Statistic select instance
-     * @param string        $destination One of \PF\Statistic\Enum\Source\Target
+     * @param string        $destination One of \PM\Statistic\Enum\Source\Target
      *
      * @return AbstractData
      */

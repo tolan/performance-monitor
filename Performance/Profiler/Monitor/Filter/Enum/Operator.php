@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Profiler\Monitor\Filter\Enum;
+namespace PM\Profiler\Monitor\Filter\Enum;
 
-use PF\Main\Abstracts\Enum;
+use PM\Main\Abstracts\Enum;
 
 /**
  * This script defines enum with all possible operators for filters.

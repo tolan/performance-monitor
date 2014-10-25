@@ -1,12 +1,12 @@
 <?php
 
-namespace PF\Tests\Unit\Main\Commander;
+namespace PM\Tests\Unit\Main\Commander;
 
-use PF\Main\Abstracts\Unit\TestCase;
-use PF\Main\Commander\Result;
+use PM\Main\Abstracts\Unit\TestCase;
+use PM\Main\Commander\Result;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Commander\Executor.
+ * This script defines class for php unit test case of class \PM\Main\Commander\Executor.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -17,7 +17,7 @@ class ExecutorTest extends TestCase {
     /**
      * Access instance.
      *
-     * @var \PF\Main\Commander\Executor
+     * @var \PM\Main\Commander\Executor
      */
     private $_instance;
 
@@ -29,7 +29,7 @@ class ExecutorTest extends TestCase {
     protected function setUp() {
         parent::setUp();
 
-        $this->_instance = $this->getProvider()->prototype('PF\Main\Commander\Executor', true);
+        $this->_instance = $this->getProvider()->prototype('PM\Main\Commander\Executor', true);
     }
 
     /**
@@ -59,7 +59,7 @@ class ExecutorTest extends TestCase {
 
         $this->assertInternalType('array', $instance->get());
         foreach ($instance->get() as $command) {
-            $this->assertInstanceOf('PF\Main\Commander\Execution', $command);
+            $this->assertInstanceOf('PM\Main\Commander\Execution', $command);
         }
 
         $this->assertCount(2, $instance->get());
@@ -73,7 +73,7 @@ class ExecutorTest extends TestCase {
     public function testGetResult() {
         $result = $this->_instance->getResult();
 
-        $this->assertInstanceOf('PF\Main\Commander\Result', $result);
+        $this->assertInstanceOf('PM\Main\Commander\Result', $result);
     }
 
     /**
@@ -87,8 +87,8 @@ class ExecutorTest extends TestCase {
 
         $answer = $this->_instance->setResult($myResult);
 
-        $this->assertInstanceOf('PF\Main\Commander\Executor', $answer);
-        $this->assertInstanceOf('PF\Main\Commander\Result', $answer->getResult());
+        $this->assertInstanceOf('PM\Main\Commander\Executor', $answer);
+        $this->assertInstanceOf('PM\Main\Commander\Result', $answer->getResult());
         $this->assertTrue($answer->getResult()->getTest());
     }
 
@@ -112,7 +112,7 @@ class ExecutorTest extends TestCase {
             'processed' => 1000
         );
 
-        $this->assertInstanceOf('PF\Main\Commander\Result', $result);
+        $this->assertInstanceOf('PM\Main\Commander\Result', $result);
         $this->assertEquals($expected, $result->toArray());
     }
 
@@ -134,7 +134,7 @@ class ExecutorTest extends TestCase {
             'const' => 100
         );
 
-        $this->assertInstanceOf('PF\Main\Commander\Result', $result);
+        $this->assertInstanceOf('PM\Main\Commander\Result', $result);
         $this->assertEquals($expected, $result->toArray());
     }
 }

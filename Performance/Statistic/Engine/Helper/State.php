@@ -1,12 +1,12 @@
 <?php
 
-namespace PF\Statistic\Engine\Helper;
+namespace PM\Statistic\Engine\Helper;
 
-use PF\Main\Commander;
-use PF\Main\Interfaces;
-use PF\Statistic\Engine;
-use PF\Statistic\Entity;
-use PF\Statistic\Service;
+use PM\Main\Commander;
+use PM\Main\Interfaces;
+use PM\Statistic\Engine;
+use PM\Statistic\Entity;
+use PM\Statistic\Service;
 
 /**
  * This script defines helper class for updating state of statistic run.

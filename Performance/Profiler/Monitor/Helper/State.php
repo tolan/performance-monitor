@@ -1,15 +1,15 @@
 <?php
 
-namespace PF\Profiler\Monitor\Helper;
+namespace PM\Profiler\Monitor\Helper;
 
-use PF\Main\Interfaces\Observer;
-use PF\Main\Interfaces\Observable;
-use PF\Main\Commander;
-use PF\Main\Commander\Executor;
-use PF\Profiler\Monitor\Repository;
-use PF\Profiler\Service;
-use PF\Profiler\Entity;
-use PF\Profiler\Monitor\Enum\Type;
+use PM\Main\Interfaces\Observer;
+use PM\Main\Interfaces\Observable;
+use PM\Main\Commander;
+use PM\Main\Commander\Executor;
+use PM\Profiler\Monitor\Repository;
+use PM\Profiler\Service;
+use PM\Profiler\Entity;
+use PM\Profiler\Monitor\Enum\Type;
 
 /**
  * This script defines helper class for updating state of test.

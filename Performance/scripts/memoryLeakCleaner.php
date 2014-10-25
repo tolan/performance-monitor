@@ -9,7 +9,7 @@ include __DIR__.'/../boot.php';
 $pid              = $argv[1];
 $i                = 0;
 $cpuUsageTreshold = 5;
-$process          = \PF\Main\Provider::getInstance()->get('PF\Main\System\Process'); /* @var $process \PF\Main\System\Process  */
+$process          = \PM\Main\Provider::getInstance()->get('PM\Main\System\Process'); /* @var $process \PM\Main\System\Process  */
 
 while($i < 30) {
     $procUsage[$i] = $process->cpuUsage($pid);

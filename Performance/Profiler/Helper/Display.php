@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Profiler\Helper;
+namespace PM\Profiler\Helper;
 
 /**
  * TODO

@@ -2,12 +2,11 @@
 
 include __DIR__.'/../boot.php';
 
-$provider = \PF\Main\Provider::getInstance();
+$provider = \PM\Main\Provider::getInstance();
 
 try {
     $provider->get('web')->run();
-} catch (\PF\Main\Exception $e) {
+} catch (\PM\Main\Exception $e) {
     $provider->get('log')->error($e->getMessage());
     $provider->get('log')->error($e->getTraceAsString());
 }
-

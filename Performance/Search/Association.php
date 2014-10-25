@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Search;
+namespace PM\Search;
 
-use PF\Search\Enum;
+use PM\Search\Enum;
 
 /**
  * This script defines class for association between all enums in search.
@@ -67,11 +67,11 @@ class Association {
      */
     private $_enums = array(
         Enum\Target::TEST => array(
-            Enum\Filter::STATE => '\PF\Profiler\Enum\TestState'
+            Enum\Filter::STATE => '\PM\Profiler\Enum\TestState'
         ),
         Enum\Target::MEASURE =>array(
-            Enum\Filter::STATE  => '\PF\Profiler\Monitor\Storage\State',
-            Enum\Filter::METHOD => '\PF\Main\Http\Enum\Method'
+            Enum\Filter::STATE  => '\PM\Profiler\Monitor\Storage\State',
+            Enum\Filter::METHOD => '\PM\Main\Http\Enum\Method'
         )
     );
 
@@ -145,7 +145,7 @@ class Association {
     /**
      * Returns that search target has allowed logic expression.
      *
-     * @param enum $target One of enum \PF\Search\Enum\Target
+     * @param enum $target One of enum \PM\Search\Enum\Target
      *
      * @return boolean
      */

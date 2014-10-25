@@ -1,10 +1,10 @@
 <?php
 
-namespace PF\Search\Service;
+namespace PM\Search\Service;
 
-use PF\Main\Abstracts;
-use PF\Search\Repository;
-use PF\Search\Entity;
+use PM\Main\Abstracts;
+use PM\Search\Repository;
+use PM\Search\Entity;
 
 /**
  * This script defines class for template service.
@@ -18,10 +18,10 @@ class Template extends Abstracts\Service {
     /**
      * Find templates for given usage.
      *
-     * @param \PF\Search\Repository\Template $repository Template repository instance
-     * @param enum                           $usage      One of enum \PF\Search\Enum\Usage
+     * @param \PM\Search\Repository\Template $repository Template repository instance
+     * @param enum                           $usage      One of enum \PM\Search\Enum\Usage
      *
-     * @return \PF\Search\Entity\Template[]
+     * @return \PM\Search\Entity\Template[]
      */
     public function findTemplates(Repository\Template $repository, $usage = null) {
         return $repository->findTemplates($usage);
@@ -31,10 +31,10 @@ class Template extends Abstracts\Service {
      * Gets template by given ID.
      *
      * @param int                            $id           ID of template
-     * @param \PF\Search\Repository\Template $repository   Template repository instance
-     * @param \PF\Search\Service\Group       $groupService Group service instance
+     * @param \PM\Search\Repository\Template $repository   Template repository instance
+     * @param \PM\Search\Service\Group       $groupService Group service instance
      *
-     * @return \PF\Search\Entity\Template
+     * @return \PM\Search\Entity\Template
      */
     public function getTemplate($id, Repository\Template $repository, Group $groupService) {
         $template = $repository->getTemplate($id);
@@ -53,10 +53,10 @@ class Template extends Abstracts\Service {
      * Creates new template of search.
      *
      * @param array                          $templateData Data of template for create
-     * @param \PF\Search\Repository\Template $repository   Template repository instance
-     * @param \PF\Search\Service\Group       $groupService Group service instance
+     * @param \PM\Search\Repository\Template $repository   Template repository instance
+     * @param \PM\Search\Service\Group       $groupService Group service instance
      *
-     * @return \PF\Search\Entity\Template
+     * @return \PM\Search\Entity\Template
      */
     public function createTemplate($templateData, Repository\Template $repository, Group $groupService) {
         $template = new Entity\Template($templateData);
@@ -81,10 +81,10 @@ class Template extends Abstracts\Service {
      * Update template of search.
      *
      * @param array                          $templateData Data of template for update
-     * @param \PF\Search\Repository\Template $repository   Template repository instance
-     * @param \PF\Search\Service\Group       $groupService Group service instance
+     * @param \PM\Search\Repository\Template $repository   Template repository instance
+     * @param \PM\Search\Service\Group       $groupService Group service instance
      *
-     * @return \PF\Search\Entity\Template
+     * @return \PM\Search\Entity\Template
      */
     public function updateTemplate($templateData, Repository\Template $repository, Group $groupService) {
         $templateUpdate = new Entity\Template($templateData);
@@ -104,11 +104,11 @@ class Template extends Abstracts\Service {
     /**
      * Updates groups sub-entities of template.
      *
-     * @param \PF\Search\Entity\Template $templateUpdate Entity of template for update
-     * @param \PF\Search\Entity\Template $template       Entity of existed template
-     * @param \PF\Search\Service\Group   $groupService   Group service instance
+     * @param \PM\Search\Entity\Template $templateUpdate Entity of template for update
+     * @param \PM\Search\Entity\Template $template       Entity of existed template
+     * @param \PM\Search\Service\Group   $groupService   Group service instance
      *
-     * @return \PF\Search\Entity\Template
+     * @return \PM\Search\Entity\Template
      */
     private function _updateGroups(Entity\Template $templateUpdate, Entity\Template $template, Group $groupService) {
         $existed = array();
@@ -156,7 +156,7 @@ class Template extends Abstracts\Service {
      * Deletes search template by given ID
      *
      * @param int                            $id         ID of template
-     * @param \PF\Search\Repository\Template $repository Template repository instance
+     * @param \PM\Search\Repository\Template $repository Template repository instance
      *
      * @return int
      */

@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Http;
+namespace PM\Main\Http;
 
 /**
  * This script defines http request exception class.
@@ -9,5 +9,5 @@ namespace PF\Main\Http;
  * @category   Performance
  * @package    Main
  */
-class Exception extends \PF\Main\Exception {
+class Exception extends \PM\Main\Exception {
 }

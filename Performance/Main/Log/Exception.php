@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Log;
+namespace PM\Main\Log;
 
 /**
  * This script defines exception class for logging.
@@ -9,5 +9,5 @@ namespace PF\Main\Log;
  * @category   Performance
  * @package    Main
  */
-class Exception extends \PF\Main\Exception {
+class Exception extends \PM\Main\Exception {
 }

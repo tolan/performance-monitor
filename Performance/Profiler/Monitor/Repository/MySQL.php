@@ -1,14 +1,14 @@
 <?php
 
-namespace PF\Profiler\Monitor\Repository;
+namespace PM\Profiler\Monitor\Repository;
 
-use PF\Main\Interfaces\Observable;
-use PF\Main\Interfaces\Observer;
-use PF\Main\Traits;
+use PM\Main\Interfaces\Observable;
+use PM\Main\Interfaces\Observer;
+use PM\Main\Traits;
 
-use PF\Profiler\Monitor\Interfaces\Storage;
-use PF\Profiler\Monitor\Interfaces\Call;
-use PF\Profiler\Monitor;
+use PM\Profiler\Monitor\Interfaces\Storage;
+use PM\Profiler\Monitor\Interfaces\Call;
+use PM\Profiler\Monitor;
 
 /**
  * This script defines class for monitor repository working with MySQL database.
@@ -41,7 +41,7 @@ class MySQL extends AbstractRepository implements Observer, Observable {
     /**
      * Instance of monitor call fly weight
      *
-     * @var \PF\Profiler\Monitor\Interfaces\Call
+     * @var \PM\Profiler\Monitor\Interfaces\Call
      */
     private $_call = null;
 
@@ -57,7 +57,7 @@ class MySQL extends AbstractRepository implements Observer, Observable {
     /**
      * Method for update observer. It is called when storage changed state.
      *
-     * @param \PF\Main\Interfaces\Observable $storage Monitor storage instance
+     * @param \PM\Main\Interfaces\Observable $storage Monitor storage instance
      */
     public function updateObserver(Observable $storage) {
         parent::update($this->_measureId, array('state' => $storage->getState()));
@@ -79,7 +79,7 @@ class MySQL extends AbstractRepository implements Observer, Observable {
      *
      * @param int $measureId ID of measure
      *
-     * @return \PF\Profiler\Monitor\Repository\MySQL
+     * @return \PM\Profiler\Monitor\Repository\MySQL
      */
     public function setMeasureId($measureId) {
         $this->_measureId = $measureId;
@@ -91,9 +91,9 @@ class MySQL extends AbstractRepository implements Observer, Observable {
     /**
      * Saves statistics from calls stack in storage. Before it must be saved monitor call fly weight.
      *
-     * @param \PF\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
+     * @param \PM\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
      *
-     * @return \PF\Profiler\Monitor\Repository\MySQL
+     * @return \PM\Profiler\Monitor\Repository\MySQL
      */
     public function saveCallStatistics(Storage $storage) {
         $this->_checkMeasureId();
@@ -112,9 +112,9 @@ class MySQL extends AbstractRepository implements Observer, Observable {
     /**
      * Loads call statistics into storage.
      *
-     * @param \PF\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
+     * @param \PM\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
      *
-     * @return \PF\Profiler\Monitor\Interfaces\Storage
+     * @return \PM\Profiler\Monitor\Interfaces\Storage
      */
     public function loadCallStatistics(Storage $storage) {
         $this->_checkMeasureId();
@@ -126,9 +126,9 @@ class MySQL extends AbstractRepository implements Observer, Observable {
     /**
      * Save monitor call fly weight instance. It is required for save others calls.
      *
-     * @param \PF\Profiler\Monitor\Interfaces\Call $call Monitor call fly weight instance
+     * @param \PM\Profiler\Monitor\Interfaces\Call $call Monitor call fly weight instance
      *
-     * @return \PF\Profiler\Monitor\Repository\MySQL
+     * @return \PM\Profiler\Monitor\Repository\MySQL
      */
     public function saveCallFlyweight(Call $call) {
         $this->_call = $call;
@@ -139,7 +139,7 @@ class MySQL extends AbstractRepository implements Observer, Observable {
     /**
      * Clean all stored data in database.
      *
-     * @return \PF\Profiler\Monitor\Repository\MySQL
+     * @return \PM\Profiler\Monitor\Repository\MySQL
      */
     public function reset() {
         $this->_checkMeasureId();
@@ -162,12 +162,12 @@ class MySQL extends AbstractRepository implements Observer, Observable {
     /**
      * It saves all calls to MySQL database.
      *
-     * @param array|\PF\Profiler\Monitor\Interfaces\Storage $stack   Monitor storage instance or array with calls
+     * @param array|\PM\Profiler\Monitor\Interfaces\Storage $stack   Monitor storage instance or array with calls
      * @param int                                           $calls   Counter for all calls
      * @param int                                           $time    Counter for time of all calls
      * @param int                                           $parentId ID of parent call
      *
-     * @return \PF\Profiler\Monitor\Repository\Cache
+     * @return \PM\Profiler\Monitor\Repository\Cache
      */
     private function _saveStatistics($stack, &$calls, &$time, $parentId = 0) {
         foreach ($stack as $call) {
@@ -217,7 +217,7 @@ class MySQL extends AbstractRepository implements Observer, Observable {
      * @param int $calls Count of all calls
      * @param int $time  Time of whole call stack
      *
-     * @return \PF\Profiler\Monitor\Repository\MySQL
+     * @return \PM\Profiler\Monitor\Repository\MySQL
      */
     private function _updateMeasure($start, $calls, $time) {
         $this->_checkMeasureId();

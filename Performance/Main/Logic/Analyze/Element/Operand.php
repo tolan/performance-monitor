@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main\Logic\Analyze\Element;
+namespace PM\Main\Logic\Analyze\Element;
 
-use PF\Main\Logic\Analyze\AbstractElement;
-use PF\Main\Logic\Exception;
+use PM\Main\Logic\Analyze\AbstractElement;
+use PM\Main\Logic\Exception;
 
 /**
  * This script defines class for logic operand element.
@@ -26,9 +26,9 @@ class Operand extends AbstractElement {
      *
      * @param mixed $value Value of operand
      *
-     * @return \PF\Main\Logic\Analyze\Element\Operand
+     * @return \PM\Main\Logic\Analyze\Element\Operand
      *
-     * @throws \PF\Main\Logic\Exception Throws when operand is full.
+     * @throws \PM\Main\Logic\Exception Throws when operand is full.
      */
     public function setValue($value) {
         if ($this->_value === null) {

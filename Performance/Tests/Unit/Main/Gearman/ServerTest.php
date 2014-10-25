@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Tests\Unit\Main\Gearman;
+namespace PM\Tests\Unit\Main\Gearman;
 
-use PF\Main\Abstracts\Unit\TestCase;
+use PM\Main\Abstracts\Unit\TestCase;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Gearman\Server.
+ * This script defines class for php unit test case of class \PM\Main\Gearman\Server.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -16,7 +16,7 @@ class ServerTest extends TestCase {
     /**
      * Server instance.
      *
-     * @var \PF\Main\Gearman\Server
+     * @var \PM\Main\Gearman\Server
      */
     private $_instance;
 
@@ -26,7 +26,7 @@ class ServerTest extends TestCase {
      * @return void
      */
     protected function setUp() {
-        $this->_instance = $this->getProvider()->get('PF\Main\Gearman\Server');
+        $this->_instance = $this->getProvider()->get('PM\Main\Gearman\Server');
 
         parent::setUp();
     }
@@ -37,8 +37,8 @@ class ServerTest extends TestCase {
      * @return void
      */
     public function testSetMessage() {
-        $message = $this->getMock('PF\Main\Abstracts\Gearman\Message');
-        $this->assertInstanceOf('PF\Main\Gearman\Server', $this->_instance->setMessage($message));
+        $message = $this->getMock('PM\Main\Abstracts\Gearman\Message');
+        $this->assertInstanceOf('PM\Main\Gearman\Server', $this->_instance->setMessage($message));
     }
 
     /**
@@ -56,13 +56,13 @@ class ServerTest extends TestCase {
      * @return void
      */
     public function testRun() {
-        $worker      = $this->getMock('PF\Main\Abstracts\Gearman\Worker', array(), array($this->getProvider()));
+        $worker      = $this->getMock('PM\Main\Abstracts\Gearman\Worker', array(), array($this->getProvider()));
         $workerClass = get_class($worker);
         $worker->expects($this->any())
             ->method('getResult')
             ->will($this->returnValue('test'));
 
-        $message = $this->getMock('PF\Main\Abstracts\Gearman\Message');
+        $message = $this->getMock('PM\Main\Abstracts\Gearman\Message');
         $message->expects($this->any())
             ->method('getTarget')
             ->will($this->returnValue($workerClass));

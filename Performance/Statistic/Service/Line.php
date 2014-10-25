@@ -1,10 +1,10 @@
 <?php
 
-namespace PF\Statistic\Service;
+namespace PM\Statistic\Service;
 
-use PF\Main\Abstracts\Service;
-use PF\Statistic\Repository;
-use PF\Statistic\Entity;
+use PM\Main\Abstracts\Service;
+use PM\Statistic\Repository;
+use PM\Statistic\Entity;
 
 /**
  * This script defines class for line service of statistic template.
@@ -19,9 +19,9 @@ class Line extends Service {
      * Returns list of line entities for view IDs.
      *
      * @param array                         $viewIds    List of view IDs
-     * @param \PF\Statistic\Repository\Line $repository Line repository instance
+     * @param \PM\Statistic\Repository\Line $repository Line repository instance
      *
-     * @return \PF\Statistic\Entity\Line[]
+     * @return \PM\Statistic\Entity\Line[]
      */
     public function getLinesForViews($viewIds, Repository\Line $repository) {
         return $repository->getLinesForViews($viewIds);
@@ -31,9 +31,9 @@ class Line extends Service {
      * Creates new line entity.
      *
      * @param array                         $lineData   Data of line for create
-     * @param \PF\Statistic\Repository\Line $repository Line repository instance
+     * @param \PM\Statistic\Repository\Line $repository Line repository instance
      *
-     * @return \PF\Statistic\Entity\Line
+     * @return \PM\Statistic\Entity\Line
      */
     public function createLine($lineData, Repository\Line $repository) {
         $line = new Entity\Line($lineData);
@@ -47,9 +47,9 @@ class Line extends Service {
      * Updates line entity.
      *
      * @param array                         $lineData   Data of line for create
-     * @param \PF\Statistic\Repository\Line $repository Line repository instance
+     * @param \PM\Statistic\Repository\Line $repository Line repository instance
      *
-     * @return \PF\Statistic\Entity\Line
+     * @return \PM\Statistic\Entity\Line
      */
     public function updateLine($lineData, Repository\Line $repository) {
         $line = new Entity\Line($lineData);
@@ -63,7 +63,7 @@ class Line extends Service {
      * Deletes line entity by given ID.
      *
      * @param int                           $id         ID of line entity.
-     * @param \PF\Statistic\Repository\Line $repository Line repository instance
+     * @param \PM\Statistic\Repository\Line $repository Line repository instance
      *
      * @return int
      */

@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Cache;
+namespace PM\Main\Cache;
 
 /**
  * Abstract class for cache driver
@@ -25,7 +25,7 @@ abstract class AbstractDriver implements Interfaces\Driver {
      *
      * @return mixed
      *
-     * @throws \PF\Main\Cache\Exception Throws when variable is not defined
+     * @throws \PM\Main\Cache\Exception Throws when variable is not defined
      */
     public function load($name = null) {
         $data = array();
@@ -46,7 +46,7 @@ abstract class AbstractDriver implements Interfaces\Driver {
      * @param string $name  Name of variable
      * @param mixed  $value Value for save
      *
-     * @return \PF\Main\Cache\AbstractDriver
+     * @return \PM\Main\Cache\AbstractDriver
      */
     public function save($name, $value) {
         $this->_data[$name] = $value;
@@ -70,9 +70,9 @@ abstract class AbstractDriver implements Interfaces\Driver {
      *
      * @param string $name Name of variable
      *
-     * @return \PF\Main\Cache\AbstractDriver
+     * @return \PM\Main\Cache\AbstractDriver
      *
-     * @throws \PF\Main\Cache\Exception Throws when variable is not set.
+     * @throws \PM\Main\Cache\Exception Throws when variable is not set.
      */
     public function clean($name=null) {
         if ($name === null) {
@@ -89,7 +89,7 @@ abstract class AbstractDriver implements Interfaces\Driver {
     /**
      * Flush unsaved data to storage.
      *
-     * @return \PF\Main\Cache\AbstractDriver
+     * @return \PM\Main\Cache\AbstractDriver
      */
     public function commit() {
         return $this;

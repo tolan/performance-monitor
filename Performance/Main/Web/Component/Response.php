@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Web\Component;
+namespace PM\Main\Web\Component;
 
-use PF\Main\Web\View\AbstractView;
+use PM\Main\Web\View\AbstractView;
 
 /**
  * This script defines class for response.
@@ -16,16 +16,16 @@ class Response {
     /**
      * Instance of template
      *
-     * @var \PF\Main\Web\Component\Template\AbstractTemplate
+     * @var \PM\Main\Web\Component\Template\AbstractTemplate
      */
     private $_template = null;
 
     /**
      * Sets templates instance.
      *
-     * @param \PF\Main\Web\Component\Template\AbstractTemplate $template Template instance
+     * @param \PM\Main\Web\Component\Template\AbstractTemplate $template Template instance
      *
-     * @return \PF\Main\Web\Component\Response
+     * @return \PM\Main\Web\Component\Response
      */
     public function setTemplate(Template\AbstractTemplate $template) {
         $this->_template = $template;
@@ -36,9 +36,9 @@ class Response {
     /**
      * Sets view instance.
      *
-     * @param \PF\Main\Web\View\AbstractView $view View instance
+     * @param \PM\Main\Web\View\AbstractView $view View instance
      *
-     * @return \PF\Main\Web\Component\Response
+     * @return \PM\Main\Web\Component\Response
      */
     public function setView(AbstractView $view) {
         $this->_template->setView($view);
@@ -51,7 +51,7 @@ class Response {
      *
      * @param mixed $data Data for display
      *
-     * @return \PF\Main\Web\Component\Response
+     * @return \PM\Main\Web\Component\Response
      */
     public function setData($data) {
         $this->_template->setData($data);
@@ -71,7 +71,7 @@ class Response {
     /**
      * Echo function for payload. It flush whole output and close connection with browser.
      *
-     * @return \PF\Main\Web\Component\Response
+     * @return \PM\Main\Web\Component\Response
      */
     public function flush() {
         ob_end_clean();

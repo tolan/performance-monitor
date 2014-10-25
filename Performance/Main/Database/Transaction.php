@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Database;
+namespace PM\Main\Database;
 
 /**
  * This script defines class for managing transations with MySQL database.
@@ -14,7 +14,7 @@ class Transaction {
     /**
      * Connection instance.
      *
-     * @var \PF\Main\Database\Connection
+     * @var \PM\Main\Database\Connection
      */
     private $_connection = null;
 
@@ -28,7 +28,7 @@ class Transaction {
     /**
      * Construct method.
      *
-     * @param \PF\Main\Database\Connection $connection Connection instance to MySQL
+     * @param \PM\Main\Database\Connection $connection Connection instance to MySQL
      *
      * @return void
      */
@@ -41,7 +41,7 @@ class Transaction {
      *
      * @param string $name Identification of transaction [optional]
      *
-     * @return \PF\Main\Database\Transaction
+     * @return \PM\Main\Database\Transaction
      */
     public function begin($name = null) {
         if ($name === null) {
@@ -63,9 +63,9 @@ class Transaction {
      *
      * @param string $name Identification of transaction [optional]
      *
-     * @return \PF\Main\Database\Transaction
+     * @return \PM\Main\Database\Transaction
      *
-     * @throws \PF\Main\Database\Exception Throws when you commit without started transaction.
+     * @throws \PM\Main\Database\Exception Throws when you commit without started transaction.
      */
     public function commit($name=null) {
         if ($this->_isInTransaction()) {
@@ -85,7 +85,7 @@ class Transaction {
     /**
      * Commits all transactions.
      *
-     * @return \PF\Main\Database\Transaction
+     * @return \PM\Main\Database\Transaction
      */
     public function commitAll() {
         if ($this->_isInTransaction()) {
@@ -101,7 +101,7 @@ class Transaction {
     /**
      * Clear all stored transactions from storage.
      *
-     * @return \PF\Main\Database\Transaction
+     * @return \PM\Main\Database\Transaction
      */
     public function clearAll() {
         $this->_transactions = array();
@@ -114,7 +114,7 @@ class Transaction {
      *
      * @param string $name Identification of transaction [optional]
      *
-     * @return \PF\Main\Database\Transaction
+     * @return \PM\Main\Database\Transaction
      */
     public function clear($name=null) {
         if ($name === null) {
@@ -133,7 +133,7 @@ class Transaction {
     /**
      * Roll back transactions.
      *
-     * @return \PF\Main\Database\Transaction
+     * @return \PM\Main\Database\Transaction
      */
     public function rollBack() {
         $this->_connection->prepare('')->closeCursor();
@@ -156,7 +156,7 @@ class Transaction {
      *
      * @return boolean
      *
-     * @throws \PF\Main\Database\Exception Throws when database is in transaction but here is no stored transactions.
+     * @throws \PM\Main\Database\Exception Throws when database is in transaction but here is no stored transactions.
      */
     private function _isInTransaction() {
         $this->_connection->prepare('')->closeCursor();

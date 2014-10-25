@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Profiler\Monitor\Storage;
+namespace PM\Profiler\Monitor\Storage;
 
-use PF\Main\Abstracts;
+use PM\Main\Abstracts;
 
 /**
  * This script defines class for monitor storage state. This class define transitions between state for monitor storage.

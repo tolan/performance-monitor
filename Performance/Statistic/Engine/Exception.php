@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Statistic\Engine;
+namespace PM\Statistic\Engine;
 
-use PF\Statistic;
+use PM\Statistic;
 
 /**
  * This script defines exception class for statistic engine.

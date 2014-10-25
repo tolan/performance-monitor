@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Profiler\Monitor;
+namespace PM\Profiler\Monitor;
 
 /**
  * This script defines class for monitor statistic.
@@ -14,7 +14,7 @@ class Statistic implements Interfaces\Statistic {
     /**
      * Monitor storage instance
      *
-     * @var \PF\Profiler\Monitor\Interfaces\Storage
+     * @var \PM\Profiler\Monitor\Interfaces\Storage
      */
     private $_storage;
 
@@ -28,7 +28,7 @@ class Statistic implements Interfaces\Statistic {
     /**
      * Construct method.
      *
-     * @param \PF\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
+     * @param \PM\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
      *
      * @return void
      */
@@ -39,7 +39,7 @@ class Statistic implements Interfaces\Statistic {
     /**
      * Generate statistics information in call stack tree.
      *
-     * @return \PF\Profiler\Monitor\Statistic
+     * @return \PM\Profiler\Monitor\Statistic
      */
     public function generate() {
         if ($this->_storage->getState() !== Storage\State::STATE_STAT_GENERATED) {
@@ -57,7 +57,7 @@ class Statistic implements Interfaces\Statistic {
     /**
      * Generate statistics information in call stack tree.
      *
-     * @param \PF\Profiler\Monitor\Storage $storage Monitor storage instance
+     * @param \PM\Profiler\Monitor\Storage $storage Monitor storage instance
      *
      * @return array
      */

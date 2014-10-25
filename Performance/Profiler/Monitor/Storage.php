@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Profiler\Monitor;
+namespace PM\Profiler\Monitor;
 
-use PF\Main\Abstracts;
-use PF\Main\Traits;
+use PM\Main\Abstracts;
+use PM\Main\Traits;
 
 /**
  * This script defines class for monitor storage.
@@ -19,30 +19,30 @@ class Storage extends Abstracts\ArrayAccessIterator implements Interfaces\Storag
     /**
      * Monitor repository instance.
      *
-     * @var \PF\Profiler\Monitor\Interfaces\Repository
+     * @var \PM\Profiler\Monitor\Interfaces\Repository
      */
     private $_repository;
 
     /**
      * Monitor call fly weight.
      *
-     * @var \PF\Profiler\Monitor\Interfaces\Call
+     * @var \PM\Profiler\Monitor\Interfaces\Call
      */
     private $_call;
 
     /**
      * Monitor storage state instance.
      *
-     * @var \PF\Profiler\Monitor\Storage\State
+     * @var \PM\Profiler\Monitor\Storage\State
      */
     private $_state;
 
     /**
      * Construct method.
      *
-     * @param \PF\Profiler\Monitor\Interfaces\Repository $repository Monitor repository instnace
-     * @param \PF\Profiler\Monitor\Interfaces\Call       $call       Monitor call fly weight
-     * @param \PF\Profiler\Monitor\Storage\State         $state      Monitor storage state instance (it is for manage states)
+     * @param \PM\Profiler\Monitor\Interfaces\Repository $repository Monitor repository instnace
+     * @param \PM\Profiler\Monitor\Interfaces\Call       $call       Monitor call fly weight
+     * @param \PM\Profiler\Monitor\Storage\State         $state      Monitor storage state instance (it is for manage states)
      *
      * @return void
      */
@@ -55,7 +55,7 @@ class Storage extends Abstracts\ArrayAccessIterator implements Interfaces\Storag
     /**
      * Returns monitor call fly weight instance.
      *
-     * @return \PF\Profiler\Monitor\Interfaces\Call
+     * @return \PM\Profiler\Monitor\Interfaces\Call
      */
     public function getCallInstance() {
         return $this->_call;
@@ -64,7 +64,7 @@ class Storage extends Abstracts\ArrayAccessIterator implements Interfaces\Storag
     /**
      * Returns actual state of storage.
      *
-     * @return enum \PF\Profiler\Monitor\Storage\State
+     * @return enum \PM\Profiler\Monitor\Storage\State
      */
     public function getState() {
         return $this->_state->getState();
@@ -73,9 +73,9 @@ class Storage extends Abstracts\ArrayAccessIterator implements Interfaces\Storag
     /**
      * Sets new state of storage.
      *
-     * @param enum $state One of \PF\Profiler\Monitor\Storage\State
+     * @param enum $state One of \PM\Profiler\Monitor\Storage\State
      *
-     * @return \PF\Profiler\Monitor\Storage
+     * @return \PM\Profiler\Monitor\Storage
      */
     public function setState($state) {
         $this->_state->setState($state);
@@ -106,7 +106,7 @@ class Storage extends Abstracts\ArrayAccessIterator implements Interfaces\Storag
     /**
      * It saves all data in storage into repository. State must be STATE_STAT_GENERATED.
      *
-     * @return \PF\Profiler\Monitor\Storage
+     * @return \PM\Profiler\Monitor\Storage
      */
     public function saveStatistics() {
         $this->_state->checkInState(Storage\State::STATE_STAT_GENERATED);
@@ -121,7 +121,7 @@ class Storage extends Abstracts\ArrayAccessIterator implements Interfaces\Storag
     /**
      * Clean all stored data in storage and repository.
      *
-     * @reutrn \PF\Profiler\Monitor\Storage
+     * @reutrn \PM\Profiler\Monitor\Storage
      */
     public function reset() {
         $this->fromArray(array());

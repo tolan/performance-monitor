@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Tests\Unit\Main\Web\View;
+namespace PM\Tests\Unit\Main\Web\View;
 
-use PF\Main\Abstracts\Unit\TestCase;
+use PM\Main\Abstracts\Unit\TestCase;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Web\View\Json.
+ * This script defines class for php unit test case of class \PM\Main\Web\View\Json.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -16,7 +16,7 @@ class JsonTest extends TestCase {
     /**
      * App instance.
      *
-     * @var \PF\Main\Web\View\Json
+     * @var \PM\Main\Web\View\Json
      */
     private $_view;
 
@@ -28,7 +28,7 @@ class JsonTest extends TestCase {
     protected function setUp() {
         parent::setUp();
 
-        $this->_view = $this->getProvider()->get('PF\Main\Web\View\Json');
+        $this->_view = $this->getProvider()->get('PM\Main\Web\View\Json');
     }
 
     /**
@@ -49,7 +49,7 @@ class JsonTest extends TestCase {
      * @return void
      */
     public function testSetData() {
-        $this->assertInstanceOf('PF\Main\Web\View\Json', $this->_view->setData(array('data')));
+        $this->assertInstanceOf('PM\Main\Web\View\Json', $this->_view->setData(array('data')));
         $this->assertEquals(array('data'), $this->_view->getData());
     }
 
@@ -71,7 +71,7 @@ class JsonTest extends TestCase {
      * @return void
      */
     public function testSetTemplate() {
-        $template = $this->getProvider()->get('PF\Main\Web\Component\Template\Html');
-        $this->assertInstanceOf('PF\Main\Web\View\Json', $this->_view->setTemplate($template));
+        $template = $this->getProvider()->get('PM\Main\Web\Component\Template\Html');
+        $this->assertInstanceOf('PM\Main\Web\View\Json', $this->_view->setTemplate($template));
     }
 }

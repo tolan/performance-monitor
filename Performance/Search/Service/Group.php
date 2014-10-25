@@ -1,10 +1,10 @@
 <?php
 
-namespace PF\Search\Service;
+namespace PM\Search\Service;
 
-use PF\Main\Abstracts;
-use PF\Search\Repository;
-use PF\Search\Entity;
+use PM\Main\Abstracts;
+use PM\Search\Repository;
+use PM\Search\Entity;
 
 /**
  * This script defines class for group service of search template.
@@ -19,10 +19,10 @@ class Group extends Abstracts\Service {
      * Returns groups of search template (include all filters).
      *
      * @param int                         $templateId    ID of template
-     * @param \PF\Search\Repository\Group $repository    Group repository instance
-     * @param \PF\Search\Service\Filter   $filterService Filter service instance
+     * @param \PM\Search\Repository\Group $repository    Group repository instance
+     * @param \PM\Search\Service\Filter   $filterService Filter service instance
      *
-     * @return \PF\Search\Entity\Group[]
+     * @return \PM\Search\Entity\Group[]
      */
     public function getGroupsForTemplate($templateId, Repository\Group $repository, Filter $filterService) {
         $groups = $repository->getGroupsForTemplate($templateId);
@@ -48,10 +48,10 @@ class Group extends Abstracts\Service {
      * Creates new group of search template.
      *
      * @param array                       $groupData     Data of new group
-     * @param \PF\Search\Repository\Group $repository    Group repository instance
-     * @param \PF\Search\Service\Filter   $filterService Filter service instance
+     * @param \PM\Search\Repository\Group $repository    Group repository instance
+     * @param \PM\Search\Service\Filter   $filterService Filter service instance
      *
-     * @return \PF\Search\Entity\Group
+     * @return \PM\Search\Entity\Group
      */
     public function createGroup($groupData, Repository\Group $repository, Filter $filterService) {
         $group = new Entity\Group($groupData);
@@ -76,11 +76,11 @@ class Group extends Abstracts\Service {
      * Updates group of search template.
      *
      * @param array                       $groupData     Data of group for update
-     * @param \PF\Search\Entity\Group     $group         Entity of existed group entity
-     * @param \PF\Search\Repository\Group $repository    Group repository instance
-     * @param \PF\Search\Service\Filter   $filterService Filter service instance
+     * @param \PM\Search\Entity\Group     $group         Entity of existed group entity
+     * @param \PM\Search\Repository\Group $repository    Group repository instance
+     * @param \PM\Search\Service\Filter   $filterService Filter service instance
      *
-     * @return \PF\Search\Entity\Group
+     * @return \PM\Search\Entity\Group
      */
     public function updateGroup($groupData, Entity\Group $group, Repository\Group $repository, Filter $filterService) {
         if ($group === null) {
@@ -99,11 +99,11 @@ class Group extends Abstracts\Service {
     /**
      * Updates filters sub-entities of group.
      *
-     * @param \PF\Search\Entity\Group   $groupUpdate   Entity of group for update
-     * @param \PF\Search\Entity\Group   $group         Entity of existed group
-     * @param \PF\Search\Service\Filter $filterService Filter service instance
+     * @param \PM\Search\Entity\Group   $groupUpdate   Entity of group for update
+     * @param \PM\Search\Entity\Group   $group         Entity of existed group
+     * @param \PM\Search\Service\Filter $filterService Filter service instance
      *
-     * @return \PF\Search\Entity\Group
+     * @return \PM\Search\Entity\Group
      */
     private function _updateFilters(Entity\Group $groupUpdate, Entity\Group $group, Filter $filterService) {
         $existed = array();
@@ -151,7 +151,7 @@ class Group extends Abstracts\Service {
      * Deletes search template group by given ID.
      *
      * @param int                         $id         ID of group
-     * @param \PF\Search\Repository\Group $repository Group repository instance
+     * @param \PM\Search\Repository\Group $repository Group repository instance
      *
      * @return int
      */

@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Profiler;
+namespace PM\Profiler;
 
 include_once __DIR__.'/../boot.php';
 
-use PF\Main\Provider;
-use PF\Profiler\Monitor\Storage\State;
+use PM\Main\Provider;
+use PM\Profiler\Monitor\Storage\State;
 
 /**
  * This script defines class of the performance profiler monitor.
@@ -22,7 +22,7 @@ class Monitor {
     /**
      * Singleton instance
      *
-     * @var \PF\Profiler\Monitor
+     * @var \PM\Profiler\Monitor
      */
     private static $_instance = false;
 
@@ -43,21 +43,21 @@ class Monitor {
     /**
      * Provider instance.
      *
-     * @var \PF\Main\Provider
+     * @var \PM\Main\Provider
      */
     private $_provider = null;
 
     /**
      * Facade instance.
      *
-     * @var \PF\Profiler\Monitor\Facade
+     * @var \PM\Profiler\Monitor\Facade
      */
     private $_facade = null;
 
     /**
      * Contruct method.
      *
-     * @param \PF\Main\Provider $provider Provider instance
+     * @param \PM\Main\Provider $provider Provider instance
      *
      * @return void
      */
@@ -67,7 +67,7 @@ class Monitor {
         }
 
         $this->_provider = $provider;
-        $this->_facade   = $this->_provider->get('PF\Profiler\Monitor\Factory\Facade')->getFacade();
+        $this->_facade   = $this->_provider->get('PM\Profiler\Monitor\Factory\Facade')->getFacade();
 
         $this->reset();
     }
@@ -75,7 +75,7 @@ class Monitor {
     /**
      * Method for get singleton instance
      *
-     * @return \PF\Profiler\Monitor
+     * @return \PM\Profiler\Monitor
      */
     public static function getInstance(Provider $provider = null) {
         if (self::$_instance === false) {
@@ -88,7 +88,7 @@ class Monitor {
     /**
      * Reset method. It clean all stored data and sets init values.
      *
-     * @return \PF\Profiler\Monitor
+     * @return \PM\Profiler\Monitor
      */
     public function reset() {
         $this->_isEnabled   = false;
@@ -102,7 +102,7 @@ class Monitor {
     /**
      * Method for enable measure.
      *
-     * @return \PF\Profiler\Monitor
+     * @return \PM\Profiler\Monitor
      */
     public function enable() {
         $startKey = Enum\HttpKeys::PROFILER_START;
@@ -126,7 +126,7 @@ class Monitor {
     /**
      * Method to disable measure.
      *
-     * @return \PF\Profiler\Monitor
+     * @return \PM\Profiler\Monitor
      */
     public function disable() {
         if ($this->_isEnabled === true) {
@@ -140,7 +140,7 @@ class Monitor {
     /**
      * Display overview of measure.
      *
-     * @return \PF\Profiler\Monitor
+     * @return \PM\Profiler\Monitor
      */
     public function display() {
         $this->_checkEnable();
@@ -163,7 +163,7 @@ class Monitor {
     /**
      * Process measure. It analyze catched calls, generate statistics and save statistics data.
      *
-     * @return \PF\Profiler\Monitor
+     * @return \PM\Profiler\Monitor
      */
     private function _process() {
         if ($this->_isProcessed === false && $this->_facade->getState() === State::STATE_TICKED) {

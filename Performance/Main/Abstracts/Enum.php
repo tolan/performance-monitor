@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Abstracts;
+namespace PM\Main\Abstracts;
 
 /**
  * This script defines abstract class for enums.

@@ -1,10 +1,20 @@
+angular.module('PM')
+    .controller('LangCtrl', LangCtrl);
 
+/**
+ * Controller for switching language.
+ *
+ * @param $scope Scope
+ * @param $http  Http provider
+ *
+ * @returns void
+ */
 function LangCtrl($scope, $http) {
     $scope.template = '/js/template/lang.html';
-    $scope.langs = [];
+    $scope.langs    = [];
     $scope.lang;
 
-    $http.get('/translate/langs').success(function(langs) {
+    $http.get('/translate/language/get').success(function(langs) {
         $scope.lang  = langs.default;
         $scope.langs = langs.langs;
     });

@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Event;
+namespace PM\Main\Event;
 
 /**
  * This script defines class for event manager. It provides registration of events and listeners. When is called method flush then all events are send to
@@ -20,28 +20,28 @@ class Manager implements Interfaces\Manager {
     /**
      * Repository instance.
      *
-     * @var \PF\Main\Event\Repository
+     * @var \PM\Main\Event\Repository
      */
     private $_repository = null;
 
     /**
      * Stack for events.
      *
-     * @var \PF\Main\Event\Action\AbstractAction[]
+     * @var \PM\Main\Event\Action\AbstractAction[]
      */
     private $_events = array();
 
     /**
      * Stack for listeners.
      *
-     * @var \PF\Main\Event\Listener\AbstractListener[]
+     * @var \PM\Main\Event\Listener\AbstractListener[]
      */
     private $_listeners = array();
 
     /**
      * Construct method
      *
-     * @param \PF\Main\Event\Repository $repository Repository instance
+     * @param \PM\Main\Event\Repository $repository Repository instance
      *
      * @return void
      */
@@ -52,7 +52,7 @@ class Manager implements Interfaces\Manager {
     /**
      * Gets all registerd events.
      *
-     * @return \PF\Main\Event\Action\AbstractAction[]
+     * @return \PM\Main\Event\Action\AbstractAction[]
      */
     public function getEvents() {
         return $this->_events;
@@ -61,7 +61,7 @@ class Manager implements Interfaces\Manager {
     /**
      * Gets all registerd listeners.
      *
-     * @return \PF\Main\Event\Listener\AbstractListener[]
+     * @return \PM\Main\Event\Listener\AbstractListener[]
      */
     public function getListeners() {
         return $this->_listeners;
@@ -71,9 +71,9 @@ class Manager implements Interfaces\Manager {
      * This method registers event for broadcast behaviour. It means that this event is send to all listeners over all modules.
      *
      * @param string                            $eventName Event identificator
-     * @param \PF\Main\Event\Interfaces\Message $message   Message of event
+     * @param \PM\Main\Event\Interfaces\Message $message   Message of event
      *
-     * @return \PF\Main\Event\Manager
+     * @return \PM\Main\Event\Manager
      */
     public function broadcast($eventName, Interfaces\Message $message = null) {
         $this->_events[] = $this->_createEvent($eventName, $message, self::EVENT_BROADCAST);
@@ -85,9 +85,9 @@ class Manager implements Interfaces\Manager {
      * This method registers event for emit behaviour. It means that this event is send to all listeners in our module.
      *
      * @param string                            $eventName Event identificator
-     * @param \PF\Main\Event\Interfaces\Message $message   Message of event
+     * @param \PM\Main\Event\Interfaces\Message $message   Message of event
      *
-     * @return \PF\Main\Event\Manager
+     * @return \PM\Main\Event\Manager
      */
     public function emit($eventName, Interfaces\Message $message = null) {
         $this->_events[] = $this->_createEvent($eventName, $message, self::EVENT_EMIT);
@@ -101,7 +101,7 @@ class Manager implements Interfaces\Manager {
      * @param string   $eventName Event identificator
      * @param \Closure $callback  Closure instance with function which is called when event is fired
      *
-     * @return \PF\Main\Event\Manager
+     * @return \PM\Main\Event\Manager
      */
     public function on($eventName, \Closure $callback) {
         $this->_listeners[] = $this->_createListener($eventName, $callback, self::LISTENER_ON);
@@ -115,7 +115,7 @@ class Manager implements Interfaces\Manager {
      * @param string   $eventName Event identificator
      * @param \Closure $callback  Closure instance with function which is called when event is fired
      *
-     * @return \PF\Main\Event\Manager
+     * @return \PM\Main\Event\Manager
      */
     public function once($eventName, \Closure $callback) {
         $this->_listeners[] = $this->_createListener($eventName, $callback, self::LISTENER_ONCE);
@@ -126,12 +126,12 @@ class Manager implements Interfaces\Manager {
     /**
      * This method flush all events to listeners. It means that it takes all evens and resolve their attributes and send it to right listener.
      *
-     * @return \PF\Main\Event\Manager
+     * @return \PM\Main\Event\Manager
      */
     public function flush() {
         while($this->getEvents()) {
             foreach ($this->getEvents() as $key => $event) {
-                /* @var $event \PF\Main\Event\Action\AbstractAction */
+                /* @var $event \PM\Main\Event\Action\AbstractAction */
                 if ($event instanceof Action\Emit) {
                     $this->_flushEmit($event);
                 } elseif ($event instanceof Action\Broadcast) {
@@ -148,7 +148,7 @@ class Manager implements Interfaces\Manager {
     /**
      * It make deregistration all events and listeners.
      *
-     * @return \PF\Main\Event\Manager
+     * @return \PM\Main\Event\Manager
      */
     public function clean() {
         foreach (array_keys($this->_events) as $key) {
@@ -166,12 +166,12 @@ class Manager implements Interfaces\Manager {
      * It creates event by given event name and message instance.
      *
      * @param string                            $eventName Event identificator
-     * @param \PF\Main\Event\Interfaces\Message $message   Message of event
+     * @param \PM\Main\Event\Interfaces\Message $message   Message of event
      * @param string                            $type      Type of event (broadcast|emit)
      *
-     * @return \PF\Main\Event\Action\AbstractAction
+     * @return \PM\Main\Event\Action\AbstractAction
      *
-     * @throws \PF\Main\Event\Exception Throws when you try create undefined event.
+     * @throws \PM\Main\Event\Exception Throws when you try create undefined event.
      */
     private function _createEvent($eventName, Interfaces\Message $message = null, $type = self::EVENT_BROADCAST) {
         switch ($type) {
@@ -215,9 +215,9 @@ class Manager implements Interfaces\Manager {
      * @param \Closure $closure   Closure instance with function which is called when event is fired
      * @param string   $type      Type of listener (on|once)
      *
-     * @return \PF\Main\Event\Listener\AbstractListener
+     * @return \PM\Main\Event\Listener\AbstractListener
      *
-     * @throws \PF\Main\Event\Exception Throws when listener is undefined
+     * @throws \PM\Main\Event\Exception Throws when listener is undefined
      */
     private function _createListener($eventName, \Closure $closure, $type = self::LISTENER_ON) {
         switch ($type) {
@@ -243,9 +243,9 @@ class Manager implements Interfaces\Manager {
     /**
      * It flush emit event to all listeners.
      *
-     * @param \PF\Main\Event\Action\Emit $event Event instance
+     * @param \PM\Main\Event\Action\Emit $event Event instance
      *
-     * @return \PF\Main\Event\Manager
+     * @return \PM\Main\Event\Manager
      */
     private function _flushEmit(Action\Emit $event) {
         foreach ($this->getListeners() as $key => $listener) {
@@ -269,9 +269,9 @@ class Manager implements Interfaces\Manager {
     /**
      * It flush broadcast event to all listeners.
      *
-     * @param \PF\Main\Event\Action\Broadcast $event Event instance
+     * @param \PM\Main\Event\Action\Broadcast $event Event instance
      *
-     * @return \PF\Main\Event\Manager
+     * @return \PM\Main\Event\Manager
      */
     private function _flushBroadcast(Action\Broadcast $event) {
         foreach ($this->getListeners() as $key => $listener) {
@@ -289,8 +289,8 @@ class Manager implements Interfaces\Manager {
     /**
      * This match names of event and listener.
      *
-     * @param \PF\Main\Event\Action\AbstractAction     $event    Event instance
-     * @param \PF\Main\Event\Listener\AbstractListener $listener Listener instance
+     * @param \PM\Main\Event\Action\AbstractAction     $event    Event instance
+     * @param \PM\Main\Event\Listener\AbstractListener $listener Listener instance
      *
      * @return boolean
      */
@@ -318,10 +318,10 @@ class Manager implements Interfaces\Manager {
     /**
      * It flush event to concrete listener.
      *
-     * @param \PF\Main\Event\Action\AbstractAction     $event    Event instance
-     * @param \PF\Main\Event\Listener\AbstractListener $listener Listener instance
+     * @param \PM\Main\Event\Action\AbstractAction     $event    Event instance
+     * @param \PM\Main\Event\Listener\AbstractListener $listener Listener instance
      *
-     * @return \PF\Main\Event\Manager
+     * @return \PM\Main\Event\Manager
      */
     private function _flushEvent(Action\AbstractAction $event, Listener\AbstractListener $listener) {
         $callback   = $listener->getClosure();

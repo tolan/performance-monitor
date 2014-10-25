@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Web\Component\Http;
+namespace PM\Main\Web\Component\Http;
 
 /**
  * This script defines class for access to env instead of $_ENV.

@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Profiler\Monitor\Interfaces;
+namespace PM\Profiler\Monitor\Interfaces;
 
-use PF\Main\Interfaces;
-use PF\Profiler\Monitor\Storage\State;
+use PM\Main\Interfaces;
+use PM\Profiler\Monitor\Storage\State;
 
 /**
  * Interface for monitor storage.
@@ -17,9 +17,9 @@ interface Storage extends Interfaces\Iterator, Interfaces\ArrayAccess, Interface
     /**
      * Construct method.
      *
-     * @param \PF\Profiler\Monitor\Interfaces\Repository $repository Monitor repository instance
-     * @param \PF\Profiler\Monitor\Interfaces\Call       $call       Call fly weight instance
-     * @param \PF\Profiler\Monitor\Storage\State         $state      Monitor storage state instance
+     * @param \PM\Profiler\Monitor\Interfaces\Repository $repository Monitor repository instance
+     * @param \PM\Profiler\Monitor\Interfaces\Call       $call       Call fly weight instance
+     * @param \PM\Profiler\Monitor\Storage\State         $state      Monitor storage state instance
      */
     public function __construct(Repository $repository, Call $call, State $state);
 

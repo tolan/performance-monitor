@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Web\View\Homepage;
+namespace PM\Main\Web\View\Homepage;
 
-use PF\Main\Web\View\Html;
+use PM\Main\Web\View\Html;
 
 /**
  * This script defines class for homepage index view.
@@ -16,7 +16,7 @@ class Index extends Html {
     /**
      * Generates payload. Sets headers and body in template.
      *
-     * @return \PF\Main\Web\View\Homepage\Index
+     * @return \PM\Main\Web\View\Homepage\Index
      */
     public function getPayload() {
         parent::getPayload();
@@ -34,7 +34,7 @@ class Index extends Html {
         $template->addScript($path.'/js/controller/Search.js');
         $template->addScript($path.'/js/controller/Statistics.js');
 
-        $template->addHeaderTag('<title>PF</title>');
+        $template->addHeaderTag('<title>PM</title>');
         $template->addHeaderTag('<link type="image/x-icon" href="'.$path.'/favicon.ico" rel="shortcut icon">');
         $template->addHeaderTag('<link type="image/png" href="'.$path.'/favicon.png" rel="icon">');
 
@@ -49,7 +49,7 @@ class Index extends Html {
      * @return string
      */
     private function _generateHtml() {
-        $html = '<div ng-app="Perf">'
+        $html = '<div ng-app="PM">'
                     .'<div class="header">'
                         .'<div ng-controller="MenuCtrl" class="menu" ng-include="template"></div>'
                     .'</div>'

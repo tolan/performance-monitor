@@ -3,20 +3,25 @@
     "provider" : {
         "useAutoloader" : true,
         "allowKillApp"  : true,
-        "initServices"  : ["database", "log", "loader"],
+        "cache"         : "cache",
+        "initServices"  : ["loader"],
         "serviceMap"    : {
-            "database" : "PF\\Main\\Database",
-            "config"   : "PF\\Main\\Config",
-            "web"      : "PF\\Main\\Web\\App",
-            "request"  : "PF\\Main\\Web\\Component\\Request",
-            "response" : "PF\\Main\\Web\\Component\\Response",
-            "log"      : "PF\\Main\\Log",
-            "access"   : "PF\\Main\\Access",
-            "router"   : "PF\\Main\\Web\\Component\\Router",
-            "cache"    : "PF\\Main\\Cache",
-            "loader"   : "PF\\Main\\ModuleLoader",
-            "utils"    : "PF\\Main\\Utils"
+            "database" : "PM\\Main\\Database",
+            "config"   : "PM\\Main\\Config",
+            "web"      : "PM\\Main\\Web\\App",
+            "request"  : "PM\\Main\\Web\\Component\\Request",
+            "response" : "PM\\Main\\Web\\Component\\Response",
+            "router"   : "PM\\Main\\Web\\Component\\Router",
+            "log"      : "PM\\Main\\Log",
+            "access"   : "PM\\Main\\Access",
+            "cache"    : "PM\\Main\\Cache",
+            "loader"   : "PM\\Main\\ModuleLoader",
+            "utils"    : "PM\\Main\\Utils"
         }
+    },
+    "cache" : {
+        "driver"    : "PM\\Main\\Cache\\Session",
+        "namespace" : "Performance"
     },
     "database" : {
         "address"  : "localhost",

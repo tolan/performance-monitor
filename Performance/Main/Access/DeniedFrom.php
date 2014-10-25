@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Access;
+namespace PM\Main\Access;
 
-use PF\Main\Access\Exception;
+use PM\Main\Access\Exception;
 
 /**
  * This script defines class for access control by denied ip address.
@@ -12,6 +12,7 @@ use PF\Main\Access\Exception;
  * @package    Main
  */
 class DeniedFrom extends AbstractAccess {
+
     const CONFIG_KEY = 'deniedFrom';
 
     /**
@@ -19,7 +20,7 @@ class DeniedFrom extends AbstractAccess {
      *
      * @return int
      *
-     * @throws \PF\Main\Access\Exception Throws when are set denied address and remote ip address is not in denied.
+     * @throws Exception Throws when are set denied address and remote ip address is not in denied.
      */
     public function checkAccess() {
         $config      = $this->getConfig();
@@ -30,6 +31,14 @@ class DeniedFrom extends AbstractAccess {
         }
 
         $remoteIp = $this->getRemoteIp();
+
+        $configTime     = $this->getConfigTime();
+        $cachedPriority = $this->getFromCache($remoteIp, $configTime);
+
+        if ($cachedPriority !== false) {
+            return $cachedPriority;
+        }
+
         $priority = 0;
 
         foreach ($ipAddresses as $pattern) {
@@ -39,6 +48,8 @@ class DeniedFrom extends AbstractAccess {
         if ($priority === 32) {
             throw new Exception('Access denied by denied address.');
         }
+
+        $this->saveToCache($remoteIp, $configTime, $priority);
 
         return $priority;
     }

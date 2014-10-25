@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Statistic\Engine\Functions;
+namespace PM\Statistic\Engine\Functions;
 
-use PF\Statistic\Engine\Select;
-use PF\Statistic\Engine\Exception;
+use PM\Statistic\Engine\Select;
+use PM\Statistic\Engine\Exception;
 
 /**
  * This script defines class for create condition of average value for data in statistic select.

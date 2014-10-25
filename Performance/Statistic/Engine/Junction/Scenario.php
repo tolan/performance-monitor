@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Statistic\Engine\Junction;
+namespace PM\Statistic\Engine\Junction;
 
-use PF\Main\Database;
-use PF\Statistic\Engine\Select;
-use PF\Statistic\Enum\Source\Target;
-use PF\Statistic\Engine\Exception;
+use PM\Main\Database;
+use PM\Statistic\Engine\Select;
+use PM\Statistic\Enum\Source\Target;
+use PM\Statistic\Engine\Exception;
 
 /**
  * This script defines class for assign junction to target entity in statistic select.
@@ -20,7 +20,7 @@ class Scenario extends AbstractJunction {
      * It creates junction to target entity.
      *
      * @param Select $select Statistic select instance
-     * @param string $target One of enum \PF\Statistic\Enum\Source\Target
+     * @param string $target One of enum \PM\Statistic\Enum\Source\Target
      *
      * @return Select
      */

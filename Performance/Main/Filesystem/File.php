@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Filesystem;
+namespace PM\Main\Filesystem;
 
 /**
  * This script defines class for manage file in filesystem.
@@ -81,7 +81,7 @@ class File {
      *
      * @param string $path Dirname of new file
      *
-     * @return \PF\Main\Filesystem\File
+     * @return \PM\Main\Filesystem\File
      */
     public function copy($path) {
         copy($this->_getFilepath(), $path.'/'.$this->getName());
@@ -140,7 +140,7 @@ class File {
      *
      * @param boolean $autoCreate Flag for automatic create file when doesn't exist
      *
-     * @return \PF\Main\Filesystem\File
+     * @return \PM\Main\Filesystem\File
      */
     public function open($autoCreate = false) {
         if ($autoCreate === false) {
@@ -163,7 +163,7 @@ class File {
     /**
      * Close file pointer.
      *
-     * @return \PF\Main\Filesystem\File
+     * @return \PM\Main\Filesystem\File
      */
     public function close() {
         $this->_checkOpen();
@@ -179,7 +179,7 @@ class File {
      *
      * @param string $data Data to save
      *
-     * @return \PF\Main\Filesystem\File
+     * @return \PM\Main\Filesystem\File
      */
     public function fputs($data) {
         $this->write($data);
@@ -192,7 +192,7 @@ class File {
      *
      * @param string $data Data to save
      *
-     * @return \PF\Main\Filesystem\File
+     * @return \PM\Main\Filesystem\File
      */
     public function write($data) {
         $this->_checkOpen();
@@ -243,7 +243,7 @@ class File {
      *
      * @param boolean $autoCreate Flag for automatic create file when doesn't exist
      *
-     * @return \PF\Main\Filesystem\File
+     * @return \PM\Main\Filesystem\File
      */
     public function touch($autoCreate = true) {
         if ($autoCreate === false) {
@@ -258,13 +258,14 @@ class File {
     /**
      * It provides delete method for file. It close pointer and unlink file from filesystem.
      *
-     * @return \PF\Main\Filesystem\File
+     * @return \PM\Main\Filesystem\File
      */
     public function delete() {
         if ($this->isOpen() === true) {
             $this->close();
         }
 
+        umask(0000);
         unlink($this->_getFilepath());
         $this->setReadOffset(0);
         $this->setWriteOffset(0);
@@ -286,7 +287,7 @@ class File {
      *
      * @param int $offset Offset of read pointer
      *
-     * @return \PF\Main\Filesystem\File
+     * @return \PM\Main\Filesystem\File
      */
     public function setReadOffset($offset) {
         $this->_readOffset = $offset;
@@ -309,7 +310,7 @@ class File {
      *
      * @param int $offset Offset of write pointer
      *
-     * @return \PF\Main\Filesystem\File
+     * @return \PM\Main\Filesystem\File
      */
     public function setWriteOffset($offset) {
         $this->_writeOffset = $offset;
@@ -341,7 +342,7 @@ class File {
     /**
      * It creates file when doesn't exist.
      *
-     * @return \PF\Main\Filesystem\File
+     * @return \PM\Main\Filesystem\File
      */
     private function _createFile() {
         if ($this->_isFileExist() === false) {
@@ -357,7 +358,7 @@ class File {
      *
      * @return string
      *
-     * @throws \PF\Main\Filesystem\Exception Throws when path or name is not set.
+     * @throws \PM\Main\Filesystem\Exception Throws when path or name is not set.
      */
     private function _getFilepath() {
         if ($this->_path === null || $this->_name === null) {
@@ -372,7 +373,7 @@ class File {
      *
      * @param int $pointer New pointer value for synchronize
      *
-     * @return \PF\Main\Filesystem\File
+     * @return \PM\Main\Filesystem\File
      */
     private function _synchronizeOffsets($pointer) {
         if ($this->_syncOffsets === true) {
@@ -386,9 +387,9 @@ class File {
     /**
      * Checks that file exists.
      *
-     * @return \PF\Main\Filesystem\File
+     * @return \PM\Main\Filesystem\File
      *
-     * @throws \PF\Main\Filesystem\Exception Throws when file doesn't exist.
+     * @throws \PM\Main\Filesystem\Exception Throws when file doesn't exist.
      */
     private function _checkFileExist() {
         if ($this->_isFileExist() === false) {
@@ -411,9 +412,9 @@ class File {
     /**
      * Checks that file is open.
      *
-     * @return \PF\Main\Filesystem\File
+     * @return \PM\Main\Filesystem\File
      *
-     * @throws \PF\Main\Filesystem\Exception Throws when file is not open.
+     * @throws \PM\Main\Filesystem\Exception Throws when file is not open.
      */
     private function _checkOpen() {
         if ($this->isOpen() === false) {

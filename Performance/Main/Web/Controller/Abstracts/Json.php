@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Web\Controller\Abstracts;
+namespace PM\Main\Web\Controller\Abstracts;
 
 /**
  * Abstract class for JSON controller.
@@ -14,10 +14,10 @@ class Json extends Controller {
     /**
      * Returns response with JSON template.
      *
-     * @return \PF\Main\Web\Component\Response
+     * @return \PM\Main\Web\Component\Response
      */
     final public function getResponse() {
-        $template = $this->getProvider()->get('PF\Main\Web\Component\Template\Json');
+        $template = $this->getProvider()->get('PM\Main\Web\Component\Template\Json');
         $response = $this->getProvider()->get('response');
         $response->setTemplate($template);
         return $response;
@@ -26,9 +26,9 @@ class Json extends Controller {
     /**
      * Returns view instance
      *
-     * @return \PF\Main\Web\View\Json
+     * @return \PM\Main\Web\View\Json
      */
     protected function getView() {
-        return $this->getProvider()->get('PF\Main\Web\View\Json');
+        return $this->getProvider()->get('PM\Main\Web\View\Json');
     }
 }

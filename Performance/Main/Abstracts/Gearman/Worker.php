@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main\Abstracts\Gearman;
+namespace PM\Main\Abstracts\Gearman;
 
-use PF\Main\Provider;
-use PF\Main\Abstracts\Gearman\Message;
+use PM\Main\Provider;
+use PM\Main\Abstracts\Gearman\Message;
 
 /**
  * Abstract class for gearman worker.
@@ -17,21 +17,21 @@ abstract class Worker extends \GearmanWorker {
     /**
      * Message instance
      *
-     * @var \PF\Main\Abstracts\Gearman\Message
+     * @var \PM\Main\Abstracts\Gearman\Message
      */
     private $_message = null;
 
     /**
      * Provider instance
      *
-     * @var \PF\Main\Provider
+     * @var \PM\Main\Provider
      */
     private $_provider = null;
 
     /**
      * Construct method.
      *
-     * @param \PF\Main\Provider $provider Instance of \PF\Main\Provider
+     * @param \PM\Main\Provider $provider Instance of \PM\Main\Provider
      */
     public function __construct(Provider $provider) {
         $this->_provider = $provider;
@@ -41,9 +41,9 @@ abstract class Worker extends \GearmanWorker {
     /**
      * Sets message instance.
      *
-     * @param \PF\Main\Abstracts\Gearman\Message $message Message instance
+     * @param \PM\Main\Abstracts\Gearman\Message $message Message instance
      *
-     * @return \PF\Main\Abstracts\Gearman\Worker
+     * @return \PM\Main\Abstracts\Gearman\Worker
      */
     final public function setMessage(Message $message) {
         $this->_message = $message;
@@ -66,9 +66,9 @@ abstract class Worker extends \GearmanWorker {
     abstract public function getResult();
 
     /**
-     * Return message (instance of \PF\Main\Abstracts\Gearman\Message)
+     * Return message (instance of \PM\Main\Abstracts\Gearman\Message)
      *
-     * @return \PF\Main\Abstracts\Gearman\Message
+     * @return \PM\Main\Abstracts\Gearman\Message
      */
     final protected function getMessage() {
         return $this->_message;
@@ -86,7 +86,7 @@ abstract class Worker extends \GearmanWorker {
     /**
      * Returns instance of provider.
      *
-     * @return \PF\Main\Provider
+     * @return \PM\Main\Provider
      */
     final protected function getProvider() {
         return $this->_provider;

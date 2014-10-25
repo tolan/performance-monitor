@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Statistic\Engine;
+namespace PM\Statistic\Engine;
 
-use PF\Main\Abstracts;
-use PF\Main\Interfaces;
-use PF\Main\Traits;
-use PF\Statistic\Enum\Run;
+use PM\Main\Abstracts;
+use PM\Main\Interfaces;
+use PM\Main\Traits;
+use PM\Statistic\Enum\Run;
 
 /**
  * This script defines class for statistic generating run state. This class define transitions between state for run.

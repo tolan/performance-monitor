@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Profiler\Monitor\Interfaces;
+namespace PM\Profiler\Monitor\Interfaces;
 
-use PF\Main\Interfaces\Observer;
-use PF\Profiler\Repository\Filter as RepositoryFilter;
+use PM\Main\Interfaces\Observer;
+use PM\Profiler\Repository\Filter as RepositoryFilter;
 
 /**
  * Interface for monitor analyzator.
@@ -24,7 +24,7 @@ interface Repository extends Observer {
     /**
      * Sets repository for handling filter entities.
      *
-     * @param \PF\Profiler\Repository\Filter $repository Filter repository instance
+     * @param \PM\Profiler\Repository\Filter $repository Filter repository instance
      * @param int                            $requestId  Request ID
      */
     public function setFilterRepository(RepositoryFilter $repository, $requestId = null);
@@ -32,21 +32,21 @@ interface Repository extends Observer {
     /**
      * Saves statistics of call stack.
      *
-     * @param \PF\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
+     * @param \PM\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
      */
     public function saveCallStatistics(Storage $storage);
 
     /**
      * Loads call statistics into storage.
      *
-     * @param \PF\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
+     * @param \PM\Profiler\Monitor\Interfaces\Storage $storage Monitor storage instance
      */
     public function loadCallStatistics(Storage $storage);
 
     /**
      * Saves call fly weight which has hash table with contents and lines.
      *
-     * @param \PF\Profiler\Monitor\Interfaces\Call $call Call fly weight instance
+     * @param \PM\Profiler\Monitor\Interfaces\Call $call Call fly weight instance
      */
     public function saveCallFlyweight(Call $call);
 

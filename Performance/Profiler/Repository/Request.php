@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Profiler\Repository;
+namespace PM\Profiler\Repository;
 
-use PF\Main\Abstracts\Repository;
-use PF\Profiler\Entity;
+use PM\Main\Abstracts\Repository;
+use PM\Profiler\Entity;
 
 /**
  * This script defines class for request repository.
@@ -26,9 +26,9 @@ class Request extends Repository {
     /**
      * Create new request in database by given request entity.
      *
-     * @param \PF\Profiler\Entity\Request $request Request entity instance
+     * @param \PM\Profiler\Entity\Request $request Request entity instance
      *
-     * @return \PF\Profiler\Entity\Request
+     * @return \PM\Profiler\Entity\Request
      */
     public function createRequest(Entity\Request $request) {
         $data = array(
@@ -48,7 +48,7 @@ class Request extends Repository {
     /**
      * Updates requet in database.
      *
-     * @param \PF\Profiler\Entity\Request $request Request entity instance
+     * @param \PM\Profiler\Entity\Request $request Request entity instance
      *
      * @return boolean
      */
@@ -68,7 +68,7 @@ class Request extends Repository {
     /**
      * Create new request parameter by given parameter entity.
      *
-     * @param \PF\Profiler\Entity\Parameter $parameter Parameter entity instance
+     * @param \PM\Profiler\Entity\Parameter $parameter Parameter entity instance
      *
      * @return int ID of new parameter
      */
@@ -86,7 +86,7 @@ class Request extends Repository {
     /**
      * Updates request parameter.
      *
-     * @param \PF\Profiler\Entity\Parameter $parameter Request parameter instance
+     * @param \PM\Profiler\Entity\Parameter $parameter Request parameter instance
      *
      * @return boolean
      */
@@ -121,7 +121,7 @@ class Request extends Repository {
      *
      * @param int $id ID of request
      *
-     * @return \PF\Profiler\Entity\Request
+     * @return \PM\Profiler\Entity\Request
      */
     public function getRequest($id) {
         $select = $this->getDatabase()->select()
@@ -141,7 +141,7 @@ class Request extends Repository {
      *
      * @param int $scenarioId ID of scenario
      *
-     * @return \PF\Profiler\Entity\Request
+     * @return \PM\Profiler\Entity\Request
      */
     public function getRequestsForScenario($scenarioId) {
         $select = $this->getDatabase()->select()
@@ -167,7 +167,7 @@ class Request extends Repository {
      *
      * @param array $requestsIds Array with request IDs
      * 
-     * @return \PF\Profiler\Entity\Parameter
+     * @return \PM\Profiler\Entity\Parameter
      */
     public function getParamsForRequests($requestsIds) {
         $select = $this->getDatabase()->select()

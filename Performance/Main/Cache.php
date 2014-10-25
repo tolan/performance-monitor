@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main;
+namespace PM\Main;
 
 /**
  * This script defines class for caching.
@@ -9,7 +9,7 @@ namespace PF\Main;
  * @category   Performance
  * @package    Main
  */
-class Cache implements Event\Interfaces\Sender {
+class Cache {
 
     const DEFAULT_NAMESPACE = 'Performance';
 
@@ -21,54 +21,41 @@ class Cache implements Event\Interfaces\Sender {
     private $_driver;
 
     /**
-     * Mediator instance
-     *
-     * @var \PF\Main\Event\Mediator
-     */
-    private $_mediator = null;
-
-    /**
      * Construct method.
      *
-     * @param \Cache\Interfaces\Driver $driver    Cache driver
-     * @param string                   $namespace Namespace
-     * @param \PF\Main\Event\Mediator  $mediator  Mediator instance
+     * @param Cache\Interfaces\Driver $driver    Cache driver
+     * @param string                  $namespace Namespace
+     * @param Config                  $config    Config instance
      *
      * @return void
      */
-    public function __construct($driver = null, $namespace = self::DEFAULT_NAMESPACE, Event\Mediator $mediator = null) {
+    public function __construct($driver = null, $namespace = self::DEFAULT_NAMESPACE, Config $config = null) {
         if ($driver && !($driver instanceof Cache\Interfaces\Driver)) {
             throw new Exception('Cache driver must be instance of Cache\Interfaces\Driver.');
         } elseif (!$driver) {
-            $driver = new Cache\Session($namespace);
+            $defaultDriver = __NAMESPACE__.'\\Cache\\Session';
+            $configCache   = $config->get('cache', array());
+            $driverClass   = array_key_exists('driver', $configCache) ? $configCache['driver'] : $defaultDriver;
+
+            if (!is_subclass_of($driverClass, __NAMESPACE__.'\\Cache\Interfaces\Driver')) {
+                throw new Exception('Configuration is not valid, it must be instance of Cache\Interfaces\Driver.');
+            }
+
+            $driver = new $driverClass($namespace, $config);
         }
 
-        $this->_driver    = $driver;
-        $this->_mediator  = $mediator;
-
-        $this->send('Cache is loaded.');
-    }
-
-    public function setDriver(Cache\Interfaces\Driver $driver) {
         $this->_driver = $driver;
-
-        return $this;
     }
 
     /**
-     * It sends message to mediator.
+     * Sets cache driver for storing data.
      *
-     * @param mixed $content Message content
+     * @param Cache\Interfaces\Driver $driver Cache driver instance
      *
-     * @return \PF\Main\Cache
+     * @return Cache
      */
-    public function send($content) {
-        $message = new Event\Message();
-        $message->setData($content);
-
-        if ($this->_mediator) {
-            $this->_mediator->send($message, $this);
-        }
+    public function setDriver(Cache\Interfaces\Driver $driver) {
+        $this->_driver = $driver;
 
         return $this;
     }
@@ -90,7 +77,7 @@ class Cache implements Event\Interfaces\Sender {
      * @param string $name  Name of variable
      * @param mixed  $value Values
      *
-     * @return \PF\Main\Cache
+     * @return Cache
      */
     public function save($name, $value) {
         $this->_driver->save($name, $value);
@@ -114,7 +101,7 @@ class Cache implements Event\Interfaces\Sender {
      *
      * @param string $name Name of variable
      *
-     * @return \PF\Main\Cache
+     * @return Cache
      */
     public function clean($name = null) {
         $this->_driver->clean($name);
@@ -125,7 +112,7 @@ class Cache implements Event\Interfaces\Sender {
     /**
      * Flush unsaved data to storage.
      *
-     * @return \PF\Main\Cache
+     * @return Cache
      */
     public function commit() {
         $this->_driver->commit();

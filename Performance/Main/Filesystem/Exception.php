@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Filesystem;
+namespace PM\Main\Filesystem;
 
 /**
  * This script defines exception class for filesystem.
@@ -9,5 +9,5 @@ namespace PF\Main\Filesystem;
  * @category   Performance
  * @package    Main
  */
-class Exception extends \PF\Main\Exception {
+class Exception extends \PM\Main\Exception {
 }

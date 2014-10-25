@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main\Commander\Interfaces;
+namespace PM\Main\Commander\Interfaces;
 
-use PF\Main\Commander\Result;
-use PF\Main\Provider;
+use PM\Main\Commander\Result;
+use PM\Main\Provider;
 
 /**
  * This script defines interface for executor (set of commands). It stores set of commands (executions) and provide their triggering.
@@ -17,8 +17,8 @@ interface Executor {
     /**
      * Construct method.
      *
-     * @param \PF\Main\Commander\Result $result   Entity for saving data from commands
-     * @param \PF\Main\Provider         $provider Provider instance
+     * @param \PM\Main\Commander\Result $result   Entity for saving data from commands
+     * @param \PM\Main\Provider         $provider Provider instance
      */
     public function __construct(Result $result, Provider $provider);
 
@@ -33,7 +33,7 @@ interface Executor {
     /**
      * Returns all executions (set of commands).
      *
-     * @return \PF\Main\Commander\Execution[]
+     * @return \PM\Main\Commander\Execution[]
      */
     public function get();
 
@@ -45,14 +45,14 @@ interface Executor {
     /**
      * Returns result instance with processed data.
      *
-     * @return \PF\Main\Commander\Result
+     * @return \PM\Main\Commander\Result
      */
     public function getResult();
 
     /**
      * It provides set result instance for sharing one instance between executors.
      *
-     * @param \PF\Main\Commander\Result $result Entity for saving data from commands
+     * @param \PM\Main\Commander\Result $result Entity for saving data from commands
      */
     public function setResult(Result $result);
 

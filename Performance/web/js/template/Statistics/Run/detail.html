@@ -1,6 +1,6 @@
 <div class="width-90 width-max-1200 width-min-640 center-block">
     <div class="inline-block width-5 pull-left">
-        <button class="close pull-left" ng-click="back('/statistic/set/detail/' + run.statisticSetId)" title="[[_.('main.back')]]">
+        <button class="close pull-left" ng-click="back('/statistic/set/detail/' + run.statisticSetId)" title="[[_('main.back')]]">
             <i class="glyphicon glyphicon-chevron-left"></i>
         </button>
     </div>
@@ -18,7 +18,7 @@
                 <div ng-repeat="view in template.views" class="panel panel-success">
                     <div class="panel-heading">
                         <div class="clearfix">
-                            <div class="pull-left">[[_.('statistic.run.chart.title.' + view.target)]]</div>
+                            <div class="pull-left">[[_('statistic.run.chart.title.' + view.target)]]</div>
                             <div class="pull-right">[[_('statistic.run.chart.started', { '#started#' : $filter('date')(run.started, 'd.M.yyyy H:mm:ss')})]]</div>
                         </div>
                     </div>
@@ -29,17 +29,19 @@
                             </div>
                             <div class="pull-right width-30 height-100">
                                 <accordion close-others="false" class="">
-                                    <accordion-group heading="[[_.('statistic.run.chart.settings')]]">
+                                    <accordion-group heading="[[_('statistic.run.chart.settings')]]">
                                         <span ng-show="view.chartData.type === 'LineChart'">
-                                            <input id="[[view.id]]"  type="checkbox" ng-true-value="function" ng-false-value="none" ng-model="view.chartData.options.curveType">
-                                            <label for="[[view.id]]">[[_.('statistic.run.chart.line.curveType')]]</label>
+                                            <input id="[[view.id]]" type="checkbox" ng-true-value="'function'" ng-false-value="'none'"
+                                                   ng-model="view.chartData.options.curveType">
+                                            <label for="[[view.id]]">[[_('statistic.run.chart.line.curveType')]]</label>
                                         </span>
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
-                                                [[_.('statistic.run.chart.line.selection')]]
+                                                [[_('statistic.run.chart.line.selection')]]
                                             </div>
                                             <div class="panel-body">
-                                                <p ng-repeat="line in view.lines" ng-click="selectChartLine(view, view.chartData, line)" class="btn margin-1" ng-class="line.selected === false ? 'btn-danger' : 'btn-success'">
+                                                <p ng-repeat="line in view.lines" ng-click="selectChartLine(view, view.chartData, line)"
+                                                        class="btn margin-1" ng-class="line.selected === false ? 'btn-danger' : 'btn-success'">
                                                     [[_getLineName(line, $index + 1)]]
                                                 </p>
                                             </div>

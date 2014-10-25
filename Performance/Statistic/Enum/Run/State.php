@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Statistic\Enum\Run;
+namespace PM\Statistic\Enum\Run;
 
-use PF\Main\Abstracts\Enum;
+use PM\Main\Abstracts\Enum;
 
 /**
  * This script defines enum with states for run entity.

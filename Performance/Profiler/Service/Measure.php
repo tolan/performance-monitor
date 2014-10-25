@@ -1,12 +1,12 @@
 <?php
 
-namespace PF\Profiler\Service;
+namespace PM\Profiler\Service;
 
-use PF\Main\Abstracts\Service;
-use PF\Main\Database;
-use PF\Profiler\Repository;
-use PF\Profiler\Monitor\Enum\Type;
-use PF\Profiler\Entity;
+use PM\Main\Abstracts\Service;
+use PM\Main\Database;
+use PM\Profiler\Repository;
+use PM\Profiler\Monitor\Enum\Type;
+use PM\Profiler\Entity;
 
 /**
  * This script defines class for measure service.
@@ -22,12 +22,12 @@ class Measure extends Service {
      *
      * @param int                $measureId ID of measure
      * @param Repository\Factory $factory   Repository factory instance
-     * @param enum               $type      One of PF\Profiler\Monitor\Enum\Type
+     * @param enum               $type      One of PM\Profiler\Monitor\Enum\Type
      *
      * @return Entity\Measure
      */
     public function getMeasure($measureId, Repository\Factory $factory, $type = Type::SESSION) {
-        $repository = $factory->getMeasure($type); /* @var $repository \PF\Profiler\Repository\Interfaces\Measure */
+        $repository = $factory->getMeasure($type); /* @var $repository \PM\Profiler\Repository\Interfaces\Measure */
 
         return $repository->getMeasure($measureId);
     }
@@ -36,16 +36,16 @@ class Measure extends Service {
      * Creates new measure to MySQL database.
      *
      * @param array                           $measureData Array with measure data
-     * @param \PF\Profiler\Repository\Factory $factory     Repository factory instance
-     * @param \PF\Main\Database               $database    Database instance
+     * @param \PM\Profiler\Repository\Factory $factory     Repository factory instance
+     * @param \PM\Main\Database               $database    Database instance
      *
-     * @return \PF\Profiler\Entity\Measure
+     * @return \PM\Profiler\Entity\Measure
      *
-     * @throws \PF\Profiler\Service\Exception
+     * @throws \PM\Profiler\Service\Exception
      */
     public function createMySQLMeasure($measureData, Repository\Factory $factory, Database $database) {
         $transaction = $database->getTransaction()->begin(__FUNCTION__);
-        $repository = $factory->getMeasure(Type::MYSQL); /* @var $repository \PF\Profiler\Repository\Interfaces\Measure */
+        $repository = $factory->getMeasure(Type::MYSQL); /* @var $repository \PM\Profiler\Repository\Interfaces\Measure */
 
         try {
             $measure = new Entity\Measure($measureData);
@@ -62,7 +62,7 @@ class Measure extends Service {
     /**
      * Returns list of all existed measures in file repository.
      *
-     * @param \PF\Profiler\Repository\Factory $factory Repository factory instance
+     * @param \PM\Profiler\Repository\Factory $factory Repository factory instance
      *
      * @return array
      */
@@ -76,12 +76,12 @@ class Measure extends Service {
      * Returns all measure for test from MySQL.
      *
      * @param int                             $testId  ID of test
-     * @param \PF\Profiler\Repository\Factory $factory Repository factory instance
+     * @param \PM\Profiler\Repository\Factory $factory Repository factory instance
      *
      * @return array
      */
     public function findMeasuresForTest($testId, Repository\Factory $factory) {
-        $repository = $factory->getMeasure(Type::MYSQL); /* @var $repository \PF\Profiler\Repository\Interfaces\Measure */
+        $repository = $factory->getMeasure(Type::MYSQL); /* @var $repository \PM\Profiler\Repository\Interfaces\Measure */
 
         return $repository->findMeasuresForTest($testId);
     }
@@ -90,13 +90,13 @@ class Measure extends Service {
      * Gets statistics information for measure.
      *
      * @param int                             $measureId ID of meassure
-     * @param \PF\Profiler\Repository\Factory $factory   Repository factory instance
-     * @param enum                            $type      One of PF\Profiler\Monitor\Enum\Type
+     * @param \PM\Profiler\Repository\Factory $factory   Repository factory instance
+     * @param enum                            $type      One of PM\Profiler\Monitor\Enum\Type
      *
      * @return array
      */
     public function getMeasureStatistics($measureId, Repository\Factory $factory, $type = Type::SESSION) {
-        $repository = $factory->getMeasure($type, $measureId); /* @var $repository \PF\Profiler\Repository\Interfaces\Measure */
+        $repository = $factory->getMeasure($type, $measureId); /* @var $repository \PM\Profiler\Repository\Interfaces\Measure */
 
         return $repository->getMeasureStatistics($measureId);
     }
@@ -105,14 +105,14 @@ class Measure extends Service {
      * Gets list of calls for measure and their parent ID.
      *
      * @param int                             $measureId ID of measure
-     * @param \PF\Profiler\Repository\Factory $factory   Repository factory instance
+     * @param \PM\Profiler\Repository\Factory $factory   Repository factory instance
      * @param int                             $parentId  ID of parent call (default 0)
-     * @param enum                            $type      One of PF\Profiler\Monitor\Enum\Type
+     * @param enum                            $type      One of PM\Profiler\Monitor\Enum\Type
      *
      * @return array
      */
     public function getMeasureCallStack($measureId, Repository\Factory $factory, $parentId = 0, $type = Type::SESSION) {
-        $repository = $factory->getMeasure($type, $measureId); /* @var $repository \PF\Profiler\Repository\Interfaces\Measure */
+        $repository = $factory->getMeasure($type, $measureId); /* @var $repository \PM\Profiler\Repository\Interfaces\Measure */
 
         return $repository->getMeasureCallStack($measureId, $parentId);
     }
@@ -121,13 +121,13 @@ class Measure extends Service {
      * Gets list of statistics for each call by given measure ID.
      *
      * @param int                             $measureId ID of measure
-     * @param \PF\Profiler\Repository\Factory $factory   Repository factory instance
-     * @param enum                            $type      One of PF\Profiler\Monitor\Enum\Type
+     * @param \PM\Profiler\Repository\Factory $factory   Repository factory instance
+     * @param enum                            $type      One of PM\Profiler\Monitor\Enum\Type
      *
      * @return array
      */
     public function getMeasureCallsStatistic($measureId, Repository\Factory $factory, $type = Type::SESSION) {
-        $repository = $factory->getMeasure($type, $measureId); /* @var $repository \PF\Profiler\Repository\Interfaces\Measure */
+        $repository = $factory->getMeasure($type, $measureId); /* @var $repository \PM\Profiler\Repository\Interfaces\Measure */
 
         return $repository->getMeasureCallsStatistic($measureId);
     }
@@ -136,13 +136,13 @@ class Measure extends Service {
      * Delete measure stored in file.
      *
      * @param int                             $measureId ID of measure
-     * @param \PF\Profiler\Repository\Factory $factory   Repository factory instance
+     * @param \PM\Profiler\Repository\Factory $factory   Repository factory instance
      *
      * @return boolean
      */
     public function deleteFileMeasure($measureId, Repository\Factory $factory) {
         $repository = $factory->getMeasure(Type::FILE, $measureId);
-        /* @var $repository \PF\Profiler\Repository\Measure\Cache */
+        /* @var $repository \PM\Profiler\Repository\Measure\Cache */
 
         return $repository->deleteMeasure($measureId);
     }

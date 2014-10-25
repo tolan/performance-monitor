@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Abstracts;
+namespace PM\Main\Abstracts;
 
-use PF\Main;
+use PM\Main;
 
 /**
  * Abstract class for state automat object.
@@ -84,7 +84,7 @@ abstract class State extends Enum implements Main\Interfaces\State {
      *
      * @param array $states List of checked states
      *
-     * @return \PF\Main\Abstracts\State
+     * @return \PM\Main\Abstracts\State
      *
      * @throws Main\Exception Throws when actual state is not in checked states.
      */

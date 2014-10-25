@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Logic\Evaluate\Arrays;
+namespace PM\Main\Logic\Evaluate\Arrays;
 
-use PF\Main\Logic\Evaluate\AbstractComposer;
+use PM\Main\Logic\Evaluate\AbstractComposer;
 
 /**
  * This script defines class for array composing result of performer and extraction of extractor.
@@ -29,7 +29,7 @@ class Composer extends AbstractComposer {
      */
     public function compose($performerResult) {
         $result    = array();
-        $extractor = $this->getEvaluator()->getPerformer()->getExtractor(); /* @var $extractor \PF\Main\Logic\Evaluate\Arrays\Extractor */
+        $extractor = $this->getEvaluator()->getPerformer()->getExtractor(); /* @var $extractor \PM\Main\Logic\Evaluate\Arrays\Extractor */
 
         foreach ($performerResult as $id => $names) {
             $tmp = array();

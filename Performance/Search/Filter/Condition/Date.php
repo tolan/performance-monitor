@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Search\Filter\Condition;
+namespace PM\Search\Filter\Condition;
 
-use PF\Search\Filter\Select;
+use PM\Search\Filter\Select;
 
 /**
  * This script defines class for filter condition with date type.
@@ -16,7 +16,7 @@ class Date extends AbstractCondition {
     /**
      * It adds filter to select with "equal" condidtion.
      *
-     * @param \PF\Search\Filter\Select $select Select instance
+     * @param \PM\Search\Filter\Select $select Select instance
      * @param mixed                    $value  Value for search
      * @param string                   $table  Table name where is column
      * @param string                   $column Column where is value
@@ -35,7 +35,7 @@ class Date extends AbstractCondition {
     /**
      * It adds filter to select with "after" condidtion.
      *
-     * @param \PF\Search\Filter\Select $select Select instance
+     * @param \PM\Search\Filter\Select $select Select instance
      * @param mixed                    $value  Value for search
      * @param string                   $table  Table name where is column
      * @param string                   $column Column where is value
@@ -52,7 +52,7 @@ class Date extends AbstractCondition {
     /**
      * It adds filter to select with "before" condidtion.
      *
-     * @param \PF\Search\Filter\Select $select Select instance
+     * @param \PM\Search\Filter\Select $select Select instance
      * @param mixed                    $value  Value for search
      * @param string                   $table  Table name where is column
      * @param string                   $column Column where is value

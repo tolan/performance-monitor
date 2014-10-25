@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Commander\Interfaces;
+namespace PM\Main\Commander\Interfaces;
 
 /**
  * This script defines interface for commander.
@@ -16,7 +16,7 @@ interface Commander {
      *
      * @param string $name Name of command set
      *
-     * @return \PF\Main\Commander\Executor
+     * @return \PM\Main\Commander\Executor
      */
     public function getExecutor($name);
 

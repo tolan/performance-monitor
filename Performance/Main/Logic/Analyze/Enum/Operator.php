@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Logic\Analyze\Enum;
+namespace PM\Main\Logic\Analyze\Enum;
 
-use PF\Main\Abstracts\Enum;
+use PM\Main\Abstracts\Enum;
 
 /**
  * This class defines types of operators.

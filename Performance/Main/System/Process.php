@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\System;
+namespace PM\Main\System;
 
 /**
  * This script defines class for manage system processes.
@@ -39,7 +39,7 @@ class Process {
      *
      * @param string $command Command for CLI
      *
-     * @return \PF\Main\System\Process
+     * @return \PM\Main\System\Process
      */
     public function exec($command) {
         exec($command.' >> /dev/null 2>&1 &');
@@ -52,7 +52,7 @@ class Process {
      *
      * @param int $pid Process ID
      * 
-     * @return \PF\Main\System\Process
+     * @return \PM\Main\System\Process
      */
     public function kill($pid) {
         exec('kill '.$pid);

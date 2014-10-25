@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Abstracts;
+namespace PM\Main\Abstracts;
 
-use PF\Main\Commander;
+use PM\Main\Commander;
 
 /**
  * Abstract class for service.
@@ -16,14 +16,14 @@ abstract class Service {
     /**
      * Commander instance.
      *
-     * @var \PF\Main\Commander
+     * @var \PM\Main\Commander
      */
     private $_commander;
 
     /**
      * Construct method.
      *
-     * @param \PF\Main\Commander $commander Commander instance
+     * @param \PM\Main\Commander $commander Commander instance
      */
     final public function __construct(Commander $commander) {
         $this->_commander = $commander;
@@ -36,7 +36,7 @@ abstract class Service {
      *
      * @param string $name Identificator name for executor [optional]
      *
-     * @return \PF\Main\Commander\Executor
+     * @return \PM\Main\Commander\Executor
      */
     final protected function getExecutor($name = null) {
         if ($name === null) {
@@ -49,7 +49,7 @@ abstract class Service {
     /**
      * Optional init function for prepare attributes
      *
-     * @return \PF\Main\Abstracts\Service
+     * @return \PM\Main\Abstracts\Service
      */
     protected function init() {}
 
@@ -66,12 +66,12 @@ abstract class Service {
      *      deleteFunction                 - Name of function for delete existed sub-entities
      *      deleteFunctionDataParameter    - Name of data parameter of function "deleteFunction" [optional]
      *
-     * @param \PF\Main\Abstracts\Entity  $upEntity      Instance of entity which will be updated and has sub-entities
-     * @param \PF\Main\Abstracts\Entity  $oldEntity     Instance of existed entity which has existed sub-entities
-     * @param \PF\Main\Abstracts\Service $entityService Service which provide all functions for create, update and delete sub-entities
-     * @param \PF\Main\Abstracts\Entity  $options       Instance of option entity for configuration of this method
+     * @param \PM\Main\Abstracts\Entity  $upEntity      Instance of entity which will be updated and has sub-entities
+     * @param \PM\Main\Abstracts\Entity  $oldEntity     Instance of existed entity which has existed sub-entities
+     * @param \PM\Main\Abstracts\Service $entityService Service which provide all functions for create, update and delete sub-entities
+     * @param \PM\Main\Abstracts\Entity  $options       Instance of option entity for configuration of this method
      *
-     * @return \PF\Main\Abstracts\Entity Returns updated entity
+     * @return \PM\Main\Abstracts\Entity Returns updated entity
      */
     protected function updateSubEntities(Entity $upEntity, Entity $oldEntity, Service $entityService, Entity $options) {
         $existed                = array();

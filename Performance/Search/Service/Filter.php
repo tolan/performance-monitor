@@ -1,10 +1,10 @@
 <?php
 
-namespace PF\Search\Service;
+namespace PM\Search\Service;
 
-use PF\Main\Abstracts;
-use PF\Search\Repository;
-use PF\Search\Entity;
+use PM\Main\Abstracts;
+use PM\Search\Repository;
+use PM\Search\Entity;
 
 /**
  * This script defines class for filter service of search template.
@@ -19,9 +19,9 @@ class Filter extends Abstracts\Service {
      * Returns filter instancies for groups and grouped by group ID.
      *
      * @param array                        $groupIds   List of group IDs
-     * @param \PF\Search\Repository\Filter $repository Filter repository instance
+     * @param \PM\Search\Repository\Filter $repository Filter repository instance
      *
-     * @return \PF\Search\Entity\Filter[]
+     * @return \PM\Search\Entity\Filter[]
      */
     public function getFiltersForGroups($groupIds, Repository\Filter $repository) {
         $filters = $repository->getFiltersForGroups($groupIds);
@@ -42,9 +42,9 @@ class Filter extends Abstracts\Service {
      * Creates new filter by given filter data.
      *
      * @param array                        $filterData Data of new filter
-     * @param \PF\Search\Repository\Filter $repository Filter repository instance
+     * @param \PM\Search\Repository\Filter $repository Filter repository instance
      *
-     * @return \PF\Search\Entity\Filter
+     * @return \PM\Search\Entity\Filter
      */
     public function createFilter($filterData, Repository\Filter $repository) {
         $filter = new Entity\Filter($filterData);
@@ -58,9 +58,9 @@ class Filter extends Abstracts\Service {
      * Updates fitler with fitler data.
      *
      * @param array                        $filterData Data of filter for update
-     * @param \PF\Search\Repository\Filter $repository Filter repository instance
+     * @param \PM\Search\Repository\Filter $repository Filter repository instance
      *
-     * @return \PF\Search\Entity\Filter
+     * @return \PM\Search\Entity\Filter
      */
     public function updateFilter($filterData, Repository\Filter $repository) {
         $filter = new Entity\Filter($filterData);
@@ -74,7 +74,7 @@ class Filter extends Abstracts\Service {
      * Deletes fitler by given ID.
      *
      * @param int                          $id         ID of filter
-     * @param \PF\Search\Repository\Filter $repository Fitler repository instance
+     * @param \PM\Search\Repository\Filter $repository Fitler repository instance
      * 
      * @return int
      */

@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Profiler\Monitor;
+namespace PM\Profiler\Monitor;
 
-use PF\Profiler\Entity;
-use PF\Profiler\Monitor\Filter\Enum;
+use PM\Profiler\Entity;
+use PM\Profiler\Monitor\Filter\Enum;
 
 /**
  * This script defines class for monitor filter.
@@ -17,7 +17,7 @@ class Filter implements Interfaces\Filter {
     /**
      * Characted type: positive | negative.
      *
-     * @var enum One of PF\Profiler\Monitor\Filter\Enum\Type
+     * @var enum One of PM\Profiler\Monitor\Filter\Enum\Type
      */
     private $_character;
 
@@ -38,7 +38,7 @@ class Filter implements Interfaces\Filter {
     /**
      * Construct method.
      *
-     * @param \PF\Profiler\Entity\Filter $filter Filter entity instance
+     * @param \PM\Profiler\Entity\Filter $filter Filter entity instance
      *
      * @return void
      */
@@ -171,7 +171,7 @@ class Filter implements Interfaces\Filter {
      *
      * @param array $parameters Array with parameters of filter
      *
-     * @return PF\Profiler\Monitor\Filter
+     * @return PM\Profiler\Monitor\Filter
      */
     private function _compile($parameters) {
         foreach ($parameters as $parameter) {

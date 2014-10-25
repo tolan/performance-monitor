@@ -1,25 +1,25 @@
-var perfModule = angular.module('Perf');
+var perfModule = angular.module('PM');
 
 perfModule.service('StatisticService', function ($http, AbstractService) {
 
     _.extend(this, AbstractService);
 
     this.getTemplates = function(success, error) {
-        var get = $http.get('/statistic/templates');
+        var get = $http.get('/statistic/template/find');
         AbstractService._assignFunctions(get, success, error);
 
         return get;
     };
 
     this.getViewsConfig = function(success, error) {
-        var get = $http.get('/statistic/views/config');
+        var get = $http.get('/statistic/config/views');
         AbstractService._assignFunctions(get, success, error);
 
         return get;
     };
 
     this.getTemplate = function(id, success, error) {
-        var get = $http.get('/statistic/template/' + id);
+        var get = $http.get('/statistic/template/get/' + id);
         AbstractService._assignFunctions(get, success, error);
 
         return get;
@@ -29,9 +29,9 @@ perfModule.service('StatisticService', function ($http, AbstractService) {
         var request;
 
         if (template.hasOwnProperty('id')) {
-            request = $http.put('/statistic/template/' + template.id, template);
+            request = $http.put('/statistic/template/update/' + template.id, template);
         } else {
-            request = $http.post('/statistic/template', template);
+            request = $http.post('/statistic/template/create', template);
         }
 
         AbstractService._assignFunctions(request, success, error);
@@ -40,7 +40,7 @@ perfModule.service('StatisticService', function ($http, AbstractService) {
     };
 
     this.deleteTemplate = function(id, success, error) {
-        var request = $http.delete('/statistic/template/' + id);
+        var request = $http.delete('/statistic/template/delete/' + id);
 
         AbstractService._assignFunctions(request, success, error);
 
@@ -48,14 +48,14 @@ perfModule.service('StatisticService', function ($http, AbstractService) {
     };
 
     this.getSets = function(success, error) {
-        var get = $http.get('/statistic/sets');
+        var get = $http.get('/statistic/set/get');
         AbstractService._assignFunctions(get, success, error);
 
         return get;
     };
 
     this.deleteSet = function(id, success, error) {
-        var request = $http.delete('/statistic/set/' + id);
+        var request = $http.delete('/statistic/set/delete/' + id);
 
         AbstractService._assignFunctions(request, success, error);
 
@@ -66,9 +66,9 @@ perfModule.service('StatisticService', function ($http, AbstractService) {
         var request;
 
         if (set.hasOwnProperty('id')) {
-            request = $http.put('/statistic/set/' + set.id, set);
+            request = $http.put('/statistic/set/update' + set.id, set);
         } else {
-            request = $http.post('/statistic/set', set);
+            request = $http.post('/statistic/set/create', set);
         }
 
         AbstractService._assignFunctions(request, success, error);
@@ -77,7 +77,7 @@ perfModule.service('StatisticService', function ($http, AbstractService) {
     };
 
     this.getSet = function(id, includeRuns, success, error) {
-        var get = $http.get('/statistic/set/' + id, {params : {includeRuns: includeRuns}});
+        var get = $http.get('/statistic/set/get/' + id, {params : {includeRuns: includeRuns}});
 
         AbstractService._assignFunctions(get, success, error);
 
@@ -85,7 +85,7 @@ perfModule.service('StatisticService', function ($http, AbstractService) {
     };
 
     this.deleteRun = function(id, success, error) {
-        var request = $http.delete('/statistic/set/run/' + id);
+        var request = $http.delete('/statistic/run/delete/' + id);
 
         AbstractService._assignFunctions(request, success, error);
 
@@ -93,7 +93,7 @@ perfModule.service('StatisticService', function ($http, AbstractService) {
     };
 
     this.startRun = function(id, success, error) {
-        var request = $http.post('/statistic/set/run/' + id + '/start');
+        var request = $http.post('/statistic/run/start/' + id);
 
         AbstractService._assignFunctions(request, success, error);
 
@@ -101,7 +101,7 @@ perfModule.service('StatisticService', function ($http, AbstractService) {
     };
 
     this.getRun = function(id, includeData, includeTemplate, success, error) {
-        var get = $http.get('/statistic/set/run/' + id, {params : {includeData: includeData, includeTemplate: includeTemplate}});
+        var get = $http.get('/statistic/run/get/' + id, {params : {includeData: includeData, includeTemplate: includeTemplate}});
 
         AbstractService._assignFunctions(get, success, error);
 

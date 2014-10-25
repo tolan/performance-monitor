@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Web\View;
+namespace PM\Main\Web\View;
 
 /**
  * Abstract class for each HTML view.
@@ -14,7 +14,7 @@ abstract class Html extends AbstractView {
     /**
      * Generate HTML payload. Adds libraries and syles.
      *
-     * @return \PF\Main\Web\View\Html
+     * @return \PM\Main\Web\View\Html
      */
     public function getPayload() {
         $path     = $this->getAbsolutePath();
@@ -32,7 +32,7 @@ abstract class Html extends AbstractView {
         $template->addScript($path.'/js/lib/angular-strap.js');
         $template->addScript($path.'/js/lib/angular-strap.tpl.js');
         $template->addScript($path.'/js/lib/angular-route.js');
-        $template->addScript($path.'/js/lib/ui-bootstrap-tpls-0.11.0.js');
+        $template->addScript($path.'/js/lib/ui-bootstrap-tpls-0.11.2.js');
         $template->addScript($path.'/js/lib/underscore.js');
         $template->addScript($path.'/js/lib/ng-google-chart.js');
         $template->addHeaderTag('<script type="text/javascript">var base="'.$path.'"</script>');
@@ -43,7 +43,7 @@ abstract class Html extends AbstractView {
     /**
      * Returns HTML template instance.
      *
-     * @return \PF\Main\Web\Component\Template\Html
+     * @return \PM\Main\Web\Component\Template\Html
      */
     final protected function getTemplate() {
         return parent::getTemplate();

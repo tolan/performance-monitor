@@ -1,8 +1,8 @@
 <?php
 
-namespace PF\Main\Event;
+namespace PM\Main\Event;
 
-use PF\Main\Abstracts;
+use PM\Main\Abstracts;
 
 /**
  * This script defines repository class for event repository.
@@ -25,9 +25,9 @@ class Repository extends Abstracts\Repository {
     /**
      * Saving message from mediator.
      *
-     * @param \PF\Main\Event\Interfaces\Message  $message  Message instance
-     * @param \PF\Main\Event\Interfaces\Sender   $sender   Instance of sender
-     * @param \PF\Main\Event\Interfaces\Reciever $reciever Instance of reciever
+     * @param \PM\Main\Event\Interfaces\Message  $message  Message instance
+     * @param \PM\Main\Event\Interfaces\Sender   $sender   Instance of sender
+     * @param \PM\Main\Event\Interfaces\Reciever $reciever Instance of reciever
      *
      * @return int ID of message
      */
@@ -43,8 +43,8 @@ class Repository extends Abstracts\Repository {
     /**
      * Save event from event manager.
      *
-     * @param \PF\Main\Event\Interfaces\Event    $event    Instance of event
-     * @param \PF\Main\Event\Interfaces\Listener $listener Instance of listener
+     * @param \PM\Main\Event\Interfaces\Event    $event    Instance of event
+     * @param \PM\Main\Event\Interfaces\Listener $listener Instance of listener
      *
      * @return int ID of message
      */
@@ -60,7 +60,7 @@ class Repository extends Abstracts\Repository {
     /**
      * Save message into database.
      *
-     * @param enum   $type    One of \PF\Main\Event\Enum\Type
+     * @param enum   $type    One of \PM\Main\Event\Enum\Type
      * @param string $message Message of event
      * @param string $from    Source of message
      * @param string $to      Destination of message

@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main\Logic\Evaluate\Arrays;
+namespace PM\Main\Logic\Evaluate\Arrays;
 
-use PF\Main\Logic\Evaluate\AbstractExtractor;
-use PF\Main\Logic\Exception;
+use PM\Main\Logic\Evaluate\AbstractExtractor;
+use PM\Main\Logic\Exception;
 
 /**
  * This script defines class for array extractor for extracting input data for performer.
@@ -84,7 +84,7 @@ class Extractor extends AbstractExtractor {
      *
      * @return array
      *
-     * @throws \PF\Main\Logic\Exception Throws when data name is not set
+     * @throws \PM\Main\Logic\Exception Throws when data name is not set
      */
     public function getMap($name = null) {
         $map = $this->_map;
@@ -114,7 +114,7 @@ class Extractor extends AbstractExtractor {
      *
      * @param mixed $identifier Parameter identifier od data
      *
-     * @return \PF\Main\Logic\Evaluate\Arrays\Extractor
+     * @return \PM\Main\Logic\Evaluate\Arrays\Extractor
      */
     public function setIdentifier($identifier) {
         $this->_identifier = $identifier;
@@ -130,7 +130,7 @@ class Extractor extends AbstractExtractor {
      *
      * @return array
      *
-     * @throws \PF\Main\Logic\Exception Throws when indetifier is undefined.
+     * @throws \PM\Main\Logic\Exception Throws when indetifier is undefined.
      */
     private function _extract($data = array(), $name = 'undefined') {
         $result = array();

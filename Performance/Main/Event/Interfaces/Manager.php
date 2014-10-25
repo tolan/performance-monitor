@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main\Event\Interfaces;
+namespace PM\Main\Event\Interfaces;
 
 /**
  * This script defines interface for event manager.
@@ -15,7 +15,7 @@ interface Manager {
      * This method registers event for emit behaviour. It means that this event is send to all listeners in our module.
      *
      * @param string                            $eventName Event identificator
-     * @param \PF\Main\Event\Interfaces\Message $message   Message of event
+     * @param \PM\Main\Event\Interfaces\Message $message   Message of event
      */
     public function emit($eventName, Message $message = null);
 
@@ -23,7 +23,7 @@ interface Manager {
      * This method registers event for broadcast behaviour. It means that this event is send to all listeners over all modules.
      *
      * @param string                            $eventName Event identificator
-     * @param \PF\Main\Event\Interfaces\Message $message   Message of event
+     * @param \PM\Main\Event\Interfaces\Message $message   Message of event
      */
     public function broadcast($eventName, Message $message = null);
 

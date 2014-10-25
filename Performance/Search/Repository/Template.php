@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Search\Repository;
+namespace PM\Search\Repository;
 
-use PF\Main\Abstracts\Repository;
-use PF\Search\Entity;
+use PM\Main\Abstracts\Repository;
+use PM\Search\Entity;
 
 /**
  * This script defines class for template repository.
@@ -28,7 +28,7 @@ class Template extends Repository {
      *
      * @param string $usage Usage of templates (optional)
      *
-     * @return \PF\Search\Entity\Template[]
+     * @return \PM\Search\Entity\Template[]
      */
     public function findTemplates($usage = null) {
         $select = $this->getDatabase()
@@ -56,7 +56,7 @@ class Template extends Repository {
      *
      * @param int $id ID of template
      *
-     * @return \PF\Search\Entity\Template
+     * @return \PM\Search\Entity\Template
      */
     public function getTemplate($id) {
         $select = $this->getDatabase()
@@ -76,9 +76,9 @@ class Template extends Repository {
     /**
      * Creates new search template into database.
      *
-     * @param \PF\Search\Entity\Template $template Template instance
+     * @param \PM\Search\Entity\Template $template Template instance
      *
-     * @return \PF\Search\Entity\Template
+     * @return \PM\Search\Entity\Template
      */
     public function createTemplate(Entity\Template $template) {
         $data = array(
@@ -97,7 +97,7 @@ class Template extends Repository {
     /**
      * Updates search template in database.
      *
-     * @param \PF\Search\Entity\Template $template Template instance
+     * @param \PM\Search\Entity\Template $template Template instance
      *
      * @return int
      */

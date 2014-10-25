@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main\Cache;
+namespace PM\Main\Cache;
 
-use PF\Main\Config;
-use PF\Main\Filesystem;
+use PM\Main\Config;
+use PM\Main\Filesystem;
 
 /**
  * This script defines driver class for cache which save data to file.
@@ -34,7 +34,7 @@ class File extends AbstractDriver implements Interfaces\Driver {
     /**
      * File instance.
      *
-     * @var \PF\Main\Filesystem\File
+     * @var \PM\Main\Filesystem\File
      */
     private $_file = null;
 
@@ -55,13 +55,13 @@ class File extends AbstractDriver implements Interfaces\Driver {
     /**
      * Construct method. It require file or config instance.
      *
-     * @param \PF\Main\Filesystem\File $file      File instance for caching
-     * @param \PF\Main\Config          $config    Config instance for get parameters when file is not set
      * @param string                   $namespace Default naemespace which is used for new filename
+     * @param \PM\Main\Config          $config    Config instance for get parameters when file is not set
+     * @param \PM\Main\Filesystem\File $file      File instance for caching
      *
      * @return void
      */
-    public function __construct(Filesystem\File $file = null, Config $config = null, $namespace = self::DEFAULT_NAMESPACE) {
+    public function __construct($namespace = self::DEFAULT_NAMESPACE, Config $config = null, Filesystem\File $file = null) {
         if ($file === null) {
             $tmpDir = is_dir($config->get('tmpDir')) ? $config->get('tmpDir') : $config->get('root').'/'.self::TMP_DIR;
             $file   = new Filesystem\File($tmpDir, $namespace.'.CACHE.tmp', true, true);
@@ -77,7 +77,7 @@ class File extends AbstractDriver implements Interfaces\Driver {
      *
      * @return mixed
      *
-     * @throws \PF\Main\Cache\Exception Throws when variable is not defined
+     * @throws \PM\Main\Cache\Exception Throws when variable is not defined
      */
     public function load($name = null) {
         if(array_key_exists($name, $this->_unsaved) === true) {
@@ -90,7 +90,7 @@ class File extends AbstractDriver implements Interfaces\Driver {
             if ($name === null) {
                 $this->_loadAll();
             } else {
-                $this->_loadBlock($name);
+                $this->_loadTo($name);
             }
         }
 
@@ -103,7 +103,7 @@ class File extends AbstractDriver implements Interfaces\Driver {
      * @param string $name  Name of variable
      * @param mixed  $value Value for save
      *
-     * @return \PF\Main\Cache\File
+     * @return \PM\Main\Cache\File
      */
     public function save($name, $value) {
         if (array_key_exists($name, $this->_data) === true) {
@@ -135,7 +135,7 @@ class File extends AbstractDriver implements Interfaces\Driver {
         }
 
         if ($result === false) {
-            $this->load($name);
+            $this->_loadTo($name);
             $result = parent::has($name);
         }
 
@@ -147,9 +147,9 @@ class File extends AbstractDriver implements Interfaces\Driver {
      *
      * @param string $name Name of variable
      *
-     * @return \PF\Main\Cache\File
+     * @return \PM\Main\Cache\File
      *
-     * @throws \PF\Main\Cache\Exception Throws when variable is not set.
+     * @throws \PM\Main\Cache\Exception Throws when variable is not set.
      */
     public function clean($name = null) {
         if ($name === null) {
@@ -169,7 +169,7 @@ class File extends AbstractDriver implements Interfaces\Driver {
     /**
      * Flush unsaved data to storage.
      *
-     * @return \PF\Main\Cache\File
+     * @return \PM\Main\Cache\File
      */
     public function commit() {
         $this->_saveToFile($this->_unsaved);
@@ -191,7 +191,7 @@ class File extends AbstractDriver implements Interfaces\Driver {
     /**
      * This loads all data from file to storage.
      *
-     * @return \PF\Main\Cache\File
+     * @return \PM\Main\Cache\File
      */
     private function _loadAll() {
         $file  = $this->_file->file();
@@ -226,9 +226,9 @@ class File extends AbstractDriver implements Interfaces\Driver {
      *
      * @param string $name Identificator of variable
      *
-     * @return \PF\Main\Cache\File
+     * @return \PM\Main\Cache\File
      */
-    private function _loadBlock($name) {
+    private function _loadTo($name) {
         while(($line = $this->_file->fgets()) && !isset($this->_data[$name])) {
             $dataLine = json_decode($line, true);
             unset($line);
@@ -242,6 +242,10 @@ class File extends AbstractDriver implements Interfaces\Driver {
             }
         }
 
+        if (!isset($this->_data[$name])) {
+            $this->_fullLoaded = true;
+        }
+
         return $this;
     }
 
@@ -249,8 +253,8 @@ class File extends AbstractDriver implements Interfaces\Driver {
      * Save data to file.
      *
      * @param array $data Data to save
-     * 
-     * @return \PF\Main\Cache\File
+     *
+     * @return \PM\Main\Cache\File
      */
     private function _saveToFile($data) {
         if (count($data) > 0) {

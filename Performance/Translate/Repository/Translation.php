@@ -1,27 +1,28 @@
 <?php
 
-namespace PF\Main\Translate;
+namespace PM\Translate\Repository;
 
-use PF\Main\Abstracts;
+use PM\Main\Abstracts\Repository;
+use PM\Translate\Enum\Lang;
 
 /**
  * This script defines repository class for translation texts.
  *
  * @author     Martin Kovar
  * @category   Performance
- * @package    Main
+ * @package    Translate
  */
-class Repository extends Abstracts\Repository {
+class Translation extends Repository {
 
     /**
      * Returns translate table by given language and module.
      *
-     * @param enum $lang   One of \PF\Main\Translate\Enum\Lang
-     * @param enum $module One of \PF\Main\Translate\Enum\Module
+     * @param enum $lang   One of \PM\Translate\Enum\Lang
+     * @param enum $module One of \PM\Translate\Enum\Module
      *
      * @return array
      */
-    public function getTranslateTable($lang = Enum\Lang::ENGLISH, $module = null) {
+    public function getTranslateTable($lang = Lang::ENGLISH, $module = null) {
         $select = $this->getDatabase()
                 ->select()
                 ->columns(array('`key`' => 'CONCAT(t.module, ".", t.key)'))

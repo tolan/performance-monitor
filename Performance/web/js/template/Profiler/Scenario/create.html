@@ -1,81 +1,81 @@
 <div class="scenario-edit width-90 width-max-1200 center-block width-min-480">
     <div class="form-horizontal">
         <div class="form-group">
-            <span class="col-md-1 col-sm-2 col-xs-3 control-label">[[_.('profiler.scenario.name')]]</span>
+            <span class="col-md-1 col-sm-2 col-xs-3 control-label">[[_('profiler.scenario.name')]]</span>
             <div class="col-md-11 col-sm-10 col-xs-9">
-                <input type="text" class="form-control" ng-model="name" placeholder="[[_.('profiler.scenario.name')]]">
+                <input type="text" class="form-control" ng-model="name" placeholder="[[_('profiler.scenario.name')]]">
             </div>
         </div>
         <div class="form-group">
-            <span class="col-md-1 col-sm-2 col-xs-3 control-label">[[_.('profiler.scenario.description')]]</span>
+            <span class="col-md-1 col-sm-2 col-xs-3 control-label">[[_('profiler.scenario.description')]]</span>
             <div class="col-md-11 col-sm-10 col-xs-9">
-                <textarea class="form-control" ng-model="description" placeholder="[[_.('profiler.scenario.description')]]" rows="4"></textarea>
+                <textarea class="form-control" ng-model="description" placeholder="[[_('profiler.scenario.description')]]" rows="4"></textarea>
             </div>
         </div>
     </div>
     <div class="zero-padding panel panel-default">
         <div class="panel-heading">
-            <button class="close pull-right" ng-click="addRequest()" title="[[_.('profiler.scenario.request.add')]]">
+            <button class="close pull-right" ng-click="addRequest()" title="[[_('profiler.scenario.request.add')]]">
                 <i class="glyphicon glyphicon-plus"></i>
             </button>
-            <h3 class="panel-title">[[_.('profiler.scenario.request.list')]]</h3>
+            <h3 class="panel-title">[[_('profiler.scenario.request.list')]]</h3>
         </div>
         <div class="panel-body">
             <div ng-repeat="request in requests" class="well well-sm form-horizontal">
-                <button class="pull-right close" ng-click="removeRequest(request)" title="[[_.('profiler.scenario.request.remove')]]">&times;</button>
+                <button class="pull-right close" ng-click="removeRequest(request)" title="[[_('profiler.scenario.request.remove')]]">&times;</button>
                 <div class="form-group">
-                    <span class="col-sm-1 col-xs-3 control-label">[[_.('profiler.scenario.request.url')]]</span>
+                    <span class="col-sm-1 col-xs-3 control-label">[[_('profiler.scenario.request.url')]]</span>
                     <div class="col-sm-4 col-xs-7">
                         <input type="text" class="form-control" ng-model="request.url">
                     </div>
                 </div>
                 <div class="form-group">
-                    <span class="col-sm-1 col-xs-3 control-label">[[_.('profiler.scenario.request.method')]]</span>
+                    <span class="col-sm-1 col-xs-3 control-label">[[_('profiler.scenario.request.method')]]</span>
                     <div class="col-sm-2 col-xs-5">
                         <select ng-model="request.method" class="form-control">
-                            <option ng-repeat="method in methods" value="[[method.value]]" ng-selected="method.value === request.method">[[_.(method.text)]]</option>
+                            <option ng-repeat="method in methods" value="[[method.value]]" ng-selected="method.value === request.method">[[_(method.text)]]</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <span class="col-sm-1 col-xs-3 control-label">[[_.('profiler.scenario.request.toMeasure')]]</span>
+                    <span class="col-sm-1 col-xs-3 control-label">[[_('profiler.scenario.request.toMeasure')]]</span>
                     <div class="col-sm-1 col-xs-2">
                         <input class="form-control" type="checkbox" ng-model="request.toMeasure">
                     </div>
                 </div>
                 <div class="panel">
                     <div class="panel-heading">
-                        <button class="close" ng-click="addParameter(request)" title="[[_.('profiler.scenario.request.parameter.add')]]">
+                        <button class="close" ng-click="addParameter(request)" title="[[_('profiler.scenario.request.parameter.add')]]">
                             <i class="glyphicon-plus"></i>
                         </button>
-                        <div>[[_.('profiler.scenario.request.parameters.list')]]</div>
+                        <div>[[_('profiler.scenario.request.parameters.list')]]</div>
                     </div>
                     <div ng-show="request.parameters.length" class="panel-body">
                         <div ng-repeat="parameter in request.parameters" class="well col-lg-3 col-md-4 col-sm-5 col-xs-6 form-horizontal width-min-200">
                             <div class="pull-right">
-                                <button class="close" ng-click="removeParameter(request, parameter)" title="[[_.('profiler.scenario.request.parameter.remove')]]">
+                                <button class="close" ng-click="removeParameter(request, parameter)" title="[[_('profiler.scenario.request.parameter.remove')]]">
                                     &times;
                                 </button>
                             </div>
                             <div class="form-group">
-                                <span class="col-sm-3 col-xs-4 control-label">[[_.('profiler.scenario.request.parameter.name')]]</span>
+                                <span class="col-sm-3 col-xs-4 control-label">[[_('profiler.scenario.request.parameter.name')]]</span>
                                 <div class="col-sm-7 col-xs-6">
                                     <input type="text" class="form-control" ng-model="parameter.name">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <span class="col-sm-3 col-xs-4 control-label">[[_.('profiler.scenario.request.parameter.value')]]</span>
+                                <span class="col-sm-3 col-xs-4 control-label">[[_('profiler.scenario.request.parameter.value')]]</span>
                                 <div class="col-sm-7 col-xs-6">
                                     <input type="text" class="form-control" ng-model="parameter.value">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <span class="col-sm-3 col-xs-4 control-label">[[_.('profiler.scenario.request.method')]]</span>
+                                <span class="col-sm-3 col-xs-4 control-label">[[_('profiler.scenario.request.method')]]</span>
                                 <div class="col-sm-7 col-xs-6">
                                     <select ng-model="parameter.method" class="form-control">
                                         <option ng-repeat="method in methodsParams[request.method]" value="[[method.value]]"
                                                 ng-selected="method.value === parameter.method">
-                                            [[_.(method.name)]]
+                                            [[_(method.name)]]
                                         </option>
                                     </select>
                                 </div>
@@ -85,25 +85,25 @@
                 </div>
                 <div class="panel">
                     <div class="panel-heading">
-                        <button class="close" ng-click="addFilter(request)" title="[[_.('profiler.scenario.request.filter.add')]]">
+                        <button class="close" ng-click="addFilter(request)" title="[[_('profiler.scenario.request.filter.add')]]">
                             <i class="glyphicon-plus"></i>
                         </button>
-                        <div>[[_.('profiler.scenario.request.filter.list')]]</div>
+                        <div>[[_('profiler.scenario.request.filter.list')]]</div>
                     </div>
                     <div ng-show="request.filters.length" class="panel-body">
                         <div ng-repeat="filter in request.filters" class="well col-md-6 col-sm-12 col-xs-12">
                             <div class="pull-right">
-                                <button class="close" ng-click="removeFilter(request, filter)" title="[[_.('profiler.scenario.request.filter.remove')]]">
+                                <button class="close" ng-click="removeFilter(request, filter)" title="[[_('profiler.scenario.request.filter.remove')]]">
                                     &times;
                                 </button>
                             </div>
                             <div class="form-horizontal">
                                 <div class="form-group">
-                                    <span class="col-sm-4 control-label">[[_.('profiler.scenario.request.filter.type')]]</span>
+                                    <span class="col-sm-4 control-label">[[_('profiler.scenario.request.filter.type')]]</span>
                                     <div class="col-sm-6">
                                         <select ng-model="filter.type" class="form-control">
                                             <option ng-repeat="type in filterTypes" value="[[type.value]]" ng-selected="type.value === filter.type">
-                                                [[_.(type.text)]]
+                                                [[_(type.text)]]
                                             </option>
                                         </select>
                                     </div>
@@ -120,34 +120,34 @@
         </div>
     </div>
     <div class="validate-message alerts" ng-show="alerts.length">
-        <div class="alert alert-danger" ng-repeat="alert in alerts"><b>[[_.(alert.caption)]]:</b> [[_.(alert.message)]]</div>
+        <div class="alert alert-danger" ng-repeat="alert in alerts"><b>[[_(alert.caption)]]:</b> [[_(alert.message)]]</div>
     </div>
     <div class="text-center">
-        <button class="btn btn-primary" ng-click="send()">[[_.('main.save')]]</button>
-        <button class="btn btn-default" ng-click="back('/profiler/mysql/scenarios')">[[_.('main.cancel')]]</button>
+        <button class="btn btn-primary" ng-click="send()">[[_('main.save')]]</button>
+        <button class="btn btn-default" ng-click="back('/profiler/mysql/scenarios')">[[_('main.cancel')]]</button>
     </div>
 </div>
 
 <script type="text/ng-template" id="filter-parameter.html">
     <div ng-if="parameter.options.operators.length === 1">
-        <span class="width-20 inline-block">[[_.(parameter.options.text)]]</span>
-        <span class="width-40 inline-block" ng-if="parameter.options.operators.0.value !== 'boolean'">[[_.(parameter.options.operators.0.text)]]</span>
-        <input class="width-30 inline-block" type="text" ng-if="parameter.options.operators.0.value !== 'boolean'" ng-model="parameter.value" ng-value="parameter.value">
-        <span class="width-20 inline-block" ng-if="parameter.options.operators.0.value === 'boolean'"><input type="checkbox" ng-model="parameter.value"></span>
-        <button class="close pull-right" ng-click="removeFilterParameter(filter, parameter)" title="[[_.('profiler.scenario.request.filter.parameter.remove')]]">
+        <span class="width-20 inline-block">[[_(parameter.options.text)]]</span>
+        <span class="width-40 inline-block" ng-if="parameter.options.operators[0].value !== 'boolean'">[[_(parameter.options.operators[0].text)]]</span>
+        <input class="width-30 inline-block" type="text" ng-if="parameter.options.operators[0].value !== 'boolean'" ng-model="parameter.value" ng-value="parameter.value">
+        <span class="width-20 inline-block" ng-if="parameter.options.operators[0].value === 'boolean'"><input type="checkbox" ng-model="parameter.value"></span>
+        <button class="close pull-right" ng-click="removeFilterParameter(filter, parameter)" title="[[_('profiler.scenario.request.filter.parameter.remove')]]">
             &times;
         </button>
     </div>
     <div ng-if="parameter.options.operators.length > 1">
-        <span class="width-20 inline-block">[[_.(parameter.options.text)]]</span>
+        <span class="width-20 inline-block">[[_(parameter.options.text)]]</span>
         <select ng-model="parameter.operator"  class="form-control width-40 inline-block">
             <option ng-repeat="operator in parameter.options.operators" value="[[operator.value]]"
                     ng-selected="operator.value === parameter.operator">
-                [[_.(operator.text)]]
+                [[_(operator.text)]]
             </option>
         </select>
         <input class="width-30 inline-block" type="text" ng-model="parameter.value" ng-value="parameter.value">
-        <button class="close" ng-click="removeFilterParameter(filter, parameter)" title="[[_.('profiler.scenario.request.filter.parameter.remove')]]">
+        <button class="close" ng-click="removeFilterParameter(filter, parameter)" title="[[_('profiler.scenario.request.filter.parameter.remove')]]">
             &times;
         </button>
     </div>

@@ -1,17 +1,18 @@
 <?php
 
-namespace PF\Main\Translate\Enum;
+namespace PM\Translate\Enum;
 
-use PF\Main\Abstracts\Enum;
+use PM\Main\Abstracts\Enum;
 
 /**
  * This class defines supported languages.
  *
  * @author     Martin Kovar
  * @category   Performance
- * @package    Main
+ * @package    Translate
  */
 class Lang extends Enum {
+
     const CZECH   = 'CS';
     const ENGLISH = 'EN';
 }

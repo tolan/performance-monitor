@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main;
+namespace PM\Main;
 
-use PF\Main\Log;
-use PF\scripts\Install;
+use PM\Main\Log;
+use PM\scripts\Install;
 
 /**
  * This script defines class for connect to MySQL database and provide basic function.
@@ -52,7 +52,7 @@ class Database {
     /**
      * Instance for transaction control.
      *
-     * @var \PF\Main\Database\Transaction
+     * @var \PM\Main\Database\Transaction
      */
     private $_transaction = null;
 
@@ -72,25 +72,25 @@ class Database {
     /**
      * Connection to database.
      *
-     * @var \PF\Main\Database\Connection
+     * @var \PM\Main\Database\Connection
      */
     private $_connection;
 
     /**
      * Logger instance.
      *
-     * @var \PF\Main\Log
+     * @var \PM\Main\Log
      */
     private $_logger;
 
     /**
      * Construct method which sets parameters to database connection.
      *
-     * @param \PF\Main\Config   $config   Configuration
-     * @param \PF\Main\Log      $logger   Logger instance
-     * @param \PF\Main\Provider $provider Provider instance (needed for installation)
+     * @param \PM\Main\Config   $config   Configuration
+     * @param \PM\Main\Log      $logger   Logger instance
+     * @param \PM\Main\Provider $provider Provider instance (needed for installation)
      *
-     * @throws \PF\Main\Database\Exception Throws when missing some configuration option
+     * @throws \PM\Main\Database\Exception Throws when missing some configuration option
      */
     public function __construct(Config $config, Log $logger, Provider $provider) {
         $configuration = $config->get('database');
@@ -114,7 +114,7 @@ class Database {
     /**
      * This method provides connection to database.
      *
-     * @return \PF\Main\Database
+     * @return \PM\Main\Database
      */
     public function connect() {
         if ($this->_isConnected === false) {
@@ -132,7 +132,7 @@ class Database {
     /**
      * This method disconnect connection to database.
      *
-     * @return \PF\Main\Database
+     * @return \PM\Main\Database
      */
     public function disconnect() {
         if ($this->_isConnected === true) {
@@ -146,7 +146,7 @@ class Database {
     /**
      * Returns PDO connection to database. It is for create custom statements.
      *
-     * @return \PF\Main\Database\Connection
+     * @return \PM\Main\Database\Connection
      */
     public function getConnection() {
         $this->connect();
@@ -157,7 +157,7 @@ class Database {
     /**
      * Gets instance for SQL select statement.
      *
-     * @return \PF\Main\Database\Select
+     * @return \PM\Main\Database\Select
      */
     public function select() {
         $this->connect();
@@ -168,7 +168,7 @@ class Database {
     /**
      * Gets instance for SQL insert statement.
      *
-     * @return \PF\Main\Database\Insert
+     * @return \PM\Main\Database\Insert
      */
     public function insert() {
         $this->connect();
@@ -179,7 +179,7 @@ class Database {
     /**
      * Gets instance for SQL update statement.
      *
-     * @return \PF\Main\Database\Update
+     * @return \PM\Main\Database\Update
      */
     public function update() {
         $this->connect();
@@ -190,7 +190,7 @@ class Database {
     /**
      * Gets instance for SQL delete statement.
      *
-     * @return \PF\Main\Database\Delete
+     * @return \PM\Main\Database\Delete
      */
     public function delete() {
         $this->connect();
@@ -201,7 +201,7 @@ class Database {
     /**
      * Gets instance for SQL query statement. Please exact function such as select, insert, update, delete.
      *
-     * @return \PF\Main\Database\Query
+     * @return \PM\Main\Database\Query
      */
     public function query() {
         $this->connect();
@@ -212,7 +212,7 @@ class Database {
     /**
      * Returns singleton instance of database transaction.
      *
-     * @return \PF\Main\Databasse\Transaction
+     * @return \PM\Main\Databasse\Transaction
      */
     public function getTransaction() {
         if ($this->_transaction === null) {

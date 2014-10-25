@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main;
+namespace PM\Main;
 
 /**
  * This script defines class for application module loader. It provides auto start all services.
@@ -14,22 +14,22 @@ class ModuleLoader {
     /**
      * Config instance
      *
-     * @var \PF\Main\Config
+     * @var \PM\Main\Config
      */
     private $_config;
 
     /**
      * Provider instance
      *
-     * @var \PF\Main\Provider
+     * @var \PM\Main\Provider
      */
     private $_provider;
 
     /**
      * Construct method.
      *
-     * @param \PF\Main\Config   $config   Config instance
-     * @param \PF\Main\Provider $provider Provider instance
+     * @param \PM\Main\Config   $config   Config instance
+     * @param \PM\Main\Provider $provider Provider instance
      */
     public function __construct(Config $config, Provider $provider) {
         $modules         = $config->get('modules');

@@ -1,11 +1,11 @@
 <?php
 
-namespace PF\Tests\Unit\Main\Event\Action;
+namespace PM\Tests\Unit\Main\Event\Action;
 
-use PF\Main\Abstracts\Unit\TestCase;
+use PM\Main\Abstracts\Unit\TestCase;
 
 /**
- * This script defines class for php unit test case of class \PF\Main\Event\Action\Broadcast.
+ * This script defines class for php unit test case of class \PM\Main\Event\Action\Broadcast.
  *
  * @author     Martin Kovar
  * @category   Performance
@@ -16,7 +16,7 @@ class BroadcastTest extends TestCase {
     /**
      * action instance.
      *
-     * @var \PF\Main\Event\Action\Broadcast
+     * @var \PM\Main\Event\Action\Broadcast
      */
     private $_action;
 
@@ -26,7 +26,7 @@ class BroadcastTest extends TestCase {
      * @return void
      */
     protected function setUp() {
-        $this->_action = $this->getProvider()->prototype('PF\Main\Event\Action\Broadcast');
+        $this->_action = $this->getProvider()->prototype('PM\Main\Event\Action\Broadcast');
 
         parent::setUp();
     }
@@ -50,7 +50,7 @@ class BroadcastTest extends TestCase {
      * @return void
      */
     public function testSetData() {
-        $this->assertInstanceOf('PF\Main\Event\Action\Broadcast', $this->_action->setData(array()));
+        $this->assertInstanceOf('PM\Main\Event\Action\Broadcast', $this->_action->setData(array()));
         $this->assertEquals(array(), $this->_action->getData());
     }
 
@@ -74,7 +74,7 @@ class BroadcastTest extends TestCase {
      * @return void
      */
     public function testSetModule() {
-        $this->assertInstanceOf('PF\Main\Event\Action\Broadcast', $this->_action->setModule('Module'));
+        $this->assertInstanceOf('PM\Main\Event\Action\Broadcast', $this->_action->setModule('Module'));
         $this->assertEquals('Module', $this->_action->getModule());
     }
 
@@ -91,7 +91,7 @@ class BroadcastTest extends TestCase {
     /**
      * Fail test for get name.
      *
-     * @expectedException PF\Main\Event\Exception
+     * @expectedException PM\Main\Event\Exception
      *
      * @return void
      */
@@ -105,7 +105,7 @@ class BroadcastTest extends TestCase {
      * @return void
      */
     public function testSetName() {
-        $this->assertInstanceOf('PF\Main\Event\Action\Broadcast', $this->_action->setName('test'));
+        $this->assertInstanceOf('PM\Main\Event\Action\Broadcast', $this->_action->setName('test'));
         $this->assertEquals('test', $this->_action->getName());
     }
 }

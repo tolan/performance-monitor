@@ -1,9 +1,9 @@
 <?php
 
-namespace PF\Main\Http\Request;
+namespace PM\Main\Http\Request;
 
-use PF\Main\Http\Enum\Method;
-use PF\Main\Http\Exception;
+use PM\Main\Http\Enum\Method;
+use PM\Main\Http\Exception;
 
 /**
  * Factory class for create request instance by given method type.
@@ -17,11 +17,11 @@ class Factory {
     /**
      * Returns reqeust by method.
      *
-     * @param enum $method One of \PF\Main\Http\Enum\Method
+     * @param enum $method One of \PM\Main\Http\Enum\Method
      *
-     * @return \PF\Main\Http\Request\AbstractRequest
+     * @return \PM\Main\Http\Request\AbstractRequest
      *
-     * @throws \PF\Main\Http\Exception Throws when request class doesn't exist.
+     * @throws \PM\Main\Http\Exception Throws when request class doesn't exist.
      */
     public static function getInstance($method) {
         switch ($method) {

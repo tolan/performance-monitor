@@ -1,6 +1,6 @@
 <?php
 
-namespace PF\Main;
+namespace PM\Main;
 
 /**
  * This script defines class for access control by ip address.
@@ -14,14 +14,14 @@ class Access {
     /**
      * Provider instance
      *
-     * @var \PF\Main\Provider
+     * @var Provider
      */
     private $_provider;
 
     /**
      * Construct method.
      *
-     * @param \PF\Main\Provider $provider Provider instance
+     * @param Provider $provider Provider instance
      */
     public function __construct(Provider $provider) {
         $this->_provider = $provider;
@@ -30,13 +30,13 @@ class Access {
     /*
      * It checks access by allow and denied address in configuration.
      *
-     * @return \PF\Main\Access
+     * @return Access
      *
-     * @throws \PF\Main\Access\Exception Throws when ip address is unauthorized.
+     * @throws Access\Exception Throws when ip address is unauthorized.
      */
     public function checkAccess() {
-        $allowPrio  = $this->_provider->get('PF\Main\Access\AllowFrom')->checkAccess();
-        $deniedPrio = $this->_provider->get('PF\Main\Access\DeniedFrom')->checkAccess();
+        $allowPrio  = $this->_provider->get('PM\Main\Access\AllowFrom')->checkAccess();
+        $deniedPrio = $this->_provider->get('PM\Main\Access\DeniedFrom')->checkAccess();
 
         if ($allowPrio <= $deniedPrio && $deniedPrio > 0) {
             throw new Access\Exception('Unauthorized access.');
