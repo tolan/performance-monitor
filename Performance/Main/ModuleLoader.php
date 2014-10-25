@@ -48,8 +48,11 @@ class ModuleLoader {
      */
     public function load($module) {
         $root = $this->_config->get('root');
+        $configFile = $root.'/'.$module.'/config.json';
 
-        $this->_config->loadJson($root.'/'.$module.'/config.json');
+        if (file_exists($configFile)) {
+            $this->_config->loadJson($configFile);
+        }
 
         if ($this->_config->hasOwnProperty('services')) {
             foreach ($this->_config->get('services') as $service) {

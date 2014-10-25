@@ -1,5 +1,5 @@
 {
-    "modules" : ["Profiler", "Search", "Statistic"],
+    "modules" : ["scripts", "Profiler", "Search", "Statistic", "Translate"],
     "provider" : {
         "useAutoloader" : true,
         "allowKillApp"  : true,

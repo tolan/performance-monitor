@@ -67,7 +67,10 @@ class Provider {
      * @var array
      */
     private $_excludeFilesFromLoad = array(
-        'Main/Abstracts/Unit/TestCase.php'
+        'Main/Abstracts/Unit/TestCase.php',
+        'scripts/install.php',
+        'scripts/memoryLeakCleaner.php',
+        'scripts/startWorker.php'
     );
 
     /**
@@ -101,6 +104,12 @@ class Provider {
             spl_autoload_register(array($this, '_autoloader'));
         } else {
             $this->_loadClass();
+
+            if ($config) {
+                foreach ($config->get('modules', array()) as $module) {
+                    $this->_loadClass('PM\\'.$module.'\\');
+                }
+            }
         }
 
         $this->set($this);
