@@ -32,4 +32,4 @@ The purpose of the monitor is the analysis, optimization, control and evaluate t
 - next go to page http://__your-domain__/Performance/web/
 
 ## Version info
-- version: 0.1
+- version: 0.8
