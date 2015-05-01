@@ -273,6 +273,7 @@ class Select extends Where {
         if ($columns === null || $columns === false) {
             $this->_order = null;
         }
+
         if (is_array($columns)) {
             foreach ($columns as $alias => $column) {
                 $this->_order[] .= $alias.'.'.$column;

@@ -2,6 +2,7 @@
 
 namespace PM\Statistic\Web\Controller;
 
+use PM\Statistic\Gearman;
 use PM\Main\Web\Controller\Abstracts\Json;
 use PM\Main\Database;
 
@@ -86,15 +87,13 @@ class Run extends Json {
             ->add(function(Database $database) {
                 $database->getTransaction()->begin();
             })
-            ->add('createRun', $runService)
+            ->add('createRun', $runService, array('setId' => $id))
             ->add(function(Database $database) {
                 $database->getTransaction()->commitAll();
             })
-            ->add(function(Client $client, $data) {
+            ->add(function(Gearman\Run\Client $client, $data) {
                 $client->setData(array('id' => $data->getId()))
                     ->doAsynchronize();
-            })
-            ->getResult()
-            ->setSetId($id);
+            });
     }
 }

@@ -53,7 +53,9 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase {
         $this->_loadFixtures();
 
         $config = $this->getProvider()->get('config');
-        $this->getProvider()->reset()->set($config, 'config');
+        $this->getProvider()
+            ->reset()
+            ->set($config, 'config');
 
         $this->_configData = $config->toArray();
 
@@ -67,9 +69,23 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase {
      */
     protected function tearDown() {
         $config = $this->getProvider()->get('config');
-        $config->fromArray($this->_configData);
+        $config
+            ->reset()
+            ->fromArray($this->_configData);
+        $this->cleanCache();
 
         parent::tearDown();
+    }
+
+    /**
+     * It cleans cache.
+     *
+     * @return TestCase
+     */
+    protected function cleanCache() {
+        $this->getProvider()->get('cache')->clean();
+
+        return $this;
     }
 
     /**
@@ -99,12 +115,29 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase {
             $yaml = yaml_parse_file($file);
 
             foreach ($yaml as $table => $yamlData) {
+                $columns = array();
                 foreach ($yamlData as $row) {
+                    $columns = array_unique(
+                        array_merge(
+                            array_keys($row),
+                            $columns
+                        )
+                    );
+
                     if (isset($row['id'])) {
                         $data[$table][$row['id']] = $row;
                     } else {
                         $data[$table][] = $row;
                     }
+                }
+
+                foreach ($data[$table] as $key => $row) {
+                    foreach (array_diff($columns, array_keys($row)) as $column) {
+                        $row[$column] = null;
+                    }
+
+                    ksort($row);
+                    $data[$table][$key] = $row;
                 }
             }
         }
@@ -146,15 +179,21 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase {
      * @return \PM\Main\Abstracts\Unit\TestCase
      */
     private function _insertFixturesData($data) {
-        $database = $this->getProvider()->get('database'); /* @var $database \PM\Main\Database */
+        if (!empty($data)) {
+            $database = $this->getProvider()->get('database'); /* @var $database \PM\Main\Database */
 
-        foreach ($data as $table => $rows) {
-            $database->delete()->setTable($table)->run();
-            $database->query()->execute('ALTER TABLE '.$table.' AUTO_INCREMENT=1');
-        }
+            try {
+                foreach ($data as $table => $rows) {
+                    $database->query()->execute('TRUNCATE '.$table);
+                }
 
-        foreach ($data as $table => $rows) {
-            $database->insert()->setTable($table)->massInsert($rows)->run();
+                foreach ($data as $table => $rows) {
+                    $database->insert()->setTable($table)->massInsert($rows)->run();
+                }
+            } catch (\Exception $e) {
+                $this->getProvider()->get('log')->error($e);
+                throw $e;
+            }
         }
 
         return $this;

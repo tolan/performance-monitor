@@ -1,0 +1,49 @@
+<div class="settings-cron-task-create width-80 center-block width-min-800 width-max-1200">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <span class="control-label col-lg-1 col-sm-2 col-xs-2">[[_('settings.cron.task.name')]]</span>
+            <div class="col-lg-11 col-sm-10 col-xs-10">
+                <input type="text" class="form-control" ng-model="task.name" placeholder="[[_('settings.cron.task.name')]]">
+            </div>
+            <div ng-show="validate.name.valid === false" class="alerts margin-1-top col-lg-offset-1 col-lg-11 col-sm-offset-2 col-sm-10 col-xs-offset-2 col-xs-10">
+                <div class="alert alert-danger"><b>[[_('settings.cron.task.name')]]</b>: [[validator._(validate.name.message)]]</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <span class="control-label col-lg-1 col-sm-2 col-xs-2">[[_('settings.cron.task.description')]]</span>
+            <div class="col-lg-11 col-sm-10 col-xs-10">
+                <textarea class="form-control" ng-model="task.description" placeholder="[[_('settings.cron.task.description')]]" rows="4"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="zero-padding panel panel-default">
+        <div class="panel-heading">
+            <button class="close pull-right" ng-click="addTrigger()" title="[[_('settings.cron.trigger.add')]]">
+                <i class="glyphicon glyphicon-plus"></i>
+            </button>
+            <h3 class="panel-title">[[_('settings.cron.trigger.list')]]</h3>
+        </div>
+        <div class="panel-body">
+            <div ng-show="validate.triggers.valid === false" class="alerts">
+                <div class="alert alert-danger"><b>[[_('settings.cron.task.trigger')]]</b>: [[validator._(validate.triggers.message)]]</div>
+            </div>
+            <div ng-repeat="trigger in task.triggers" class="well well-sm form-horizontal">
+                <div class="zero-padding panel panel-default">
+                    <div class="panel-heading">
+                        <span>[[_('settings.cron.task.trigger')]]</span>
+                        <button class="pull-right close" ng-click="removeTrigger(trigger)" title="[[_('settings.cron.trigger.remove')]]">&times;</button>
+                    </div>
+                    <div class="panel-body">
+                        <div ng-controller="SettingsCronTaskTrigger" ng-include="htmlTemplate">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <button class="btn btn-primary" ng-click="save()">[[_('main.save')]]</button>
+        <button class="btn btn-default" ng-click="back('/statistic/template')">[[_('main.cancel')]]</button>
+    </div>
+</div>

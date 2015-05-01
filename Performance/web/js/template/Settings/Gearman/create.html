@@ -1,0 +1,27 @@
+<div class="settings-cron-task-create width-80 center-block width-min-800 width-max-1200">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <span class="control-label col-lg-1 col-sm-2 col-xs-2">[[_('settings.gearman.worker.name')]]</span>
+            <div class="col-lg-11 col-sm-10 col-xs-10">
+                <input type="text" class="form-control" ng-model="worker.name" placeholder="[[_('settings.gearman.worker.name')]]">
+            </div>
+            <div ng-show="validate.name.valid === false" class="alerts margin-1-top col-lg-offset-1 col-lg-11 col-sm-offset-2 col-sm-10 col-xs-offset-2 col-xs-10">
+                <div class="alert alert-danger"><b>[[_('settings.gearman.worker.name')]]</b>: [[validator._(validate.name.message)]]</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <span class="control-label col-lg-1 col-sm-2 col-xs-2">[[_('settings.gearman.worker.script')]]</span>
+            <div class="col-lg-11 col-sm-10 col-xs-10">
+                <input type="text" class="form-control" ng-model="worker.script" placeholder="[[_('settings.gearman.worker.script')]]">
+            </div>
+            <div ng-show="validate.script.valid === false" class="alerts margin-1-top col-lg-offset-1 col-lg-11 col-sm-offset-2 col-sm-10 col-xs-offset-2 col-xs-10">
+                <div class="alert alert-danger"><b>[[_('settings.gearman.worker.script')]]</b>: [[validator._(validate.name.message)]]</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <button class="btn btn-primary" ng-click="save()">[[_('main.save')]]</button>
+        <button class="btn btn-default" ng-click="back('/settings/gearman')">[[_('main.cancel')]]</button>
+    </div>
+</div>

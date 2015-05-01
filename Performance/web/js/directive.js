@@ -37,7 +37,8 @@ perfModule.constant('datetimepickerConfig', {
     meridians: ['AM', 'PM'],
     readonlyInput: false,
     mousewheel: true
-}).directive('datetimepicker', ['$parse', '$log', 'datetimepickerConfig', function($parse, $log, datetimepickerConfig) {
+})
+    .directive('datetimepicker', ['$parse', '$log', 'datetimepickerConfig', function($parse, $log, datetimepickerConfig) {
     return {
         restrict: 'EA',
         require: '?^ngModel',

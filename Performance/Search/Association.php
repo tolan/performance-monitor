@@ -2,8 +2,6 @@
 
 namespace PM\Search;
 
-use PM\Search\Enum;
-
 /**
  * This script defines class for association between all enums in search.
  *
@@ -69,9 +67,26 @@ class Association {
         Enum\Target::TEST => array(
             Enum\Filter::STATE => '\PM\Profiler\Enum\TestState'
         ),
-        Enum\Target::MEASURE =>array(
+        Enum\Target::MEASURE => array(
             Enum\Filter::STATE  => '\PM\Profiler\Monitor\Storage\State',
             Enum\Filter::METHOD => '\PM\Main\Http\Enum\Method'
+        ),
+        Enum\Target::STATISTIC_SET => array(
+            Enum\Filter::SOURCE  => array(
+                Enum\Target::SCENARIO,
+                Enum\Target::TEST,
+                Enum\Target::MEASURE,
+                Enum\Target::CALL
+            )
+        ),
+        Enum\Target::STATISTIC_RUN => array(
+            Enum\Filter::SOURCE  => array(
+                Enum\Target::SCENARIO,
+                Enum\Target::TEST,
+                Enum\Target::MEASURE,
+                Enum\Target::CALL
+            ),
+            Enum\Filter::STATE => '\PM\Statistic\Enum\Run\State'
         )
     );
 
@@ -118,6 +133,18 @@ class Association {
             Enum\Filter::CONTENT       => Enum\Type::STRING,
             Enum\Filter::TIME          => Enum\Type::FLOAT,
             Enum\Filter::IMMERSION     => Enum\Type::INT
+        ),
+        Enum\Target::STATISTIC_SET => array(
+            Enum\Filter::FULLTEXT => Enum\Type::QUERY,
+            Enum\Filter::NAME     => Enum\Type::STRING,
+            Enum\Filter::SOURCE   => Enum\Type::ENUM,
+            Enum\Filter::STARTED  => Enum\Type::DATE
+        ),
+        Enum\Target::STATISTIC_RUN => array(
+            Enum\Filter::FULLTEXT => Enum\Type::QUERY,
+            Enum\Filter::SOURCE   => Enum\Type::ENUM,
+            Enum\Filter::STATE    => Enum\Type::ENUM,
+            Enum\Filter::STARTED  => Enum\Type::DATE
         )
     );
 
@@ -127,19 +154,57 @@ class Association {
      * @var array
      */
     private $_isAllowedLogic = array(
-        Enum\Target::SCENARIO => true,
-        Enum\Target::TEST     => true,
-        Enum\Target::MEASURE  => true,
-        Enum\Target::CALL     => false
+        Enum\Target::SCENARIO      => true,
+        Enum\Target::TEST          => true,
+        Enum\Target::MEASURE       => true,
+        Enum\Target::CALL          => false,
+        Enum\Target::STATISTIC_SET => true,
+        Enum\Target::STATISTIC_RUN => true
+    );
+
+    /**
+     * It defines which entities can be search by usage.
+     *
+     * @var array
+     */
+    private $_usageEntities = array(
+        Enum\Usage::SEARCH    => array(
+            Enum\Target::SCENARIO,
+            Enum\Target::TEST,
+            Enum\Target::CALL,
+            Enum\Target::MEASURE,
+            Enum\Target::STATISTIC_SET,
+            Enum\Target::STATISTIC_RUN
+        ),
+        Enum\Usage::STATISTIC => array(
+            Enum\Target::SCENARIO,
+            Enum\Target::TEST,
+            Enum\Target::CALL,
+            Enum\Target::MEASURE
+        ),
+        Enum\Usage::CRON      => array(
+            Enum\Target::SCENARIO,
+            Enum\Target::STATISTIC_SET
+        )
     );
 
     /**
      * Returns association for search menu.
      *
+     * @param enum $usage One of enum Enum\Usage
+     *
      * @return array
      */
-    public function getMenu() {
-        return $this->_association;
+    public function getMenu($usage) {
+        $result = array();
+
+        foreach ($this->_association as $entity => $assoc) {
+            if (in_array($entity, $this->_usageEntities[$usage])) {
+                $result[$entity] = $assoc;
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -200,7 +265,11 @@ class Association {
         $newOptions[self::TYPE] = $type;
         if ($type === Enum\Type::ENUM) {
             $enum      = $this->_enums[$target][$filter];
-            $constants = $enum::getConstants();
+            if (is_array($enum)) {
+                $constants = $enum;
+            } else {
+                $constants = $enum::getConstants();
+            }
 
             foreach ($constants as $const) {
                 $newOptions[self::VALUES][] = array(

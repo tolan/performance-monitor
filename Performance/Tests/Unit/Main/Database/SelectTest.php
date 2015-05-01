@@ -97,7 +97,7 @@ class SelectTest extends TestCase {
         $this->assertEquals('SELECT test.* FROM test AS test WHERE (id = 1)', $select->assemble());
 
         $select = $this->_database->select()->from('test')->orWhere('id = ?', 1)->orWhere('id = ?', 2);
-        $this->assertEquals('SELECT test.* FROM test AS test WHERE (id = \'1\') OR (id = \'2\')', $select->assemble());
+        $this->assertEquals('SELECT test.* FROM test AS test WHERE (id = 1) OR (id = 2)', $select->assemble());
     }
 
     /**
@@ -265,7 +265,7 @@ class SelectTest extends TestCase {
         $select = $this->_database->select()->from('table')->where($where)->where($where2)->orWhere('count = ?', 1);
 
         $this->assertEquals(
-            'SELECT table.* FROM table AS table WHERE ((id = \'1\') AND (count > \'5\')) AND ((id = \'2\') OR (count < \'10\')) OR (count = 1)',
+            'SELECT table.* FROM table AS table WHERE ((id = 1) AND (count > 5)) AND ((id = 2) OR (count < 10)) OR (count = 1)',
             $select->assemble()
         );
     }

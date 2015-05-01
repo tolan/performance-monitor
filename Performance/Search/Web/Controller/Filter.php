@@ -18,14 +18,16 @@ class Filter extends Json {
     /**
      * Returns filter menu for search entities.
      *
-     * @link /menu
+     * @link /menu/{usage}
      *
      * @method GET
      *
+     * @param enum $usage One of enum \PM\Search\Enum\Usage
+     *
      * @return void
      */
-    public function actionFilterMenu() {
-        $data = $this->getProvider()->get('PM\Search\Association')->getMenu();
+    public function actionFilterMenu($usage) {
+        $data = $this->getProvider()->get('PM\Search\Association')->getMenu($usage);
         $menu = array();
 
         foreach ($data as $target => $filters) {

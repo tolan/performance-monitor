@@ -39,6 +39,21 @@ perfModule.config([
             when('/statistic/set/run/detail/:id', {templateUrl: templateDir+'Statistics/Run/detail.html', controller: StatisticRunDetail}).
             // ### STATISTIC END ### //
 
+
+            // ### SETTINGS ### //
+            // cron
+            when('/settings/cron', {templateUrl: templateDir+'Settings/Cron/main.html', controller: SettingsCronCtrl}).
+            when('/settings/cron/create', {templateUrl: templateDir+'Settings/Cron/create.html', controller: SettingsCronCreateCtrl}).
+            when('/settings/cron/edit/:id', {templateUrl: templateDir+'Settings/Cron/create.html', controller: SettingsCronCreateCtrl}).
+            // gearman
+            when('/settings/gearman', {templateUrl: templateDir+'Settings/Gearman/main.html', controller: SettingsGearmanCtrl}).
+            when('/settings/gearman/workers', {templateUrl: templateDir+'Settings/Gearman/workers.html', controller: SettingsGearmanWorkersCtrl}).
+            when('/settings/gearman/create/:name', {templateUrl: templateDir+'Settings/Gearman/create.html', controller: SettingsGearmanCreateCtrl}).
+            when('/settings/gearman/create', {templateUrl: templateDir+'Settings/Gearman/create.html', controller: SettingsGearmanCreateCtrl}).
+            when('/settings/gearman/edit/:id', {templateUrl: templateDir+'Settings/Gearman/create.html', controller: SettingsGearmanCreateCtrl}).
+            // ### SETTINGS END ### //
+
+
             // DEFAULT PAGE
             otherwise({redirectTo: '/profiler/mysql/scenarios'});
 

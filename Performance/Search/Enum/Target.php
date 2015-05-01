@@ -12,8 +12,10 @@ use PM\Main\Abstracts\Enum;
  * @package    Search
  */
 class Target extends Enum {
-    const SCENARIO = 'scenario';
-    const TEST     = 'test';
-    const MEASURE  = 'measure';
-    const CALL     = 'call';
+    const SCENARIO      = 'scenario';
+    const TEST          = 'test';
+    const MEASURE       = 'measure';
+    const CALL          = 'call';
+    const STATISTIC_SET = 'statistic_set';
+    const STATISTIC_RUN = 'statistic_run';
 }

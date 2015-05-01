@@ -35,8 +35,10 @@ class Access {
      * @throws Access\Exception Throws when ip address is unauthorized.
      */
     public function checkAccess() {
-        $allowPrio  = $this->_provider->get('PM\Main\Access\AllowFrom')->checkAccess();
-        $deniedPrio = $this->_provider->get('PM\Main\Access\DeniedFrom')->checkAccess();
+        $allowFrom  = $this->_provider->get('PM\Main\Access\AllowFrom'); /* @var $allowFrom \PM\Main\Access\AllowFrom */
+        $deniedFrom = $this->_provider->get('PM\Main\Access\DeniedFrom'); /* @var $deniedFrom \PM\Main\Access\DeniedFrom */
+        $allowPrio  = $allowFrom->checkAccess();
+        $deniedPrio = $deniedFrom->checkAccess();
 
         if ($allowPrio <= $deniedPrio && $deniedPrio > 0) {
             throw new Access\Exception('Unauthorized access.');

@@ -1,0 +1,75 @@
+<div class="width-100">
+    <div>
+        <div class="form-group">
+            <span class="control-label col-lg-1 col-sm-2 col-xs-2">[[_('settings.cron.task.trigger.timer.minute')]]</span>
+            <div class="col-lg-11 col-sm-10 col-xs-10">
+                <input type="text" class="form-control" ng-model="trigger.timer.minute" placeholder="[[_('settings.cron.task.trigger.timer.minute')]]">
+            </div>
+            <div ng-show="validate.timer.minute.valid === false" class="alerts margin-1-top col-lg-offset-1 col-lg-11 col-sm-offset-2 col-sm-10 col-xs-offset-2 col-xs-10">
+                <div class="alert alert-danger"><b>[[_('settings.cron.task.trigger.timer.minute')]]</b>: [[validator._(validate.timer.minute.message)]]</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <span class="control-label col-lg-1 col-sm-2 col-xs-2">[[_('settings.cron.task.trigger.timer.hour')]]</span>
+            <div class="col-lg-11 col-sm-10 col-xs-10">
+                <input type="text" class="form-control" ng-model="trigger.timer.hour" placeholder="[[_('settings.cron.task.trigger.timer.hour')]]">
+            </div>
+            <div ng-show="validate.timer.hour.valid === false" class="alerts margin-1-top col-lg-offset-1 col-lg-11 col-sm-offset-2 col-sm-10 col-xs-offset-2 col-xs-10">
+                <div class="alert alert-danger"><b>[[_('settings.cron.task.trigger.timer.hour')]]</b>: [[validator._(validate.timer.hour.message)]]</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <span class="control-label col-lg-1 col-sm-2 col-xs-2">[[_('settings.cron.task.trigger.timer.day')]]</span>
+            <div class="col-lg-11 col-sm-10 col-xs-10">
+                <input type="text" class="form-control" ng-model="trigger.timer.day" placeholder="[[_('settings.cron.task.trigger.timer.day')]]">
+            </div>
+            <div ng-show="validate.timer.day.valid === false" class="alerts margin-1-top col-lg-offset-1 col-lg-11 col-sm-offset-2 col-sm-10 col-xs-offset-2 col-xs-10">
+                <div class="alert alert-danger"><b>[[_('settings.cron.task.trigger.timer.day')]]</b>: [[validator._(validate.timer.day.message)]]</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <span class="control-label col-lg-1 col-sm-2 col-xs-2">[[_('settings.cron.task.trigger.timer.month')]]</span>
+            <div class="col-lg-11 col-sm-10 col-xs-10">
+                <input type="text" class="form-control" ng-model="trigger.timer.month" placeholder="[[_('settings.cron.task.trigger.timer.month')]]">
+            </div>
+            <div ng-show="validate.timer.month.valid === false" class="alerts margin-1-top col-lg-offset-1 col-lg-11 col-sm-offset-2 col-sm-10 col-xs-offset-2 col-xs-10">
+                <div class="alert alert-danger"><b>[[_('settings.cron.task.trigger.timer.month')]]</b>: [[validator._(validate.timer.month.message)]]</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <span class="control-label col-lg-1 col-sm-2 col-xs-2">[[_('settings.cron.task.trigger.timer.dayOfWeek')]]</span>
+            <div class="col-lg-11 col-sm-10 col-xs-10">
+                <input type="text" class="form-control" ng-model="trigger.timer.dayOfWeek" placeholder="[[_('settings.cron.task.trigger.timer.dayOfWeek')]]">
+            </div>
+            <div ng-show="validate.timer.dayOfWeek.valid === false" class="alerts margin-1-top col-lg-offset-1 col-lg-11 col-sm-offset-2 col-sm-10 col-xs-offset-2 col-xs-10">
+                <div class="alert alert-danger"><b>[[_('settings.cron.task.trigger.timer.dayOfWeek')]]</b>: [[validator._(validate.timer.dayOfWeek.message)]]</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="zero-padding panel panel-default">
+        <div class="panel-heading">
+            <button class="close pull-right" ng-click="addAction()" title="[[_('settings.cron.trigger.action.add')]]">
+                <i class="glyphicon glyphicon-plus"></i>
+            </button>
+            <h3 class="panel-title">[[_('settings.cron.trigger.action.list')]]</h3>
+        </div>
+        <div class="panel-body">
+            <div ng-show="validate.actions.valid === false" class="alerts">
+                <div class="alert alert-danger"><b>[[_('settings.cron.trigger.action.list')]]</b>: [[validator._(validate.actions.message)]]</div>
+            </div>
+            <div ng-repeat="action in trigger.actions" class="well well-sm form-horizontal">
+                <div class="zero-padding panel panel-default">
+                    <div class="panel-heading">
+                        <span>[[_('settings.cron.trigger.action')]]</span>
+                        <button class="pull-right close" ng-click="removeAction(action)" title="[[_('settings.cron.trigger.action.remove')]]">&times;</button>
+                    </div>
+                    <div class="panel-body">
+                        <div ng-controller="SettingsCronTaskTriggerAction" ng-include="htmlTemplate">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

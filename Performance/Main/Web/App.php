@@ -150,7 +150,7 @@ class App {
      * @return \PM\Main\Web\App
      */
     private function _showAccessDenied(AccessException $exc) {
-        $this->_returnApplicationError($exc); // TODO
+        $this->_returnApplicationError($exc);
 
         return $this;
     }
@@ -163,7 +163,7 @@ class App {
      * @return \PM\Main\Web\App
      */
     private function _showRoutingError(Exception $exc) {
-        $this->_returnApplicationError($exc); // TODO
+        $this->_returnApplicationError($exc);
 
         return $this;
     }

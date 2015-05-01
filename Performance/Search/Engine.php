@@ -60,12 +60,14 @@ class Engine {
         $result = array();
 
         if ($association->isAllowedLogic($target)) {
-            $result['all'] = $this->_createSearcherForScope($target);
+            $select        = $this->_createSearcherForScope($target);
+            $result['all'] = $select->fetchAll();
             $logicEvaluator->setScope($result['all']);
         }
 
         foreach ($groups as $key => $group) {
-            $result[$key] = $this->_createSearcherByGroup($group['filters'], $target)->fetchAll();
+            $select       = $this->_createSearcherByGroup($group['filters'], $target);
+            $result[$key] = $select->fetchAll();
             $logicEvaluator->setData($key, $result[$key]);
         }
 
@@ -124,7 +126,8 @@ class Engine {
      * @return Filter\Container
      */
     private function _createSearcherForScope($target) {
-        $targetInstance = $this->_provider->prototype('PM\Search\Filter\Target\\' . ucfirst($target)); /* @var $targetInstance Filter\Target\AbstractTarget */
+        $class          = 'PM\Search\Filter\Target\\' . ucfirst($this->_utils->toCamelCase($target));
+        $targetInstance = $this->_provider->prototype($class); /* @var $targetInstance Filter\Target\AbstractTarget */
 
         $container  = $this->_provider->prototype('PM\Search\Filter\Container'); /* @var $container Filter\Container */
         $container->setTarget($targetInstance);
@@ -138,26 +141,25 @@ class Engine {
      * @param array $filters List of search filters
      * @param enum  $target  \PM\Search\Enum\Target
      *
-     * @return array
+     * @return Filter\Container
      *
      * @throws Exception Throws when target and filter target is not same.
      */
     private function _createSearcherByGroup($filters, $target) {
-        $targetInstance = $this->_provider->prototype('PM\Search\Filter\Target\\' . ucfirst($target)); /* @var $targetInstance Filter\Target\AbstractTarget */
-
-        $container = $this->_provider->prototype('PM\Search\Filter\Container'); /* @var $container Filter\Container */
-        $container->setTarget($targetInstance);
+        $class          = 'PM\Search\Filter\Target\\' . ucfirst($this->_utils->toCamelCase($target));
+        $targetInstance = $this->_provider->prototype($class); /* @var $targetInstance Filter\Target\AbstractTarget */
 
         $associaton = $this->_provider->prototype('PM\Search\Association'); /* @var $associaton \PM\Search\Association */
-
+        $container  = $this->_provider->prototype('PM\Search\Filter\Container'); /* @var $container Filter\Container */
+        $container->setTarget($targetInstance);
 
         foreach ($filters as $filter) {
             if (isset($filter['target']) && $filter['target'] !== $target) {
                 throw new Exception('Target of filter is different to default target.');
             }
 
-            $junction = $this->_provider
-                ->prototype('PM\Search\Filter\Junction\\' . ucfirst($filter['target'])); /* @var $junction Filter\Junction\AbstractJunction */
+            $class    = 'PM\Search\Filter\Junction\\' . ucfirst($this->_utils->toCamelCase($filter['target']));
+            $junction = $this->_provider->prototype($class); /* @var $junction Filter\Junction\AbstractJunction */
 
             if (array_key_exists('type', $filter) === false) {
                 $filter['type'] = $associaton->getFilter($filter['target'], $filter['filter'])['type'];

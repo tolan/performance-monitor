@@ -1,0 +1,20 @@
+<div>
+    <div ng-controller="SearchSourceCtrl" data-usage='cron' data-cache='false' data-source=action.source ng-include="htmlTemplate" class="panel-body">
+    </div>
+    <menu ng-show="action.source.target" class="inline-block zero-margin zero-padding" data="menu[action.source.target]"
+        dtitle="'settings.cron.trigger.action.menu.addAction'" event="'menu-selected-action'">
+    </menu>
+
+    <div ng-repeat="task in action.tasks" class="margin-1-bottom margin-1-top">
+        <div class="panel panel-default padding-1 margin-0">
+            <button class="pull-right close" ng-click="removeTask(task)" title="[[_('settings.cron.trigger.action.task.remove')]]">&times;</button>
+            <div>
+                [[settings.cron.trigger.action.task.action]] [[_('settings.cron.trigger.action.task.action.' + task.action)]]
+            </div>
+        </div>
+    </div>
+
+    <menu ng-show="action.source.target && action.tasks.length > 0" class="inline-block zero-margin zero-padding" data="menu[action.source.target]"
+        dtitle="'settings.cron.trigger.action.menu.addAction'" event="'menu-selected-action'">
+    </menu>
+</div>

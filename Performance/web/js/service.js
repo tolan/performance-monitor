@@ -1,93 +1,5 @@
 angular.module('PM')
 .service(
-    'validator',
-    function() {
-        this._selected   = {};
-        this._validators = {
-            required : function (value, test) {
-                if (value === undefined || value.length === 0 && test === true) {
-                    return 'main.validator.required';
-                }
-
-                return null;
-            },
-
-            minLength : function (value, test) {
-                if (value === undefined || value.length < test) {
-                    return 'main.validator.minLength';
-                }
-
-                return null;
-            },
-
-            maxLength : function (value, test) {
-                if (value.length > test) {
-                    return 'main.validator.maxLength';
-                }
-
-                return null;
-            },
-
-            password : function (value, test) {
-                if (value === undefined || test === true && value.match(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).+/) === null) {
-                    // with special chars /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[/*-+&#@]).+/
-                    return 'main.validator.password';
-                } else if (angular.isString(test) && value.match(test) === null) {
-                    return 'main.validator.password';
-                }
-
-                return null;
-            },
-
-            regex : function (value, test) {
-                if (value === undefined || value.match(test) === null) {
-                    return 'main.validator.regex';
-                }
-
-                return null;
-            }
-        };
-
-        this.addValidator = function (type, validator) {
-            this._validators[type] = validator;
-
-            return this;
-        };
-
-        this.selectValidators = function (validators) {
-            if (angular.isObject(validators)) {
-                this._selected = validators;
-            } else if (validators !== undefined && validators !== null) {
-                throw 'Validators must be object.';
-            }
-
-            return this;
-        };
-
-        this.validate = function (value, validators) {
-            this.selectValidators(validators);
-            var message = null, test, type,
-                result = {
-                    message : null,
-                    valid   : true
-                };
-
-            for(type in this._selected) {
-                if (this._selected.hasOwnProperty(type)) {
-                    test    = this._selected[type];
-                    message = this._validators[type](value, test);
-
-                    if (message !== null) {
-                        result.message = message;
-                        result.valid   = false;
-                    }
-                }
-            }
-            return result;
-        };
-    }
-)
-.service(
     'translate',
     function($rootScope, $http) {
         var self = this;
@@ -175,6 +87,98 @@ angular.module('PM')
         this.loadModule('main');
     }
 )
+.service(
+    'validator',
+    function(translate) {
+        this._selected   = {};
+        this._validators = {
+            required : function (value) {
+                var valid = null;
+                if (_.isEmpty(value)) {
+                    valid = 'main.validate.required';
+                }
+
+                return valid;
+            }
+        };
+
+        this._ = function(message) {
+            if (message) {
+                return translate._(message);
+            }
+        };
+
+        this.addValidator = function (type, validator) {
+            this._validators[type] = validator;
+
+            return this;
+        };
+
+        this.selectValidators = function (validators) {
+            if (angular.isObject(validators)) {
+                this._selected = validators;
+            } else if (validators !== undefined && validators !== null) {
+                throw 'Validators must be object.';
+            }
+
+            return this;
+        };
+
+        this.validate = function (values, validators, scope) {
+            var result = {}, message;
+            this.selectValidators(validators);
+
+            _.each(validators, function(validator, key) {
+                message = this._validateProperty(values[key], validator);
+
+                if (message !== null) {
+                    result[key] = message;
+                }
+            }, this);
+
+            if (scope) {
+                scope.validate = result;
+            }
+
+            return result;
+        };
+
+        this._validateProperty = function(value, validator) {
+            var message = null, index;
+
+            if (_.isFunction(validator)) {
+                message = this._getMessage(
+                    validator(value)
+                );
+            } else if (_.isArray(validator)) {
+                for(index = 0; index < validator.length && message === null; index++) {
+                    message = this._validateProperty(value, validator[index]);
+                };
+            } else if (_.has(this._validators, validator)) {
+                message = this._getMessage(
+                    this._validators[validator](value)
+                );
+            }
+
+            return message;
+        };
+
+        this._getMessage = function(text) {
+            var message = null;
+
+            if (_.isObject(text)) {
+                message = text;
+            } else if (_.isString(text)) {
+                message = {
+                    message : text,
+                    valid   : false
+                };
+            }
+
+            return message;
+        };
+    }
+)
 .factory('myCache', function ($cacheFactory) {
     return $cacheFactory('myCache');
 })
@@ -192,20 +196,29 @@ angular.module('PM')
     };
 
     this.synchronize = function(requests, event) {
-        var completed = 0, iterator;
+        var completed = 0, iterator, result = {};
 
         event    = event || 'synced';
-        iterator = function() {
+        iterator = function(response, key) {
             completed++;
+            result[key] = response;
 
             if (completed === _.values(requests).length) {
-                $rootScope.$broadcast(event, requests);
+                if (_.isArray(requests)) {
+                    result = _.values(result);
+                }
+
+                $rootScope.$broadcast(event, requests, result);
             }
         };
 
-        _.each(requests, function(request) {
-            request.success(iterator);
-            request.error(iterator);
+        _.each(requests, function(request, key) {
+            var aa = function(response) {
+                iterator(response, key);
+            };
+
+            request.success(aa);
+            request.error(aa);
         });
 
         return this;

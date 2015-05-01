@@ -2,33 +2,39 @@
     "modules" : [],
     "provider" : {
         "useAutoloader" : true,
-        "initServices"  : ["database"],
+        "initServices"  : [],
         "serviceMap"    : {
-            "database" : "PM\\Main\\Database",
-            "config"   : "PM\\Main\\Config",
-            "web"      : "PM\\Main\\Web\\App",
-            "request"  : "PM\\Main\\Web\\Component\\Request",
-            "response" : "PM\\Main\\Web\\Component\\Response",
-            "log"      : "PM\\Main\\Log",
-            "access"   : "PM\\Main\\Access",
-            "router"   : "PM\\Main\\Web\\Component\\Router",
-            "cache"    : "PM\\Main\\Cache",
-            "loader"   : "PM\\Main\\ModuleLoader"
+            "database"  : "PM\\Main\\Database",
+            "config"    : "PM\\Main\\Config",
+            "web"       : "PM\\Main\\Web\\App",
+            "request"   : "PM\\Main\\Web\\Component\\Request",
+            "response"  : "PM\\Main\\Web\\Component\\Response",
+            "router"    : "PM\\Main\\Web\\Component\\Router",
+            "log"       : "PM\\Main\\Log",
+            "access"    : "PM\\Main\\Access",
+            "cache"     : "PM\\Main\\Cache",
+            "loader"    : "PM\\Main\\ModuleLoader",
+            "utils"     : "PM\\Main\\Utils",
+            "commander" : "PM\\Main\\Commander"
         }
     },
     "database" : {
         "address"  : "localhost",
         "user"     : "root",
         "password" : "net",
-        "database" : "performance_unit_tests",
-        "install"  : false
+        "database" : "PF_unit_tests",
+        "install"  : true
+    },
+    "cache" : {
+        "driver"    : "PM\\Main\\Cache\\Nil",
+        "namespace" : "Performance"
     },
     "access" : {
         "allowFrom" : [],
         "deniedFrom" : []
     },
     "log" : {
-        "level" : 2,
+        "level" : 3,
         "file"  : "performance_test.log",
         "cache" : false
     },

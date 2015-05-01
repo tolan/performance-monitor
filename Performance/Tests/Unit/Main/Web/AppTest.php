@@ -39,17 +39,9 @@ class AppTest extends TestCase {
     public function testRun() {
         $request = $this->getProvider()->get('request'); /* @var $request \PM\Main\Web\Component\Request */
         // set basic information for request
-        $request->getServer()->set('REQUEST_URI', '/translate/langs');
+        $request->getServer()->set('REQUEST_URI', '/menu');
         $request->getServer()->set('BASE', '');
         $request->getServer()->set('REQUEST_METHOD', 'GET');
-
-        // mock instead of cahce instance
-        $cache = $this->getMock('PM\Main\Abstracts\Entity');
-        $cache->expects($this->any())
-            ->method('load')
-            ->will($this->returnValue(array()));
-
-        $this->getProvider()->set($cache, 'PM\Main\Cache');
 
         // mock instead of response instance
         $response = $this->getMock('PM\Main\Web\Component\Response');

@@ -40,7 +40,7 @@ class Group extends Repository {
 
         $result = array();
         foreach ($data as $item) {
-            $item['id'] = (int)$item['id'];
+            $item['id']         = (int)$item['id'];
             $item['templateId'] = (int)$item['templateId'];
 
             $result[] = new Entity\Group($item);

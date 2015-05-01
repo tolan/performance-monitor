@@ -217,7 +217,7 @@ class Provider {
             $pid    = $process->getPid();
             $script = 'php '.$root.'/scripts/memoryLeakCleaner.php '.$pid;
             $this->get('PM\Main\Log')->warning('Application was killed with PID: '.$pid);
-            $process->exec($script);
+            $process->execInBackground($script);
         }
     }
 

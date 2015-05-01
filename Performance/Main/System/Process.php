@@ -35,13 +35,31 @@ class Process {
     }
 
     /**
+     * Execute program in command line and returns result.
+     *
+     * @param string $command Command for CLI
+     *
+     * @return Process\Result
+     */
+    public function exec($command) {
+        $ans = array();
+        exec($command, $ans);
+
+        $result = new Process\Result();
+        $result->setScript($command);
+        $result->setResult($ans);
+
+        return $result;
+    }
+
+    /**
      * Execute asynchronously program in command line.
      *
      * @param string $command Command for CLI
      *
-     * @return \PM\Main\System\Process
+     * @return Process
      */
-    public function exec($command) {
+    public function execInBackground($command) {
         exec($command.' >> /dev/null 2>&1 &');
 
         return $this;
@@ -51,7 +69,7 @@ class Process {
      * Kill process by given ID.
      *
      * @param int $pid Process ID
-     * 
+     *
      * @return \PM\Main\System\Process
      */
     public function kill($pid) {

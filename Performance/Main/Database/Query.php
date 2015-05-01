@@ -163,7 +163,8 @@ class Query {
         }
 
         foreach ($this->getBind() as $key => $value) {
-            if (strpos($value, '%') === 0 || strrpos($value, '%') === strlen($value)) {
+            $value = $this->cleanData($value);
+            if (is_string($value) && (strpos($value, '%') === 0 || strrpos($value, '%') === strlen($value))) {
                 $value = "'".$value."'";
             }
 
@@ -328,7 +329,7 @@ class Query {
         } elseif (is_object($data)) {
             $data = $this->_connection->quote((string)$data);
         } elseif (is_bool($data)) {
-            $data = $data === true ? 1 : 0;
+            $data = (int)$data;
         }
 
         return $data;

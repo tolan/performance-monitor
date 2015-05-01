@@ -128,9 +128,10 @@ class ExecutorTest extends TestCase {
             ->add('test', $class)
             ->execute();
 
-        $result = $this->_instance->getResult();
+        $result   = $this->_instance->getResult();
         $expected = array(
-            'data'  => 20000,
+            'data'  => null,
+            'mul'   => 20000,
             'const' => 100
         );
 

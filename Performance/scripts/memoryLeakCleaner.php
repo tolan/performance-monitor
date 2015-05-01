@@ -15,7 +15,7 @@ while($i < 30) {
     $procUsage[$i] = $process->cpuUsage($pid);
 
     if ($procUsage[$i] < $cpuUsageTreshold && isset($procUsage[$i-1]) && $procUsage[$i-1] < $cpuUsageTreshold) {
-        $process->exec('kill '.$pid);
+        $process->execInBackground('kill '.$pid);
         break;
     }
 

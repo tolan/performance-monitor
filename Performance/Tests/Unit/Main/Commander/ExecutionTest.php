@@ -43,13 +43,14 @@ class ExecutionTest  extends TestCase {
      * @return void
      */
     public function testClass() {
-        $class = new TestingClass();
+        $class     = new TestingClass();
         $execution = new Execution('test', $class);
 
         $result = new Result();
         $execution->execute($result, $this->getProvider());
         $expected = array(
-            'data'  => 200,
+            'data'  => null,
+            'mul'   => 200,
             'const' => 100
         );
 

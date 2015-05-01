@@ -1,0 +1,30 @@
+<td class="search-result-item-name">
+    <a href="#/statistic/set/detail/[[item.id]]">
+        <span class="label label-default">[[_('search.filter.target.' + target)]] ([[item.id]])</span>
+    </a>
+    <span ng-repeat="filter in item.applied_filters" class="badge">[[filter]]</span>
+</td>
+<td class="search-result-item-attributes">
+    <div ng-show="item.templateId">
+        <span class="search-result-item-attributes-name">[[_('search.filter.statistic_template')]]:</span>
+        <span class="search-result-item-attributes-value">
+            <a href="#/statistic/template/edit/[[item.templateId]]">[[item.templateId]]</a>
+        </span>
+    </div>
+    <div ng-show="item.name">
+        <span class="search-result-item-attributes-name">[[_('search.filter.statistic_set.name')]]:</span>
+        <span class="search-result-item-attributes-value">[[item.name]]</span>
+    </div>
+    <div ng-show="item.descirption">
+        <span class="search-result-item-attributes-name">[[_('search.filter.statistic_set.description')]]:</span>
+        <span class="search-result-item-attributes-value">[[item.description]]</span>
+    </div>
+    <div ng-show="item.sourceType">
+        <span class="search-result-item-attributes-name">[[_('search.filter.statistic_set.sourceType')]]:</span>
+        <span class="search-result-item-attributes-value">[[_('search.filter.statistic_set.sourceType.' + item.sourceType)]]</span>
+    </div>
+    <div ng-show="item.started">
+        <span class="search-result-item-attributes-name">[[_('search.filter.statistic_set.started')]]:</span>
+        <span class="search-result-item-attributes-value">[[item.started | date:'d.M.yyyy H:mm:ss']]</span>
+    </div>
+</td>

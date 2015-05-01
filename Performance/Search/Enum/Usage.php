@@ -14,4 +14,5 @@ use PM\Main\Abstracts\Enum;
 class Usage extends Enum {
     const SEARCH    = 'search';
     const STATISTIC = 'statistic';
+    const CRON      = 'cron';
 }

@@ -59,6 +59,18 @@ class Router {
     }
 
     /**
+     * Resets routing parameters.
+     *
+     * @return Router
+     */
+    public function reset() {
+        $this->_controller = null;
+        $this->_routeInfo  = array();
+
+        return $this;
+    }
+
+    /**
      * Resolve route and create controller instance.
      *
      * @return \PM\Main\Web\Component\Router
@@ -140,7 +152,10 @@ class Router {
      * @throws \PM\Main\Web\Exception Throws when controller has wrong base path.
      */
     private function _resolveNewRoute($path) {
-        list($module, $controller, $action) =  explode('/', trim($path, '/').'/', 3);
+        $trimmedPath  = trim($path, '/');
+        $preparedPath = str_pad($trimmedPath, 2 - substr_count($trimmedPath, '/') + strlen($trimmedPath), '/', STR_PAD_RIGHT);
+
+        list($module, $controller, $action) =  explode('/', $preparedPath, 3);
 
         if (!$action) {
             $action     = $controller;
@@ -169,7 +184,7 @@ class Router {
 
         foreach ($classMethodsAnnot as $methodName => $annot) {
             if (isset($annot['link'])) {
-                $regExpMethod = preg_replace('#\{[a-zA-Z]+\}#', '[a-zA-Z0-9-]+', $annot['link']);
+                $regExpMethod = preg_replace('#\{[a-zA-Z]+\}#', '[a-zA-Z0-9-_]+', $annot['link']);
                 $regExp = '#/'.$controller.'/'.ltrim($regExpMethod, '/').'#';
                 if (preg_match($regExp, $path) && ((isset($annot['method']) && $requestMethod == $annot['method']) || !isset($annot['method']))) {
                     $method     = substr($methodName, strlen('action'));

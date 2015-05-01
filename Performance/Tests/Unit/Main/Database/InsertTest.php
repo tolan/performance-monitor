@@ -37,7 +37,10 @@ class InsertTest extends TestCase {
      * @return void
      */
     public function testAssemble() {
-        $insert = $this->_database->insert()->setTable('test')->setInsertData(array('col' => 'val'));
+        $insert = $this->_database
+            ->insert()
+            ->setTable('test')
+            ->setInsertData(array('col' => 'val'));
         $this->assertEquals('INSERT INTO test (`col`) VALUES (\'val\')', $insert->assemble());
 
         $massInsert = array(
@@ -45,7 +48,10 @@ class InsertTest extends TestCase {
             array('col' => 'val2')
         );
 
-        $insert = $this->_database->insert()->setTable('test')->massInsert($massInsert);
+        $insert = $this->_database
+            ->insert()
+            ->setTable('test')
+            ->massInsert($massInsert);
         $this->assertEquals('INSERT INTO test (`col`) VALUES (\'val1\'), (\'val2\')', $insert->assemble());
     }
 
@@ -55,17 +61,31 @@ class InsertTest extends TestCase {
      * @return void
      */
     public function testInsertOneRow() {
-        $original = $this->_database->select()->from('measure')->fetchAll();
+        $original = $this->_database
+            ->select()
+            ->from('version')
+            ->fetchAll();
 
-        $insertId = $this->_database->insert()->setTable('measure')->setInsertData(array('name' => 'test'))->run();
+        $insertId = $this->_database
+            ->insert()
+            ->setTable('version')
+            ->setInsertData(array('name' => 'test'))
+            ->run();
 
-        $insertedAll = $this->_database->select()->from('measure')->fetchAll();
-        $inserted    = $this->_database->select()->from('measure')->where('id = ?', $insertId)->fetchOne();
+        $insertedAll = $this->_database
+            ->select()
+            ->from('version')
+            ->fetchAll();
+
+        $inserted    = $this->_database
+            ->select()
+            ->from('version')
+            ->where('id = ?', $insertId)
+            ->fetchOne();
         $expected = array(
-            'id'          => $insertId,
-            'name'        => 'test',
-            'description' => '',
-            'edited'      => ''
+            'id'        => $insertId,
+            'name'      => 'test',
+            'installed' => '0000-00-00 00:00:00'
         );
 
         $this->assertEquals($expected, $inserted);
@@ -78,16 +98,25 @@ class InsertTest extends TestCase {
      * @return void
      */
     public function testInsertMultiRow() {
-        $original = $this->_database->select()->from('measure')->fetchAll();
+        $original = $this->_database
+            ->select()
+            ->from('version')
+            ->fetchAll();
 
         $data = array(
             array('name' => 'multi row 1'),
             array('name' => 'multi row 2'),
             array('name' => 'multi row 3')
         );
-        $this->_database->insert()->setTable('measure')->massInsert($data)->run();
+        $this->_database
+            ->insert()
+            ->setTable('version')
+            ->massInsert($data)->run();
 
-        $insertedAll = $this->_database->select()->from('measure')->fetchAll();
+        $insertedAll = $this->_database
+            ->select()
+            ->from('version')
+            ->fetchAll();
         $this->assertEquals(3, count($insertedAll) - count($original));
     }
 
@@ -97,8 +126,14 @@ class InsertTest extends TestCase {
      * @return void
      */
     public function testGetId() {
-        $original = $this->_database->select()->from('measure')->fetchAll();
-        $insert = $this->_database->insert()->setTable('measure')->setInsertData(array('name' => 'test'));
+        $original = $this->_database
+            ->select()
+            ->from('version')
+            ->fetchAll();
+        $insert = $this->_database
+            ->insert()
+            ->setTable('version')
+            ->setInsertData(array('name' => 'test'));
 
         $insertId = $insert->run();
         $id       = $insert->getId();
@@ -113,7 +148,10 @@ class InsertTest extends TestCase {
      * @return void
      */
     public function testGetStatement() {
-        $insert = $this->_database->insert()->setTable('test')->setInsertData(array('col' => 'val'));
+        $insert = $this->_database
+            ->insert()
+            ->setTable('test')
+            ->setInsertData(array('col' => 'val'));
         $this->assertEquals('INSERT INTO test (`col`) VALUES (?)', $insert->getStatement());
     }
 
@@ -124,7 +162,10 @@ class InsertTest extends TestCase {
      */
     public function testGetBind() {
         $bind = array('col' => 'val');
-        $insert = $this->_database->insert()->setTable('test')->setInsertData($bind);
+        $insert = $this->_database
+            ->insert()
+            ->setTable('test')
+            ->setInsertData($bind);
         $this->assertEquals(array_values($bind), $insert->getBind());
     }
 }

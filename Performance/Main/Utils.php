@@ -101,4 +101,21 @@ class Utils {
     public function convertToBoolean($value) {
         return $value !== 'false' && $value !== 0 && $value !== false;
     }
+
+    /**
+     * Return short name of class.
+     *
+     * @param string|object $class Class to resolve the name
+     *
+     * @return string
+     */
+    public function getShortName($class) {
+        if (is_object($class)) {
+            $class = get_class($class);
+        }
+
+        $function = new \ReflectionClass($class);
+
+        return $function->getShortName();
+    }
 }

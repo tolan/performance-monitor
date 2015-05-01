@@ -38,10 +38,10 @@ class UpdateTest extends TestCase {
      */
     public function testAssemble() {
         $update = $this->_database->update()->setTable('test')->setUpdateData(array('col' => 'val'));
-        $this->assertEquals('UPDATE test AS test SET col = \'val\'', $update->assemble());
+        $this->assertEquals('UPDATE test AS test SET test.col = \'val\'', $update->assemble());
 
         $update = $this->_database->update()->setTable(array('alias' => 'test'))->setUpdateData(array('col' => 'val'));
-        $this->assertEquals('UPDATE test AS alias SET col = \'val\'', $update->assemble());
+        $this->assertEquals('UPDATE test AS alias SET alias.col = \'val\'', $update->assemble());
 
         $update = $this->_database->update()->setTable(array('alias' => 'test'))->setUpdateData(array('alias.col' => 'val'));
         $this->assertEquals('UPDATE test AS alias SET alias.col = \'val\'', $update->assemble());
@@ -97,12 +97,12 @@ class UpdateTest extends TestCase {
      * @return void
      */
     public function testRun() {
-        $data = $this->_database->select()->from('measure')->where('id = ?', 1)->fetchOne();
+        $data = $this->_database->select()->from('version')->where('id = ?', 1)->fetchOne();
         $this->assertEquals('first test', $data['name']);
 
-        $this->_database->update()->setTable('measure')->setUpdateData(array('name' => 'updated name'))->where('id = :id', array(':id' => 1))->run();
+        $this->_database->update()->setTable('version')->setUpdateData(array('name' => 'updated name'))->where('id = :id', array(':id' => 1))->run();
 
-        $data = $this->_database->select()->from('measure')->where('id = ?', 1)->fetchOne();
+        $data = $this->_database->select()->from('version')->where('id = ?', 1)->fetchOne();
         $this->assertEquals('updated name', $data['name']);
     }
 }

@@ -37,7 +37,11 @@ class QueryTest extends TestCase {
      * @return void
      */
     public function testAssemble() {
-        $query = $this->_database->query()->setSQL('AAA')->assemble();
+        $query = $this->_database
+            ->query()
+            ->setSQL('AAA')
+            ->assemble();
+
         $this->assertEquals('AAA', $query);
     }
 
@@ -47,7 +51,11 @@ class QueryTest extends TestCase {
      * @return void
      */
     public function testExecute() {
-        $data = $this->_database->query()->execute('SELECT * FROM measure')->fetchAll();
+        $data = $this->_database
+            ->query()
+            ->execute('SELECT * FROM version')
+            ->fetchAll();
+
         $this->assertCount(3, $data);
     }
 
@@ -57,10 +65,18 @@ class QueryTest extends TestCase {
      * @return void
      */
     public function testExecuteAndBind() {
-        $data = $this->_database->query()->execute('SELECT * FROM measure WHERE id = ?', array(1))->fetchAll();
+        $data = $this->_database
+            ->query()
+            ->execute('SELECT * FROM version WHERE id = ?', array(1))
+            ->fetchAll();
+
         $this->assertCount(1, $data);
 
-        $data = $this->_database->query()->execute('SELECT * FROM measure WHERE id = :id', array(':id' => 1))->fetchAll();
+        $data = $this->_database
+            ->query()
+            ->execute('SELECT * FROM version WHERE id = :id', array(':id' => 1))
+            ->fetchAll();
+
         $this->assertCount(1, $data);
     }
 
@@ -70,7 +86,11 @@ class QueryTest extends TestCase {
      * @return void
      */
     public function testFetchAll() {
-        $data = $this->_database->query()->setSQL('SELECT * FROM measure')->fetchAll();
+        $data = $this->_database
+            ->query()
+            ->setSQL('SELECT * FROM version')
+            ->fetchAll();
+
         $this->assertCount(3, $data);
     }
 
@@ -80,12 +100,15 @@ class QueryTest extends TestCase {
      * @return void
      */
     public function testFetchOne() {
-        $data     = $this->_database->query()->setSQL('SELECT * FROM measure')->fetchOne();
+        $data = $this->_database
+            ->query()
+            ->setSQL('SELECT * FROM version')
+            ->fetchOne();
+
         $expected = array(
-            'id'          => 1,
-            'name'        => 'first test',
-            'description' => '',
-            'edited'      => ''
+            'id'        => 1,
+            'name'      => 'first test',
+            'installed' => '0000-00-00 00:00:00'
         );
         $this->assertEquals($expected, $data);
     }

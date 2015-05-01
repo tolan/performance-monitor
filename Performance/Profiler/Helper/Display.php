@@ -3,6 +3,7 @@
 namespace PM\Profiler\Helper;
 
 /**
+ * Old deprecated code.
  * TODO
  */
 class Display

@@ -25,4 +25,5 @@ class Filter extends Enum {
     const LINE          = 'line';
     const IMMERSION     = 'immersion';
     const CONTENT       = 'content';
+    const SOURCE        = 'source';
 }

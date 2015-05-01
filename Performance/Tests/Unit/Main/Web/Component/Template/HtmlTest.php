@@ -28,8 +28,10 @@ class HtmlTest extends TestCase {
     protected function setUp() {
         parent::setUp();
 
-        $this->_template =  $this->getProvider()->get('PM\Main\Web\Component\Template\Html');
-        $view = $this->getMock('PM\Main\Web\View\AbstractView');
+        $this->_template = $this->getProvider()->get('PM\Main\Web\Component\Template\Html');
+        $view = $this->getMockBuilder('PM\Main\Web\View\AbstractView')
+            ->disableOriginalConstructor()
+            ->getMock();
         $view->expects($this->any())
             ->method('getPayload')
             ->will($this->returnValue($view));

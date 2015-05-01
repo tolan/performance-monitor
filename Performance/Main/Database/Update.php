@@ -93,7 +93,8 @@ class Update extends Where {
         $bind         = array();
 
         foreach ($this->_data as $column => $data) {
-            $placeholders[]    = $this->_table['alias'].'.'.$column.' = :'.$column;
+            $columnName        = strpos($column, '.') ? $column : ($this->_table['alias'].'.'.$column);
+            $placeholders[]    = $columnName.' = :'.$column;
             $bind[':'.$column] = $data;
         }
 

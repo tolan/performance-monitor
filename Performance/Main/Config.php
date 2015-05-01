@@ -157,10 +157,11 @@ class Config {
 
         if (array_key_exists($key, $this->_data) && is_array($this->_data[$key])) {
             $this->_data[$key] = array_unique(
-                array_merge($this->_data[$key], $data)
+                array_merge($this->_data[$key], (array)$data),
+                SORT_REGULAR
             );
         } else {
-            $this->_data[lcfirst($name)] = $data;
+            $this->_data[$key] = $data;
         }
 
         return $this;

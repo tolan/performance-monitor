@@ -2,6 +2,7 @@ angular.module('PM')
     .controller('SearchMainCtrl', SearchMainCtrl)
     .controller('SearchResultCtrl', SearchResultCtrl)
     .controller('SearchFiltersCtrl', SearchFiltersCtrl)
+    .controller('SearchSourceCtrl', SearchSourceCtrl)
     .controller('SearchTemplateCtrl', SearchTemplateCtrl);
 
 /**
@@ -52,10 +53,12 @@ function SearchResultCtrl($scope) {
     $scope.templatePrefix = '/js/template/Search/Result/';
     $scope.template       = $scope.templatePrefix + 'main.html';
     $scope.templates      = {
-        'scenario' : $scope.templatePrefix + 'scenario.html',
-        'test'     : $scope.templatePrefix + 'test.html',
-        'measure'  : $scope.templatePrefix + 'measure.html',
-        'call'     : $scope.templatePrefix + 'call.html'
+        'scenario'      : $scope.templatePrefix + 'scenario.html',
+        'test'          : $scope.templatePrefix + 'test.html',
+        'measure'       : $scope.templatePrefix + 'measure.html',
+        'call'          : $scope.templatePrefix + 'call.html',
+        'statistic_set' : $scope.templatePrefix + 'statisticSet.html',
+        'statistic_run' : $scope.templatePrefix + 'statisticRun.html'
     };
 
     $scope.target;
@@ -85,7 +88,8 @@ function SearchResultCtrl($scope) {
  * @returns void
  */
 function SearchFiltersCtrl($scope, $http, $timeout, $modal, $attrs) {
-    $scope.usage          = ($attrs.usage || 'search' );
+    $scope.usage          = ($attrs.usage || $scope.usage || 'search' );
+    $scope.cache          = (($attrs.cache || $scope.cache) === undefined ? true : ($attrs.cache || $scope.cache)).toString() !== 'false';
     $scope.cachePrefix    = arguments.callee.name + $scope.usage;
     $scope.templatePrefix = '/js/template/Search/Filters/';
     $scope.templateSearch = $scope.templatePrefix + 'main.html';
@@ -104,6 +108,8 @@ function SearchFiltersCtrl($scope, $http, $timeout, $modal, $attrs) {
     $scope.timerInterval  = 800;
     $scope.timer;
     $scope.resultTotal;
+
+    $scope.originalMenu[$scope.usage] = {};
 
     $scope.template = {};
 
@@ -124,7 +130,7 @@ function SearchFiltersCtrl($scope, $http, $timeout, $modal, $attrs) {
         $scope.template.logic  = '';
         $scope.template.target = undefined;
 
-        $scope.menu           = $scope.originalMenu;
+        $scope.menu           = $scope.originalMenu[$scope.usage];
         $scope.showLogic      = false;
         $scope.isAllowedLogic = false;
     };
@@ -201,7 +207,7 @@ function SearchFiltersCtrl($scope, $http, $timeout, $modal, $attrs) {
         });
 
         if (filters === 0) {
-            $scope.menu            = $scope.originalMenu;
+            $scope.menu            = $scope.originalMenu[$scope.usage];
             $scope.showLogic       = false;
             $scope.isAllowedLogic  = false;
             $scope.template.target = undefined;
@@ -213,7 +219,7 @@ function SearchFiltersCtrl($scope, $http, $timeout, $modal, $attrs) {
     $scope.selectFilter = function(event, item, group) {
         if (item.hasOwnProperty('target')) {
             $scope.template.target = item.target;
-            $scope.menu            = $scope.originalMenu[item.target].submenu;
+            $scope.menu            = $scope.originalMenu[$scope.usage][item.target].submenu;
 
             if ($scope.filterCache.hasOwnProperty(item.target) && $scope.filterCache[item.target].hasOwnProperty(item.filter)) {
                 $scope._createFilter(group, angular.copy($scope.filterCache[item.target][item.filter]), item);
@@ -258,7 +264,7 @@ function SearchFiltersCtrl($scope, $http, $timeout, $modal, $attrs) {
 
         if (countFilters === 0) {
             $scope.template.target = undefined;
-            $scope.menu            = $scope.originalMenu;
+            $scope.menu            = $scope.originalMenu[$scope.usage];
         } else {
             $scope.send();
         }
@@ -427,21 +433,24 @@ function SearchFiltersCtrl($scope, $http, $timeout, $modal, $attrs) {
 
     $scope.$on('menu-selected-item', $scope.selectFilter);
 
-    $scope.cacheObject('menu');
     $scope.cacheObject('originalMenu');
-    $scope.cacheObject('filterCache');
-    $scope.cacheObject('template');
 
-    if (_.isEmpty($scope.originalMenu)) {
-        $http.get('search/filter/menu').success(function(menu) {
+    if ($scope.cache === true) {
+        $scope.cacheObject('menu');
+        $scope.cacheObject('filterCache');
+        $scope.cacheObject('template');
+    }
+
+    if (_.isEmpty($scope.originalMenu[$scope.usage])) {
+        $http.get('search/filter/menu/' + $scope.usage).success(function(menu) {
             _.each(menu, function(item, key) {
-                $scope.originalMenu[key] = item;
+                $scope.originalMenu[$scope.usage][key] = item;
             });
 
             $scope.menu = menu;
 
             if ($scope.template.target !== undefined) {
-                $scope.menu = $scope.originalMenu[$scope.template.target].submenu;
+                $scope.menu = $scope.originalMenu[$scope.usage][$scope.template.target].submenu;
             }
 
             if ($scope.$parent.hasOwnProperty('template') && $scope.$parent.template.hasOwnProperty('groups')) {
@@ -462,6 +471,146 @@ function SearchFiltersCtrl($scope, $http, $timeout, $modal, $attrs) {
     } else {
         $scope.$emit('search-ready');
     }
+}
+
+/**
+ * Controller for manage search source.
+ *
+ * @param $scope   Scope
+ * @param $attrs   Attributes provider
+ *
+ * @returns void
+ */
+function SearchSourceCtrl($scope, $attrs) {
+    $scope.usage  = ($attrs.usage || 'search' );
+    $scope.cache  = ($attrs.cache || true) !== 'false';
+    $scope.source = ($scope.$parent.searchSource || {
+        template : {},
+        target : null
+    });
+    $scope.target = null;
+    $scope.$parent.isValidSource = $scope.isValidSource;
+
+    $scope.initList('id');
+    $scope.htmlTemplate         = '/js/template/Search/source.html';
+    $scope.templateSearchPrefix = '/js/template/Search/Result/';
+    $scope.searchTemplates      = {
+        'scenario'      : $scope.templateSearchPrefix + 'scenario.html',
+        'test'          : $scope.templateSearchPrefix + 'test.html',
+        'measure'       : $scope.templateSearchPrefix + 'measure.html',
+        'call'          : $scope.templateSearchPrefix + 'call.html',
+        'statistic_set' : $scope.templateSearchPrefix + 'statistic_set.html',
+        'statistic_run' : $scope.templateSearchPrefix + 'statistic_run.html'
+    };
+    $scope.validation   = {};
+    $scope.items        = [];
+    $scope.previewItems = [];
+    $scope.selected     = [];
+
+    if ($scope.source.hasOwnProperty('items')) {
+        $scope.selected = $scope.source.items;
+    }
+
+    $scope._fillTemplateSource = function() {
+        var type = $scope.source.type;
+
+        switch (type) {
+            case 'template':
+                $scope.source.items = [];
+                break;
+            case 'all':
+                $scope.source.items = _.pluck($scope.items.length > 0 ? $scope.items : $scope.previewItems, 'id');
+                break;
+            case 'manual':
+                $scope.source.items = $scope.selected;
+                break;
+        };
+    };
+
+    var hideResult = function(event) {
+        $scope.source.template = event.targetScope.getTemplate ? event.targetScope.getTemplate() : $scope.source.template;
+
+        if (event.targetScope.template && event.targetScope.template.hasOwnProperty('target')) {
+            $scope.source.target = event.targetScope.template.target || null;
+        }
+
+        $scope.items              = [];
+        $scope.searchErrorMessage = null;
+        $scope.isValidSource($scope.validation);
+    };
+
+    $scope.$watch('source.type', $scope._fillTemplateSource);
+    $scope.$watch('source.target', function() { $scope.target = $scope.source.target; });
+
+    $scope.$on('search-done', function(event, result) {
+        hideResult(event);
+
+        $scope.source.target = result.target;
+        $scope.items         = result.result.result;
+        $scope.totalItems    = $scope.items.length;;
+        $scope._fillTemplateSource();
+    });
+
+    $scope.$on('search-preview', function(event, result) {
+        hideResult(event);
+        $scope.source.target = result.target;
+        $scope.previewItems  = result.result.result;
+        $scope._fillTemplateSource();
+    });
+
+    $scope.$on('search-group-add', hideResult);
+    $scope.$on('search-group-drop', hideResult);
+    $scope.$on('search-filter-drop', hideResult);
+    $scope.$on('search-filter-add', hideResult);
+    $scope.$on('search-template-reset', hideResult);
+    $scope.$on('search-template-select', hideResult);
+
+    $scope.$on('search-error', function(event) {
+        $scope.searchErrorMessage = 'main.server.error';
+    });
+
+    $scope.selectItem = function(item) {
+        if ($scope.source.type === 'manual') {
+            if (_.indexOf($scope.selected, item.id) !== -1) {
+                $scope.selected = _.without($scope.selected, item.id);
+            } else {
+                $scope.selected.push(item.id);
+            }
+
+            $scope._fillTemplateSource();
+        }
+    };
+
+    $scope.selectPage = function(page, pageSize) {
+        var i, forSelect = [];
+        for(i = (page - 1) * pageSize; i < page * pageSize && i < $scope.items.length; i++) {
+            forSelect.push($scope.items[i].id);
+        }
+
+        if (_.difference(forSelect, $scope.selected).length === 0) {
+            $scope.selected = _.difference($scope.selected, forSelect);
+        } else {
+            $scope.selected = _.union($scope.selected, forSelect);
+        }
+
+        $scope._fillTemplateSource();
+    };
+
+    $scope.cleanSelect = function() {
+        $scope.selected = [];
+        $scope._fillTemplateSource();
+    };
+
+    $scope.isValidSource = function(validation) {
+        $scope.validation = validation;
+
+        delete(validation.source);
+        if (_.isEmpty($scope.source.template)) {
+            validation.source = 'error';
+        }
+
+        return validation;
+    };
 }
 
 /**

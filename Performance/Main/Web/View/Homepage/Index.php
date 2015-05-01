@@ -28,11 +28,13 @@ class Index extends Html {
         $template->addScript($path.'/js/filter.js');
         $template->addScript($path.'/js/directive.js');
         $template->addScript($path.'/js/service/Statistics.js');
+        $template->addScript($path.'/js/service/Settings.js');
         $template->addScript($path.'/js/controller/Menu.js');
         $template->addScript($path.'/js/controller/Lang.js');
         $template->addScript($path.'/js/controller/Profiler.js');
         $template->addScript($path.'/js/controller/Search.js');
         $template->addScript($path.'/js/controller/Statistics.js');
+        $template->addScript($path.'/js/controller/Settings.js');
 
         $template->addHeaderTag('<title>PM</title>');
         $template->addHeaderTag('<link type="image/x-icon" href="'.$path.'/favicon.ico" rel="shortcut icon">');

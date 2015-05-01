@@ -15,12 +15,12 @@ class TestingClass {
     /**
      * Testing method for execute tests.
      *
-     * @param mixed $data  some data
+     * @param mixed $mul   multiplier
      * @param mixed $const some constant
      *
      * @return array
      */
-    public function test($data = 1, $const = 200) {
-        return array('data' => $const * $data, 'const' => 100);
+    public function test($mul = 1, $const = 200) {
+        return array('mul' => $const * $mul, 'const' => 100);
     }
 }

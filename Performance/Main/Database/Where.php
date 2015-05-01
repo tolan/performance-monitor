@@ -90,7 +90,8 @@ class Where extends Query {
 
         if (count($this->_where) > 0) {
             foreach ($this->_where as $condition) {
-                $compiledBinds = array_merge($compiledBinds, (array)$condition['bind']);
+                $bind          = is_object($condition['bind']) ? array($condition['bind']) : (array)$condition['bind'];
+                $compiledBinds = array_merge($compiledBinds, $bind);
                 $operator      = $condition['operator'];
                 $statement     = (string)$condition['condition'];
 

@@ -39,19 +39,24 @@ class RouterTest extends TestCase {
     public function testRoute() {
         $request = $this->getProvider()->get('request'); /* @var $request \PM\Main\Web\Component\Request */
         // set basic information for request
-        $request->getServer()->set('REQUEST_URI', '/translate/langs');
+        $request->getServer()->set('REQUEST_URI', '/menu');
         $request->getServer()->set('BASE', '');
         $request->getServer()->set('REQUEST_METHOD', 'GET');
 
-        // mock instead of cahce instance
-        $cache = $this->getMock('PM\Main\Abstracts\Entity');
-        $cache->expects($this->any())
-            ->method('load')
-            ->will($this->returnValue(array()));
+        $info     = $this->_router->route()->getRouteInfo();
+        $expected = array (
+            'controller' => '\PM\Main\Web\Controller\Menu',
+            'action'     => 'Index',
+            'params'     => null,
+            'annotation' => array()
+        );
 
-        $this->getProvider()->set($cache, 'PM\Main\Cache');
+        $this->assertEquals($expected, $info);
 
-        $this->_router->route();
+        $request->getServer()->set('REQUEST_URI', '/');
+        $info                   = $this->_router->reset()->route()->getRouteInfo();
+        $expected['controller'] = '\PM\Main\Web\Controller\Homepage';
+        $this->assertEquals($expected, $info);
     }
 
     /**
@@ -62,21 +67,13 @@ class RouterTest extends TestCase {
     public function testGetController() {
         $request = $this->getProvider()->get('request'); /* @var $request \PM\Main\Web\Component\Request */
         // set basic information for request
-        $request->getServer()->set('REQUEST_URI', '/translate/langs');
+        $request->getServer()->set('REQUEST_URI', '/menu');
         $request->getServer()->set('BASE', '');
         $request->getServer()->set('REQUEST_METHOD', 'GET');
 
-        // mock instead of cahce instance
-        $cache = $this->getMock('PM\Main\Abstracts\Entity');
-        $cache->expects($this->any())
-            ->method('load')
-            ->will($this->returnValue(array()));
-
-        $this->getProvider()->set($cache, 'PM\Main\Cache');
-
         $controller = $this->_router->getController();
 
-        $this->assertInstanceOf('PM\Main\Web\Controller\Translate', $controller);
-        $this->assertEquals('GetLangs', $controller->getAction());
+        $this->assertInstanceOf('PM\Main\Web\Controller\Menu', $controller);
+        $this->assertEquals('Index', $controller->getAction());
     }
 }

@@ -3,6 +3,7 @@
 namespace PM\scripts\Install;
 
 use PM\Main\Provider;
+use PM\Main\Database\Connection;
 
 /**
  * Abstract class for migrations.
@@ -67,6 +68,56 @@ abstract class AbstractMigration {
      */
     final protected function getConfig($module) {
         return $this->_provider->get('PM\Main\Config')->get($module, array());
+    }
+
+    /**
+     * Returns connection to the database by configuration.
+     *
+     * @param string $address  Address of MySQL database
+     * @param string $user     User with access to database
+     * @param string $password Password
+     * @param string $database Name of database
+     *
+     * @return Connection
+     */
+    final protected function getConnection($address = null, $user = null, $password = null, $database = null) {
+        $configuration = $this->getConfig('database');
+        $address       = $address  ? $address  : $configuration['address'];
+        $user          = $user     ? $user     : $configuration['user'];
+        $password      = $password ? $password : $configuration['password'];
+        $database      = $database ? $database : $configuration['database'];
+
+        $options = array(
+            Connection::ATTR_ERRMODE            => Connection::ERRMODE_EXCEPTION,
+            Connection::MYSQL_ATTR_INIT_COMMAND => "SET CHARACTER SET UTF8; SET NAMES UTF8"
+        );
+        $connection = new Connection($address, $user, $password, $database, $options);
+        $connection->prepare('')->closeCursor();
+
+        return $connection;
+    }
+
+    /**
+     * It load sql file and execute it.
+     *
+     * @param string     $filename   Path to the file with sql statements
+     * @param Connection $connection Connection to the database
+     *
+     * @return AbstractMigration
+     */
+    final protected function loadSQLFile($filename, Connection $connection=null) {
+        $connection = $connection ? $connection : $this->getConnection();
+
+        if (file_exists($filename)) {
+            $sql = explode(";\n", file_get_contents($filename));
+            foreach ($sql as $query) {
+                if (!empty($query)) {
+                    $connection->exec($query);
+                }
+            }
+        }
+
+        return $this;
     }
 
     /**

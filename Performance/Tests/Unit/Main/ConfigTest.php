@@ -37,20 +37,16 @@ class ConfigTest extends TestCase {
      * @return void
      */
     public function testToArray() {
+        $this->_config->reset();
         $expected = array(
-            'namespace' => Config::NAME_SPACE
         );
 
         $config = $this->_config->toArray();
-        $this->assertArrayHasKey('root', $config);
-        unset($config['root']);
         $this->assertInternalType('array', $config);
         $this->assertEquals($expected, $config);
 
         $config = $this->_config->set('test', array('data'))->toArray();
         $expected['test'] = array('data');
-        $this->assertArrayHasKey('root', $config);
-        unset($config['root']);
         $this->assertInternalType('array', $config);
         $this->assertEquals($expected, $config);
     }
@@ -61,14 +57,13 @@ class ConfigTest extends TestCase {
      * @return void
      */
     public function testFromArray() {
+        $this->_config->reset();
         $expected = array(
             'namespace' => 'test',
             'test'      => 'text'
         );
 
         $config = $this->_config->fromArray($expected)->toArray();
-        $this->assertArrayHasKey('root', $config);
-        unset($config['root']);
         $this->assertInternalType('array', $config);
         $this->assertEquals($expected, $config);
     }
@@ -79,14 +74,12 @@ class ConfigTest extends TestCase {
      * @return void
      */
     public function testLoadJson() {
+        $this->_config->reset();
         $expected = array(
-            'namespace' => Config::NAME_SPACE,
-            'name'      => 'test'
+            'name' => 'test'
         );
 
-        $config = $this->_config->loadJson(__DIR__.'/configTest.json')->toArray();
-        $this->assertArrayHasKey('root', $config);
-        unset($config['root']);
+        $config = $this->_config->loadJson(__DIR__.'/ConfigTest.json')->toArray();
         $this->assertInternalType('array', $config);
         $this->assertEquals($expected, $config);
     }

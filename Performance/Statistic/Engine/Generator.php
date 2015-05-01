@@ -44,11 +44,11 @@ class Generator {
      */
     public function generateStatistic(Entity\Template $template) {
         $searchTemplate = new Search\Entity\Template($template->getSource()['template']);
-        $searchSelect   = $this->_getSourceSelect($template);
+        $sourceSelect   = $this->_getSourceSelect($template);
 
         $result = array();
         foreach ($template->getViews() as $view) {
-            $select   = $this->_getSelectForView($view, clone $searchSelect, $searchTemplate);
+            $select   = $this->_getSelectForView($view, clone $sourceSelect, $searchTemplate);
             $viewData = $select->fetchAll();
             $result   = array_merge($result, $this->_transformData($view, $viewData));
         }

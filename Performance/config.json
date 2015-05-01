@@ -1,22 +1,23 @@
 {
-    "modules" : ["scripts", "Profiler", "Search", "Statistic", "Translate"],
+    "modules" : ["scripts", "Profiler", "Search", "Statistic", "Translate", "Cron"],
     "provider" : {
         "useAutoloader" : true,
         "allowKillApp"  : true,
         "cache"         : "cache",
         "initServices"  : ["loader"],
         "serviceMap"    : {
-            "database" : "PM\\Main\\Database",
-            "config"   : "PM\\Main\\Config",
-            "web"      : "PM\\Main\\Web\\App",
-            "request"  : "PM\\Main\\Web\\Component\\Request",
-            "response" : "PM\\Main\\Web\\Component\\Response",
-            "router"   : "PM\\Main\\Web\\Component\\Router",
-            "log"      : "PM\\Main\\Log",
-            "access"   : "PM\\Main\\Access",
-            "cache"    : "PM\\Main\\Cache",
-            "loader"   : "PM\\Main\\ModuleLoader",
-            "utils"    : "PM\\Main\\Utils"
+            "database"  : "PM\\Main\\Database",
+            "config"    : "PM\\Main\\Config",
+            "web"       : "PM\\Main\\Web\\App",
+            "request"   : "PM\\Main\\Web\\Component\\Request",
+            "response"  : "PM\\Main\\Web\\Component\\Response",
+            "router"    : "PM\\Main\\Web\\Component\\Router",
+            "log"       : "PM\\Main\\Log",
+            "access"    : "PM\\Main\\Access",
+            "cache"     : "PM\\Main\\Cache",
+            "loader"    : "PM\\Main\\ModuleLoader",
+            "utils"     : "PM\\Main\\Utils",
+            "commander" : "PM\\Main\\Commander"
         }
     },
     "cache" : {
@@ -27,11 +28,11 @@
         "address"  : "localhost",
         "user"     : "root",
         "password" : "net",
-        "database" : "performance",
+        "database" : "PF",
         "install"  : false
     },
     "access" : {
-        "allowFrom" : [],
+        "allowFrom"  : ["10.109.97.0/24", "10.77.0.0/16"],
         "deniedFrom" : []
     },
     "log" : {

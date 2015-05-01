@@ -1,0 +1,68 @@
+<div class="list width-80 width-max-1200 center-block">
+    <input type="text" ng-model="search" class="form-control search-query" placeholder="[[_('main.list.search')]]">
+    <table class="table table-striped table-bordered table-hover table-responsive">
+        <thead>
+            <tr>
+                <th ng-click="predicate='name'; reverse=!reverse" class="pointer">
+                    <i ng-class="selectSortClass('name', predicate, reverse)"></i>&nbsp;[[_('settings.gearman.list.name')]]
+                </th>
+                <th ng-click="predicate='queue'; reverse=!reverse" class="pointer">
+                    <i ng-class="selectSortClass('queue', predicate, reverse)"></i>&nbsp;[[_('settings.gearman.list.queue')]]
+                </th>
+                <th ng-click="predicate='running'; reverse=!reverse" class="pointer">
+                    <i ng-class="selectSortClass('running', predicate, reverse)"></i>&nbsp;[[_('settings.gearman.list.running')]]
+                </th>
+                <th ng-click="predicate='available'; reverse=!reverse" class="pointer">
+                    <i ng-class="selectSortClass('available', predicate, reverse)"></i>&nbsp;[[_('settings.gearman.list.available')]]
+                </th>
+                <th class="center actions">
+                    [[_('settings.gearman.list.actions')]]
+                </th>
+                <th class="center actions">
+                    <a href="#/settings/gearman/workers" title="[[_('settings.gearman.list.workers')]]">
+                        <i class="glyphicon glyphicon-list"></i>
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="status in statuses | filter:search | customFilter:refresh | orderBy:predicate:reverse">
+                <td>[[status.name]]</td>
+                <td class="center">[[status.queue]]</td>
+                <td class="center">[[status.running]]</td>
+                <td class="center">[[status.available]]</td>
+                <td ng-if="status.mode === SIMPLE" class="center">
+                    <div ng-if="getWorkerByStatus(status)">
+                        <i class="pointer glyphicon glyphicon-plus" title="[[_('settings.gearman.list.plus')]]" ng-click="plusWorker(status)"></i>
+                        &nbsp;
+                        <i class="pointer glyphicon glyphicon-minus" title="[[_('settings.gearman.list.minus')]]" ng-click="minusWorker(status)"></i>
+                        &nbsp;
+                        <i class="pointer glyphicon glyphicon-stop" title="[[_('settings.gearman.list.stop')]]" ng-click="stopWorkers(status)"></i>
+                    </div>
+                </td>
+                <td ng-if="status.mode === KEEP" class="center">
+                    <input type="number" min="0" max="1000" ng-model="status.keepCount" class="form-control" title="[[_('settings.gearman.list.keepCount')]]">
+                </td>
+                <td class="center">
+                    <a ng-if="getWorkerByStatus(status) === undefined" href="#/settings/gearman/create/[[status.name]]" title="[[_('settings.gearman.list.create')]]">
+                        <i class="glyphicon glyphicon-plus"></i>
+                    </a>
+                    <div ng-if="getWorkerByStatus(status)">
+                        <a ng-click="changeMode(status)" title="[[_('settings.gearman.list.changeMode')]]">
+                            <i ng-if="status.mode === SIMPLE" class="glyphicon glyphicon-retweet"></i>
+                            <i ng-if="status.mode === KEEP" class="glyphicon glyphicon-ban-circle"></i>
+                        </a>
+                        &nbsp;
+                        <a href="#/settings/gearman/edit/[[getWorkerByStatus(status).id]]" title="[[_('settings.gearman.list.edit')]]">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                        </a>
+                        &nbsp;
+                        <a ng-click="deleteWorker(status)" title="[[_('settings.gearman.list.delete')]]">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

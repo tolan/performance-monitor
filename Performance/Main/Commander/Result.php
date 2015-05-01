@@ -10,6 +10,10 @@ use PM\Main\Abstracts\Entity;
  * @author     Martin Kovar
  * @category   Performance
  * @package    Main
+ *
+ * @method mixed getData()
  */
 class Result extends Entity {
+
+    protected $data = null;
 }
