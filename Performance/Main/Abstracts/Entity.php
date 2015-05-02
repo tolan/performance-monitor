@@ -41,7 +41,7 @@ abstract class Entity extends Enum {
      *
      * @param array $array Array with values.
      *
-     * @return \PM\Main\Abstracts\Entity
+     * @return Entity
      */
     public function fromArray($array) {
         if ($array instanceof Entity) {
@@ -64,9 +64,10 @@ abstract class Entity extends Enum {
      */
     public function toArray($recursive = true) {
         $result = array();
-        $vars   = get_class_vars(get_class($this));
+        $vars   = $this->_getVarsNames();
 
-        foreach (array_keys($vars) as $name) {
+        foreach ($vars as $name) {
+            // extract non-private prefixed properties
             if (strpos($name, '_') !== 0) {
                 $result[$name] = $this->_getItemValue($this->$name, $recursive);
             }
@@ -96,11 +97,9 @@ abstract class Entity extends Enum {
      *
      * @return mixed Value of attribute
      *
-     * @throws \PM\Main\Exception Throws when parameter has not been set.
+     * @throws Exception Throws when parameter has not been set.
      */
     final public function get($name, $default = null) {
-        $name = lcfirst($name);
-
         if (!$this->has($name)) {
             if ($default !== null) {
                 return $default;
@@ -109,9 +108,10 @@ abstract class Entity extends Enum {
             throw new Exception ('Parameter '.$name.' has not been set.');
         }
 
-        $thisVars = get_class_vars(get_class($this));
+        $name = lcfirst($name);
+        $vars = $this->_getVarsNames();
 
-        if (array_key_exists($name, $thisVars)) {
+        if (in_array($name, $vars)) {
             $value = $this->$name;
         } else {
             $value = $this->_data[$name];
@@ -126,13 +126,13 @@ abstract class Entity extends Enum {
      * @param string $name  Name of attribute.
      * @param mixed  $value Vale of attribute.
      *
-     * @return \PM\Main\Abstracts\Entity
+     * @return Entity
      */
     final public function set($name, $value) {
-        $thisVars = get_class_vars(get_class($this));
-        $name     = lcfirst($name);
+        $vars = $this->_getVarsNames();
+        $name = lcfirst($name);
 
-        if (array_key_exists($name, $thisVars)) {
+        if (in_array($name, $vars)) {
             $this->$name = $value;
         } else {
             $this->_data[$name] = $value;
@@ -148,20 +148,28 @@ abstract class Entity extends Enum {
      *
      * @param string $name Name of attribute.
      *
-     * @return \PM\Main\Abstracts\Entity
+     * @return Entity
      *
-     * @throws \PM\Main\Exception Throws when parameter has not been set.
+     * @throws Exception Throws when parameter has not been set.
      */
-    final public function reset($name) {
-        $name = lcfirst($name);
-        $vars = get_class_vars(get_class($this));
-
-        if (array_key_exists($name, $vars)) {
-            $this->$name = NULL;
-        } elseif(array_key_exists($name, $this->_data)) {
-            unset($this->_data[$name]);
+    final public function reset($name = null) {
+        if ($name === null) {
+            foreach (array_keys($this->_getDefaultVars()) as $name) {
+                $this->reset($name);
+            }
         } else {
-            throw new Exception ('Variable with name: "'.$name.'" does not exist!');
+            $name = lcfirst($name);
+            $vars = $this->_getDefaultVars();
+
+            $this->_version++;
+
+            if (array_key_exists($name, $vars)) {
+                $this->$name = $vars[$name];
+            } elseif(array_key_exists($name, $this->_data)) {
+                unset($this->_data[$name]);
+            } else {
+                throw new Exception ('Variable with name: "'.$name.'" does not exist!');
+            }
         }
 
         return $this;
@@ -175,10 +183,10 @@ abstract class Entity extends Enum {
      * @return boolean It is true when varaible is set.
      */
     final public function has($name) {
+        $vars = $this->_getVarsNames();
         $name = lcfirst($name);
-        $vars = get_class_vars(get_class($this));
 
-        return array_key_exists($name, $vars) || array_key_exists($name, $this->_data);
+        return in_array($name, $vars) || array_key_exists($name, $this->_data);
     }
 
     /**
@@ -188,17 +196,17 @@ abstract class Entity extends Enum {
      *
      * @return boolean It is true when attribute is empty.
      *
-     * @throws \PM\Main\Exception Throws when parameter has not been defined.
+     * @throws Exception Throws when parameter has not been defined.
      */
     final public function isEmpty($name) {
-        $vars = get_class_vars(get_class($this));
+        $vars = $this->_getVarsNames();
         $name = lcfirst($name);
 
         if (!$this->has($name)) {
             throw new Exception ('Parameter "'.$name.'" has not been set.');
         }
 
-        if (array_key_exists($name, $vars)) {
+        if (in_array($name, $vars)) {
             return empty($this->$name);
         } else {
             return empty($this->_data[$name]);
@@ -212,7 +220,7 @@ abstract class Entity extends Enum {
      *
      * @return mixed
      *
-     * @throws \PM\Main\Exception
+     * @throws Exception
      */
     final public function __get($name) {
         return $this->get($name);
@@ -224,7 +232,7 @@ abstract class Entity extends Enum {
      * @param string $name  Name of value
      * @param mixed  $value Value of item
      *
-     * @return \PM\Main\Abstracts\Entity
+     * @return Entity
      */
     final public function __set($name, $value) {
         return $this->set($name, $value);
@@ -236,9 +244,9 @@ abstract class Entity extends Enum {
      * @param string $name      Name of attribute.
      * @param mixed  $arguments Arguments for methods.
      *
-     * @return \PM\Main\Abstracts\Entity | mixed | boolean
+     * @return Entity | mixed | boolean
      *
-     * @throws \PM\Main\Exception Throws when method is not defined.
+     * @throws Exception Throws when method is not defined.
      */
     final public function __call($name, $arguments) {
         $method   = strtolower(substr($name, 0, 3));
@@ -275,9 +283,9 @@ abstract class Entity extends Enum {
      *
      * @param string $name Name of varible.
      *
-     * @return \PM\Main\Abstracts\Entity
+     * @return Entity
      *
-     * @throws \PM\Main\Exception Throw when attribute does not exist.
+     * @throws Exception Throw when attribute does not exist.
      */
     final public function __unset($name) {
         return $this->reset($name);
@@ -319,5 +327,26 @@ abstract class Entity extends Enum {
         }
 
         return NULL;
+    }
+
+    /**
+     * Returns set of vars which are defined on class.
+     *
+     * @return array
+     */
+    private function _getVarsNames() {
+        $vars   = array_keys($this->_getDefaultVars());
+        $result = array_diff($vars, array('_data', '_version'));
+
+        return $result;
+    }
+
+    /**
+     * Returns set of all vars which are defined on class and their default values.
+     *
+     * @return array
+     */
+    private function _getDefaultVars() {
+        return get_class_vars(get_class($this));
     }
 }
