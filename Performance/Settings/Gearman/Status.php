@@ -82,10 +82,14 @@ class Status {
      */
     private function _parseStatus(Process\Result $status) {
         $result = array();
-        $count  = count($status);
+        $count  = count($status->toArray());
 
         for($i = 0; $i < $count; $i++) {
             $row = $status[$i];
+
+            if (trim($row) === '.') {
+                continue;
+            }
 
             $result[] = $this->_parseRow(trim($row));
         }
@@ -103,7 +107,7 @@ class Status {
     private function _parseRow($row) {
         $result = array();
 
-        preg_match('/^([a-zA-Z0-9_]+)\s+(\d+)\s+(\d+)\s+(\d+)$/', $row, $result);
+        preg_match('/^([a-zA-Z0-9_\\\]+)\s+(\d+)\s+(\d+)\s+(\d+)$/', $row, $result);
         array_shift($result);
 
         $result = array_combine(self::$_keys, $result);
