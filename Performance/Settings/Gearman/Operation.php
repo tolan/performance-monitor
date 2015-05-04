@@ -159,6 +159,7 @@ class Operation {
         preg_match('/'.$worker['name'].'/', $status['name'], $match);
 
         foreach ($match as $key => $value) {
+            $value  = strtr($value, array('\\' => '\\\\\\'));
             $script = preg_replace('/\$'.($key + 1).'/', $value, $script);
         }
 
