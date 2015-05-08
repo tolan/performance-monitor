@@ -10,6 +10,7 @@ namespace PM\Main;
  * @package    Main
  */
 class Utils {
+
     const MYSQL_DATETIME = 'Y-m-d H:i:s';
 
     /**
@@ -63,21 +64,28 @@ class Utils {
      *
      * @param string $memoryString String in memory format
      *
-     * @return int
+     * @return string
      */
     public function convertMemory($memoryString) {
-        $value = 0;
-        if (stristr($memoryString, 'G')) {
-            $value = (int)strstr($memoryString, 'G', true) * pow(2, 30); // There can be limit by 32-bit system
-        } elseif (stristr($memoryString, 'M')) {
-            $value = (int)strstr($memoryString, 'M', true) * pow(2, 20);
-        } elseif (stristr($memoryString, 'K')) {
-            $value = (int)strstr($memoryString, 'K', true) * pow(2, 10);
-        } else {
-            $value = (int)$memoryString;
+        $types   = array('P', 'T', 'G', 'M', 'K');
+        $pattern = '/(\d+[.,]*\d*) *(['.join('', $types).'])/';
+        $matches = array();
+
+        preg_match_all($pattern, $memoryString, $matches);
+
+        foreach ($matches[0] as $key => $match) {
+            $amount   = strtr($matches[1][$key], array(',' => '.'));
+            $type     = $matches[2][$key];
+            $exponent = (count($types) - array_search($type, $types)) * 10;
+
+            $value = round($amount * pow(2, $exponent), 0);
+
+            $replace = strpos($match, ' ') ? $value.' ' : $value;
+
+            $memoryString = str_replace($match, $replace, $memoryString);
         }
 
-        return $value;
+        return $memoryString;
     }
 
     /**
@@ -88,7 +96,7 @@ class Utils {
      * @return boolean
      */
     public function isAssociativeArray(array $array) {
-        return array_keys($array) !== range(0, count($array) - 1);
+        return !empty($array) && array_keys($array) !== range(0, count($array) - 1);
     }
 
     /**
@@ -99,7 +107,7 @@ class Utils {
      * @return boolean
      */
     public function convertToBoolean($value) {
-        return $value !== 'false' && $value !== 0 && $value !== false;
+        return $value !== 'false' && $value !== 0 && $value !== false && $value !== '' && $value !== '0';
     }
 
     /**

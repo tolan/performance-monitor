@@ -58,4 +58,109 @@ class UtilsTest extends TestCase {
             $this->assertEquals($time, strtotime($dateTime));
         }
     }
+
+    /**
+     * Success test for method convertTimeFromMySQLDateTime.
+     *
+     * @return void
+     */
+    public function testConvertTimeFromMySQLDateTime() {
+        $times = array(
+            '1970-01-01 00:00:00' => 0,
+            '2011-12-11 12:32:11' => 1323606731,
+            '2038-01-20 00:00:00' => 2147558400,
+            '2090-11-11 22:22:22' => 3814122142
+        );
+
+        foreach ($times as $value => $expected) {
+            $result = $this->_utils->convertTimeFromMySQLDateTime($value, false);
+            $this->assertEquals($expected, $result);
+
+            $result = $this->_utils->convertTimeFromMySQLDateTime($value, true);
+            $this->assertEquals($expected * 1000, $result);
+        }
+    }
+
+    /**
+     * Success test for method convertMemory.
+     *
+     * @return void
+     */
+    public function testConvertMemory() {
+        $data = array(
+            'the file has 13.145 MB or 11KB' => 'the file has 13783532 B or 11264B',
+            '0'                              => '0',
+            '0KB 0 MB'                       => '0B 0 B',
+            '20 KB'                          => '20480 B',
+            '11,232 GB'                      => '12060268167 B'
+        );
+
+        foreach ($data as $value => $expected) {
+            $result = $this->_utils->convertMemory($value);
+            $this->assertEquals($expected, $result);
+        }
+    }
+
+    /**
+     * Success test for method isAssociativeArray.
+     *
+     * @return void
+     */
+    public function testIsAssociativeArray() {
+        $array = range(1,100);
+        $this->assertFalse($this->_utils->isAssociativeArray($array));
+
+        $array = array('1' => 11, 'a' => 'AA');
+        $this->assertTrue($this->_utils->isAssociativeArray($array));
+
+        $array = array(1 => 11, 2 => 'AA');
+        $this->assertTrue($this->_utils->isAssociativeArray($array));
+
+        $array = array();
+        $this->assertFalse($this->_utils->isAssociativeArray($array));
+
+        $array = array(1, 3, 5);
+        $this->assertFalse($this->_utils->isAssociativeArray($array));
+    }
+
+    /**
+     * Success test for method convertToBoolean.
+     *
+     * @return void
+     */
+    public function testConvertToBoolean() {
+        $data = array(
+            true    => true,
+            false   => false,
+            'true'  => true,
+            'false' => false,
+            'test'  => true,
+            0       => false,
+            '0'     => false,
+            1       => true
+        );
+
+        foreach ($data as $value => $expected) {
+            $this->assertSame($expected, $this->_utils->convertToBoolean($value));
+        }
+    }
+
+    /**
+     * Success test for method getShortName.
+     *
+     * @return void
+     */
+    public function testGetShortName() {
+        $classes = array(
+            'PM\Main\Database'            => 'Database',
+            'PM\Main\Commander\Execution' => 'Execution',
+            'PM\Main\Event\Action\Emit'   => 'Emit',
+            'PM\Main\Event\Listener\On'   => 'On',
+            'PM\Main\Event\Manager'       => 'Manager'
+        );
+
+        foreach ($classes as $value => $expected) {
+            $this->assertSame($expected, $this->_utils->getShortName($value));
+        }
+    }
 }

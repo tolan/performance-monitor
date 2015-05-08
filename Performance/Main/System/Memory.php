@@ -37,7 +37,7 @@ class Memory {
      * @return int
      */
     public function getLimit() {
-        return $this->_utils->convertMemory(ini_get('memory_limit'));
+        return trim($this->_utils->convertMemory(ini_get('memory_limit')), 'B');
     }
 
     /**

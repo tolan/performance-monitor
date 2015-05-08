@@ -1,5 +1,7 @@
 <?php
 
+date_default_timezone_set('UTC');
+
 include __DIR__.'/../../Main/Provider.php';
 include __DIR__.'/../../Main/Config.php';
 
