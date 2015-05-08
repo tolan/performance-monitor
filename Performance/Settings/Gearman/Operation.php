@@ -67,6 +67,7 @@ class Operation {
      */
     public function stop($status, $worker) {
         $script = 'ps ax | grep "'.$this->_getStartScript($status, $worker).'" | grep -v grep';
+        $script = strtr($script, array('\\\\' => '\\\\\\'));
         $pids   = $this->_getRunningsPids($script);
 
         $this->_process->kill(current($pids));
@@ -84,6 +85,7 @@ class Operation {
      */
     public function stopAll($status, $worker) {
         $script = 'ps ax | grep "'.$this->_getStartScript($status, $worker).'" | grep -v grep';
+        $script = strtr($script, array('\\\\' => '\\\\\\'));
         $pids   = $this->_getRunningsPids($script);
 
         foreach ($pids as $pid) {
