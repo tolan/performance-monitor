@@ -68,6 +68,7 @@ class Provider {
      */
     private $_excludeFilesFromLoad = array(
         'Main/Abstracts/Unit/TestCase.php',
+        'scripts/cron.php',
         'scripts/install.php',
         'scripts/memoryLeakCleaner.php',
         'scripts/startWorker.php'
