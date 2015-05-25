@@ -32,7 +32,7 @@
         "install"  : false
     },
     "access" : {
-        "allowFrom"  : ["10.109.97.0/24", "10.77.0.0/16"],
+        "allowFrom"  : [],
         "deniedFrom" : []
     },
     "log" : {
