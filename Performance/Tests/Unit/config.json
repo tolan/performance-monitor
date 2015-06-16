@@ -21,7 +21,7 @@
     "database" : {
         "address"  : "localhost",
         "user"     : "root",
-        "password" : "100807962",
+        "password" : "net",
         "database" : "PF_unit_tests",
         "install"  : true
     },
@@ -35,7 +35,7 @@
     },
     "log" : {
         "level" : 3,
-        "file"  : "/home/tolan/my.log",
+        "file"  : "performance.log",
         "cache" : false
     },
     "translate" : {
