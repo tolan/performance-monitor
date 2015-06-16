@@ -9,6 +9,6 @@ namespace PM\Cron\Parser;
  * @category   Performance
  * @package    Cron
  */
-class Exception extends PM\Main\Exception {
+class Exception extends \PM\Main\Exception {
 
 }
