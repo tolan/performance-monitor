@@ -187,6 +187,26 @@ class Gearman extends Json {
     }
 
     /**
+     * Controls set of gearman workers by given configuration.
+     *
+     * @link /worker/control
+     *
+     * @method POST
+     *
+     * @return void
+     */
+    public function actionWorkerControl() {
+        $status = $this->getProvider()->get('PM\Settings\Gearman\Status'); /* @var $status \PM\Settings\Gearman\Status */
+
+        $this->_runOperation('control');
+        $this->getExecutor()
+            ->add(function() {
+                usleep(50 * 1000);
+            })
+            ->add('get', $status);
+    }
+
+    /**
      * It runs operation by given method and status and worker settings in request input.
      *
      * @param string $method Method of operation

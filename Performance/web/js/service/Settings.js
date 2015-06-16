@@ -88,20 +88,6 @@ perfModule.service('SettingsService', function ($http, AbstractService) {
         return request;
     };
 
-    this.startWorker = function(status, worker, success, error) {
-        var request = $http.post('/settings/gearman/worker/start', {status: status, worker: worker});
-        AbstractService._assignFunctions(request, success, error);
-
-        return request;
-    };
-
-    this.stopWorker = function(status, worker, success, error) {
-        var request = $http.post('/settings/gearman/worker/stop', {status: status, worker: worker});
-        AbstractService._assignFunctions(request, success, error);
-
-        return request;
-    };
-
     this.stopAllWorkers = function(status, worker, success, error) {
         var request = $http.post('/settings/gearman/worker/stopAll', {status: status, worker: worker});
         AbstractService._assignFunctions(request, success, error);
@@ -109,8 +95,8 @@ perfModule.service('SettingsService', function ($http, AbstractService) {
         return request;
     };
 
-    this.keepWorkers = function(status, worker, success, error) {
-        var request = $http.post('/settings/gearman/worker/keep', {status: status, worker: worker});
+    this.controlWorkers = function(control, success, error) {
+        var request = $http.post('/settings/gearman/worker/control', {control: control});
         AbstractService._assignFunctions(request, success, error);
 
         return request;

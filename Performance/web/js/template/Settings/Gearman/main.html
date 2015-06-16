@@ -1,19 +1,35 @@
 <div class="list width-80 width-max-1200 center-block">
-    <input type="text" ng-model="search" class="form-control search-query" placeholder="[[_('main.list.search')]]">
+    <div class="row margin-1">
+        <div class="col-lg-2">
+            <input type="text" ng-model="search" class="form-control search-query" placeholder="[[_('main.list.search')]]">
+        </div>
+        <div class="col-lg-offset-4 col-lg-6 form-horizontal">
+            <span class="control-label col-lg-6 text-right">[[_('settings.gearman.list.refresh')]]</span>
+            <div class="col-lg-6">
+                <input type="number" ng-model="interval" min="500" class="form-control">
+            </div>
+        </div>
+    </div>
     <table class="table table-striped table-bordered table-hover table-responsive">
         <thead>
             <tr>
                 <th ng-click="predicate='name'; reverse=!reverse" class="pointer">
                     <i ng-class="selectSortClass('name', predicate, reverse)"></i>&nbsp;[[_('settings.gearman.list.name')]]
                 </th>
-                <th ng-click="predicate='queue'; reverse=!reverse" class="pointer">
-                    <i ng-class="selectSortClass('queue', predicate, reverse)"></i>&nbsp;[[_('settings.gearman.list.queue')]]
+                <th class="center">
+                    [[_('settings.gearman.list.queue')]]
                 </th>
-                <th ng-click="predicate='running'; reverse=!reverse" class="pointer">
-                    <i ng-class="selectSortClass('running', predicate, reverse)"></i>&nbsp;[[_('settings.gearman.list.running')]]
+                <th class="center">
+                    [[_('settings.gearman.list.running')]]
                 </th>
-                <th ng-click="predicate='available'; reverse=!reverse" class="pointer">
-                    <i ng-class="selectSortClass('available', predicate, reverse)"></i>&nbsp;[[_('settings.gearman.list.available')]]
+                <th class="center">
+                    [[_('settings.gearman.list.available')]]
+                </th>
+                <th class="center">
+                    [[_('settings.gearman.list.requested')]]
+                </th>
+                <th class="center">
+                    [[_('settings.gearman.list.mode')]]
                 </th>
                 <th class="center actions">
                     [[_('settings.gearman.list.actions')]]
@@ -26,38 +42,37 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="status in statuses | filter:search | customFilter:refresh | orderBy:predicate:reverse">
-                <td>[[status.name]]</td>
-                <td class="center">[[status.queue]]</td>
-                <td class="center">[[status.running]]</td>
-                <td class="center">[[status.available]]</td>
-                <td ng-if="status.mode === SIMPLE" class="center">
-                    <div ng-if="getWorkerByStatus(status)">
-                        <i class="pointer glyphicon glyphicon-plus" title="[[_('settings.gearman.list.plus')]]" ng-click="plusWorker(status)"></i>
+            <tr ng-repeat="item in control | filter:search | customFilter:refresh | orderBy:predicate:reverse">
+                <td>[[item.name]]</td>
+                <td class="center">[[item.status.queue]]</td>
+                <td class="center">[[item.status.running]]</td>
+                <td class="center">[[item.status.available]]</td>
+                <td class="center">[[item.status.requested]]</td>
+                <td class="center">
+                    <div ng-if="item.worker">
+                        <i class="pointer glyphicon glyphicon-plus" title="[[_('settings.gearman.list.plus')]]" ng-click="plusWorker(item.status)"></i>
                         &nbsp;
-                        <i class="pointer glyphicon glyphicon-minus" title="[[_('settings.gearman.list.minus')]]" ng-click="minusWorker(status)"></i>
+                        <i class="pointer glyphicon glyphicon-minus" title="[[_('settings.gearman.list.minus')]]" ng-click="minusWorker(item.status)"></i>
                         &nbsp;
-                        <i class="pointer glyphicon glyphicon-stop" title="[[_('settings.gearman.list.stop')]]" ng-click="stopWorkers(status)"></i>
+                        <i class="pointer glyphicon glyphicon-stop" title="[[_('settings.gearman.list.stop')]]" ng-click="stopWorkers(item.status)"></i>
                     </div>
                 </td>
-                <td ng-if="status.mode === KEEP" class="center">
-                    <input type="number" min="0" max="1000" ng-model="status.keepCount" class="form-control" title="[[_('settings.gearman.list.keepCount')]]">
+                <td>
+                    <div ng-if="item.worker" class="center">
+                        <menu class="inline-block zero-margin zero-padding" dclass="'btn'" data="modeMenu" dscope="item.status" dtitle="'settings.gearman.list.mode.' + item.status.mode">
+                        </menu>
+                    </div>
                 </td>
                 <td class="center">
-                    <a ng-if="getWorkerByStatus(status) === undefined" href="#/settings/gearman/create/[[status.name]]" title="[[_('settings.gearman.list.create')]]">
+                    <a ng-if="item.worker === null" href="#/settings/gearman/create/[[status.name]]" title="[[_('settings.gearman.list.create')]]">
                         <i class="glyphicon glyphicon-plus"></i>
                     </a>
-                    <div ng-if="getWorkerByStatus(status)">
-                        <a ng-click="changeMode(status)" title="[[_('settings.gearman.list.changeMode')]]">
-                            <i ng-if="status.mode === SIMPLE" class="glyphicon glyphicon-retweet"></i>
-                            <i ng-if="status.mode === KEEP" class="glyphicon glyphicon-ban-circle"></i>
-                        </a>
-                        &nbsp;
+                    <div ng-if="item.worker">
                         <a href="#/settings/gearman/edit/[[getWorkerByStatus(status).id]]" title="[[_('settings.gearman.list.edit')]]">
                             <i class="glyphicon glyphicon-pencil"></i>
                         </a>
                         &nbsp;
-                        <a ng-click="deleteWorker(status)" title="[[_('settings.gearman.list.delete')]]">
+                        <a ng-click="deleteWorker(item.worker.id)" title="[[_('settings.gearman.list.delete')]]">
                             <i class="glyphicon glyphicon-trash"></i>
                         </a>
                     </div>

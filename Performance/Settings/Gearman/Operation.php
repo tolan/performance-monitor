@@ -29,16 +29,25 @@ class Operation {
     private $_status = null;
 
     /**
+     * Control factory instance.
+     *
+     * @var Control\Factory
+     */
+    private $_factory = null;
+
+    /**
      * Construct method.
      *
-     * @param Process $process Process instance
-     * @param Status  $status  Gearman server status instance
+     * @param Process         $process Process instance
+     * @param Status          $status  Gearman server status instance
+     * @param Control\Factory $factory Factory instance
      *
      * @return void
      */
-    public function __construct(Process $process, Status $status) {
+    public function __construct(Process $process, Status $status, Control\Factory $factory) {
         $this->_process = $process;
         $this->_status  = $status;
+        $this->_factory = $factory;
     }
 
     /**
@@ -129,6 +138,25 @@ class Operation {
     }
 
     /**
+     * It controls set of statuses and workers by given data (it includes mode).
+     *
+     * @param array $control Control set with statuses and workers
+     *
+     * @return boolean
+     */
+    public function control($control) {
+        foreach($control as $item) {
+            $status = $item['status'];
+            $worker = $item['worker'];
+
+            $controlInstance = $this->_factory->getControl($status['mode']);
+            $controlInstance->control($status, $worker);
+        }
+
+        return true;
+    }
+
+    /**
      * Returns set of pids for script.
      *
      * @param string $script Script start string
@@ -137,7 +165,7 @@ class Operation {
      */
     private function _getRunningsPids($script) {
         $processes = $this->_process->exec($script);
-        $pids = array();
+        $pids      = array();
         foreach ($processes as $process) {
             $pid    = strstr(trim($process), ' ', true);
             $pids[] = $pid;

@@ -277,27 +277,110 @@ function SettingsCronTaskTriggerAction ($scope, SettingsService) {
  * Controller for show list of gearman worker statuses.
  *
  * @param $scope          Scope
- * @param $interval       Interval
+ * @param $timeout        Timeout
  * @param SettingsService Settings service
  *
  * @returns void
  */
-function SettingsGearmanCtrl ($scope, $interval, SettingsService) {
+function SettingsGearmanCtrl ($scope, $timeout, SettingsService) {
     $scope.initList('name');
 
-    $scope.statuses = [];
+    $scope.MODE_MANUAL    = 'manual'
+    $scope.MODE_KEEP      = 'keep'
+    $scope.MODE_ON_DEMAND = 'on_demand'
+
+    $scope.interval = 2000;
     $scope.workers  = [];
+    $scope.control  = [];
 
-    $scope.SIMPLE = 'simple';
-    $scope.KEEP   = 'keep';
+    $scope.modeMenu = [{
+        text: 'settings.gearman.list.mode.' + $scope.MODE_MANUAL,
+        value: $scope.MODE_MANUAL
+    }, {
+        text: 'settings.gearman.list.mode.' + $scope.MODE_KEEP,
+        value: $scope.MODE_KEEP
+    }, {
+        text: 'settings.gearman.list.mode.' + $scope.MODE_ON_DEMAND,
+        value: $scope.MODE_ON_DEMAND
+    }];
 
-    var interval = 1000;
+    var _prepareControl = function(statuses, workers) {
+        var actual,
+            control = [];
 
-    $scope.getWorkerByStatus = function(status) {
-        var result = _.findWhere($scope.workers, {name: status.name}), pattern;
+        _.each(
+            statuses,
+            function(status) {
+                actual           = _.findWhere($scope.control, {name: status.name});
+                status.requested = status.available;
+                status.mode      = $scope.MODE_MANUAL;
+
+                if (actual) {
+                    status.requested = actual.status.requested;
+                    status.mode      = actual.status.mode;
+                }
+
+                if (status.mode === $scope.MODE_MANUAL) {
+                    status.requested = 0;
+                }
+
+                control.push({
+                    name   : status.name,
+                    status : status,
+                    worker : $scope.getWorkerForStatus(status, workers)
+                });
+            }
+        );
+
+        return control;
+    };
+
+    var _initData = function() {
+        $scope.mask();
+        SettingsService.synchronize({
+            statuses : SettingsService.getGearmanStatus(),
+            workers  : SettingsService.getGearmanWorkers()
+        }).on('synced', function(event, requests, responses) {
+            $scope.workers = responses.workers;
+            $scope.control = _prepareControl(responses.statuses, responses.workers);
+
+            $scope.unmask();
+        });
+    };
+
+    var _isChanged = function(statuses, control) {
+        var status,
+            isChanged = statuses.length !== control.length,
+            _isSame   = function(first, second) {
+                var isSame = true;
+
+                isSame = first.queue === second.queue;
+                isSame = isSame && first.running === second.running;
+                isSame = isSame && first.available === second.available;
+
+                return isSame;
+            };
+
+        if (!isChanged) {
+            _.each(control, function(item) {
+                if (!isChanged) {
+                    status = _.findWhere(statuses, {name: item.status.name});
+                    if (!status || !_isSame(status, item.status)) {
+                        isChanged = true;
+                    };
+                }
+            });
+        }
+
+        return isChanged;
+    };
+
+    $scope.getWorkerForStatus = function(status, workers) {
+        var pattern,
+            result = _.findWhere(workers, {name: status.name}) || null;
 
         if (!result) {
-            _.each($scope.workers, function(worker) {
+            _.each(workers, function(worker) {
                 pattern = new RegExp(worker.name);
 
                 if (!result && pattern.exec(status.name)) {
@@ -309,145 +392,62 @@ function SettingsGearmanCtrl ($scope, $interval, SettingsService) {
         return result;
     };
 
-    var _prepareStatuses = function(statuses) {
-        var original;
-
-        _.each(statuses, function(status) {
-            status.keepCount = status.available;
-            original         = _.findWhere($scope.statuses, {name: status.name});
-
-            if (original) {
-                status.mode      = original.mode;
-                status.interval  = original.interval;
-                status.keepCount = original.keepCount;
-
-                if (original.mode === $scope.KEEP) {
-                    _cancelKeepInterval(original);
-                    _assignKeepInterval(status);
-                }
-            }
-
-            status.mode = status.mode || $scope.SIMPLE;
-        });
-
-        return statuses;
-    };
-
-    var _refreshData = function() {
-        $scope.mask();
-        SettingsService.synchronize({
-            statuses : SettingsService.getGearmanStatus(),
-            workers  : SettingsService.getGearmanWorkers()
-        }).on('synced', function(event, requests, responses) {
-            $scope.statuses = _prepareStatuses(responses.statuses);
-            $scope.workers  = responses.workers;
-
-            $scope.unmask();
-        });
-    };
-
-    var isSame = function(first, second) {
-        var result = first.length === second.length;
-
-        if (result) {
-            _.each(first, function(item) {
-                if (!_.findWhere(second, item)) {
-                    result = false;
-                };
-            });
-        }
-
-        return result;
-    };
-
-    var _assignKeepInterval = function(status) {
-        status.interval = $interval(
-            function() {
-                $scope.unmask().blockLoad(true);
-                SettingsService.keepWorkers(
-                    status,
-                    $scope.getWorkerByStatus(status),
-                    function() { $scope.blockLoad(false); }
-                );
-            },
-            interval
-        );
-    };
-
-    var _cancelKeepInterval = function(status) {
-        $interval.cancel(status.interval);
-    };
-
-    $scope.changeMode = function(status) {
-        status.mode = status.mode === $scope.SIMPLE ? $scope.KEEP : $scope.SIMPLE;
-
-        if (status.mode === $scope.KEEP) {
-            _assignKeepInterval(status);
-        } else if(status.interval) {
-            _cancelKeepInterval(status);
-        }
-
-        return status;
+    $scope.deleteWorker = function(id) {
+        SettingsService.deleteWorker(id, _initData, _initData);
     };
 
     $scope.plusWorker = function(status) {
-        var worker = $scope.getWorkerByStatus(status);
-        if (worker) {
-            SettingsService.startWorker(status, worker, _refreshData, _refreshData);
-        }
+        status.requested++;
     };
 
     $scope.minusWorker = function(status) {
-        var worker = $scope.getWorkerByStatus(status);
-        if (worker) {
-            SettingsService.stopWorker(status, worker, _refreshData, _refreshData);
+        var min = (status.mode === $scope.MODE_MANUAL) ? -status.available : 0;
+
+        if (status.requested > min) {
+            status.requested--;
         }
     };
 
     $scope.stopWorkers = function(status) {
-        var worker = $scope.getWorkerByStatus(status);
-        if (worker) {
-            SettingsService.stopAllWorkers(status, worker, _refreshData, _refreshData);
-        }
+        status.requested = (status.mode === $scope.MODE_MANUAL) ? -status.available : 0;
     };
 
-    $scope.deleteWorker = function(status) {
-        var worker = $scope.getWorkerByStatus(status);
-        if (worker) {
-            SettingsService.deleteWorker(worker.id, _refreshData, _refreshData);
-        }
-    };
-
-    _refreshData();
-
-    var watcher = $interval(
-        function() {
-            $scope.unmask().blockLoad(true);
-            SettingsService.getGearmanStatus(
-                function(response) {
-                    if (!isSame(response, $scope.statuses)) {
-                        $scope.statuses = _prepareStatuses(response);
-                    }
-
-                    $scope.blockLoad(false);
+    var _refresh = function() {
+        $scope.unmask().blockLoad(true);
+        SettingsService.controlWorkers(
+            $scope.control,
+            function(response) {
+                if (_isChanged(response, $scope.control)) {
+                    $scope.control = _prepareControl(response, $scope.workers);
                 }
-            );
-        },
-        interval
-    );
+
+                $scope.blockLoad(false);
+            }
+        );
+
+        $scope.interval = Math.max($scope.interval || 0, 500)
+
+        if (_refresh) {
+            $timeout(_refresh, $scope.interval);
+        }
+    };
+
+    $timeout(_refresh, $scope.interval);
 
     $scope.$on('$locationChangeSuccess', function() {
         $scope.blockLoad(false);
-        $interval.cancel(watcher);
-        _.each(
-            $scope.statuses,
-            function(status) {
-                if (status.interval) {
-                    $interval.cancel(status.interval);
-                }
-            }
-        );
+        _refresh = undefined;
     });
+
+    $scope.$on('menu-selected-item', function(event, item, status) {
+        status.mode = item.value;
+
+        if (status.mode !== $scope.MODE_MANUAL) {
+            status.requested = status.available;
+        }
+    });
+
+    _initData();
 };
 
 /**
