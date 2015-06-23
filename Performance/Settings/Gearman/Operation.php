@@ -149,6 +149,9 @@ class Operation {
             $status = $item['status'];
             $worker = $item['worker'];
 
+            $actual = $this->_status->get($status['name']);
+            $status = array_merge($status, $actual);
+
             $controlInstance = $this->_factory->getControl($status['mode']);
             $controlInstance->control($status, $worker);
         }

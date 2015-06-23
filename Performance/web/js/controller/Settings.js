@@ -284,6 +284,8 @@ function SettingsCronTaskTriggerAction ($scope, SettingsService) {
  */
 function SettingsGearmanCtrl ($scope, $timeout, SettingsService) {
     $scope.initList('name');
+    $scope.loading = 0;
+    $scope.timer;
 
     $scope.MODE_MANUAL    = 'manual'
     $scope.MODE_KEEP      = 'keep'
@@ -414,6 +416,7 @@ function SettingsGearmanCtrl ($scope, $timeout, SettingsService) {
 
     var _refresh = function() {
         $scope.unmask().blockLoad(true);
+        $scope.loading = 100;
         SettingsService.controlWorkers(
             $scope.control,
             function(response) {
@@ -422,17 +425,31 @@ function SettingsGearmanCtrl ($scope, $timeout, SettingsService) {
                 }
 
                 $scope.blockLoad(false);
+
+                $timeout(function() {
+                    $scope.loading = 0;
+                }, 250);
+
+                if (_refresh) {
+                    $scope.timer = $timeout(_refresh, $scope.interval);
+                }
             }
         );
-
-        $scope.interval = Math.max($scope.interval || 0, 500)
-
-        if (_refresh) {
-            $timeout(_refresh, $scope.interval);
-        }
     };
 
-    $timeout(_refresh, $scope.interval);
+    $scope.refreshDelay = function() {
+        $scope.interval = Math.max($scope.interval || 0, 500);
+        var value       = $scope.interval;
+
+        $timeout(function() {
+            if (value === $scope.interval) {
+                $timeout.cancel($scope.timer);
+                $scope.timer = $timeout(_refresh, $scope.interval);
+            }
+        }, 500);
+    };
+
+    $scope.timer = $timeout(_refresh, $scope.interval);
 
     $scope.$on('$locationChangeSuccess', function() {
         $scope.blockLoad(false);

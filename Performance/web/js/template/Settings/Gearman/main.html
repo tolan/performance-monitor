@@ -1,12 +1,15 @@
 <div class="list width-80 width-max-1200 center-block">
     <div class="row margin-1">
-        <div class="col-lg-2">
+        <div class="col-lg-4">
             <input type="text" ng-model="search" class="form-control search-query" placeholder="[[_('main.list.search')]]">
         </div>
-        <div class="col-lg-offset-4 col-lg-6 form-horizontal">
-            <span class="control-label col-lg-6 text-right">[[_('settings.gearman.list.refresh')]]</span>
-            <div class="col-lg-6">
-                <input type="number" ng-model="interval" min="500" class="form-control">
+        <div class="col-lg-4 control-label padding-0-left padding-0-right">
+            <progressbar class="progress-striped active" max="100" value="[[loading]]" animate="false"></progressbar>
+        </div>
+        <div class="form-horizontal col-lg-4">
+            <span class="control-label text-right col-lg-7">[[_('settings.gearman.list.refresh')]]</span>
+            <div class="col-lg-5">
+                <input type="number" ng-model="interval" min="500" class="form-control" ng-change="refreshDelay()">
             </div>
         </div>
     </div>
