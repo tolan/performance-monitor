@@ -150,7 +150,7 @@ class Operation {
             $worker = $item['worker'];
 
             $actual = $this->_status->get($status['name']);
-            $status = array_merge($status, $actual);
+            $status = array_merge($status, current($actual));
 
             $controlInstance = $this->_factory->getControl($status['mode']);
             $controlInstance->control($status, $worker);
