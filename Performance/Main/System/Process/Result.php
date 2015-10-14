@@ -21,6 +21,13 @@ class Result extends ArrayAccessIterator {
     private $_script = null;
 
     /**
+     * Status about result.
+     *
+     * @var array
+     */
+    private $_status;
+
+    /**
      * Returns executed script.
      *
      * @return string
@@ -62,5 +69,36 @@ class Result extends ArrayAccessIterator {
         $this->_data = $result;
 
         return $this;
+    }
+
+    /**
+     * Sets status about executed command script.
+     *
+     * @param array $status Stataus about result
+     *
+     * @return Result
+     */
+    public function setStatus($status) {
+        $this->_status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Gets status about executed command script.
+     *
+     * @return array
+     */
+    public function getStatus() {
+        return $this->_status;
+    }
+
+    /**
+     * Gets count of returned lines.
+     *
+     * @return array
+     */
+    public function getCount() {
+        return count($this->_data);
     }
 }

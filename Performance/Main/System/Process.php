@@ -43,11 +43,13 @@ class Process {
      */
     public function exec($command) {
         $ans = array();
-        exec($command, $ans);
+        $status;
+        exec($command, $ans, $status);
 
         $result = new Process\Result();
         $result->setScript($command);
         $result->setResult($ans);
+        $result->setStatus($status);
 
         return $result;
     }

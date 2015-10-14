@@ -16,6 +16,13 @@ class Session extends AbstractDriver implements Interfaces\Driver {
     private $_namespace;
 
     /**
+     * Flag for call session_start
+     *
+     * @var boolean
+     */
+    private $_autoStart = false;
+
+    /**
      * Flag for fully loaded data from session.
      *
      * @var boolean
@@ -35,6 +42,10 @@ class Session extends AbstractDriver implements Interfaces\Driver {
 
             if (array_key_exists('namespace', $cacheConfig)) {
                 $namespace = $cacheConfig['namespace'];
+            }
+
+            if (array_key_exists('autoStart', $cacheConfig)) {
+                $this->_autoStart = $cacheConfig['autoStart'];
             }
         }
 
@@ -103,8 +114,8 @@ class Session extends AbstractDriver implements Interfaces\Driver {
      */
     private function _loadSessionData() {
         if ($this->_loaded === false) {
-            if (session_id() === '') {
-                session_start();
+            if (session_id() === '' && $this->_autoStart) {
+                @session_start();
             }
 
             if (isset($_SESSION[self::SESSION_NAME][$this->_namespace])) {

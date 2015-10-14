@@ -315,7 +315,7 @@ function SettingsGearmanCtrl ($scope, $timeout, SettingsService) {
             function(status) {
                 actual           = _.findWhere($scope.control, {name: status.name});
                 status.requested = status.available;
-                status.mode      = $scope.MODE_MANUAL;
+                status.mode      = $scope.MODE_ON_DEMAND;
 
                 if (actual) {
                     status.requested = actual.status.requested;
@@ -424,6 +424,17 @@ function SettingsGearmanCtrl ($scope, $timeout, SettingsService) {
                     $scope.control = _prepareControl(response, $scope.workers);
                 }
 
+                $scope.blockLoad(false);
+
+                $timeout(function() {
+                    $scope.loading = 0;
+                }, 250);
+
+                if (_refresh) {
+                    $scope.timer = $timeout(_refresh, $scope.interval);
+                }
+            },
+            function() {
                 $scope.blockLoad(false);
 
                 $timeout(function() {

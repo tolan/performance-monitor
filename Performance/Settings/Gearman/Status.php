@@ -38,6 +38,13 @@ class Status {
     private $_process;
 
     /**
+     * Status about executed command.
+     *
+     * @var Process/Result
+     */
+    private $_status;
+
+    /**
      * Construct method.
      *
      * @param Process $process Process instance
@@ -51,23 +58,37 @@ class Status {
     /**
      * Returns actual status of gearman server.
      *
-     * @param string $name Name of gearman worker
+     * @param string  $name    Name of gearman worker
+     * @param boolean $refresh Flag for refresh states
      *
      * @return array
      */
-    public function get($name = null) {
-        $status = $this->_process->exec(self::COMMAND);
+    public function get($name = null, $refresh = false) {
+        if ($this->_status === null || $refresh) {
+            $attempts = 5;
+            while($attempts) {
+                $status = $this->_process->exec(self::COMMAND);
+                if ($status->getStatus() === 0) {
+                    break;
+                }
 
-        $statuses = $this->_parseStatus($status);
-        $result   = array();
+                usleep(10 * 1000);
+
+                $attempts--;
+            }
+
+            $this->_status = $this->_parseStatus($status);
+        }
+
+        $result = array();
         if ($name !== null) {
-            foreach ($statuses as $stat) {
+            foreach ($this->_status as $stat) {
                 if ($stat['name'] === $name) {
                     $result[] = $stat;
                 }
             }
         } else {
-            $result = $statuses;
+            $result = $this->_status;
         }
 
         return $result;

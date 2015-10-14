@@ -150,6 +150,11 @@ class Operation {
             $worker = $item['worker'];
 
             $actual = $this->_status->get($status['name']);
+
+            if (empty($actual)) {
+                throw new Exception('Error on CLI.', 500);
+            }
+
             $status = array_merge($status, current($actual));
 
             $controlInstance = $this->_factory->getControl($status['mode']);
